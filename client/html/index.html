@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Neuton" rel="stylesheet">
+    <script src="https://cdn.ckeditor.com/4.11.4/standard/ckeditor.js"></script>
+    
+    <title>Mini-WP</title>
+</head>
+<body>
+    <nav class="sticky-top">
+        <div class="logo">
+            <div id="logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Wordpress_Blue_logo.png"
+                alt="wordpress logo">
+                my Wordpress
+            </div>
+        </div>
+        <div class="acc-notif" >
+                <button id="new-article" style="margin-right:20px; margin-bottom: 2px" type="button" class="btn btn-success btn-sm"><i class="fas fa-feather-alt" style="margin-right: 10px"></i>New Article</button>
+            <button class="btn"><i  class="icon-right fas fa-user-circle fa-lg" style="margin-right: 10px"></i></button><button class="btn"><i class="icon-right fas fa-bell fa-lg" style="margin-right: 10px"></i></button>
+        </div>
+    </nav>
+    <div id="container" class="container-fluid">
+        <div class="row">
+            <nav id="sidebar" class="sidebar col-md-2 d-none d-md-block">
+                <div class="sidebar">
+                    <h4 class="sidebar-heading d-flex justify-content-center ">Navigation Head</h4>
+                    <ul class="nav flex-column" id="articles">
+                        <li class="nav-item "><button class="btn">Article List</button></li>
+                        <li class="nav-item "><button class="btn">bbbbb</button></li>
+                        <li class="nav-item "><button class="btn">ccccc</button></li>
+                        <li class="nav-item "><button class="btn">ddddd</button></li>
+                        <li class="nav-item "><button class="btn">eeeee</button></li>
+                    </ul>
+                </div>
+            </nav>    
+            <div id="content" class="col-10 offset-2" style="overflow:scroll; height: 900px">
+                <br><br>
+                <div id="content-list" class="card text-center col-8 offset-2">
+                    <div class="card-header">
+                        <ul class="nav nav-pills card-header-pills">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Published</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">Draft</a>
+                        </li>
+                        </ul>
+                    </div>
+                    <div class="card-body row justify-content-center">
+                        <!-- <h6 class="card-content">no content</h6> -->
+                        <div class="card col-3 mb-1 mr-1" >
+                            <h5 class="card-title"><b>maian</b></h5>
+                            <span class="card-content">asdadaddsadsadasdadsdadasddasaddasadhasdhsdjadajhdsd</span>
+                        </div>
+                        <div class="card col-3 mb-1 mr-1">
+                            <h5 class="card-title"><b>maian</b></h5>
+                            <span class="card-content">asdadaddsadsadasdadsdadasddasaddasadhasdhsdjadajhdsd</span>
+                        </div>
+                        <div class="card col-3 mb-1 mr-1">
+                            <h5 class="card-title"><b>maian</b></h5>
+                            <span class="card-content">asdadaddsadsadasdadsdadasddasaddasadhasdhsdjadajhdsd</span>
+                        </div>
+                        <div class="card col-3 mb-1 mr-1" >
+                            <h5 class="card-title"><b>maian</b></h5>
+                            <span class="card-content">asdadaddsadsadasdadsdadasddasaddasadhasdhsdjadajhdsd</span>
+                        </div>
+                        <div class="card col-3 mb-1 mr-1">
+                            <h5 class="card-title"><b>maian</b></h5>
+                            <span class="card-content">asdadaddsadsadasdadsdadasddasaddasadhasdhsdjadajhdsd</span>
+                        </div>
+                        <div class="card col-3 mb-1 mr-1">
+                            <h5 class="card-title"><b>maian</b></h5>
+                            <span class="card-content">asdadaddsadsadasdadsdadasddasaddasadhasdhsdjadajhdsd</span>
+                        </div>
+
+                        <div class="card col-3 mb-1 mr-1">
+                            <h5 class="card-title"><b>maian</b></h5>
+                            <span class="card-content">asdadaddsadsadasdadsdadasddasaddasadhasdhsdjadajhdsd</span>
+                        </div>
+                        <!-- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                    </div>
+                </div>
+                <br>
+                <div>
+                    <div>
+                        <form id="create-form" class="col-10 offset-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="title" placeholder="Title">
+                                <input type="text" class="form-control" id="description" placeholder="Description">
+                            </div>
+                            <div id="editor">
+                                <textarea name="editor1"></textarea>
+                                <br><button id="create-article" type="button" class="btn btn-success">create article</button>
+                                <script>
+                                        CKEDITOR.replace( 'editor1' );
+                                </script>
+                                <br><br><br>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <p>AHSHIAAAP</p>
+    </div>
+    <script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"></script>
+    <script src="javascript/index.js"></script>
+</body>
+</html>
