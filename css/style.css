@@ -1,0 +1,204 @@
+*{
+    font-family: 'Open Sans', sans-serif
+}
+
+body{
+    background-color: #eff1f2;
+}
+
+.sidenav {
+    height: 100%; /* Full-height: remove this if you want "auto" height */
+    width: 250px; /* Set the width of the sidebar */
+    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    left: 0;
+    background-color: #363a41; /* Black */
+    overflow: hidden; /* Disable horizontal scroll */
+    padding-top: 20px;
+}
+
+.postitle ul, .post-footer ul{
+    padding: 0;
+}
+
+.post-footer ul{
+    float: right;
+}
+
+.postitle ul li, .post-footer ul li{
+    display: inline;
+    list-style: none;
+    color: grey;
+    margin-right: 20px;
+}
+
+.content-wrapper{
+    margin: 20px 10% 0 10%;
+}
+
+.breadcrumb .content-wrapper{
+    width: 100%;
+}
+
+/* The navigation menu links */
+.sidenav a {
+    padding: 15px 30px;
+    text-decoration: none;
+    font-size: 12dp;
+    color: #d3d3d3;
+    display: block;
+}
+
+.sidenav ul{
+    list-style: none;
+    padding: 0;
+    margin: 30px 0;
+}
+
+.sidenav li{
+    padding:0;
+}
+
+.form-group{
+    margin-top: 20px;
+}
+
+.sidenav{
+    padding-top: 0px;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav .links li:hover {
+    background-color: #282b30;
+    color: white;
+}
+
+.container-search{
+    margin: 20px;
+}
+
+.card-inside{
+    margin: 0;
+}
+
+/* Style page content */
+.main {
+    margin-left: 250px; /* Same as the width of the sidebar */
+}
+
+.content-header ul li{
+    display: inline;
+    margin-right: 40px;
+}
+
+.content-header ul{
+    padding-left: 30px;
+}
+
+.content-header{
+    margin-top: 175px;
+}
+
+.breadcrumb, .userInfo{
+    height: 150px;
+}
+
+.breadcrumb ul li{
+    display: inline;
+    margin-right: 20px;
+}
+
+.breadcrumb ul li i{
+    margin-right: 5px;
+}
+
+.breadcrumb ul {
+    margin: 0;
+}
+
+.post-head{
+    border-bottom: 1px solid black;
+    padding-bottom: 20px;
+}
+
+.card .post{
+    margin-top: 20px;
+    padding: 20px;
+    text-align: justify;
+}
+
+.post-body{
+    padding-top: 20px;
+    line-height: 20pt;
+}
+
+#main-content .card{
+    border: none;
+}
+
+.card{
+    border: none;
+}
+
+#main-content{
+    background-color: #eff1f2;
+}
+
+.breadcrumb{
+    background-color: white;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1;
+    margin-bottom: 10px;
+}
+
+.breadcrumb .row{
+    width: 100%;
+}
+
+.userInfo{
+    background-color: antiquewhite;
+    padding: 20px 0px 0px 30px;
+    background-image: url('../res/trianglify\(1\).svg')
+}
+
+.profile-picture{
+    width: 64px;
+    border-radius: 50%;
+}
+
+.postitle{
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.postitle p{
+    margin-bottom: 0;
+}
+
+.profile-thumbnail{
+    width: 100px;
+    border-radius: 50%;
+}
+
+.profile-container{
+    line-height: 5px;
+}
+
+.user-detail-container{
+    margin-top: 20px;
+}
+
+.profile-container p{
+    font-size: 12dp;
+    color: #363a41;
+}
+
+
+/* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}
