@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +8,8 @@
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
         integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/tagsinput.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-bs4.css" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
     <title>New MiniWP (Mini Wordpress)</title>
 </head>
@@ -80,12 +81,39 @@
         <!-- Page Content -->
         <div id="content">
             <div class="container">
-                <!-- Post Category Nav -->
+                <!-- Category Selection Nav -->
                 <div class="row">
                     <nav class="navbar">
-                        <a href="#publish" id="cat-publish" class="category-item active">PUBLISHED</a>
-                        <a href="#draft" id="cat-draft" class="category-item">DRAFT</a>
+                        <a href="#" id="cat-publish" class="category-item active">PUBLISHED</a>
+                        <a href="#" id="cat-draft" class="category-item">DRAFT</a>
                     </nav>
+                </div>
+
+                <!-- New Post Form -->
+                <div class="row mt-4">
+                    <form class="needs-validation w-100" novalidate>
+                            <div class="form-group">
+                                <label for="title">Title</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="title" placeholder="Title" aria-describedby="title" required>
+                                    <div class="invalid-feedback">
+                                        Please set any title
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="post-content">Content</label>
+                                <!-- <textarea class="form-control" id="post-content" rows="3"></textarea> -->
+                                <textarea id="summernote" name="editordata"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="tags">Tags</label>
+                                <input type="text" value="Amsterdam,Washington,Sydney,Beijing,Cairo" data-role="tagsinput"  class="form-control" id="tags" aria-describedby="tags">
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-success" type="submit">Submit</button>
+                            </div>
+                    </form>
                 </div>
 
                 <!-- Posts List -->
@@ -164,6 +192,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous">
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-bs4.js"></script>
+    <script src="js/tagsinput.js"></script>
     <script src="js/main.js"></script>
 </body>
 

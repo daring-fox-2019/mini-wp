@@ -1,4 +1,10 @@
 $(document).ready(function () {
+    $('#summernote').summernote({
+        placeholder: 'Start writing here...',
+        tabsize: 2,
+        height: 200,
+      });
+
     $('#sidebarCollapse').on('click', function () {
         $('#sidebar').toggleClass('active');
         $('#content').toggleClass('active');
@@ -13,9 +19,23 @@ $(document).ready(function () {
         $('#cat-publish').removeClass('active');
     });
 
-    // close dropdowns
     $('.collapse.in').toggleClass('in');
-    // and also adjust aria-expanded attributes we use for the open/closed arrows
-    // in our CSS
     $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+
+    'use strict';
+    window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+
+  }, false);
 });
