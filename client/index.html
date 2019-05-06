@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/main.css">
+    <title>New MiniWP (Mini Wordpress)</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark main-bg-color">
+        <a class="navbar-brand brand" href="/">
+            <i class="fab fa-wordpress" style="width: 35px; font-size: 1.2em;"></i>
+            MiniWP</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+            aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Explore</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Posts</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="sidebarCollapse" href="#">Sidebar</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto mt-2 mt-lg-0 mr-2">
+                <li class="nav-item">
+                    <a class="btn btn-light" style="min-width" href="#">
+                        <i class="fas fa-edit mr-2"></i>Write
+                    </a>
+                </li>
+            </ul>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <div class='has-search'>
+                    <span class="fa fa-search form-control-feedback"></span>
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search">
+                </div>
+            </form>
+            <button class="btn btn-warning my-2 my-sm-0" type="submit">Logout</button>
+        </div>
+    </nav>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav id="sidebar">
+            <ul class="list-unstyled components">
+                <li class="active">
+                    <a href="#">Home</a>
+                </li>
+                <li>
+                    <a href="#">About</a>
+                </li>
+                <li>
+                    <a href="#">Portfolio</a>
+                </li>
+                <li>
+                    <a href="#">Contact</a>
+                </li>
+            </ul>
+        </nav>
+        <!-- Page Content -->
+        <div id="content">
+                <ul class="list-unstyled components">
+                        <li class="active">
+                            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
+                            <ul class="collapse list-unstyled" id="homeSubmenu">
+                                <li>
+                                    <a href="#">Home 1</a>
+                                </li>
+                                <li>
+                                    <a href="#">Home 2</a>
+                                </li>
+                                <li>
+                                    <a href="#">Home 3</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">About</a>
+                        </li>
+                        <li>
+                            <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false"
+                                class="dropdown-toggle">Pages</a>
+                            <ul class="collapse list-unstyled" id="pageSubmenu">
+                                <li>
+                                    <a href="#">Page 1</a>
+                                </li>
+                                <li>
+                                    <a href="#">Page 2</a>
+                                </li>
+                                <li>
+                                    <a href="#">Page 3</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">Portfolio</a>
+                        </li>
+                        <li>
+                            <a href="#">Contact</a>
+                        </li>
+                    </ul>
+                    <ul class="list-unstyled components">
+                            <li class="active">
+                                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
+                                <ul class="collapse list-unstyled" id="homeSubmenu">
+                                    <li>
+                                        <a href="#">Home 1</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Home 2</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Home 3</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">About</a>
+                            </li>
+                            <li>
+                                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false"
+                                    class="dropdown-toggle">Pages</a>
+                                <ul class="collapse list-unstyled" id="pageSubmenu">
+                                    <li>
+                                        <a href="#">Page 1</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Page 2</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Page 3</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">Portfolio</a>
+                            </li>
+                            <li>
+                                <a href="#">Contact</a>
+                            </li>
+                        </ul>
+                        <ul class="list-unstyled components">
+                                <li class="active">
+                                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
+                                    <ul class="collapse list-unstyled" id="homeSubmenu">
+                                        <li>
+                                            <a href="#">Home 1</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Home 2</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Home 3</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#">About</a>
+                                </li>
+                                <li>
+                                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false"
+                                        class="dropdown-toggle">Pages</a>
+                                    <ul class="collapse list-unstyled" id="pageSubmenu">
+                                        <li>
+                                            <a href="#">Page 1</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Page 2</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Page 3</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#">Portfolio</a>
+                                </li>
+                                <li>
+                                    <a href="#">Contact</a>
+                                </li>
+                            </ul>
+                            <ul class="list-unstyled components">
+                                    <li class="active">
+                                        <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
+                                        <ul class="collapse list-unstyled" id="homeSubmenu">
+                                            <li>
+                                                <a href="#">Home 1</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Home 2</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Home 3</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#">About</a>
+                                    </li>
+                                    <li>
+                                        <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false"
+                                            class="dropdown-toggle">Pages</a>
+                                        <ul class="collapse list-unstyled" id="pageSubmenu">
+                                            <li>
+                                                <a href="#">Page 1</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Page 2</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Page 3</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#">Portfolio</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Contact</a>
+                                    </li>
+                                </ul>
+                                <ul class="list-unstyled components">
+                                        <li class="active">
+                                            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
+                                            <ul class="collapse list-unstyled" id="homeSubmenu">
+                                                <li>
+                                                    <a href="#">Home 1</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Home 2</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Home 3</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="#">About</a>
+                                        </li>
+                                        <li>
+                                            <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false"
+                                                class="dropdown-toggle">Pages</a>
+                                            <ul class="collapse list-unstyled" id="pageSubmenu">
+                                                <li>
+                                                    <a href="#">Page 1</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Page 2</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Page 3</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="#">Portfolio</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Contact</a>
+                                        </li>
+                                    </ul>
+                                    <ul class="list-unstyled components">
+                                            <li class="active">
+                                                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
+                                                <ul class="collapse list-unstyled" id="homeSubmenu">
+                                                    <li>
+                                                        <a href="#">Home 1</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">Home 2</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">Home 3</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <a href="#">About</a>
+                                            </li>
+                                            <li>
+                                                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false"
+                                                    class="dropdown-toggle">Pages</a>
+                                                <ul class="collapse list-unstyled" id="pageSubmenu">
+                                                    <li>
+                                                        <a href="#">Page 1</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">Page 2</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">Page 3</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <a href="#">Portfolio</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Contact</a>
+                                            </li>
+                                        </ul>
+                                        <ul class="list-unstyled components">
+                                                <li class="active">
+                                                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
+                                                    <ul class="collapse list-unstyled" id="homeSubmenu">
+                                                        <li>
+                                                            <a href="#">Home 1</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">Home 2</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">Home 3</a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li>
+                                                    <a href="#">About</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false"
+                                                        class="dropdown-toggle">Pages</a>
+                                                    <ul class="collapse list-unstyled" id="pageSubmenu">
+                                                        <li>
+                                                            <a href="#">Page 1</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">Page 2</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">Page 3</a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Portfolio</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Contact</a>
+                                                </li>
+                                            </ul>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous">
+    </script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
