@@ -1,0 +1,12 @@
+.article {
+    &--container {
+        min-height: 80vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    &__container {
+        margin: 3em 8em 1em;
+    }
+}

@@ -1,0 +1,28 @@
+.my-card{
+    position: relative;
+    display: inline-block;
+    width: 75%;
+    height: auto;
+    margin-right: 1.2%;
+    background: #ffffff;
+    border-radius: 4px;
+    margin: 0 auto;
+
+    padding: 0px 15px;
+
+    cursor: pointer;
+
+    &:not(:first-child) {
+        margin-top: 1.2em;
+    }
+
+    &:hover {
+        box-shadow: 0 2px 4px 0 rgba(0,0,0,0.12);
+    }
+
+    &-header {
+        color: #616161;
+        font-size: 32px;
+        font-weight: 500;
+    }
+}
