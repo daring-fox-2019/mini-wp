@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
+  <title>Document</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+    integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+  <!-- WYSIWYG -->
+  <link rel="stylesheet" href="css/vueWysiwyg.css">
+  <script src="/js/vueWysiwyg.js"></script>
+
+</head>
+
+<body>
+  <div id="app">
+    <v-app dark id="inspire">
+
+      <!-- ===================================== HEADER ===================================== -->
+      <v-toolbar color="red" dense fixed clipped-left app>
+        <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+        <v-toolbar-title class="mr-5 align-center">
+          <span class="title">MiniWP</span>
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-layout row align-center style="max-width: 400px;">
+          <v-text-field placeholder="Search..." single-line append-icon="search" color="white" hide-details>
+          </v-text-field>
+        </v-layout>
+      </v-toolbar>
+
+      <!-- ===================================== NAVBAR ===================================== -->
+      <v-navigation-drawer fixed clipped v-model="drawer" app>
+        <v-list>
+          <v-list-tile class="mt-3" @click="displayAddArticle">
+            <v-list-tile-action>
+              <v-icon>add_circle_outline</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-title>Add Article</v-list-tile-title>
+          </v-list-tile>
+          <v-subheader class="mt-3 grey--text text--darken-1">Article</v-subheader>
+          <v-list>
+            <v-list-tile @click="displayDraftArticle">
+              <v-list-tile-action>
+                <v-icon>description</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-title>Draft</v-list-tile-title>
+            </v-list-tile>
+            <v-list-tile @click="displayPublishArticle">
+              <v-list-tile-action>
+                <v-icon>library_books</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-title>Publish</v-list-tile-title>
+            </v-list-tile>
+          </v-list>
+          <v-list-tile class="mt-3" @click="">
+            <v-list-tile-action>
+              <v-icon>exit_to_app</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-title>Sign out</v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </v-navigation-drawer>
+
+
+      <!-- ===================================== FORM ADD ARTICLE  ===================================== -->
+      <v-content v-if="displayContent==1">
+        <v-container fill-height>
+          <v-layout justify-center align-center>
+            <v-flex shrink>
+              <h1 style="text-align: center;">ADD ARTICLE</h1>
+              <v-form ref="form" v-model="valid" lazy-validation>
+                <v-text-field v-model="title" :rules="titleRules" label="Title" required></v-text-field>
+                <wysiwyg v-model="content" :rules="contentRules" required></wysiwyg>
+                <v-text-field label="Select Image" @click='pickFile' v-model='imageName' prepend-icon='attach_file'>
+                </v-text-field>
+                <input type="file" style="display: none" ref="image" accept="image/*" @change="onFilePicked">
+                <img :src="imageUrl" height="150" v-if="imageUrl" /><br />
+                <v-btn :disabled="!valid" color="success" @click="validate">
+                  Validate
+                </v-btn>
+                <v-btn color="error" @click="reset">
+                  Reset Form
+                </v-btn>
+                <v-btn color="warning" @click="resetValidation">
+                  Reset Validation
+                </v-btn>
+              </v-form>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-content>
+
+
+      <!-- ===================================== LIST ARTICLE DRAFT ===================================== -->
+      <v-content v-if="displayContent==2">
+        <v-container>
+          <div style="width: 100%; margin-top:0 !important;">
+            <v-layout row>
+              <v-flex>
+                <v-card>
+                  <v-card-title primary-title>
+                    <div>
+                      <div class="headline">Article Draft 1</div>
+                      <span class="grey--text">Description article 1</span>
+                    </div>
+                  </v-card-title>
+
+                  <v-card-actions>
+                    <v-btn flat>Detail</v-btn>
+                    <v-btn flat color="green">Edit</v-btn>
+                    <v-btn flat color="red">Delete</v-btn>
+                    <v-spacer></v-spacer>
+                </v-card>
+              </v-flex>
+            </v-layout>
+
+            <v-layout row>
+              <v-flex>
+                <v-card>
+                  <v-card-title primary-title>
+                    <div>
+                      <div class="headline">Article Draft 2</div>
+                      <span class="grey--text">Description article 2</span>
+                    </div>
+                  </v-card-title>
+
+                  <v-card-actions>
+                    <v-btn flat>Detail</v-btn>
+                    <v-btn flat color="green">Edit</v-btn>
+                    <v-btn flat color="red">Delete</v-btn>
+                    <v-spacer></v-spacer>
+                </v-card>
+              </v-flex>
+            </v-layout>
+
+          </div>
+        </v-container>
+      </v-content>
+
+      <!-- ===================================== LIST ARTICLE PUBLISHED ===================================== -->
+      <v-content v-if="displayContent==3">
+        <v-container>
+          <div style="width: 100%; margin-top:0 !important;">
+            <v-layout row>
+              <v-flex>
+                <v-card>
+                  <v-card-title primary-title>
+                    <div>
+                      <div class="headline">Article Publish 1</div>
+                      <span class="grey--text">Description article 1</span>
+                    </div>
+                  </v-card-title>
+
+                  <v-card-actions>
+                    <v-btn flat>Detail</v-btn>
+                    <v-btn flat color="green">Edit</v-btn>
+                    <v-btn flat color="red">Delete</v-btn>
+                    <v-spacer></v-spacer>
+                </v-card>
+              </v-flex>
+            </v-layout>
+
+            <v-layout row>
+              <v-flex>
+                <v-card>
+                  <v-card-title primary-title>
+                    <div>
+                      <div class="headline">Article Publish 2</div>
+                      <span class="grey--text">Description article 2</span>
+                    </div>
+                  </v-card-title>
+
+                  <v-card-actions>
+                    <v-btn flat>Detail</v-btn>
+                    <v-btn flat color="green">Edit</v-btn>
+                    <v-btn flat color="red">Delete</v-btn>
+                    <v-spacer></v-spacer>
+                </v-card>
+              </v-flex>
+            </v-layout>
+
+          </div>
+        </v-container>
+      </v-content>
+
+    </v-app>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
+  <script src="./js/index.js"></script>
+  <script>
+
+  </script>
+</body>
+
+</html>
