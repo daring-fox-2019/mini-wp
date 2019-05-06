@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Ramini WordPress</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="./css/vueWysiwyg.css">
+</head>
+<body>
+  <div id="app">
+    <div
+      class="hide-overflow"
+      style="position:relative;"
+    >
+      <v-toolbar
+        floating
+        absolute
+        color="grey lighten-3"
+        scroll-off-screen
+        scroll-target="#scrolling-techniques"
+        style="border-radius:10px"
+      >
+        <v-toolbar-side-icon
+          @click.stop="drawer = !drawer"
+        >
+        </v-toolbar-side-icon>
+        <v-toolbar-title>Ramini-WP</v-toolbar-title>
+
+        <v-spacer></v-spacer>
+
+        <v-btn icon>
+          <v-icon>search</v-icon>
+        </v-btn>
+
+        <v-btn icon>
+          <v-icon>notifications</v-icon>
+        </v-btn>
+
+        <v-btn icon>
+          <v-icon>exit_to_app</v-icon>
+        </v-btn>
+      </v-toolbar>
+
+      <v-navigation-drawer
+        v-model="drawer"
+        absolute
+        temporary
+      >
+        <v-list class="pa-1">
+          <v-list-tile avatar>
+            <v-list-tile-avatar>
+              <img src="./assets/avatar.png">
+            </v-list-tile-avatar>
+  
+            <v-list-tile-content>
+              <v-list-tile-title>Muhammad Ramadhoni</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
+  
+        <v-list class="pt-0" dense>
+          <v-divider></v-divider>
+  
+          <v-list-tile
+            v-for="item in items"
+            :key="item.title"
+            @click=""
+          >
+            <v-list-tile-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-tile-action>
+  
+            <v-list-tile-content>
+              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+
+          <v-divider></v-divider>
+
+          <v-list-tile
+            v-for="cloud in clouds"
+            :key="cloud.title"
+            @click=""
+          >
+            <v-list-tile-action>
+              <v-icon>{{ cloud.icon }}</v-icon>
+            </v-list-tile-action>
+  
+            <v-list-tile-content>
+              <v-list-tile-title>{{ cloud.title }}</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+
+          <v-divider></v-divider>
+
+          <v-list-tile
+            v-for="account in accounts"
+            :key="account.title"
+            @click=""
+          >
+            <v-list-tile-action>
+              <v-icon>{{ account.icon }}</v-icon>
+            </v-list-tile-action>
+  
+            <v-list-tile-content>
+              <v-list-tile-title>{{ account.title }}</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
+      </v-navigation-drawer>
+      <div
+        id="scrolling-techniques"
+        class="scroll-y"
+        style="height:100vh;background:rgb(200, 200, 200)"
+      >
+        <v-container yellow justify-center style="padding-top:100px;">
+          <v-layout justify-center row wrap>
+            <v-flex xs8 red>
+              <wysiwyg v-model="text" />
+              <p>KEDUA</p>
+              <p>KEDUA</p>
+              <p>KEDUA</p>
+              <p>KEDUA</p>
+              <p>KEDUA</p>
+              <p>KEDUA</p>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </div>
+    </div>
+  </div>
+
+  <script
+			  src="https://code.jquery.com/jquery-3.4.1.min.js"
+			  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+			  crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
+  <script src="./js/vueWysiwyg.js"></script>
+  <script src="./js/navbar.js"></script>
+  <script src="./js/sidebar.js"></script>
+  <script src="./js/index.js"></script>
+</body>
+</html>
