@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <title>Mini WP</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="./resources/wysiwyg/vueWysiwyg.css">
+</head>
+
+<body>
+  <v-app id="app">
+    <!-- - ================================== TOOLBAR ============================================= -->
+    <v-toolbar color="blue darken-3" dark app :clipped-left="$vuetify.breakpoint.mdAndUp" fixed>
+      <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
+        <span class="hidden-sm-and-down">Mini Wordpress</span>
+      </v-toolbar-title>
+      <v-text-field flat solo-inverted prepend-icon="search" label="Search" class="hidden-sm-and-down"></v-text-field>
+      <v-spacer></v-spacer>
+      <v-btn icon>
+        <v-icon>apps</v-icon>
+      </v-btn>
+      <v-btn icon>
+        <v-icon>notifications</v-icon>
+      </v-btn>
+      <v-btn icon large>
+        <v-avatar size="32px" tile>
+          <img src="./resources/img/logo.png" aspect-ratio="0.5" alt="Vuetify"> <!-- aspect-ratio="0.75" -->
+        </v-avatar>
+      </v-btn>
+    </v-toolbar>
+
+    <!-- - ================================== SIDEBAR ============================================= -->
+    <v-navigation-drawer fixed :clipped="$vuetify.breakpoint.mdAndUp" app v-model="drawer" width="250">
+      <v-list dense>
+        <template v-for="item in items">
+          <v-layout row v-if="item.heading" align-center :key="item.heading">
+          </v-layout>
+
+          <v-list-tile v-else @click="test(item)" :key="item.text">
+            <v-list-tile-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>
+                {{ item.text }}
+              </v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+
+        </template>
+        <!-- <v-card class="mx-auto" max-width="500">
+          <v-list>
+            <v-list-item-group v-model="model">
+              <v-list-item v-for="(item, i) in items" :key="i">
+                <v-list-item-icon>
+                  <v-icon v-text="item.icon"></v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title v-text="item.text"></v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+        </v-card> -->
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-content>
+      <v-container fluid fill-height>
+        <v-layout>
+          Tes 3
+          <!-- - ================================== ISI KONTEN ============================================= -->
+          <v-content>
+            <!-- justify-center align-center -->
+            Tes 2
+            <v-container fluid>
+              Test
+            </v-container>
+          </v-content>
+        </v-layout>
+      </v-container>
+    </v-content>
+
+
+    <v-btn fab bottom right color="pink" dark fixed @click.stop="dialog = !dialog">
+      <v-icon>add</v-icon>
+    </v-btn>
+
+    <!-- - ================================== DIALOG NEW ============================================= -->
+    <v-dialog v-model="dialog" width="800px">
+      <v-card>
+        <v-card-title class="grey lighten-4 py-4 title">
+          New Article
+        </v-card-title>
+
+        <v-container grid-list-sm class="pa-4">
+          <v-layout row wrap>
+            <v-flex xs12>
+              <v-text-field prepend-icon="title" label="Title" required></v-text-field>
+            </v-flex>
+            <v-flex xs12>
+              <wysiwyg v-model="content" label="content" style="overflow: scroll; height: 300px;"></wysiwyg>
+            </v-flex>
+
+            <!-- - ================================== MULTER ============================================= -->
+            <!-- <v-flex xs12 class="text-xs-center text-sm-center text-md-center text-lg-center">
+              <img :src="imageUrl" height="150" v-if="imageUrl" />
+              <v-text-field label="Select Image" @click='pickFile' v-model='imageName' prepend-icon='attach_file'>
+              </v-text-field>
+              <input type="file" style="display: none" ref="image" accept="image/*" @change="onFilePicked">
+            </v-flex> -->
+
+          </v-layout>
+        </v-container>
+
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn flat @click="dialog = false">Cancel</v-btn>
+          <v-btn flat color="primary" @click="dialog = false">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+
+    <!-- - ================================== LOGIN CARD ============================================= -->
+    <v-container fluid fill-height v-if="false">
+      <v-layout align-center justify-center>
+        <v-flex xs12 sm8 md4>
+          <v-card class="elevation-12">
+            <v-toolbar dark color="primary">
+              <v-toolbar-title>Login form</v-toolbar-title>
+              <v-spacer></v-spacer>
+              <!--  -->
+            </v-toolbar>
+            <v-card-text>
+              <v-form>
+                <v-text-field prepend-icon="person" name="login" label="Login" type="text"></v-text-field>
+                <v-text-field prepend-icon="lock" name="password" label="Password" id="password" type="password">
+                </v-text-field>
+              </v-form>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="primary">Login</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </v-app>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
+  <script src="./resources/wysiwyg/vueWysiwyg.js"></script>
+  <script src="./resources/js/main.js"></script>
+</body>
+
+</html>
