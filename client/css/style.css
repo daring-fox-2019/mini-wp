@@ -1,0 +1,32 @@
+* {
+    margin: 0;
+    padding:0;
+}
+
+nav{
+    direction: rtl;
+}
+
+.sidenav {
+    height: 100%;
+    width: 160px; 
+    position: fixed; 
+    z-index: 1; 
+    top: 0; 
+    left: 0;
+    background-color:#282828;
+    overflow-x: hidden; 
+    padding-top: 20px;
+  }
+
+.sidenav ul li a{
+    text-decoration: none;
+    color: white;   
+}
+
+.main {
+    margin-left: 15%; /* Same as the width of the sidebar */
+    padding: 0px 10px;
+}
+.navbar-brand{
+}
