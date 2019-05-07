@@ -6,25 +6,25 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Ramini WordPress</title>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
 
   <link rel="stylesheet" href="./css/vueWysiwyg.css">
 </head>
 <body>
-  <div id="app">
+  <v-app id="app">
     <div
       class="hide-overflow"
       style="position:relative;"
     >
       <v-toolbar
+        dense
         floating
         absolute
         color="grey lighten-3"
         scroll-off-screen
         scroll-target="#scrolling-techniques"
-        style="border-radius:10px"
+        style="border-radius:7px"
       >
         <v-toolbar-side-icon
           @click.stop="drawer = !drawer"
@@ -117,30 +117,23 @@
       <div
         id="scrolling-techniques"
         class="scroll-y"
-        style="height:100vh;background:rgb(200, 200, 200)"
+        style="height:100vh;background:rgb(214, 214, 214)"
       >
-        <v-container yellow justify-center style="padding-top:100px;">
+        <v-container justify-center style="padding-top:100px;height:1000px">
           <v-layout justify-center row wrap>
-            <v-flex xs8 red>
+            <v-flex xs8>
               <wysiwyg v-model="text" />
-              <p>KEDUA</p>
-              <p>KEDUA</p>
-              <p>KEDUA</p>
-              <p>KEDUA</p>
-              <p>KEDUA</p>
-              <p>KEDUA</p>
             </v-flex>
           </v-layout>
         </v-container>
       </div>
     </div>
-  </div>
+  </v-app>
 
   <script
 			  src="https://code.jquery.com/jquery-3.4.1.min.js"
 			  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
 			  crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
   <script src="./js/vueWysiwyg.js"></script>

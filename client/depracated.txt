@@ -1,0 +1,17 @@
+[Vuetify] [UPGRADE] '<v-toolbar-side-icon>' is deprecated, use '<v-app-bar-nav-icon>' instead vuetify.js:28751:27
+[Vuetify] [UPGRADE] '<v-toolbar scroll-off-screen>' is deprecated, use '<v-app-bar hide-on-scroll scroll-off-screen>' instead vuetify.js:28751:27
+[Vuetify] [UPGRADE] '<v-toolbar scroll-target>' is deprecated, use '<v-app-bar scroll-target>' instead vuetify.js:28751:27
+[Vuetify] [UPGRADE] 'v-list-tile-title' is deprecated, use 'v-list-item-title' instead vuetify.js:28751:27
+[Vuetify] [UPGRADE] 'v-list-tile-content' is deprecated, use 'v-list-item-content' instead vuetify.js:28751:27
+[Vuetify] [UPGRADE] 'v-list-tile-title' is deprecated, use 'v-list-item-title' instead vuetify.js:28751:27
+[Vuetify] [UPGRADE] 'v-list-tile-content' is deprecated, use 'v-list-item-content' instead vuetify.js:28751:27
+[Vuetify] [UPGRADE] 'v-list-tile-title' is deprecated, use 'v-list-item-title' instead vuetify.js:28751:27
+[Vuetify] [UPGRADE] 'v-list-tile-content' is deprecated, use 'v-list-item-content' instead vuetify.js:28751:27
+[Vuetify] [UPGRADE] 'v-list-tile-title' is deprecated, use 'v-list-item-title' instead vuetify.js:28751:27
+[Vuetify] [UPGRADE] 'v-list-tile-content' is deprecated, use 'v-list-item-content' instead vuetify.js:28751:27
+[Vuetify] [UPGRADE] 'v-list-tile-title' is deprecated, use 'v-list-item-title' instead vuetify.js:28751:27
+[Vuetify] [UPGRADE] 'v-list-tile-content' is deprecated, use 'v-list-item-content' instead vuetify.js:28751:27
+[Vuetify] [UPGRADE] 'v-list-tile-title' is deprecated, use 'v-list-item-title' instead vuetify.js:28751:27
+[Vuetify] [UPGRADE] 'v-list-tile-content' is deprecated, use 'v-list-item-content' instead vuetify.js:28751:27
+[Vuetify] [UPGRADE] 'v-list-tile-title' is deprecated, use 'v-list-item-title' instead vuetify.js:28751:27
+[Vuetify] [UPGRADE] 'v-list-tile-content' is deprecated, use 'v-list-item-content' instead vuetify.js:28751:27
