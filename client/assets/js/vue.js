@@ -45,13 +45,11 @@ var app = new Vue({
         createArticle: function() {
             axios
             .post(`${SERVER_PORT}/articles`, {
-                title: this.title,
-                content: this.content
+                title: this.newArticle.title,
+                content: this.newArticle.content
             })
             .then( ({data}) => {
-                this.newArticle.title=''
-                this.newArticle.content=''
-                this.newArticle.id=''
+                this.newArticle={}
 
                 this.articles.push(data)
                 this.goToList()
