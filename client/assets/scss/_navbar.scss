@@ -1,0 +1,38 @@
+.my-nav {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    padding: .5rem 1rem;
+    position: relative;
+
+    border-bottom: solid 1px #ededed;
+
+    .search-icon {
+        position: absolute;
+        left: 7.5em;
+        top: 1.9em;
+        color: #616161;
+    }
+    
+    &--content { justify-content: space-around }
+
+    &.white {
+        background-color: #fff;
+    }
+
+    &--fixed {
+        position: fixed;
+        width: 100%;
+        z-index: 9;
+    }
+
+    &--big {
+        height: 13vh;
+    }
+}

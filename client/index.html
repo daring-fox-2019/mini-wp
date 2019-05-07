@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-bs4.css" rel="stylesheet">
+  <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-bs4.js"></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+    integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+  <link rel="stylesheet" href="./assets/css/style.css">
+
+  <title>Momenku</title>
+</head>
+
+<body>
+  <div id="app">
+    <div class="d-flex" id="wrapper" v-bind:class="{ toggled }">
+      <nav id="sidebar" class="sidebar--container bg-light border-right">
+        <div class="sidebar__heading">Parampampam</div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item 
+            list-group-item-action 
+            bg-light
+            cursor-pointer" @click="goToList">My Articles</li>
+          <li class="list-group-item 
+            list-group-item-action 
+            bg-light
+            cursor-pointer" @click="goToCreate">Create Article</li>
+          <li href="#" class="list-group-item list-group-item-action bg-light">Article</li>
+        </ul>
+      </nav>
+
+      <div id="page-content-wrapper" style="min-width: 100vw;">
+
+        <header id="header" class="my-nav my-nav--fixed my-nav--big white border-bottom"
+          style="justify-content: space-between;">
+          <button class="btn btn-link
+              cursor-pointer" id="menu-toggle" @click="menuToggle"><i class="fas fa-bars"></i></button>
+
+          <div style="width: 85%">
+            <i class="fas fa-search search-icon"></i>
+            <input type="search" name="search" placeholder="Search your article here" class="searchbar searchbar--input"
+              style="width:100%;" id="header__search">
+          </div>
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+                  Lutfi
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="#">Edit Profile</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#">Logout</a>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </header>
+
+        <div style="height: 14vh">&nbsp;</div>
+
+        <section id="list" class="article--container container-fluid " v-show="menus[0].show">
+          <h1 class="mt-4 text-center">Your Story</h1>
+
+          <!-- VUE -->
+          <div class="container" style="max-width: 1000px !important">
+            <div class="row">
+              <div class="input-group mb-3">
+                <input type="search" class="form-control" placeholder="Search your article"
+                  aria-label="Recipient's username" aria-describedby="button-addon2" v-model.trim="search">
+              </div>
+            </div>
+          </div>
+
+
+          <div class="d-flex flex-column">
+            <div class="my-card d-flex justify-content-between" v-for="article in filteredArticle" :key="article.id">
+              <div class="content">
+                <div class="my-card-header">
+                  {{article.title}}
+                </div>
+                <div class="my-card-content">
+                  {{article.content}}
+                </div>
+              </div>
+              <div class="action">
+                <div class="btn btn-link" @click="fetchEdit(article._id)">Edit</div>
+                <div class="color-red fs-17" @click="deleteArticle(article._id)">Delete</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="article" v-show="menus[1].show">
+          <div class="article__container">
+            <h3>Article</h3>
+
+            <form v-on:submit.prevent="editArticle" v-show="!createButton">
+              <div class="form-group">
+                <input type="text" v-model.trim="title" class="form-control" placeholder="Title">
+              </div>
+              <div class="form-group">
+                <textarea v-model.trim="content" class="form-control" rows="5" id="summernote"></textarea>
+              </div>
+
+              <input type="hidden" v-model.trim="id">
+
+              <button class="btn btn-primary">Edit</button>
+            </form>
+
+            <form v-on:submit.prevent="createArticle" v-show="createButton">
+              <div class="form-group">
+                <input type="text" v-model.trim="title" class="form-control" placeholder="Title">
+              </div>
+              <div class="form-group">
+                <textarea v-model.trim="content" class="form-control" rows="5" id="summernote"></textarea>
+              </div>
+
+              <button id="article__draft-btn" class="btn btn-success" v-show="createButton">Draft</button>
+              <button id="article__publish-btn" class="btn btn-primary" v-show="createButton">Publish</button>
+            </form>
+          </div>
+        </section>
+        <footer class="footer">
+          <div class="footer__content">
+            &copy; 1989-2019, Momen.
+            Dirancang oleh Muhammad Lutfi di Jakarta
+          </div>
+        </footer>
+      </div>
+    </div>
+  </div>
+
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+  <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  <script src="./assets/js/vue.js"></script>
+</body>
+
+</html>
