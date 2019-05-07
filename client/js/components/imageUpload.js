@@ -1,7 +1,5 @@
 Vue.component('image-upload',{
-    props: {
-      toupload: false
-    },
+    props: ['toupload'],
     data() {
         return {
             image: ''
