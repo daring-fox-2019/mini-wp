@@ -14,7 +14,8 @@ const articleSchema = new Schema({
     },
     created_at: {
         type: Date
-    }
+    },
+    owner : { type: Schema.Types.ObjectId, ref: 'Member' }    
 });
 
 articleSchema.pre('save', function() {
