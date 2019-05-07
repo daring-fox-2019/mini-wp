@@ -1,0 +1,42 @@
+{
+    "articles": [
+        {
+        "id": 1,
+        "title": "Patty Melt",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Flickr_pointnshoot_642959103--Patty_melt.jpg/500px-Flickr_pointnshoot_642959103--Patty_melt.jpg",
+        "author": "Fahmi Sutansyah",
+        "content": "A patty melt is a type of burger consisting of a hamburger patty, sometimes topped with caramelized onions and Swiss cheese between two slices of bread (traditionally rye, though sourdough or Texas toast are sometimes substituted in some regions, including the southern U.S.) Patty melts are sometimes prepared using marbled rye bread. In some places, especially in the U.S., a patty melt might consist only of the hamburger patty (with cheese) on a single piece of toast or a single bun. The hamburger is then fried with butter on a frying pan so that the cheese melts thoroughly.[citation needed] It is unclear when the patty melt was actually invented, but records exist of them having been served as early as the 1940s. The patty melt is a variant of the traditional American cheeseburger, taking the sandwich back to its roots by serving it on bread versus a bun"
+        },
+        {
+            "id": 2,
+            "title": "William Prynne",
+            "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Wenceslas_Hollar_-_Prynne_cropped.jpg/340px-Wenceslas_Hollar_-_Prynne_cropped.jpg",
+            "author": "Fahmi Sutansyah",
+            "content": "William Prynne (1600 – 24 October 1669) was an English lawyer, author, polemicist, and political figure. He was a prominent Puritan opponent of the church policy of the Archbishop of Canterbury, William Laud. Although his views on church polity were presbyterian, he became known in the 1640s as an Erastian, arguing for overall state control of religious matters. A prolific writer, he published over 200 books and pamphlets."
+        },
+        {
+            "id": 3,
+            "title": "List of governors of North Dakota",
+            "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Flag_of_the_Governor_of_North_Dakota.svg/440px-Flag_of_the_Governor_of_North_Dakota.svg.png",
+            "author": "Fahmi Sutansyah",
+            "content": "The Governor of North Dakota is the chief executive of the U.S. state of North Dakota. The current Governor is Doug Burgum. The Governor has the power to sign or veto laws, and to call the Legislative Assembly into emergency session. The Governor is also chairman of the North Dakota Industrial Commission. He has an ex officio North Dakota Governor's Residence. There are no limits on the number of terms a governor may serve."
+        },
+        {
+            "id": 4,
+            "title": "Munda languages",
+            "image": "https://upload.wikimedia.org/wikipedia/commons/a/a9/Munda-Sprachen.png",
+            "author": "Komang",
+            "content": "The Munda languages are a language family spoken by about nine million people in central and eastern India and Bangladesh. They constitute a branch of the Austroasiatic language family, which means they are related to languages such as Mon and Khmer languages and Vietnamese, as well as minority languages in Thailand and Laos and the minority Mangic languages of South China.[2] The origins of the Munda languages are not known, but they predate the other languages of eastern India. Ho, Mundari, and Santali are notable languages of this group."
+        },
+        {
+            "id": 5,
+            "title": "Richmond International Airport",
+            "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Richmond_International_Airport.jpg/500px-Richmond_International_Airport.jpg",
+            "author": "Fahmi Sutansyah",
+            "content": "Richmond International Airport (IATA: RIC, ICAO: KRIC, FAA LID: RIC) is a joint civil-military public airport in Sandston, Virginia, United States, an unincorporated community (within Henrico County). The airport is about 7 miles (11 km) southeast of downtown Richmond, the capital of the Commonwealth of Virginia."
+        }
+
+        
+    ]
+
+}
