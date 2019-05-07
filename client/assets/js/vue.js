@@ -1,4 +1,4 @@
-const SERVER_PORT = `http://localhost:3000`
+const ARTICLE_PATH = `http://localhost:3000/articles`
 
 var app = new Vue({
     el: '#app',
@@ -32,7 +32,7 @@ var app = new Vue({
         fetchArticles: function() {
             this.createButton=false
             axios
-            .get(`${SERVER_PORT}/articles`)
+            .get(`${ARTICLE_PATH}`)
             .then(({data}) => {
                 data.forEach(element => {
                     this.articles.push(element)
@@ -44,7 +44,7 @@ var app = new Vue({
         },
         createArticle: function() {
             axios
-            .post(`${SERVER_PORT}/articles`, {
+            .post(`${ARTICLE_PATH}`, {
                 title: this.newArticle.title,
                 content: this.newArticle.content
             })
@@ -62,7 +62,7 @@ var app = new Vue({
             const id = this.newArticle.id
 
             axios
-            .patch(`${SERVER_PORT}/articles/${id}`, {
+            .patch(`${ARTICLE_PATH}/${id}`, {
                 title: this.newArticle.title,
                 content: this.newArticle.content
             })
@@ -87,7 +87,7 @@ var app = new Vue({
         fetchEdit: function(id) {
             this.goToCreate()
             axios
-            .get(`${SERVER_PORT}/articles/${id}`)
+            .get(`${ARTICLE_PATH}/${id}`)
             .then(({data}) => {
                 this.newArticle.title=data.title
                 this.newArticle.content=data.content
@@ -101,7 +101,7 @@ var app = new Vue({
         },
         deleteArticle: function(id) {
             axios
-            .delete(`${SERVER_PORT}/articles/${id}`)
+            .delete(`${ARTICLE_PATH}/${id}`)
             .then((deleted) => {
 
                 this.articles = this.articles.filter(article => {
