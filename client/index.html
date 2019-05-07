@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="//cdn.ckeditor.com/4.11.4/standard/ckeditor.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <title>Mini Wordpress</title>
+</head>
+<body>
+    <nav class="sticky-top d-flex justify-content-around" id="navbarAtas">
+        <div id="logo">
+            <img src="https://scontent-sea1-1.cdninstagram.com/vp/9fb6549e2c697cdca87489f05ea0a1dd/5D705334/t51.2885-19/s150x150/55778917_621877284951923_2049740062177886208_n.jpg?_nc_ht=scontent-sea1-1.cdninstagram.com" alt="Logo">
+            Mini Wordpress
+        </div>
+        <div id="navUser">
+            <a href="#editor"><button type="button" class="btn btn-white" id="write">Write +</button></a>
+            <a href=""><i class="fas fa-user-circle" id="userIcon"></i></a>
+        </div>
+    </nav>
+
+    <div class="container-fluid" id="isi">
+        <div class="row">
+            <div class="col-md-3" id="sidebar">
+                <br>
+                <div class="navbar">
+                    <h3>Search: </h3>
+                    <form class="form-inline">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" v-model="searchArtc"><br><br>
+                        <button class="btn btn-primary my-2 my-sm-0" type="submit" @click.prevent="searchArticle(searchArtc)">Search</button>
+                    </form>
+                </div>
+                <h4 class="d-flex justify-content-center" style="color:darkblue; font-size:35px; padding-top: 10px">Options</h4>
+                <ul class="" id="liSidebar">
+                    <li><a href="#artcilesList"><button type="button" class="btn btn-primary btn-lg btn-block" style="margin-top:20px">Articles List</button></a></li>
+                    <li><a href=""><button type="button" class="btn btn-primary btn-lg btn-block" style="margin-top:20px">Option</button></a></li>
+                    <li><a href=""><button type="button" class="btn btn-primary btn-lg btn-block" style="margin-top:20px">Option</button></a></li>
+                </ul>
+                <br><br>
+                <!-- <ul class="article" id="sidebarList">
+                    <li><h3>Menu Articles</h3></li>
+                    <li v-for="article in articles"><h4><a href="">{{article.title}}</a></h4></li>
+                </ul> -->
+            </div>
+            <div class="col-md-9 offset-3">
+                    <!-- <div class="search">
+                        <div class="row" id="artcilesList">
+                            <div class="col-4" v-for="article in searchArtc" :key="article.id">
+                                <div class="card text-center" style="width: 18rem; margin-top:15px;">
+                                    <img v-bind:src="article.img" class="card-img-top" alt="Article Image">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{article.title}}</h5>
+                                        <p class="card-text">{{article.content}}</p>
+                                        <p class="card-text"><small class="text-muted">Created At {{article.created_at}}</small></p>
+                                        <a href="" class="btn btn-primary" @click.prevent="readMoress(article.id)" style="margin-bottom: 5px">Read More</a><br>
+                                        <a href="" class="btn btn-secondary" @click.prevent="editArticle(article.id)">Edit</a>
+                                        <a href="" class="btn btn-danger" @click.prevent="deleteArticle(article.id)">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="row" id="artcilesList">
+                        <div class="col-4" v-for="article in articles" :key="article.id">
+                            <div class="card text-center" style="width: 18rem; margin-top:15px;">
+                                <img v-bind:src="article.img" class="card-img-top" alt="Article Image">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{article.title}}</h5>
+                                    <!-- <p class="card-text">{{article.content}}</p> -->
+                                    <p class="card-text"><small class="text-muted">Created At {{article.created_at}}</small></p>
+                                    <a href="" class="btn btn-primary" @click.prevent="readMoress(article.id)" style="margin-bottom: 5px">Read More</a><br>
+                                    <a href="" class="btn btn-secondary" @click.prevent="editArticle(article.id)">Edit</a>
+                                    <a href="" class="btn btn-danger" @click.prevent="deleteArticle(article.id)">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="isiArticle">
+                        <h1 style="text-align: center">{{addArticle.title}}</h1>
+                        <img :src="addArticle.img" alt="Article Image" style="width:100%; height:500px">
+                        <p><small>Created At : {{addArticle.created_at}}</small></p>
+                        <p><i>{{addArticle.content}}</i></p>
+                    </div>
+                    <div id="editor">
+                        <form>
+                            <h1>Write Something</h1>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="" placeholder="Need Title.." v-model="addArticle.title"><br>
+                                <textarea name="" id="" cols="80" rows="10" class="form-control" placeholder="Content" v-model="addArticle.content"></textarea>
+                            </div>
+                            <!-- <textarea name="editor1" id="editor1" rows="10" cols="80">
+                            </textarea> -->
+                            <a href=""><button type="button" class="btn btn-primary" style="margin-top:20px; margin-right:10px" @click.prevent="addArticleToDB()" v-if="editArtc == false">Add Article</button></a>
+                            <a href=""><button type="button" class="btn btn-primary" style="margin-top:20px; margin-right:10px" @click.prevent="editArticleToDB(addArticle.id)" v-if="editArtc == true">Edit Article</button></a>
+                            <a href=""><button type="button" class="btn btn-primary" style="margin-top:20px; margin-right:10px">Cancel</button></a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="footer">
+                    <p>Copyright 2019 @rudyfebrianthomas</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>CKEDITOR.replace( 'editor1' );</script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="./javascript/script.js"></script>
+</body>
+</html>
