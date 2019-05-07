@@ -1,22 +1,26 @@
 $(document).ready(function () {
-    $('#summernote').summernote({
-        placeholder: 'Start writing here...',
-        tabsize: 2,
-        height: 200,
-      });
-
+    showIndex();
+    
     $('#sidebarCollapse').on('click', function () {
         $('#sidebar').toggleClass('active');
         $('#content').toggleClass('active');
     });
 
-    $('#cat-publish').on('click', function () {
-        $('#cat-publish').toggleClass('active');
-        $('#cat-draft').removeClass('active');
+    let $publishCategory = $('#cat-publish')
+    let $draftCategory = $('#cat-draft')
+
+    $publishCategory.on('click', function () {
+       if(!$publishCategory.hasClass('active')) {
+          $publishCategory.toggleClass('active');
+          $draftCategory.removeClass('active');
+       }
     });
-    $('#cat-draft').on('click', function () {
-        $('#cat-draft').toggleClass('active');
-        $('#cat-publish').removeClass('active');
+
+    $draftCategory.on('click', function () {
+      if(!$draftCategory.hasClass('active')) {
+        $draftCategory.toggleClass('active');
+        $publishCategory.removeClass('active');
+      }
     });
 
     $('.collapse.in').toggleClass('in');
@@ -39,3 +43,36 @@ $(document).ready(function () {
 
   }, false);
 });
+
+const serverURL = 'http://localhost:3000';
+
+function showCreatePost() {
+  $('#createPost').show()
+  $('#index').hide()
+  $('#updatePost').hide()
+}
+
+function showIndex() {
+  $('#index').show()
+  $('#createPost').hide()
+  $('#updatePost').hide()
+}
+
+function showUpdatePost() {
+  $('#updatePost').show()
+  $('#createPost').hide()
+  $('#index').hide()
+}
+
+var app = new Vue({
+  el: '#miniWP',
+  data: {
+    isLogin: false,
+    user: {
+      _id: '',
+      email: '',
+      name: '',
+    }
+  },
+
+})

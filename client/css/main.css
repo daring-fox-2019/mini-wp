@@ -28,7 +28,7 @@ a, a:hover, a:focus {
 #sidebar {
     width: 200px;
     position: fixed;
-    top: 56px;
+    top: 46px;
     left: 0;
     height: 100vh;
     max-height: 100vh;
@@ -81,6 +81,7 @@ ul ul a {
 
 .main-bg-color {
     background:#065a92fa;
+    max-height: 46px;
 }
 
 .brand {
@@ -136,7 +137,7 @@ color: #aaa;
 }
 
 .post-list {
-    max-width: 80%;
+    width: 80%;
 }
 
 .post-list-item {

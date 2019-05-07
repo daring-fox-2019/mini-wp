@@ -1,0 +1,71 @@
+input[type="file"] {
+    position: absolute;
+    opacity: 0;
+    z-index: -1;
+  }
+  
+  .align-center {
+    text-align: center;
+  }
+  
+  .helper {
+    height: 100%;
+    display: inline-block;
+    vertical-align: middle;
+    width: 0;
+  }
+  
+  .hidden {
+    display: none !important;
+  }
+  
+  .hidden.image {
+    display: inline-block !important;
+  }
+  
+  .display-inline {
+    display: inline-block;
+    vertical-align: middle;
+  }
+  
+  .img {
+    border: 1px solid #f6f6f6;
+    display: inline-block;
+    height: auto;
+    max-height: 80%;
+    max-width: 80%;
+    width: auto;
+  }
+  
+  .drop {
+    background-color: #f2f2f2;
+    border: 4px dashed #ccc;
+    background-color: #f6f6f6;
+    border-radius: 2px;
+    min-height: 200px;
+    height: auto;
+    width: 100%;
+    padding: 15px;
+  }
+
+  #featured-image {
+      display: flex;
+  }
+
+  .featured_image_full {
+      margin-top: 20px;
+      width: auto;
+      height: auto;
+      max-width: 100vh;
+      max-height: 80%;
+      display: flex;
+  }
+
+.featured_image_full img {
+    background-size: cover;
+}
+
+  .detail_title {
+      font-style: none;
+      font-size: 3em;
+  }
