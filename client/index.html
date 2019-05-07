@@ -113,23 +113,23 @@
 
             <form v-on:submit.prevent="editArticle" v-show="!createButton">
               <div class="form-group">
-                <input type="text" v-model.trim="title" class="form-control" placeholder="Title">
+                <input type="text" v-model.trim="newArticle.title" class="form-control" placeholder="Title">
               </div>
               <div class="form-group">
-                <textarea v-model.trim="content" class="form-control" rows="5" id="summernote"></textarea>
+                <textarea v-model.trim="newArticle.content" class="form-control" rows="5" id="summernote"></textarea>
               </div>
 
-              <input type="hidden" v-model.trim="id">
+              <input type="hidden" v-model.trim="newArticle.id">
 
               <button class="btn btn-primary">Edit</button>
             </form>
 
             <form v-on:submit.prevent="createArticle" v-show="createButton">
               <div class="form-group">
-                <input type="text" v-model.trim="title" class="form-control" placeholder="Title">
+                <input type="text" v-model.trim="newArticle.title" class="form-control" placeholder="Title">
               </div>
               <div class="form-group">
-                <textarea v-model.trim="content" class="form-control" rows="5" id="summernote"></textarea>
+                <textarea v-model.trim="newArticle.content" class="form-control" rows="5" id="summernote"></textarea>
               </div>
 
               <button id="article__draft-btn" class="btn btn-success" v-show="createButton">Draft</button>

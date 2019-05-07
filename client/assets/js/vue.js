@@ -5,9 +5,11 @@ var app = new Vue({
     data: {
         articles: [],
         message: 'Hello vue!',
-        title: '',
-        content: '',
-        id: '',
+        newArticle: {
+            title: '',
+            content: '',
+            id: '',
+        },
         search: '',
         createButton: true,
         menus: 
@@ -47,9 +49,10 @@ var app = new Vue({
                 content: this.content
             })
             .then( ({data}) => {
-                this.title=''
-                this.content=''
-                this.id=''
+                this.newArticle.title=''
+                this.newArticle.content=''
+                this.newArticle.id=''
+
                 this.articles.push(data)
                 this.goToList()
             })
@@ -58,16 +61,16 @@ var app = new Vue({
             })
         },
         editArticle: function() {
-            const id = this.id
+            const id = this.newArticle.id
 
             axios
             .patch(`${SERVER_PORT}/articles/${id}`, {
-                title: this.title,
-                content: this.content
+                title: this.newArticle.title,
+                content: this.newArticle.content
             })
             .then( ({data}) => {
                 this.articles=this.articles.map(e=> {
-                    if(e._id===this.id) {
+                    if(e._id===this.newArticle.id) {
                         e.title=data.title
                         e.content=data.content
                     }
@@ -75,9 +78,7 @@ var app = new Vue({
                     return e
                 })
 
-                this.title=''
-                this.content=''
-                this.id=''
+                this.newArticle={}
                 
                 this.goToList()
             })
@@ -90,9 +91,9 @@ var app = new Vue({
             axios
             .get(`${SERVER_PORT}/articles/${id}`)
             .then(({data}) => {
-                this.title=data.title
-                this.content=data.content
-                this.id=data._id
+                this.newArticle.title=data.title
+                this.newArticle.content=data.content
+                this.newArticle.id=data._id
 
                 this.createButton=false
             })
