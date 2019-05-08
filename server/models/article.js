@@ -9,6 +9,7 @@ const articleSchema = new Schema({
   },
   text: String,
   status: Number,
+  imageURL: String,
   created: Date,
   updated: Date,
   creator: {

@@ -9,7 +9,7 @@ class Controller {
     }
     Article.find(obj, [], {
       sort:{
-          created: -1
+          updated: -1
       }
     })
       .populate({
@@ -71,8 +71,14 @@ class Controller {
   static create(req, res, next) {
     const { title, text } = req.body
     const { decoded } = req;
+    let imageURL = null;
+    
+    if (req.file) {
+      imageURL = req.file.cloudStoragePublicUrl;
+    }
     Article.create({
       title, text,
+      imageURL: imageURL || './assets/noPhoto.png',
       status: 0,
       creator: decoded.id,
       created: new Date(),
@@ -112,12 +118,18 @@ class Controller {
   static updatePut(req, res, next) {
     const { title, text, status } = req.body
     let updatedArticle = req.article;
+    let imageURL = null;
+    
+    if (req.file) {
+      imageURL = req.file.cloudStoragePublicUrl;
+    }
     updatedArticle.title = title;
     updatedArticle.text = text;
+    updatedArticle.imageURL = imageURL;
     updatedArticle.status = status;
     updatedArticle.updated = new Date();
     updatedArticle.updateOne({
-      title, text, status, updated: updatedArticle.updated
+      title, text, status, imageURL, updated: updatedArticle.updated
     })
       .then(info => {
         res.status(201).json({ message: 'data updated', updatedArticle, info });
@@ -130,8 +142,14 @@ class Controller {
   static updatePatch(req, res, next) {
     const { title, text, status } = req.body
     let { article } = req;
+    let imageURL = null;
+    
+    if (req.file) {
+      imageURL = req.file.cloudStoragePublicUrl;
+    }
     article.title = title || article.title;
     article.text = text || article.text;
+    article.imageURL = imageURL || article.imageURL;
     article.status = status || article.status;
     article.updated = new Date();
     article.save()
