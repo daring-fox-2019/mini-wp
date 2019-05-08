@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    
     <link
       rel="stylesheet"
       href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
@@ -16,89 +17,158 @@
       integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-bs4.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-bs4.js"></script>
+    <link rel="stylesheet" href="css/style.css" />
     <title>Mini Wordpress</title>
   </head>
   <body>
-    <header>
-      <div class="container">
-        <nav>
-          <h1 class="brand"></h1>
-          <ul>
-            <li>
-              <a style=" text-decoration: none;color: white" href="#">Blogs</a>
-            </li>
-            <li>
-              <a style=" text-decoration: none;color: white" href="#">About</a>
-            </li>
-            <li>
-              <a style=" text-decoration: none;color: white" href="#"
-                >Register</a
-              >
-            </li>
-          </ul>
-        </nav>
-      </div>
+    <div id="app">
 
-      <!-- REGISTER FORM-->
-      <div class="container py-5" style="width:500px;">
-          <h1> Register </h1>
-          <form>
-            <div class="form-group">
-              <label for="exampleInputEmail1">Email address</label>
-              <input
-                type="email"
-                class="form-control"
-                id="exampleInputEmail1"
-                aria-describedby="emailHelp"
-                placeholder="Enter email"
-              />
-              <small id="emailHelp" class="form-text text-muted"
-                >We'll never share your email with anyone else.</small
-              >
-            </div>
-            <div class="form-group">
-              <label for="exampleInputPassword1">Password</label>
-              <input
-                type="password"
-                class="form-control"
-                id="exampleInputPassword1"
-                placeholder="Password"
-              />
-            </div>
-            <div class="form-group">
-                <span>Profile Picture</span>
-                <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="inputGroupFile01">
-                    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+      <!-- NAVBAR -->
+      <nav>
+        <h1 class="brand"></h1>
+        <ul>
+          <li>
+            <a
+              style=" text-decoration: none;color: white"
+              href="#"
+              v-if="isLogin"
+              @click.prevent="fetchArticles"
+              >Blogs</a
+            >
+          </li>
+          <li>
+            <a style=" text-decoration: none;color: white" href="#">About</a>
+          </li>
+          <li>
+            <a
+              style=" text-decoration: none;color: white"
+              href="#"
+              v-on:click.prevent="showRegister"
+              >Register</a
+            >
+          </li>
+          <li>
+            <a
+              style=" text-decoration: none;color: white"
+              href="#"
+              v-if="!isLogin"
+              v-on:click.prevent="showLogin"
+              >Sign in</a
+            >
+            <a
+              style=" text-decoration: none;color: white"
+              href="#"
+              v-else="isLogin"
+              v-on:click.prevent="logout"
+              >Sign Out</a
+            >
+          </li>
+        </ul>
+      </nav>
+
+      <section id="home" v-if="!isLogin">
+        <!--REGISTER FORM-->
+        <register
+          v-if="!isLogin && authenticate == 'register'"
+          v-on:success-register="successRegister"
+        ></register>
+
+        <!-- LOGIN FORM-->
+        <login
+          v-if="!isLogin && authenticate == 'login'"
+          v-on:success-login="successLogin"
+        ></login>
+      </section>
+
+      <section id="main-content" v-if="isLogin" >
+          <div class="row py-5" style="height:100vh">
+            <div class="col-2 border-right">
+                <div class="media ">
+                  <img id="profPic" class="align-self-start mx-auto" v-bind:src="loginUser.profPic" alt="Generic placeholder image">
+                </div>
+                    <h4 class="text-center py-4">{{loginUser.username}}</h4>
+                <div class="col-12 px-5">
+                  <div class="list-group" id="list-tab" role="tablist">
+                    <a class="list-group-item list-group-item-action border-0 pl-2" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home"><i class="fas fa-search"></i> Search</a>
+                    <a class="list-group-item list-group-item-action border-0 pl-2" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile"><i class="fas fa-book-open"></i> My Blogs</a>
+                    <a class="list-group-item list-group-item-action border-0 pl-2" id="list-messages-list" data-toggle="list" href="#list-messages" role="tab" aria-controls="messages"><i class="fas fa-star"></i> My Likes</a>
+                    <a class="list-group-item list-group-item-action border-0 pl-2" id="list-settings-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings"><i class="fas fa-tags"></i> Tags</a>
+                    <button @click.prevent="showEditor" type="button" class="btn mt-3" style="background-color: #016087; width: 120px; font-size: 10px"><i class="fas fa-feather-alt px-2"></i> Write</button>
+                  </div>
                 </div>
             </div>
-            <div class="form-check">
-              <input type="checkbox" class="form-check-input" id="exampleCheck1" />
-              <label class="form-check-label" for="exampleCheck1"
-                >Check me out</label
-              >
+            <div class="col-9">
+               <div class="row">
+                 <div class="col-12">
+                   <div class="container px-4 py-4">
+                     <div class="form-group has-search">
+                         <span class="fa fa-search form-control-feedback"></span>
+                         <input type="text" class="form-control" placeholder="Search">
+                     </div>
+                   </div>
+                 </div>
+               </div>
+               <!--All Articles-->
+               <articles v-bind:articles="articles" v-if="page == 'all'"></articles>
+               <article-details  v-if="page == 'details'" v-bind:details="details"></article-details>
+
+               <!-- Editor -->
+               <div class="container">
+                 <h1>Title : {{newArticle.title}}</h1>
+                   <div class="form-group">
+                       <input
+                         type="text"
+                         class="form-control"
+                         id="exampleInputTitle"
+                         placeholder="Input Title"
+                         v-model="newArticle.title"
+                       />
+                   </div>
+                   <h1>Description : </h1>
+                   <summer-note ref="editor"></summer-note>
+                   <div class="custom-file">
+                      <input
+                        type="file"
+                        class="custom-file-input"
+                        id="inputGroupFile01"
+                        v-on:change="getImage"
+                      />
+                      <label class="custom-file-label" for="inputGroupFile01"
+                        ></label
+                      >
+                  </div>
+                   <div class="col-12 px-0 d-flex justify-content-center">
+                       <button @click.prevent="getValue" type="button" class="btn mt-3" style="background-color: #016087; width: 120px; font-size: 10px">Post</button>
+                       <button @click.prevent="addArticle" type="button" class="btn mt-3" style="background-color: #016087; width: 120px; font-size: 10px">Cancel</button>
+                   </div>
+               </div>        
             </div>
-            <button type="submit" class="btn btn-primary" 
-                    style=" color: white;background-color: #d52c82; border: none"
-                    >Submit</button>
-          </form>
-      </div>
-    </header>
-    <script
-      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-      crossorigin="anonymous"
-    ></script>
+          </div>
+       
+      </section>
+    </div>
+    <!-- built files will be auto injected -->
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="components/register.js"></script>
+    <script src="components/login.js"></script>
+    <script src="components/articles.js"></script>
+    <script src="components/details.js"></script>
+    <script src="components/summernote.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        $('#summernote').summernote({
+          tabsize: 2,
+          height: 200
+        });
+    </script>
   </body>
 </html>

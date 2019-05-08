@@ -6,7 +6,9 @@ const multer = require('../middlewares/multer')
 const gcsMiddlewares = require('../middlewares/googleCloudStorage')
 const googleVision = require('../middlewares/google-vision')
 
-
-router.post('/', authentication, multer.single('photo'), gcsMiddlewares.sendUploadToGCS, googleVision, articleController.create)
-
+router.use(authentication)
+router.post('/', multer.single('photo'), gcsMiddlewares.sendUploadToGCS, googleVision, articleController.create)
+router.get('/', articleController.showAll)
+router.get('/:id', articleController.showOne)
+router.put('/:id', articleController.update)
 module.exports = router

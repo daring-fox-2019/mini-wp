@@ -17,10 +17,11 @@ const articleSchema = new Schema({
         type : Date,
         default : new Date()
     },
-    like : {
-        type : Number,
-        default : 0
-    },
+    like : [{
+        type : Schema.Types.ObjectId,
+        ref : 'User',
+        default : null
+    }],
     tags : [{
         type : Schema.Types.ObjectId,
         ref : 'Tag'
@@ -28,6 +29,10 @@ const articleSchema = new Schema({
     userId : {
         type : Schema.Types.ObjectId,
         ref : 'User'
+    },
+    updatedAt : {
+        type : Date,
+        default : null
     }
 })
 

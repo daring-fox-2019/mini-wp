@@ -4,9 +4,17 @@ const { sign } = require('../helpers/jwt')
 
 class userController {
     static register(req, res) {
-        const { email, password } = req.body
+        const { username, email, password, image } = req.body
+        let gcsUrl = ''
+        if (!req.file) {
+            gcsUrl = 'https://upload.wikimedia.org/wikipedia/en/d/d1/Image_not_available.png'
+        } else {
+            gcsUrl = req.file.gcsUrl
+        }
         User
             .create({
+                username,
+                profilePicture : gcsUrl,
                 email,
                 password
             })
@@ -29,8 +37,8 @@ class userController {
                 if (!findOneUser) res.status(401).json({ message: 'Email/Password is incorrect!' })
                 else if (!compare(password, findOneUser.password)) res.status(401).json({ message: 'Email/Password is incorrect!' })
                 else {
-                    const { id, email } = findOneUser
-                    const payload = { id, email }
+                    const { id, email, username, profilePicture } = findOneUser
+                    const payload = { id, email, username, profilePicture }
                     const token = sign(payload)
                     req.headers.token = token
                     res.status(200).json({
