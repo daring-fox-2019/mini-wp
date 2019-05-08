@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "sass": "sass --watch ../client/assets/scss/_main.scss:../client/assets/css/style.css"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +17,7 @@
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "express": "^4.16.4",
+    "google-auth-library": "^3.1.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.5.6"
   },

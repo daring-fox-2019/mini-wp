@@ -27,14 +27,20 @@
       <nav id="sidebar" class="sidebar--container bg-light border-right">
         <div class="sidebar__heading">Parampampam</div>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item 
-            list-group-item-action 
-            bg-light
-            cursor-pointer" @click="goToList">My Articles</li>
-          <li class="list-group-item 
-            list-group-item-action 
-            bg-light
-            cursor-pointer" @click="goToCreate">Create Article</li>
+          <li 
+            class="list-group-item 
+              list-group-item-action 
+              bg-light
+              cursor-pointer" 
+            @click="goToListPage"
+          >List</li>
+          <li 
+            class="list-group-item 
+              list-group-item-action 
+              bg-light
+              cursor-pointer" 
+            @click="goToArticlePage"
+          >Create Article</li>
           <li href="#" class="list-group-item list-group-item-action bg-light">Article</li>
         </ul>
       </nav>
@@ -43,20 +49,26 @@
 
         <header id="header" class="my-nav my-nav--fixed my-nav--big white border-bottom"
           style="justify-content: space-between;">
-          <button class="btn btn-link
-              cursor-pointer" id="menu-toggle" @click="menuToggle"><i class="fas fa-bars"></i></button>
+          <button
+            @click="menuToggle"
+            class="btn btn-link
+              cursor-pointer" 
+            id="menu-toggle" 
+          ><i class="fas fa-bars color-grey4"></i></button>
 
           <div style="width: 85%">
-            <i class="fas fa-search search-icon"></i>
-            <input type="search" name="search" placeholder="Search your article here" class="searchbar searchbar--input"
-              style="width:100%;" id="header__search">
+            <div class="relative">
+              <i class="fas fa-search search-icon"></i>
+              <input type="search" name="search" placeholder="Search your article here" class="searchbar searchbar--input"
+                style="width:100%;" id="header__search">
+            </div>
           </div>
 
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
-          <div id="navbarSupportedContent">
+          <div id="navbarSupportedContent" v-if="user.loggedIn">
             <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
@@ -75,10 +87,120 @@
 
         <div style="height: 14vh">&nbsp;</div>
 
-        <section id="list" class="article--container container-fluid " v-show="menus[0].show">
+        <!-- menus -->
+        <section id="login" v-if="menus.login" class="relative">
+          <div class="container-sm">
+            <div class="row my-card my-card--border">
+              <div class="">
+                <h4>Login</h4>
+              </div>
+              <div class="">
+                <div>
+                  <form v-on:submit.prevent="login">
+                    <div class="form-group">
+                      <input 
+                        type="email" 
+                        class="form-control" 
+                        v-model="userForm.email"
+                        placeholder="email@mail.com"
+                      >
+                    </div>
+                    <div class="form-group">
+                      <input 
+                        type="password" 
+                        class="form-control" 
+                        v-model="userForm.password"
+                        placeholder="Password"
+                      >
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                      <div 
+                        class="color-red 
+                          cursor-pointer
+                          pointer-underline
+                          "
+                        @click="goToRegisterPage"
+                      >
+                        Create new account
+                      </div>
+                      <button 
+                        type="submit" 
+                        class="btn 
+                        btn-danger
+                        cursor-pointer"
+                      >
+                        Login
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="register" v-else-if="menus.register">
+
+          <div class="container-sm">
+            <div class="row my-card my-card--border">
+              <div class="">
+                <h4>Register</h4>
+              </div>
+              <div class="">
+                <div>
+                  <form v-on:submit.prevent="register">
+                    <div class="form-group">
+                      <input 
+                        type="text" 
+                        class="form-control" 
+                        v-model="userForm.name"
+                        placeholder="Name"
+                      >
+                    </div>
+
+                    <div class="form-group">
+                      <input 
+                        type="email" 
+                        class="form-control" 
+                        v-model="userForm.email"
+                        placeholder="email@mail.com"
+                      >
+                    </div>
+                    
+                    <div class="form-group">
+                      <input 
+                        type="password" 
+                        class="form-control" 
+                        v-model="userForm.password"
+                        placeholder="Password"
+                      >
+                    </div>
+
+                    <button 
+                      type="submit" 
+                      class="btn 
+                        btn-danger
+                        cursor-pointer"
+                    >
+                      Submit
+                    </button>
+
+                    <div>
+                      Already have account? Login <span @click="goToLoginPage" class="cursor-pointer
+                      color-red
+                      pointer-underline">here</span>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="list" class="article--container container-md" v-else-if="menus.list">
           <h1 class="mt-4 text-center">Your Story</h1>
 
-          <!-- VUE -->
           <div class="container" style="max-width: 1000px !important">
             <div class="row">
               <div class="input-group mb-3">
@@ -87,7 +209,6 @@
               </div>
             </div>
           </div>
-
 
           <div class="d-flex flex-column">
             <div class="my-card d-flex justify-content-between" v-for="article in filteredArticle" :key="article.id">
@@ -100,18 +221,28 @@
                 </div>
               </div>
               <div class="action">
-                <div class="btn btn-link" @click="fetchEdit(article._id)">Edit</div>
-                <div class="color-red fs-17" @click="deleteArticle(article._id)">Delete</div>
+                <div 
+                  class="btn 
+                    btn-link 
+                    cursor-pointer" 
+                  @click="fetchEdit(article._id)"
+                >Edit</div>
+                <div 
+                  class="color-red 
+                    fs-17
+                    pointer-underline" 
+                  @click="deleteArticle(article._id)"
+                >Delete</div>
               </div>
             </div>
           </div>
         </section>
 
-        <section id="article" v-show="menus[1].show">
+        <section id="article" v-else-if="menus.article">
           <div class="article__container">
             <h3>Article</h3>
 
-            <form v-on:submit.prevent="editArticle" v-show="!createButton">
+            <form v-on:submit.prevent="editArticle" v-show="!createPage">
               <div class="form-group">
                 <input type="text" v-model.trim="newArticle.title" class="form-control" placeholder="Title">
               </div>
@@ -121,10 +252,14 @@
 
               <input type="hidden" v-model.trim="newArticle.id">
 
-              <button class="btn btn-primary">Edit</button>
+              <button 
+                class="btn 
+                  btn-primary
+                  cursor-pointer"
+              >Edit</button>
             </form>
 
-            <form v-on:submit.prevent="createArticle" v-show="createButton">
+            <form v-on:submit.prevent="createArticle" v-show="createPage">
               <div class="form-group">
                 <input type="text" v-model.trim="newArticle.title" class="form-control" placeholder="Title">
               </div>
@@ -132,11 +267,14 @@
                 <textarea v-model.trim="newArticle.content" class="form-control" rows="5" id="summernote"></textarea>
               </div>
 
-              <button id="article__draft-btn" class="btn btn-success" v-show="createButton">Draft</button>
-              <button id="article__publish-btn" class="btn btn-primary" v-show="createButton">Publish</button>
+              <button id="article__draft-btn" class="btn btn-success">Draft</button>
+              <button id="article__publish-btn" class="btn btn-primary">Publish</button>
             </form>
           </div>
         </section>
+
+        <!-- end of menus -->
+
         <footer class="footer">
           <div class="footer__content">
             &copy; 1989-2019, Momen.

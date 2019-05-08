@@ -5,24 +5,28 @@ var app = new Vue({
     data: {
         articles: [],
         message: 'Hello vue!',
+        user: {
+            loggedIn: false
+        },
         newArticle: {
             title: '',
             content: '',
             id: '',
         },
+        userForm: {
+            name: '',
+            email: '',
+            password: ''
+        },
         search: '',
-        createButton: true,
+        createPage: true,
         menus: 
-        [
-            {
-                menu: 'list',
-                show: true
-            },
-            {
-                menu: 'article',
-                show: false
-            }
-        ],
+        {
+            login: true,
+            register: false,
+            list: false,
+            article: false
+        },
         toggled: false
     },
     mounted() {
@@ -30,7 +34,7 @@ var app = new Vue({
     },
     methods: {
         fetchArticles: function() {
-            this.createButton=false
+            this.createPage=false
             axios
             .get(`${ARTICLE_PATH}`)
             .then(({data}) => {
@@ -52,7 +56,7 @@ var app = new Vue({
                 this.newArticle={}
 
                 this.articles.push(data)
-                this.goToList()
+                this.goToListPage()
             })
             .catch(err => {
                 console.log(err);
@@ -78,14 +82,14 @@ var app = new Vue({
 
                 this.newArticle={}
                 
-                this.goToList()
+                this.goToListPage()
             })
             .catch(err => {
                 console.log(err);
             })
         },
         fetchEdit: function(id) {
-            this.goToCreate()
+            this.goToArticlePage()
             axios
             .get(`${ARTICLE_PATH}/${id}`)
             .then(({data}) => {
@@ -93,7 +97,7 @@ var app = new Vue({
                 this.newArticle.content=data.content
                 this.newArticle.id=data._id
 
-                this.createButton=false
+                this.createPage=false
             })
             .catch(err => {
                 console.log(err);
@@ -114,14 +118,29 @@ var app = new Vue({
                 console.log(err);
             })
         },
-        goToList: function() {
-            this.menus[0].show=true
-            this.menus[1].show=false
+        goToLoginPage: function() {
+            this.menus.login=true
+            this.menus.register=false
+            this.menus.list=false
+            this.menus.article=false
         },
-        goToCreate: function() {
-            this.menus[0].show=false
-            this.menus[1].show=true
-            this.createButton=true
+        goToRegisterPage: function() {
+            this.menus.login=false
+            this.menus.register=true
+            this.menus.list=false
+            this.menus.article=false
+        },
+        goToListPage: function() {
+            this.menus.login=false
+            this.menus.register=false
+            this.menus.list=true
+            this.menus.article=false
+        },
+        goToArticlePage: function() {
+            this.menus.login=false
+            this.menus.register=false
+            this.menus.list=false
+            this.menus.article=true
         },
         menuToggle: function() {
             this.toggled = !this.toggled

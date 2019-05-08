@@ -15,7 +15,7 @@
 .my-card {
   position: relative;
   display: inline-block;
-  width: 75%;
+  width: 100%;
   height: auto;
   margin-right: 1.2%;
   background: #ffffff;
@@ -23,10 +23,15 @@
   margin: 2em auto 0em;
   z-index: 0;
   padding: 13px 23px;
-  cursor: pointer;
+}
+.my-card--border {
+  border: solid 1px #bdbdbd;
 }
 .my-card:not(:first-child) {
   margin-top: 1.2em;
+}
+.my-card:last-child {
+  margin-bottom: 3.3em;
 }
 .my-card:hover {
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.12);
@@ -40,7 +45,6 @@
 .footer {
   background-color: #fff;
   border-top: solid 1px #ededed;
-  margin-top: 4.5em;
 }
 .footer__content {
   text-align: center;
@@ -103,9 +107,9 @@
 }
 .my-nav .search-icon {
   position: absolute;
-  left: 7.5em;
-  top: 1.9em;
-  color: #616161;
+  left: 2.9em;
+  top: 0.7em;
+  color: #bdbdbd;
 }
 .my-nav--content {
   justify-content: space-around;
@@ -169,6 +173,35 @@ body {
   overflow-x: hidden;
 }
 
+section {
+  min-height: 75vh;
+}
+
+.relative {
+  position: relative;
+}
+
+.abs-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+}
+
+.container-sm {
+  max-width: 445px;
+  margin: 0 auto;
+}
+
+.container-md {
+  max-width: 809px;
+  margin: 0 auto;
+}
+
 .hide {
   display: none;
 }
@@ -177,12 +210,27 @@ body {
   cursor: pointer;
 }
 
+.pointer-underline {
+  cursor: pointer;
+}
+.pointer-underline:hover {
+  text-decoration: underline;
+}
+
 .bg-white {
   background-color: #fff;
 }
 
 .color-red {
   color: #e33012;
+}
+
+.color-grey4 {
+  color: #616161;
+}
+
+.color-grey3 {
+  color: #bdbdbd;
 }
 
 .fs-17 {
