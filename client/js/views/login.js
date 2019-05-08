@@ -22,7 +22,6 @@ Vue.component('login', {
         },
         onSubmitLogin(data) {
             this.formData = data
-
             axios.post({
                 url: serverURL + '/auth/signin',
                 data: this.formData
@@ -32,21 +31,21 @@ Vue.component('login', {
                 localStorage.setItem('miniwp_email', data.email)
                 localStorage.setItem('miniwp_name', data.name)
 
-                showIndex()
+                this.$emit('success')
             })
             .catch(err => {
 
             })
         },
         onshowregister() {
-            showRegister()
+           app.page = 'register'
         },
         onSignIn(googleUser) {
             console.log('sampaiii login...');
         }
     },
     template:
-    `<div style="height: 100%; width: 100%;">
+    `<div style="height: 100%; width: 100%; display: flex; flex-direction: column;">
         <div v-if="status.message" v-bind:class="getAlertClass()" role="alert">
             {{ status.message }}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">

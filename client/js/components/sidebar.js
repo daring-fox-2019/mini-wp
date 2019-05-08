@@ -14,13 +14,13 @@ Vue.component('sidebar', {
                 <a href="#">Explore</a>
             </li>
             <li>
-                <a href="#" onclick="showCreatePost()">New Post</a>
+                <a href="#" onclick="$emit('')">New Post</a>
             </li>
             <li>
-                <a href="#" onclick="showUpdatePost()">Update Post</a>
+                <a href="#" onclick="$emit('')">Update Post</a>
             </li>
             <li>
-                <a href="#" onclick="showIndex()">Posts</a>
+                <a href="#" onclick="$emit('')">Posts</a>
             </li>
             <li>
                 <a href="#">About</a>

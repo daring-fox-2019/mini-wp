@@ -20,7 +20,7 @@
 <body>
     <div id="miniWP">
         <!-- top navbar -->
-        <navigation></navigation>
+        <navigation :islogin="isLogin" @logout="logout"></navigation>
         
         <!-- wrapper for sidebar & content -->
         <div class="wrapper">
@@ -29,16 +29,16 @@
 
             <!-- Actual Content -->
             <div id="content">
-                <login id="loginPage"></login>
-                <register id="registerPage"></register>
+                <login id="loginPage" v-show="page === 'login'" @success="page = 'index'"></login>
+                <register id="registerPage" v-if="page === 'register'" @success="page = 'login'"></register>
 
-                <div id="index" class="container">
+                <div id="index" v-if="page === 'index'" class="container">
                     <index></index>
                 </div>
-                <div id="createPost" class="container">
+                <div id="createPost" v-if="page === 'createPost'" class="container">
                     <create-post></create-post>
                 </div>
-                <div id="updatePost" class="container">
+                <div id="updatePost" v-if="page === 'updatePost'" class="container">
                     <update-post></update-post>
                 </div>
             </div>
@@ -55,7 +55,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous">
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
     <script src="https://unpkg.com/@johmun/vue-tags-input/dist/vue-tags-input.js"></script>
 

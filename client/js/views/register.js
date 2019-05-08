@@ -23,27 +23,26 @@ Vue.component('register', {
         },
         onSubmitRegister(data) {
             this.formData = data
-
-            axios.post({
-                url: serverURL + '/auth/signup',
-                data: this.formData
-            })
+            console.log(serverURL);
+            axios.post(serverURL + '/auth/signup', this.formData
+            )
             .then(({data}) => {
                 this.status.type = 'success'
                 this.status.message = "You have been successfully registered.\nPlease go to login page"
-                showLoginPage()
+                this.$emit('success')
             })
             .catch(err => {
+                console.log(err.response);
                 this.status.type = 'error'
                 this.status.message = err
             })
         },
         onCancelRegister() {
-            showLogin();
+            app.page = 'login'
         }
     },
     template:
-    `<div style="display: flex; justify-content: center; align-items: center; height: 100%; width: 100%;">
+    `<div style="display: flex-direction: column; justify-content: center; align-items: center; height: 100%; width: 100%;">
         <div v-if="status.message" v-bind:class="getAlertClass()" role="alert">
             {{ status.message }}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">

@@ -1,6 +1,11 @@
 Vue.component('navigation', {
     data: '',
-    props: ['isLogin'],
+    props: ['islogin'],
+    methods: {
+        logout() {
+            this.$emit('logout')
+        }
+    },
     template: 
     `<nav class="navbar navbar-expand-lg navbar-dark main-bg-color">
         <a class="navbar-brand brand" href="/">
@@ -36,7 +41,7 @@ Vue.component('navigation', {
                     <input class="form-control mr-sm-2" type="search" placeholder="Search">
                 </div>
             </form>
-            <button class="btn btn-warning my-2 my-sm-0" type="submit">Logout</button>
+            <button v-if="islogin" class="btn btn-warning my-2 my-sm-0" type="button" @click.prevent="logout">Logout</button>
         </div>
     </nav>
     ` 

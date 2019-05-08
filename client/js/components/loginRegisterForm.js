@@ -9,6 +9,9 @@ Vue.component('loginregister',{
             },
         }
     },
+    created() {
+        
+    },
     template: `
     <div style="height: inherit; width: inherit; display: flex; padding-top: 100px; justify-content: center; align-items: flex-start;">
         <form v-if="(page === 'register')" @submit.prevent="$emit('onsubmitregister')" class="loginRegisterForm" >
@@ -42,7 +45,7 @@ Vue.component('loginregister',{
             </div>
             <div class="form-group">
                 <button class="btn btn-success" type="submit">Submit</button>
-                <button class="btn btn-secondary" @click="$emit('backToLogin')">Back</button>
+                <button class="btn btn-secondary" type="button" @click="$emit('backToLogin')">Back</button>
             </div>
         </form>
         <form v-if="(page === 'login')" @submit.prevent="$emit('submitlogin', formData)" class="loginRegisterForm" >
@@ -65,13 +68,15 @@ Vue.component('loginregister',{
                     </div>
                 </div>
             </div>
+            <div class="form-group mt-5">
+                <button style="width: 100%;"  class="btn btn-success" type="submit">Submit</button>
+            </div>
             <div class="form-group">
-                <button class="btn btn-success" type="submit">Submit</button>
-                <button class="btn btn-primary" @click="$emit('showregister')">Register</button>
+                <button style="width: 100%;" class="btn btn-primary" type="button" @click="$emit('showregister')">Register</button>
             </div>
             <hr>
             <div class="form-group">
-                <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                <div class="g-signin2" data-height="50px" data-width="318" data-onsuccess="onSignIn"></div>
             </div>
         </form>
     </div>

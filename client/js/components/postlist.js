@@ -28,6 +28,6 @@ Vue.component('postlist', {
     },
     template: 
     `<div class="list-group post-list">
-        <postitemcard v-for="post in posts" :post="post"></postitemcard>
+        <postitemcard v-for="post in posts" :post="post" :key="post._id"></postitemcard>
     </div>`
 })

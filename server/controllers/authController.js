@@ -10,6 +10,7 @@ class AuthController {
         for(let key of Object.keys(req.body)) {
             user[key] = req.body[key]
         }
+        
         user.password = getHash(user.password)
 
         User.create(user)
