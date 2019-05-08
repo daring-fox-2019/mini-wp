@@ -35,6 +35,7 @@ class UserController {
         });
       });
   }
+  
   static login(req, res) {
     User.findOne({ email: req.body.email })
     .then(user => {
@@ -42,6 +43,7 @@ class UserController {
         let check = compareHash(req.body.password, user.password);
         if (check) {
           let token = generateJWT({
+            id: user._id,
             email: user.email,
             username: user.username,
             name: user.name

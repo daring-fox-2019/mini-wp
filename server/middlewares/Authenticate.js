@@ -3,6 +3,7 @@ const { User } = require("../models");
 
 module.exports = {
   Authentication: function(req, res, next) {
+    console.log("authenticating")
     let decode = decodeJWT(req.headers.token);
     if (decode) {
       User.findOne({ email: decode.email })

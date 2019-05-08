@@ -4,6 +4,7 @@ const app = express()
 const port = 3000
 const mongoose = require('mongoose')
 const cors = require("cors")
+const morgan = require('morgan')
 
 mongoose.connect("mongodb://localhost/mini-wp", { 
     useNewUrlParser: true,
@@ -19,6 +20,7 @@ db.once("open", function () {
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(morgan("tiny"))
 
 app.use('/', require('./routes/index'))
 
