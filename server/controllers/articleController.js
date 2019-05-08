@@ -4,8 +4,8 @@ const ObjectId = require('mongoose').ObjectId
 
 class ArticleController {
     static findAll(req, res) {
-        User.findOne({username: req.user.username})
-        .populate('articles')
+        Article.find({author: req.user._id})
+        .populate('author')
         .then(result => {
             if(result) {
                 result = result.articles.map(x => {

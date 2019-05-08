@@ -2,15 +2,6 @@ const mongoose = require('mongoose')
 const Schema = require('mongoose').Schema
 
 const userSchema = new Schema({
-    username: {
-        type: String,
-        default: this.email,
-        required: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
     email: {
         type: String,
         required: true,
@@ -22,11 +13,14 @@ const userSchema = new Schema({
                 message: "Must be email format!"
         }
     },
+    password: {
+        type: String,
+        required: true
+    },
     name: {
         type: String,
         default: ''
     },
-    articles: [ {type: Schema.Types.ObjectId, ref: 'Article'} ],
     created_at: {
         type: Date,
         default: new Date

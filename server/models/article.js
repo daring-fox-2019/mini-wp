@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const Schema = require('mongoose').Schema
 const getSlug = require('../helpers/slugHash')
+
 const articleSchema = new Schema({
     title: {
         type: String,
@@ -23,7 +24,8 @@ const articleSchema = new Schema({
     slug: {
         type: String
     },
-    author: {type: Schema.Types.ObjectId, ref: 'User'}
+    author: {type: Schema.Types.ObjectId, ref: 'User'},
+    comments: [{type: Schema.Types.ObjectId, ref: 'Comment'}]
 })
 
 articleSchema.pre('save', function(next) {
@@ -34,7 +36,7 @@ articleSchema.pre('save', function(next) {
     else {
         title = ""
     }
-    console.log(this);
+
     this.slug = getSlug(title)
     next()
 })

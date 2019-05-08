@@ -84,6 +84,15 @@ ul ul a {
     max-height: 46px;
 }
 
+.loginRegisterForm  {
+    border-radius: 10px;
+    height: auto;
+    min-width: 350px;
+    width: auto;
+    padding: 15px;
+    border: 1px dashed #016087;
+}
+
 .brand {
     letter-spacing: 2px;
 }
@@ -144,6 +153,7 @@ color: #aaa;
     display: inline-flex;
     justify-content: space-between;
 }
+
 
 /* Media Queries (auto hide sidebars on smaller screen) */
 @media (max-width: 768px) {

@@ -94,7 +94,7 @@ Vue.component('postform', {
         <div class="form-group">
             <label for="title"><h5>Title</h5></label>
             <div class="input-group">
-                <input type="text" class="form-control" id="title" placeholder="Title" v-model="formData.title"
+                <input type="text" class="form-control" placeholder="Title" v-model="formData.title"
                     aria-describedby="title" autocomplete="off" required>
                 <div class="invalid-feedback">
                     Please set any title
@@ -113,7 +113,7 @@ Vue.component('postform', {
         </div>
         <div class="form-group">
             <label for="tags"><h5>Tags</h5></label>
-            <vue-tags-input v-model="tag" id="tags"
+            <vue-tags-input v-model="tag"
                 :tags="tags"
                 autocomplete="off"
                 :autocomplete-items="filteredTags"
@@ -121,7 +121,7 @@ Vue.component('postform', {
             />
         </div>
         <div class="form-group">
-            <button class="btn btn-success" type="submit">Submit</button>
+            <button class="btn-sm btn-success" type="submit">Submit</button>
         </div>
     </form>`
 })

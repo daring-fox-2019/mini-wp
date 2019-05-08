@@ -1,6 +1,4 @@
 $(document).ready(function () {
-    showIndex();
-    
     $('#sidebarCollapse').on('click', function () {
         $('#sidebar').toggleClass('active');
         $('#content').toggleClass('active');
@@ -50,18 +48,44 @@ function showCreatePost() {
   $('#createPost').show()
   $('#index').hide()
   $('#updatePost').hide()
+  $('#loginPage').hide()
+  $('#registerPage').hide()
 }
 
 function showIndex() {
   $('#index').show()
   $('#createPost').hide()
   $('#updatePost').hide()
+  $('#loginPage').hide()
+  $('#registerPage').hide()
 }
 
 function showUpdatePost() {
   $('#updatePost').show()
   $('#createPost').hide()
   $('#index').hide()
+  $('#loginPage').hide()
+  $('#registerPage').hide()
+}
+
+function showLogin() {
+  $('#loginPage').show()
+  $('#registerPage').hide()
+  $('#index').hide()
+  $('#updatePost').hide()
+  $('#createPost').hide()
+}
+
+function showRegister() {
+  $('#registerPage').show()
+  $('#loginPage').hide()
+  $('#index').hide()
+  $('#updatePost').hide()
+  $('#createPost').hide()
+}
+
+function onSignIn(googleUser) {
+  console.log('sampaiii login...di main.js');
 }
 
 var app = new Vue({
@@ -74,5 +98,16 @@ var app = new Vue({
       name: '',
     }
   },
+  created() {
+    console.log('created main...');
+    showLogin()
 
+    /* 
+    if(localStorage.getItem('miniwp_token')) {
+      showIndex()
+    }
+    else {
+      showLogin()
+    } */
+  }
 })

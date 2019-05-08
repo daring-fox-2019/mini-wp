@@ -3,6 +3,6 @@ const AuthController = require('../controllers/authController')
 
 route.post('/signup', AuthController.signup)
 route.post('/signin', AuthController.signin)
-route.post('/google-signin', AuthController.socialSignin)
+route.post('/google', AuthController.socialSignin)
 
 module.exports = route
