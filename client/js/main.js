@@ -33,13 +33,10 @@ var app = new Vue({
   el: '#blog-post',
   data: {
     message: 'Hello Vue!',
-    articles: []
+    articles: [],
+    token:"xxxxxxx"
   },
-  methods: {
-    blog_id: function (counter) {
-      return `blog-${counter}`
-    }
-  },
+  
   mounted() {
     axios
       .get('http://localhost:3000/articles')
