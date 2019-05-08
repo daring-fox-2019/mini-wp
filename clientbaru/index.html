@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.css">
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <style type="text/css">
+    body {
+      background-color: #DADADA;
+    }
+    body > .grid {
+      height: 100%;
+    }
+    .image {
+      margin-top: -100px;
+    }
+    .column {
+      max-width: 450px;
+    }
+    .ui.footer {
+      position:fixed;
+      left:0;
+      bottom:0;
+      width:100%
+    }
+  </style>
+  <title>Mini WP</title>
+</head>
+<body>
+
+<div id="loggedin-page">
+  <!-- NAVIGATION -->
+  <nav class="ui teal inverted labeled icon menu" id="navigation" v-if="status">
+  <!-- <p class="header item"><i class="pencil icon"></i>Mini WP</p> -->
+  <p class="header item"><i class="user icon"></i>Helo, {{name}}!</p>
+  <!-- <a class="item view-profile"><i class="users icon"></i>Profile</a> -->
+  <a class="item view-articles" v-on:click="viewArticles"><i class=" newspaper outline icon" ></i>My Articles</a>
+  <div class="right menu">
+    <a class="item view-write" v-on:click="writeNewArticle"><i class="edit outline icon"></i>Write</a>
+    <a class="item" id="logout-btn" v-on:click="loggingOut"><i class="sign-out icon"></i>Log Out</a>
+  </div>
+  </nav>
+  
+  <!-- CONTENT -->
+  <div class="ui container">
+
+  <!-- ALL ARTICLES -->
+  <div class="ui container" id="articles-view" v-if="status">
+    article-view : isinya list of articles
+    <br>
+    <div class="ui container segment">
+      <div class="ui relaxed divided items" id="articles-view-success">
+        <div class="item">
+          <div class="content">
+            <a class="header">Article Title</a>
+            <div class="meta">
+              <pre><i class="calendar alternate outline icon"></i> Date   <i class="tag icon"></i> Category</pre> 
+            </div>
+            <div class="description">
+              100 words of the article
+            </div>
+            <div class="extra">
+              <i class="ui users icon"></i> Author <br>  
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="articles-view-failed">
+        NO ARTICLES FOUND
+
+      </div>
+    </div>
+    <div>
+
+    </div>
+  </div>
+  <!-- EDIT & VIEW ONE ARTICLES -->
+  <!-- <div class="ui container" id="edit-article-view">
+    one-article-view
+    <div class="ui container segment">
+      <form class="ui form center aligned">
+        <div id="editor">
+          
+        </div>
+        <br>
+        <div class="ui container center aligned">
+          <button class="ui button center aligned teal huge">Update</button>
+        </div>
+      </form>
+    </div>
+  </div> -->
+  <!-- WRITE NEW ARTICLE -->
+  <div class="ui container" id="write-view" v-if="status">
+    <div class="ui red message" id="newarticleerrormsg" style="display: none">
+      {{ error_message }}
+    </div>
+    <div class="ui green message" id="newarticlesuccessmsg" style="display: none">
+      {{ success_message }}
+    </div>
+    <div class="ui segments center aligned">
+      <div class="ui segment grid right aligned" style="background-color: #DADADA">
+          <div class="ui ten wide column left aligned">
+              <h4>Write New Article</h4>
+          </div>
+          <div class="ui six wide column">
+              {{ date }}
+          </div>
+      </div>
+      <div class="ui fluid icon input">
+        <input type="text" class="header" v-bind:value="header" v-model="header" class="ui fluid input" id="article-header-input" placeholder="Article's Title">
+        <i class="bookmark icon"></i>
+      </div>
+      <div class="ui segment" id="editor2">
+        
+      </div>
+    </div>
+        <div class="ui container right aligned">
+            <button class="ui button teal huge" v-on:click="saveNewArticle">Save this article</button>
+          <button class="ui button teal huge" v-on:click="submitNewArticle">Save & Post this article</button>
+        </div>
+        <BR><BR><bR>
+  </div>
+  </div>
+  <!-- FOOTER -->
+  <footer>
+    <div class="ui inverted teal footer segment">
+        <div class="ui container center aligned">
+          <i class="pencil alternate icon"></i> Mini Wordpress
+        </div>
+    </div>
+  </footer>
+</div> 
+
+<div id="loggedout-page">
+  <!-- LOGIN -->
+  <div class="ui container" id="signin-page" v-if="status">
+    <div class="ui middle aligned center aligned grid">
+      <div class="column">
+        <h1 class="ui center aligned icon header">
+          <i class="massive circular inverted teal pencil icon"></i>
+          Mini Wordpress
+        </h1>
+        <h4>Sign in to proceed</h4>
+        <div class="ui red message" id="signinerrormsg" style="display: none">
+          {{ error_message }}
+        </div>
+        <form class="ui large form">
+          <div class="ui stacked segment">
+            <div class="field">
+              <div class="ui left icon input">
+                <i class="user icon"></i>
+                <input type="text" name="email" placeholder="E-mail address" v-bind:value="email" v-model="email">
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui left icon input">
+                <i class="lock icon"></i>
+                <input type="password" name="password" placeholder="Password" v-bind:value="password" v-model="password">
+              </div>
+            </div>
+            <div class="ui fluid large teal button" v-on:click="loggingIn"><i class="sign-in icon"></i>Login</div>
+            <br>
+            <div class="ui fluid large teal button">Login by Google</div>
+          </div>
+          <div class="ui message">
+            New to us?
+            <div class="ui fluid large teal button" v-on:click="viewSignUpPage" id="view-signup-page">Register</div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- REGISTER -->
+  <div class="ui container" id="signup-page" v-if="status">
+    <div class="ui middle aligned center aligned grid">
+      <div class="column">
+        <h1 class="ui center aligned icon header">
+          <i class="massive circular inverted teal pencil icon"></i>
+          Mini Wordpress
+        </h1>
+        <h4>Hello, fill form below to create new Account! </h4>
+        <div class="ui red message" id="signuperrormsg" style="display: none">
+          {{ error_message }}
+        </div>
+        <form class="ui large form">
+          <div class="ui stacked segment">
+            <div class="field">
+              <div class="ui left icon input">
+                <i class="user icon"></i>
+                <input type="text" name="name" placeholder="Name" id="signup-form-name" v-bind:value="name" v-model="name">
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui left icon input">
+                <i class="envelope outline icon"></i>
+                <input type="text" name="email" placeholder="E-mail address" id="signup-form-email" v-bind:value="email" v-model="email">
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui left icon input">
+                <i class="lock icon"></i>
+                <input type="password" name="password" placeholder="Password" id="signup-form-password" v-bind:value="password" v-model="password">
+              </div>
+            </div>
+            <div class="ui fluid large teal button"  id="signup-btn" v-on:click="createUser"><i class="sign-in icon"></i>Register</div>
+          </div>
+          <div class="ui message">
+            Already have an account?
+            <div class="ui fluid large teal button" id="view-signin-page" v-on:click="viewSigninPage">Login</div>
+          </div>
+          <div>
+            
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCRIPT -->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+  <script>
+    var quill = new Quill('#editor', {
+      theme: 'snow'
+    });
+    var quill2 = new Quill('#editor2', {
+      theme: 'snow'
+    });
+  </script>
+</body>
+</html>
