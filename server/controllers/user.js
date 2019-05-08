@@ -1,7 +1,6 @@
 const User = require('../models/user');
 const bcrypt = require('../helpers/bcrypt');
 const jwt = require('../helpers/jwt');
-const gverify = require('../helpers/gverify');
 
 class Controller {
   static login(req, res, next) {
