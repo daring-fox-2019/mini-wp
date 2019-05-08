@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>miniWP</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto"
+      rel="stylesheet"
+    />
+    <style>
+      #app {
+        min-height: 100vh;
+      }
+      .ck-editor__editable_inline {
+        min-height: 320px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" :class="{'bg-light': page !== 'list-article'}">
+      <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom">
+        <div class="container">
+          <a
+            class="navbar-brand my-2"
+            href="#"
+            @click.prevent="handleClickNav('home')"
+            >miniWP</a
+          >
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarNav"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <div
+              class="input-group ml-auto shadow-sm"
+              style="max-width: 480px;"
+            >
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Search articles..."
+                style="height: 2em;"
+                v-model="searchQuery"
+                @keyup="e => e.key === 'Enter' && handleClickSearch()"
+                ref="search"
+                :autofocus="page === 'list-article'"
+              />
+              <div class="input-group-append" style="height: 2em;">
+                <button
+                  class="btn btn-sm input-group-text"
+                  type="button"
+                  id="button-addon2"
+                  @click.prevent="handleClickSearch"
+                >
+                  <i class="fa fa-search"></i>
+                </button>
+              </div>
+            </div>
+            <navbar-nav
+              @click="handleClickNav"
+              :is-logged-in="!!login.token"
+              :page="page"
+            ></navbar-nav>
+          </div>
+        </div>
+      </nav>
+
+      <main style="height: 100%">
+        <template v-if="login.token">
+          <list-article
+            :articles="articles"
+            :login="login"
+            @mounted="handleMountedListArticle"
+            @click-edit="handleClickEditArticle"
+            @click-delete="handleClickDeleteArticle"
+            @click-tag="handleClickTag"
+            v-if="page === 'list-article'"
+          ></list-article>
+          <form-article
+            :login="login"
+            :article-id="selectedArticle"
+            @created-article="handleNewArticle"
+            @updated-article="handleUpdateArticle"
+            v-if="page === 'form-article'"
+          ></form-article>
+        </template>
+        <template v-else>
+          <form-register
+            @on-register="handleRegister"
+            v-if="page === 'register'"
+          ></form-register>
+          <form-login
+            @on-login="handleLogin"
+            v-if="page === 'login'"
+          ></form-login>
+        </template>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.24.0/min/moment-with-locales.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@ckeditor/ckeditor5-build-classic@12.1.0/build/ckeditor.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.18.0/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.common.dev.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@ckeditor/ckeditor5-vue@1.0.0-beta.2/dist/ckeditor.min.js"></script>
+
+    <script src="components/NavbarNav.js"></script>
+    <script src="components/FormRegister.js"></script>
+    <script src="components/FormLogin.js"></script>
+    <script src="components/ListArticle.js"></script>
+    <script src="components/InputTag.js"></script>
+    <script src="components/FormArticle.js"></script>
+
+    <script src="main.js"></script>
+  </body>
+</html>
