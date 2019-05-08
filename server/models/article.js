@@ -1,0 +1,41 @@
+const mongoose = require('mongoose');
+
+const { Schema } = mongoose;
+
+const articleSchema = new Schema({
+  title: {
+    type: String,
+    required: [true, 'required']
+  },
+  text: String,
+  status: Number,
+  created: Date,
+  updated: Date,
+  creator: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  }
+})
+
+articleSchema.post('save', function(doc, next) {
+  Article
+    .findOne({
+      creator: doc.creator
+    })
+    .populate({
+      path: 'creator',
+      select: ['_id', 'name', 'email']
+    })
+    .then(article => {
+        doc.creator = article.creator;
+        next();
+      })
+      .catch(err => {
+        next(err);
+      })
+})
+
+let Article = mongoose.model('Article', articleSchema);
+
+
+module.exports = Article;
