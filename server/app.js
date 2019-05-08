@@ -6,7 +6,7 @@ const mongoose = require('mongoose')
 const cors = require("cors")
 const morgan = require('morgan')
 
-mongoose.connect("mongodb://localhost/mini-wp", { 
+mongoose.connect(`mongodb+srv://admin:${process.env.ATLAS_PASSWORD}@cluster0-ayir7.gcp.mongodb.net/test?retryWrites=true`, { 
     useNewUrlParser: true,
     useCreateIndex: true
     })
