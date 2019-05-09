@@ -23,18 +23,18 @@ Vue.component('register', {
         },
         onSubmitRegister(data) {
             this.formData = data
-            console.log(serverURL);
             axios.post(serverURL + '/auth/signup', this.formData
             )
             .then(({data}) => {
+                this.status.message = ''
                 this.status.type = 'success'
                 this.status.message = "You have been successfully registered.\nPlease go to login page"
-                this.$emit('success')
+                //this.$emit('success')
             })
             .catch(err => {
                 console.log(err.response);
                 this.status.type = 'error'
-                this.status.message = err
+                this.status.message = err.response.data.error.message
             })
         },
         onCancelRegister() {

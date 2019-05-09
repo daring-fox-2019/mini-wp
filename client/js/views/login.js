@@ -21,11 +21,9 @@ Vue.component('login', {
             }
         },
         onSubmitLogin(data) {
-            this.formData = data
-            axios.post({
-                url: serverURL + '/auth/signin',
-                data: this.formData
-            })
+            this.formData = {email: data.email, password: data.password}
+
+            axios.post(serverURL + '/auth/signin', this.formData)
             .then(({data}) => {
                 localStorage.setItem('miniwp_token', data.token)
                 localStorage.setItem('miniwp_email', data.email)
@@ -52,7 +50,7 @@ Vue.component('login', {
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <loginregister page="login" v-on:showregister="onshowregister"></loginregister>
+        <loginregister page="login" v-on:showregister="onshowregister" v-on:submitlogin="onSubmitLogin"></loginregister>
     </div>
     `
 })

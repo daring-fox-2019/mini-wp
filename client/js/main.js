@@ -1,6 +1,3 @@
-function initUIComponents() {
-  
-}
 
 $(document).ready(function () {
   $('#sidebarCollapse').on('click', function () {
@@ -35,11 +32,12 @@ function onSignIn(googleUser) {
 
 // start VUE codes
 
-const serverURL = 'http://localhost:3000';
 
 var app = new Vue({
   el: '#miniWP',
   data: {
+    headers: {authorization: localStorage.getItem('miniwp_token')},
+    serverURL: 'http://localhost:3000',
     isLogin: false,
     page: '',
     user: {
@@ -73,11 +71,11 @@ var app = new Vue({
   },
   created() {
     if(localStorage.getItem('miniwp_token')) {
-      this.login()
+      this.isLogin = true
+      this.page = 'index'
     }
     else {
       this.isLogin = false;
-      this.showLogin()
     }
   }
 })

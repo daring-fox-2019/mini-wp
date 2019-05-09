@@ -6,16 +6,9 @@ const googleTokenParser = require('../helpers/googleTokenParser')
 
 class AuthController {
     static signup(req, res) {
-        let user = {}
-        for(let key of Object.keys(req.body)) {
-            user[key] = req.body[key]
-        }
-        
-        user.password = getHash(user.password)
-
-        User.create(user)
+        User.create({...req.body})
             .then(created => {
-                res.status(201).json({data: created})
+                res.status(201).json(created)
             })
             .catch(err => {
                 console.log(`User create error --- ${err}`);

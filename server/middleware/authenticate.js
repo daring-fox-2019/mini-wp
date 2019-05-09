@@ -4,6 +4,7 @@ const bcryptjs = require('bcryptjs')
 
 module.exports = function(req, res, next) {
 
+    console.log(req.headers);
     if(req.headers.authorization) {
         let payload
         let username

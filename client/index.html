@@ -30,7 +30,7 @@
             <!-- Actual Content -->
             <div id="content">
                 <login id="loginPage" v-show="page === 'login'" @success="page = 'index'"></login>
-                <register id="registerPage" v-if="page === 'register'" @success="page = 'login'"></register>
+                <register id="registerPage" v-if="page === 'register'"></register>
 
                 <div id="index" v-if="page === 'index'" class="container">
                     <index></index>

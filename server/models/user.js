@@ -1,17 +1,35 @@
 const mongoose = require('mongoose')
 const Schema = require('mongoose').Schema
+const {getHash}  = require('../helpers/passwordHash')
 
 const userSchema = new Schema({
     email: {
         type: String,
-        required: true,
-        validate: {
-                validator: function() {
+        required: [true, 'Email is required'],
+        validate: [
+            {
+                validator: function(value) {
                     var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/
-                    return emailRegex.test(this.email)
+                    return emailRegex.test(value)
                 },
                 message: "Must be email format!"
-        }
+            },
+            {
+                validator: function(value) {
+                    return User.findOne({email: value, _id: {$ne: this._id}})
+                        .then(user => {
+                            if(user) {
+                                return false
+                            }
+                        })
+                        .catch(err => {
+                            throw new Error(err)
+                        })
+
+                },
+                message: "Email already in use!"
+            }
+        ]
     },
     password: {
         type: String,
@@ -28,13 +46,8 @@ const userSchema = new Schema({
 })
 
 userSchema.pre('save', function(next) {
-    User.findOne({username: this.username})
-        .then(found => {
-            if(found && found._id !== this._id) {
-                next(`Username must be unique`)
-            }
-            next()
-        })
+    this.password  = getHash(this.password)
+    next()
 })
 
 const User  = mongoose.model('User', userSchema)

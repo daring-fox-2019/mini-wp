@@ -9,37 +9,36 @@ Vue.component('loginregister',{
             },
         }
     },
-    created() {
-        
-    },
     template: `
-    <div style="height: inherit; width: inherit; display: flex; padding-top: 100px; justify-content: center; align-items: flex-start;">
-        <form v-if="(page === 'register')" @submit.prevent="$emit('onsubmitregister')" class="loginRegisterForm" >
+    <div style="height: inherit; width: inherit; display: flex; padding-top: 50px; justify-content: center; align-items: flex-start;">
+        <form v-if="(page === 'register')" @submit.prevent="$emit('onsubmitregister', formData)" class="loginRegisterForm" >
             <h2 class='article_title mb-4'>Register</h2>
-            <div class="form-group">
-                <div class="input-group">
-                    <input type="email" class="form-control" id="reg-email" placeholder="Email" v-model="formData.email"
-                        aria-describedby="title" autocomplete="off" required>
-                    <div class="invalid-feedback">
-                        Please set valid email
+            <div class="d-flex flex-column" style="min-height: 200px; height: 80%;">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="email" class="form-control" id="reg-email" placeholder="Email" v-model="formData.email"
+                            aria-describedby="title" autocomplete="off" required>
+                        <div class="invalid-feedback">
+                            Please set valid email
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="input-group">
-                    <input type="password" class="form-control" id="reg-password" placeholder="Password" v-model="formData.password"
-                        aria-describedby="title" autocomplete="off" required>
-                    <div class="invalid-feedback">
-                        Please set any password
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="reg-password" placeholder="Password" v-model="formData.password"
+                            aria-describedby="title" autocomplete="off" required>
+                        <div class="invalid-feedback">
+                            Please set any password
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="input-group">
-                    <input type="text" class="form-control" id="reg-name" placeholder="Full Name" v-model="formData.name"
-                        aria-describedby="title" autocomplete="off" required>
-                    <div class="invalid-feedback">
-                        Please set any name
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="reg-name" placeholder="Full Name" v-model="formData.name"
+                            aria-describedby="title" autocomplete="off" required>
+                        <div class="invalid-feedback">
+                            Please set any name
+                        </div>
                     </div>
                 </div>
             </div>
