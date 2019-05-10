@@ -29,8 +29,7 @@ Vue.component('navbar', {
                 <input class="mx-auto form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
             </form>
                 </ul>
-                <button v-if="!isLogin" type="button" class="btn btn-outline-secondary">Get Started</button>
-
+                <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#exampleModalCenter" v-if="!isLogin" type="button" class="btn btn-outline-secondary">Get Started</button>
 
                 <div class="dropdown">
                 <span class="navbar-text">

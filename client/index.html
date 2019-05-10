@@ -24,12 +24,18 @@
     <!-- FONTS -->
     <link href="https://fonts.googleapis.com/css?family=Gentium+Book+Basic|Lato" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Abril+Fatface|Habibi" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+        integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+
     <!-- VUE AX -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
     <!-- SWL -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+
+    <!-- STYLE -->
+    <script src="./style/other.css"></script>
 
     <style>
         body {
@@ -52,11 +58,11 @@
         <!-- NAVBAR ENDS HERE -->
 
         <!-- LOGIN FORM STARTS HERE -->
-        <login v-on:sign-in="signIn" v-bind:is-login="isLogin" v-if="!isLogin"></login>
+        <login v-if="currentPage == 'login'" v-on:sign-in="signIn" v-bind:is-login="isLogin" v-if="!isLogin"></login>
         <!-- LOGIN FORM ENDS HERE -->
 
         <!-- REGISTER STARTS HERE -->
-        <register v-if="!isLogin"></register>
+        <register  v-if="currentPage == 'register'" v-if="!isLogin"></register>
         <!-- REGISTER FORM ENDS HERE -->
 
         <!-- HOME SEGALA HOME STARTS HERE -->
@@ -99,6 +105,23 @@
         </div>
         <!-- HOME SEGALA HOME ENDS HERE -->
 
+        <!-- START MODAL REGISTER -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div  style="background-color: transparent; min-width:0% !important;" class="modal-dialog modal-dialog-centered" role="document">
+                  <div  style=" background:url('./assets/smallbg1.jpg') no-repeat center"  class="modal-content">
+
+                    <div class="modal-body">
+                        <br><br><br><br><br><br><br><br>
+                      <button data-dismiss="modal" v-on:click.prevent="showLogin" class="btn btn-light" style="margin-left:200px">Login</button>
+                      <br>
+                      <button data-dismiss="modal" v-on:click.prevent="showRegister" class="btn btn-light" style="margin-left:190px">Register</button>
+                      <br><br><br>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- MODAL REGISTER ENDS -->
+
         <!-- START MY STORIES -->
         <div v-show="currentPage == 'myStory'" class="container">
             <nav>
@@ -113,26 +136,28 @@
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                     <div v-for="(art, index) in arrArticles" :key="index" id="myarticles">
-                        <mediumcard v-bind:art="art"></mediumcard>
+                        <mediumcard v-on:likearticle="updateArticle" v-on:fullarticle="fullarticle" v-bind:art="art">
+                        </mediumcard>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                     <br>
                     <h3>Write a Story</h3>
                     <div class="form-group">
-                        <input v-model="articleTitle" type="text" class="form-control" id="formGroupExampleInput" placeholder="Title goes here">
+                        <input v-model="articleTitle" type="text" class="form-control" id="formGroupExampleInput"
+                            placeholder="Title goes here">
                     </div>
                     <wysiwyg v-model="articleBody"></wysiwyg>
                     <div style="border-style:none" class="custom-file">
-                        <input v-on:change="getImage" style="border-style:none" type="file" class="custom-file-input"
-                            id="customFile">
+                        <input v-on:change="getImage" style="border-style:none" type="file" class="custom-file-input" id="customFile">
                         <label style="border-style:none" class="mt-2 custom-file-label" for="customFile">Add Featured
                             Image To Reach More People</label>
                     </div>
                     <div>
                         <button @click.prevent="postArticle" class="btn btn-light" type="submit"
                             name="action">Submit</button>
-                        <chips style="display:flex;" v-bind:current-tags="currentTags" v-on:deletetag="deletetag"></chips>
+                        <chips style="display:flex;" v-bind:current-tags="currentTags" v-on:deletetag="deletetag">
+                        </chips>
                     </div>
                     <!-- <div >
                         <button @click.prevent="patchArticle(currentArticle)"  class="btn btn-light" type="submit" name="action">Edit Post
@@ -148,7 +173,7 @@
         <!-- START OF FULL ARTICLE -->
         <div class="container">
             <center>
-                <fullarticle v-if="currentPage == 'fullarticle'"></fullarticle>
+                <fullarticle v-bind:current-article="currentArticle" v-if="currentPage == 'fullarticle'"></fullarticle>
             </center>
 
         </div>

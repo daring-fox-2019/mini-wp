@@ -8,10 +8,9 @@ module.exports = {
     generateTag  : async function (req, res, next) {
         try {
             console.log('masuk?');
-            console.log(req.file.cloudStoragePublicUrl, 'APA INI LINK');
             
             
-            if (!req.file.cloudStoragePublicUrl) {
+            if (!req.file) {
                 next()
             } else {
                 const [result] = await client.labelDetection(req.file.cloudStoragePublicUrl );

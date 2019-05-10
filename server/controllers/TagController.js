@@ -16,7 +16,7 @@ class TagController {
                    await arrTagsToShow.push(hasil)
                 });
                  
-                 await res.status(201).json({tags : req.tags})
+                res.status(201).json({tags : req.tags})
                 
             } else {
                 res.status(200).json({message : 'No generated tags!'})

@@ -14,6 +14,7 @@ new Vue({
         userImage: '',
         articleBody: '',
         articleTitle : '',
+        currentArticle : '',
         currentTags : '',
         arrArticles : [{
             title: ''
@@ -21,7 +22,6 @@ new Vue({
         image : '',
         user : {
             myArticles : [],
-            currentArticle : '',
             title : '',
             content : '',
             image : '',
@@ -73,6 +73,15 @@ new Vue({
         gethome() {
             this.currentPage = 'home'
         },
+        showLogin() {
+            console.log('masuk ga');
+            
+            this.currentPage = 'login'
+        },
+        showRegister() {
+            this.currentPage = 'register'
+
+        },
         getImage(event) {
             this.image = event.target.files[0]
             let formData = new FormData()
@@ -97,14 +106,16 @@ new Vue({
             this.currentTags.tags = this.currentTags.tags.filter(tag =>  tag.description !== namatag)
             
           },
-        getFullArticle(id) {
-            Axios.get(`/articles/${id}`)
+          fullarticle(id) {
+            Axios.get(`/articles/${id}`,  {headers: {
+                'token': localStorage.getItem('token')
+            }})
             .then(({data}) => {
-                this.user.currentArticle = data
+                this.currentArticle = data
                 this.currentPage = 'fullarticle'
             })
             .catch(err => {
-                console.log(error.response); 
+                console.log(err.response); 
                 swal({
                     text: 'Something is wrong',
                     icon: "warning",
@@ -173,6 +184,39 @@ new Vue({
                     button: "Understood",
                 });
             })
-        }
+        },
+        updateArticle(obj) {
+            console.log(obj, '//');
+            
+            if (obj.type == 'like') {
+                console.log('hehe');
+                
+                Axios.patch(`/articles/${obj.id}`, {type : 'like'}, {
+                    headers: {
+                        'token': localStorage.getItem('token')
+                    }
+                })
+                .then(({data}) => {
+                    if (data.msg == 'dislike') {
+                        Swal.fire( 'You disliked this post!', '', 'success')
+                        this.getUserArticlesAll()
+                    } else if (data.msg == 'like') {
+                        Swal.fire( 'You liked this post!', '', 'success')
+                        this.getUserArticlesAll()
+                    } else {
+                        console.log(data, 'dapet data gak?');
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                    
+                    swal({
+                        text: 'Something is wrong',
+                        icon: "warning",
+                        button: "Understood",
+                    });
+                })
+            }
+        } 
     }
 })
