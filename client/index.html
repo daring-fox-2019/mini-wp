@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <!-- meta google-signin-client_id -->
+    <meta name="google-signin-client_id"
+        content="542800123011-8mnmmf47fhbjo0v28ijvv6occajn0qvr.apps.googleusercontent.com">
+    <!-- bootstrapVue CSS -->
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
+    <!-- fontAwesome CSS -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <!-- wysiwyg CSS -->
+    <link rel="stylesheet" type="text/css" href="./wysiwyg/style.css">
+    <!-- my CSS -->
+    <link rel="stylesheet" type="text/css" media="screen" href="style.css">
+    <!-- sweetalert2 -->
+    <!-- <link rel="stylesheet" href="sweetalert2.min.css" type="text/css"> -->
+</head>
+
+<body>
+    <div id="app">
+        <!-- beforelogin -->
+        <div v-if="!isLoggedIn">
+            <div>
+                <button class="btn btn-info btn-lg" id="login-f-btn" v-on:click="regularLogin()">Login</button>
+            </div>
+            <div class="or-login-with-google">
+                Or log in with Google
+            </div>
+            <div>
+                <div class="g-signin2" data-onsuccess="onSignIn"></div>
+            </div>
+            <div class="or-signup">
+                Or sign up for free !
+            </div>
+            <div>
+                <button class="btn btn-info btn-lg" id="register-f-btn" v-on:click="register()">Register</button>
+            </div>
+        </div>
+
+        <!-- afterlogin -->
+        <div v-else-if="isLoggedIn">
+
+            <!-- NAVBAR -->
+
+            <div class="navbar">
+                <div id="left-bar">
+                    <ul class="navbar-list" id="most-left">
+                        <li><span class="nav-icon" style="font-size: 30px; color: white;"><i
+                                    class="fab fa-wordpress-simple"></i></span></li>
+                        <li>MiniWP</li>
+                    </ul>
+                    <ul class="navbar-list">
+                        <li><span class="nav-icon" style="font-size: 30px; color: white;"><i
+                                    class="far fa-newspaper"></i></span></li>
+                        <li>Reader</li>
+                    </ul>
+                </div>
+                <div>
+                    <ul class="navbar-list" id="most-right">
+                        <li><button v-on:click="addBlogPageFunc" class="btn btn-light" id="write-btn"><span
+                                    id="edit-ico"><i class="far fa-edit"></i></span>
+                                Write</button></li>
+                        <li><span class="nav-icon" style="font-size: 30px; color: white;"><i
+                                    class="fas fa-user-circle"></i></span></li>
+                        <li><span class="nav-icon" style="font-size: 30px; color: white;"><i
+                                    class="fas fa-bell"></i></span>
+                        </li>
+                        <li>
+                            <span id="signout-btn">
+                                <button v-on:click="signOut()" class="signout-btn"><a>Sign
+                                        out</a></button>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- CONTENT -->
+
+            <div class='body d-flex'>
+
+                <!-- NAVMENU -->
+
+                <div class="navmenu col-sm-4 col-xl-2">
+                    <ul>
+                        <li class="nav-menu-item" id="first-menu"><i class="fas fa-desktop"></i> View Site</li>
+                        <li class="nav-menu-item"><i class="far fa-chart-bar"></i> Stats</li>
+                        <li class="nav-menu-item"><i class="fas fa-hiking"></i> Activity</li>
+                        <li class="nav-menu-item"><i class="fas fa-ruler-combined"></i> Plan</li>
+                    </ul>
+                    <p>Manage</p>
+                    <ul>
+                        <li class="nav-menu-item"><i class="far fa-file-alt"></i> Site Plugins <button
+                                class="btn-nav-menu btn btn-dark">Add</button></li>
+                        <li class="nav-menu-item"><button style="background-color: transparent"
+                                v-on:click.prevent="listBlog"><i class="far fa-clone"></i> Blog Posts
+                            </button><button class="btn-nav-menu btn btn-dark" v-on:click="addBlogPageFunc">Add</button>
+                        </li>
+                        <li class="nav-menu-item"><i class="far fa-image"></i> Media <button
+                                class="btn-nav-menu btn btn-dark">Add</button></li>
+                        <li class="nav-menu-item"><i class="far fa-comments"></i> Comments</li>
+                        <li class="nav-menu-item"><i class="far fa-comment-alt"></i> Feedbacks <button
+                                class="btn-nav-menu btn btn-dark">Add</button></li>
+                        <li class="nav-menu-item"><i class="fas fa-plug"></i> Plugins <button
+                                class="btn-nav-menu btn btn-dark">Manage</button></li>
+                        <li class="nav-menu-item"><i class="fas fa-file-import"></i> Import</li>
+                    </ul>
+                    <p>Personalize</p>
+                    <ul>
+                        <li class="nav-menu-item"><i class="fas fa-tools"></i> Customize</li>
+                    </ul>
+                </div>
+
+                <!-- CONTENT DYNAMIC -->
+
+                <div class="articles-list content col-sm-8 col-xl-10">
+
+                    <!-- LIST BLOG SUB-PAGE -->
+
+                    <div class="lb" v-if="page === 'blog-list'">
+                        <div class="menubar-articles-list d-flex">
+                            <ul class="sub-menubar-articles-list p-2">
+                                <li>Published List</li>
+                                <li>Draft</li>
+                            </ul>
+
+                            <ul class="sub-menubar-articles-list ml-auto p-2">
+                                <li>
+                                    <form class="form-inline md-form form-sm active-pink active-pink-2 mt-2"
+                                        v-on:submit.prevent="searchBlog">
+                                        <i class="fas fa-search" aria-hidden="true"></i>
+                                        <input class="form-control form-control-sm ml-3 w-75" size="30" type="text"
+                                            placeholder="Search" aria-label="Search" v-model="value">
+                                    </form>
+                                </li>
+                            </ul>
+
+                        </div>
+                        <div class="listBlog-detail">
+                            <ul>
+                                <li v-if="listBlogg[0].title" v-for="(blog,index) in listBlogg">
+                                    <div id="per-blog">
+                                        <div>
+                                            <div>
+                                                <h2><strong>{{ blog.title }}</strong></h2><br>
+                                            </div>
+                                            <div>
+                                                <img v-bind:src="blog.img" style="margin:auto" width="70%">
+                                            </div><br>
+                                        </div>
+                                        <h6 v-html="blog.content">
+                                            <h6><br>
+                                                <h6>Created At: {{blog.createdAt}}</h6>
+                                                <h6>By: {{blog.author}}</h6><br>
+
+                                                <!-- edit-delete button -->
+
+                                                <p><button
+                                                        v-on:click="editBlog_btn(blog._id,blog.title,blog.content,blog.createdAt)"
+                                                        class="btn btn-dark">Edit</button> || <button
+                                                        v-on:click="deleteBlog_btn(blog._id)"
+                                                        class="btn btn-dark">Delete</button></p>
+                                    </div>
+                                    <br>
+
+                                </li>
+                                <li v-else>
+                                    <h6>{{ listBlogg[0] }}</h6>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- ADD BLOG SUB-PAGE -->
+
+                    <div v-show="page === 'blog-add-page'" class="blog-add-subpage">
+                        <form class="form-blog-add-subpage" method="POST">
+                            <div>
+                                <label for title>Title: </label><br>
+                                <input class="form-control form-control-lg" v-model="blog_title" type="text"
+                                    name="title" size="35" placeholder="Your title here.." required>
+                            </div><br>
+                            <label for editor>Content:</label>
+                            <!-- <div id="editor">
+                            <p>Your content here..</p>
+                        </div><br> -->
+                            <div>
+                                <wysiwyg id="editor" v-model="text"></wysiwyg>
+                            </div>
+                            <div>
+                                <input type="text" v-model="author" placeholder="Author of this article.."
+                                    id="author-input">
+                            </div>
+                            <div>
+                                <input type="file" v-on:change="onChangeUpload" required>
+                            </div><br>
+                            <button class="btn btn-dark" v-on:click.prevent="addBlogg">Add</button>
+                        </form>
+                    </div>
+
+                    <!-- EDIT BLOG SUB-PAGE -->
+
+                    <div v-show="page === 'blog-update-page'" class="blog-update-page">
+                        <form class="form-blog-edit-subpage" method="POST">
+                            <div>
+                                <label for title>Title: </label><br>
+                                <input v-model="blog_title" type="text" name="title" id="blog_title" size="35"
+                                    placeholder="Your title here.." required>
+                            </div><br>
+                            <label for editor>Content:</label>
+                            <!-- <div id="editor2">
+                            <p></p>
+                        </div> -->
+                            <div>
+                                <wysiwyg id="editor" v-model="text"></wysiwyg>
+                            </div><br>
+                            <div>
+                                <input type="file" v-on:change="onChangeUpload" required>
+                            </div><br>
+                            <button class="btn btn-dark" type="submit" v-on:click.prevent="updateBlogg">Update</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FOOTER -->
+
+            <footer class="page-footer font-small blue pt-4">
+                <div class="footer-copyright text-center py-3">© 2019 Copyright: MiniWP
+                </div>
+            </footer>
+
+        </div>
+    </div>
+    <!-- bootstrapVue JS -->
+    <script src="//unpkg.com/@babel/polyfill@latest/dist/polyfill.min.js"></script>
+    <script src="//unpkg.com/vue@latest/dist/vue.min.js"></script>
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+    <!-- axios JS -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- vue JS -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- wysiwyg JS -->
+    <script src="./wysiwyg/index.js"></script>
+    <!-- swal2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <!-- <script src="sweetalert2.min.js"></script> -->
+    <!-- swal -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <!-- Google Platform Library -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <!-- my JS -->
+    <script src="index.js"></script>
+</body>
+
+</html>
