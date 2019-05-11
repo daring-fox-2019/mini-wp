@@ -9,6 +9,20 @@ Vue.component('loginregister',{
             },
         }
     },
+    mounted() {
+        window.gapi.load('auth2', () => {
+            const auth2 = window.gapi.auth2.init({
+              client_id: '460094986334-isi4pb2bokq5adebc9obp1nqp3nn4bm1.apps.googleusercontent.com',
+            })
+            auth2.attachClickHandler(this.$refs.signinBtn, {}, googleUser => {
+              console.log('googlelogin sucess...', googleUser)
+              googleUser.token = googleUser.getAuthResponse().id_token;
+                this.$emit('googlelogin', googleUser)
+            }, error => console.log(error))
+          })
+    },
+    methods: {
+    },
     template: `
     <div style="height: inherit; width: inherit; display: flex; padding-top: 50px; justify-content: center; align-items: flex-start;">
         <form v-if="(page === 'register')" @submit.prevent="$emit('onsubmitregister', formData)" class="loginRegisterForm" >
@@ -74,8 +88,8 @@ Vue.component('loginregister',{
                 <button style="width: 100%;" class="btn btn-primary" type="button" @click="$emit('showregister')">Register</button>
             </div>
             <hr>
-            <div class="form-group">
-                <div class="g-signin2" data-height="50px" data-width="318" data-onsuccess="onSignIn"></div>
+            <div class="form-group" id="googleSignInBtn">
+                <div ref="signinBtn" class="g-signin2" data-height="50px" data-width="318"></div>
             </div>
         </form>
     </div>

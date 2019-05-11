@@ -1,5 +1,5 @@
 Vue.component('update-post', {
-    props: ['initData'],
+    props: ['initdata'],
     data() {
         return {
             formData: null,
@@ -8,6 +8,9 @@ Vue.component('update-post', {
                 message: '',
             }
         }
+    },
+    mounted() {
+        this.formData = this.$props.initdata;
     },
     methods: {
         getAlertClass() {
@@ -19,12 +22,13 @@ Vue.component('update-post', {
             }
         },
         updatePost(data) {
+            console.log(data, '---- toupdate');
             axios({
                 method: 'PUT',
-                url: serverURL + '/posts',
-                data: formData,
+                url: serverURL + '/articles/' + data._id,
+                data: data,
                 headers: {
-                    token: localStorage.getItem('miniwp_token')
+                    'Authorization': localStorage.getItem('miniwp_token')
                 }
             })
             .then(({data}) => {
@@ -33,8 +37,25 @@ Vue.component('update-post', {
             .catch(err => {
 
             })
-
-        }
+        },
+        showUpdatePost(id) {
+            axios.get(serverURL + '/articles/' + id, this.config)
+            .then(({data}) => {
+              console.log('main: updated post...')
+              this.currentPost = data
+              this.page = 'updatePost'
+              
+            })
+            .catch(({response}) => {
+              console.log(response);
+              Swal.fire(
+                'Error!',
+                response.data.error.message,
+                'error'
+              )
+            })
+            this.page = 'updatePost'
+        },
     },
     template:
     `<div class="d-flex flex-column pb-5">
@@ -45,6 +66,6 @@ Vue.component('update-post', {
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <postform type="update" v-on:update="updatePost" :data="initData"></postform>
+        <postform type="update" v-on:update="updatePost" :data="initdata"></postform>
     </div>`
 })

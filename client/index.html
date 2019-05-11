@@ -26,25 +26,25 @@
         <div class="wrapper">
             <!-- control sidebar -->
             <sidebar></sidebar>
-            
-            <!-- Actual Content -->
-            <div id="content">
-                <a class="sidebar-btn" id="sidebarCollapse" href="#">
+            <a class="sidebar-btn" id="sidebarCollapse" href="#">
                     <i class="fas fa-chevron-right"></i>
                     <i class="fas fa-chevron-right" style="margin-left: -5px;"></i>
-                </a>
+            </a>
+            <moon-loader style="z-index: 100; position: relative; top: 50px; margin: 0 auto;" v-if="loading" :loading="loading" :size="200"></moon-loader>
+            <!-- Actual Content -->
+            <div id="content">
 
-                <login id="loginPage" v-show="page === 'login'" @success="loginSuccess"></login>
-                <register id="registerPage" v-if="page === 'register'"></register>
+                <login id="loginPage" v-show="page === 'login' && !loading" @success="loginSuccess"></login>
+                <register id="registerPage" v-if="page === 'register' && !loading"></register>
 
-                <div id="index" v-if="page === 'index'" class="container">
+                <div id="index" v-if="page === 'index' && !loading" class="container">
                     <index></index>
                 </div>
-                <div id="createPost" v-if="page === 'createPost'" class="container">
+                <div id="createPost" v-if="page === 'createPost' && !loading" class="container">
                     <create-post></create-post>
                 </div>
-                <div id="updatePost" v-if="page === 'updatePost'" class="container">
-                    <update-post :initData="currentPost"></update-post>
+                <div id="updatePost" v-if="page === 'updatePost' && !loading" class="container">
+                    <update-post :initdata="currentPost"></update-post>
                 </div>
             </div>
         </div>
@@ -52,7 +52,7 @@
 
     <!-- Script section -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://apis.google.com/js/platform.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
@@ -62,6 +62,7 @@
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous">
     </script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/@saeris/vue-spinners"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
     <script src="https://unpkg.com/@johmun/vue-tags-input/dist/vue-tags-input.js"></script>
 

@@ -22,6 +22,7 @@ Vue.component('login', {
         },
         onSubmitLogin(data) {
             this.formData = {email: data.email, password: data.password}
+            this.$root.loading = true;
 
             axios.post(serverURL + '/auth/signin', this.formData)
             .then(({data}) => {
@@ -29,8 +30,8 @@ Vue.component('login', {
                 localStorage.setItem('miniwp_email', data.email)
                 localStorage.setItem('miniwp_name', data.name)
                 
-                this.$root.headers = {authorization: data.token}
-
+                this.$root.config = {headers: {authorization: data.token}}
+                this.$root.loading = false;
                 this.$emit('success')
             })
             .catch(err => {
@@ -40,8 +41,31 @@ Vue.component('login', {
         onshowregister() {
            app.page = 'register'
         },
-        onSignIn(googleUser) {
-            console.log('sampaiii login...');
+        onGoogleSignIn(googluser) {
+            this.$root.loading = true;
+            axios.post(serverURL + '/auth/google', {token: googluser.token})
+                .then(({data}) => {
+                    localStorage.setItem('miniwp_token', data.token)
+                    localStorage.setItem('miniwp_email', data.email)
+                    localStorage.setItem('miniwp_name', data.name)
+                    
+                    this.$root.loading = false;
+                    this.$root.config = {headers: {authorization: data.token}}
+                    this.$emit('success')
+    
+                    swal.fire(
+                        'Success',
+                        `Welcome back, ${data.name}`,
+                        'success',
+                    )
+                })
+                .catch(({response}) => {
+                    swal.fire(
+                        'Error',
+                        response.data.error.message,
+                        'error',
+                    )
+                })
         }
     },
     template:
@@ -52,7 +76,7 @@ Vue.component('login', {
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <loginregister page="login" v-on:showregister="onshowregister" v-on:submitlogin="onSubmitLogin"></loginregister>
+        <loginregister page="login" v-on:showregister="onshowregister" v-on:submitlogin="onSubmitLogin" v-on:googlelogin="onGoogleSignIn"></loginregister>
     </div>
     `
 })

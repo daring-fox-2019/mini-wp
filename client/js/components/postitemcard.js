@@ -10,7 +10,6 @@ Vue.component('postitemcard', {
             return moment(new Date(this.$props.post.created_at)).format('MMM DD, YYYY')
         },
         cardImage() {
-            console.log(this.$props.post.featured_image);
             if(this.$props.post.featured_image) {
                 return this.$props.post.featured_image
             }

@@ -25,6 +25,25 @@ class ArticleController {
         })
     }
 
+    static findOne(req, res) {
+        Article.findOne({_id: req.params.id})
+        .populate('comment')
+        .populate('author')
+        .populate('tags')
+        .then(result => {
+            if(result) {
+                res.status(200).json(result)
+            }
+            else {
+                res.status(400).json('Post ID not existed')
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({error: err})
+        })
+    }
+
     static create(req, res) {
         let article = {}, tagIds = [], promises = []
 
@@ -48,17 +67,17 @@ class ArticleController {
         //process tags
         article.tags = article.tags.split(',')
 
-        article.tags.forEach(x => {
-            if(!x) {
-                promises.push(Tag.findOneAndUpdate({text: x}, {$setOnInsert: {text: x}}, {upsert: true, new: true}))
+        promises = article.tags.map(x => {
+            if(x) {
+                return Tag.findOneAndUpdate({text: x}, {$setOnInsert: {text: x}}, {upsert: true, new: true})
+            }
+            else {
+                // console.log('empty tag...');
             }
         });
 
-        console.log('alll ', promises);
-
         Promise.all(promises)
             .then(results => {
-                console.log('hasil promise all ------> ', results);
                 article.tags = results.map(x => x._id)
 
                 Article.create(article)
@@ -76,17 +95,48 @@ class ArticleController {
     }
 
     static update(req, res) {
-        let updateArticle = {}
+        let article = {}, promises = []
         for(let key of Object.keys(req.body)) {
-            updateArticle[key] = req.body[key]
+            article[key] = req.body[key]
         }
 
-        Article.findOneAndUpdate({_id: req.params.id}, updateArticle, {new: true})
-            .then(article => {
-                res.status(200).json({data: article})
+        if(req.file) {
+            article.featured_image_name = req.file.cloudStorageObject
+            article.featured_image = req.file.cloudStoragePublicUrl
+        }
+        else {
+            article.featured_image_name = 'user.png'
+            article.featured_image = "https://storage.googleapis.com/miniwp-images/user.png"
+        }
+        
+        article.tags = !article.tags.length ? article.tags.split(',') : article.tags
+        console.log(article);
+
+        promises = article.tags.map(x => {
+            if(x) {
+                return Tag.findOneAndUpdate({text: x}, {$setOnInsert: {text: x}}, {upsert: true, new: true})
+            }
+            else {
+                // console.log('empty tag...');
+            }
+        });
+
+        Promise.all(promises)
+            .then(results => {
+                article.tags = results.map(x => x._id)
+
+                Article.findOneAndUpdate({_id: req.params.id}, article, {new: true})
+                .then(newPost => {
+                    console.log('done....', newPost);
+                    res.status(200).json(newPost)
+                })
+                .catch(err => {
+                    console.log('update error...', err);
+                    res.status(500).json(err)
+                })
             })
             .catch(err => {
-                res.status(500).json(err)
+                console.log('promise all error ', err);
             })
     }
 

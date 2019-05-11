@@ -41,11 +41,12 @@ Vue.component('create-post', {
                 }
             };
             
-            
+            this.$root.loading = true;
+
             axios.post(serverURL+'/articles', formData, config)
                 .then(({data}) => {
                     console.log(`created successfully...${data}`);
-
+                    this.$root.loading = false;
                     this.$root.page = 'index'
                 })
                 .catch(err => {

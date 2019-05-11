@@ -4,6 +4,7 @@ $(document).ready(function () {
   $('#sidebarCollapse').on('click', function () {
     $('#sidebar').toggleClass('active');
     $('#content').toggleClass('active');
+    $('#sidebarCollapse').toggleClass('active')
   });
 
   $('.collapse.in').toggleClass('in');
@@ -30,6 +31,7 @@ var serverURL = 'http://localhost:3000';
 var app = new Vue({
   el: '#miniWP',
   data: {
+    loading: false,
     config: null,
     isLogin: false,
     page: '',
@@ -48,13 +50,15 @@ var app = new Vue({
     logout() {
         let self = this
         var auth2 = gapi.auth2.getAuthInstance();
+
         auth2.signOut().then(function () {
           localStorage.removeItem('miniwp_token')
           localStorage.removeItem('miniwp_name')
           localStorage.removeItem('miniwp_email')
 
+          self.page = "login"
+          self.config = null
           self.isLogin = false;
-          self.page = 'login'
         });
     },
     showIndex() {
@@ -72,18 +76,20 @@ var app = new Vue({
     showUpdatePost(id) {
       axios.get(serverURL + '/articles/' + id, this.config)
       .then(({data}) => {
-        console.log('updated post...')
         this.currentPost = data
         this.page = 'updatePost'
-        
       })
       .catch(({response}) => {
         console.log(response);
+        Swal.fire(
+          'Error!',
+          response.data.error.message,
+          'error'
+        )
       })
-      this.page = 'updatePost'
     },
   },
-  created() {
+  mounted() {
     if(localStorage.getItem('miniwp_token')) {
       this.isLogin = true
       this.page = 'index'

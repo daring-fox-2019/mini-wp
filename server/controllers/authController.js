@@ -18,6 +18,7 @@ class AuthController {
     static googleSignIn(req, res) {
         googleTokenParser(req.body.token, function(err, miniwpToken) {
             if(err) {
+                console.log(err);
                 res.status(401).json(err)
             }
             else {

@@ -24,7 +24,7 @@ const articleSchema = new Schema({
     slug: {
         type: String
     },
-    comments: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
+    comments: [{type: Schema.Types.ObjectId, ref: "Comment"}],
     tags: [{type: Schema.Types.ObjectId, ref: 'Tag'}],
     author: {type: Schema.Types.ObjectId, ref: 'User'},
 })

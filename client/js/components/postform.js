@@ -32,6 +32,7 @@ Vue.component('postform', {
                     return {text: x.text}
                 })
                 
+                // console.log('current match...', filtered);
                 return filtered
             }
             else {
@@ -43,13 +44,16 @@ Vue.component('postform', {
     mounted() {
         $('[data-toggle="tooltip"]').tooltip();
         this.getTags();
+        if(this.$props.data) {
+            this.formData = this.$props.data
+            this.formData.featured_image = this.$props.data.featured_image
+            //populate tags if the current mode is update
+            this.formData.tags.forEach(x => {
+                this.tags.push(x.text)
+            })
+        }
 
-        //populate tags if the current mode is update
-        this.formData.tags.forEach(x => {
-            this.tags.push(x.text)
-        })
-        this.formData = data
-        this.formData.featured_image = data.featured_image
+
     },
     methods: {
         getTags() {
@@ -72,9 +76,15 @@ Vue.component('postform', {
             this.formData.tags = newTags
         },
         processSubmit() {
+            console.log(this.formData.tags);
             if(this.formData.tags && this.formData.tags.length > 0) {
                 this.formData.tags = this.formData.tags.map(x => {
-                    return x.text
+                    if(x.text) {
+                        return x.text
+                    }
+                    else if(x) {
+                        return x
+                    }
                 })
             }
 
@@ -86,8 +96,8 @@ Vue.component('postform', {
             }
         },
         onTakeImage(data) {
-            console.log('image loaded...');
             this.formData.featured_image = data
+            console.log('image loaded...', this.formData.featured_image);
         }
     },
     template: 
@@ -104,15 +114,13 @@ Vue.component('postform', {
         </div>
         <div class="form-group">
             <label for="tags"><h5>Feature Image</h5></label>
-            <!--<input type="file" class="form-control" id="feature-image" v-model="formData.feature_image"
-                aria-describedby="feature-image" autocomplete="off"> -->
-                <image-upload id="featured-image" v-bind:toupload="uploadingImage" v-on:take-image="onTakeImage"></image-upload>
+            <image-upload id="featured-image" v-bind:toupload="uploadingImage" v-on:take-image="onTakeImage" :initimage="type ==='update' ? formData.featured_image : ''" ></image-upload>
         </div>
         <div class="form-group">
             <label for="post-content"><h5>Content</h5></label>
             <vuewysiwyg v-model="formData.content"></vuewysiwyg>
         </div>
-        <div class="form-group" data-toggle="tooltip" title="You can add new tag here">
+        <div class="form-group">
             <label for="tags"><h5>Tags</h5></label>
             <vue-tags-input v-model="tag"
                 :tags="tags"

@@ -11,15 +11,17 @@ Vue.component('postlist', {
         getPosts() {
             axios.get(serverURL + '/articles',this.$root.config)
                 .then(({data}) => {
-                    console.log(data);
                     this.posts = data
                 })
                 .catch(({response}) => {
-                    console.log('postlist ==>', response);
+                    Swal.fire(
+                        'Error!',
+                        response.data.error.message,
+                        'error'
+                      )
                 })
         },
         deletePost(id) {
-            console.log('delete...', id, this.$root.config);
             axios({
                 method: 'DELETE',
                 url: serverURL + '/articles/' + id, 
@@ -38,7 +40,7 @@ Vue.component('postlist', {
                 })
         },
         updatePost(id) {
-            this.$root.showUpdate(id)
+            this.$root.showUpdatePost(id)
         }
     },
     template: 
