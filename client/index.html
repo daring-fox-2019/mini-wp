@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="google-signin-client_id"
+    content="249855385187-0brfcrlg3ckst7l8stihcq7jrkem0e28.apps.googleusercontent.com">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
+  <title>My Mini Wordpress</title>
+
+  <!-- Google Signin -->
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+    integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+  <!-- AXIOS -->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  <!-- WYSIWYG -->
+  <link rel="stylesheet" href="css/vueWysiwyg.css">
+  <script src="/js/vueWysiwyg.js"></script>
+
+  <!-- SWAL -->
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <v-app dark id="inspire">
+
+      <!-- ===================================== SIGNIN ===================================== -->
+      <v-content v-show="statusSign==0">
+        <v-container fluid fill-height>
+          <v-layout align-center justify-center>
+            <v-flex xs12 sm8 md4>
+              <v-card class="elevation-12">
+                <v-toolbar dark color="red">
+                  <v-toolbar-title>Signin</v-toolbar-title>
+                  <v-spacer></v-spacer>
+                </v-toolbar>
+                <v-card-text>
+                  <v-form>
+                    <v-text-field prepend-icon="person" name="login" v-model="signin.email" label="Email" type="email"
+                      :rules="emailRules"></v-text-field>
+                    <v-text-field prepend-icon="lock" name="password" v-model="signin.password" label="Password"
+                      id="password" type="password"></v-text-field>
+                  </v-form>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <span><a @click="showSignup">Not Registered?</a></span>
+                  <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                  <v-btn flat @click="signIn">Signin</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-content>
+
+      <!-- ===================================== SIGNUP ===================================== -->
+      <v-content v-if="statusSign==1">
+        <v-container fluid fill-height>
+          <v-layout align-center justify-center>
+            <v-flex xs12 sm8 md4>
+              <v-card class="elevation-12">
+                <v-toolbar dark color="red">
+                  <v-toolbar-title>Signup</v-toolbar-title>
+                  <v-spacer></v-spacer>
+                </v-toolbar>
+                <v-card-text>
+                  <v-form>
+                    <v-text-field prepend-icon="person" name="name" v-model="signup.name" label="Full name" type="text">
+                    </v-text-field>
+                    <v-text-field prepend-icon="person" name="email" v-model="signup.email" label="Email" type="email"
+                      :rules="emailRules"></v-text-field>
+                    <v-text-field prepend-icon="lock" name="password" v-model="signup.password" label="Password"
+                      id="password" type="password"></v-text-field>
+                  </v-form>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="success" @click="signUp">Send</v-btn>
+                  <v-btn color="red" @click="backSignin">Cancel</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-content>
+
+      <div v-if="statusSign==2">
+        <!-- ===================================== HEADER ===================================== -->
+        <v-toolbar color="red" dense fixed clipped-left app>
+          <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+          <v-toolbar-title class="mr-5 align-center">
+            <span class="title">MiniWP</span>
+          </v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-layout row align-center style="max-width: 400px;">
+            <v-text-field placeholder="Title Search..." single-line append-icon="search" color="white" hide-details
+              v-model="searchTitle">
+            </v-text-field>
+          </v-layout>
+        </v-toolbar>
+
+
+        <!-- ===================================== NAVBAR ===================================== -->
+        <v-navigation-drawer fixed clipped v-model="drawer" app>
+          <v-list>
+            <v-list-tile class="mt-3" @click="displayAddArticle">
+              <v-list-tile-action>
+                <v-icon>add_circle_outline</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-title>Add Article</v-list-tile-title>
+            </v-list-tile>
+            <v-subheader class="mt-3 grey--text text--darken-1">Article</v-subheader>
+            <v-list>
+              <v-list-tile @click="displayDraftArticle">
+                <v-list-tile-action>
+                  <v-icon>description</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-title>Draft</v-list-tile-title>
+              </v-list-tile>
+              <v-list-tile @click="displayPublishArticle">
+                <v-list-tile-action>
+                  <v-icon>library_books</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-title>Publish</v-list-tile-title>
+              </v-list-tile>
+            </v-list>
+            <v-list-tile class="mt-3" @click="">
+              <v-list-tile-action>
+                <v-icon>exit_to_app</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-title onclick="signOut();">Sign out</v-list-tile-title>
+            </v-list-tile>
+          </v-list>
+        </v-navigation-drawer>
+
+
+        <!-- ===================================== HOME  ===================================== -->
+        <v-content v-if="displayContent==0">
+          <v-container fill-height>
+            <v-layout justify-center align-center>
+              <v-flex shrink>
+                <img src="./img/undraw_into_the_night_vumi.svg" height="300" />
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-content>
+
+
+        <!-- ===================================== FORM ADD ARTICLE  ===================================== -->
+        <v-content v-if="displayContent==1">
+          <v-container fill-height>
+            <v-layout justify-center align-center>
+              <v-flex shrink>
+                <h1 style="text-align: center;">ADD ARTICLE</h1>
+                <v-form ref="form" lazy-validation>
+                  <v-text-field v-model="form.title" :rules="titleRules" label="Title" required></v-text-field>
+                  <wysiwyg v-model="form.content" :rules="contentRules" required id="textEdit"
+                    style="overflow: scroll; height: 200px;"></wysiwyg>
+                  <v-radio-group v-model="form.status">
+                    <v-radio label="Draft" value="false"></v-radio>
+                    <v-radio label="Publish" value="true"></v-radio>
+                  </v-radio-group>
+                  <v-text-field label="Select Image" @click='pickFile' v-model='form.imageName'
+                    prepend-icon='attach_file'>
+                  </v-text-field>
+                  <input type="file" style="display: none" ref="image" accept="image/*" @change="onFilePicked">
+                  <img :src="form.imageUrl" height="150" v-if="form.imageUrl" /><br />
+                  <v-combobox multiple v-model="form.tags" label="Tags" append-icon chips deletable-chips class="tag-input"
+                    :search-input.sync="search" @keyup.tab="updateTags" @paste="updateTags">
+                  </v-combobox>
+
+                  <v-btn color="success" @click="addArticle">
+                    SEND
+                  </v-btn>
+                  <v-btn color="error" @click="reset">
+                    Reset Form
+                  </v-btn>
+                </v-form>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-content>
+
+
+        <!-- ===================================== LIST ARTICLE DRAFT ===================================== -->
+        <v-content v-if="displayContent==2">
+          <v-container>
+            <div style="width: 100%; margin-top:0 !important;">
+              <v-layout row v-for="article in articlesDraft" :key="article._id">
+                <v-flex>
+                  <card-article :article='article' @show-detail="showModal" @edit-article="showEditArticle"
+                    @delete-article="deleteArticle" @search-tag="searchTags" />
+                </v-flex>
+              </v-layout>
+            </div>
+          </v-container>
+        </v-content>
+
+
+        <!-- ===================================== LIST ARTICLE PUBLISHED ===================================== -->
+        <v-content v-if="displayContent==3">
+          <v-container>
+            <div style="width: 100%; margin-top:0 !important;">
+
+              <v-layout row v-for="article in articlesPublish" :key="article._id">
+                <v-flex>
+                  <card-article :article='article' @show-detail="showModal" @edit-article="showEditArticle"
+                    @delete-article="deleteArticle" @searchTags="searchTags" />
+                </v-flex>
+              </v-layout>
+
+            </div>
+          </v-container>
+        </v-content>
+
+
+        <!-- MODAL DETAIL -->
+        <div class="text-xs-center">
+          <v-dialog v-model="dialog" width="500">
+            <v-card>
+              <v-card-title class="headline grey" primary-title color="red">
+                {{dialogTitle}}
+              </v-card-title>
+
+              <v-card-text>
+                <span class="grey--text" v-html="dialogContent"></span>
+              </v-card-text>
+              <div class="text-xs-center">
+                <v-chip small v-for="(tag, index) in dialogTags" :key="index">{{ tag }}</v-chip>
+              </div>
+              <v-divider></v-divider>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="primary" flat @click="dialog = false">
+                  OKE
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </div>
+
+
+        <!-- MODAL EDIT -->
+        <div class="text-xs-center">
+          <v-dialog v-model="dialogEdit" width="600">
+            <v-card>
+              <v-card-title class="headline grey" primary-title color="red">
+                EDIT ARTICLE
+              </v-card-title>
+              <v-flex style="padding: 20px;">
+                <h1 style="text-align: center;"></h1>
+                <v-form ref="form" lazy-validation>
+                  <v-text-field v-model="form.title" :rules="titleRules" label="Title" required></v-text-field>
+                  <wysiwyg v-model="form.content" :rules="contentRules" required id="textEdit"
+                    style="overflow: scroll; height: 200px;"></wysiwyg>
+                  <v-radio-group v-model="form.status">
+                    <v-radio label="Draft" value="false"></v-radio>
+                    <v-radio label="Publish" value="true"></v-radio>
+                  </v-radio-group>
+                  <v-text-field label="Select Image" @click='pickFile' v-model='form.imageName'
+                    prepend-icon='attach_file'>
+                  </v-text-field>
+                  <input type="file" style="display: none" ref="image" accept="image/*" @change="onFilePicked">
+                  <img :src="form.imageUrl" height="150" v-if="form.imageUrl" /><br />
+                  <v-combobox multiple v-model="form.tags" label="Tags" append-icon chips deletable-chips
+                    class="tag-input" :search-input.sync="search" @keyup.tab="updateTags" @paste="updateTags" required>
+                  </v-combobox>
+                </v-form>
+              </v-flex>
+              <v-divider></v-divider>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="success" @click="editArticle">
+                  SEND
+                </v-btn>
+                <v-btn color="error" @click="backEdit">
+                  Cancel
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </div>
+
+
+      </div>
+    </v-app>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
+  <script src="./js/index.js"></script>
+  <script src="./js/card-article.js"></script>
+  <script src="./js/tags.js"></script>
+  <script>
+
+  </script>
+</body>
+
+</html>
