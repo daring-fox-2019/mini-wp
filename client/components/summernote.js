@@ -1,11 +1,19 @@
 Vue.component('summer-note', {
+    props: ['edit'],
+    data(){
+        return {
+            localEdit : ''
+        }
+    },
     template : `
-    <textarea ref="summernote" id="summernote" />
+    <div>
+    <textarea ref="summernote" id="summernote"></textarea>
+    </div>
     `,
     computed: {
         summernote() {
             return $(this.$refs.summernote);
-        }
+        },  
     },
     methods: {
         getVal() {
@@ -24,10 +32,13 @@ Vue.component('summer-note', {
         $(this.$refs.summernote).summernote({
             height: 250
           });
+          $('#summernote').summernote('code', this.localEdit.content );
+      
     },
     created() {
         this.summernote.summernote({
             height: 250
-          })
+        })
+        this.localEdit = this.edit
     },
 })

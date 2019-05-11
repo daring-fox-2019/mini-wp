@@ -16,10 +16,18 @@ var app = new Vue({
         title : '',
         content : '',
         photo : '',
-        tags : '',
         userId : localStorage.getItem('id')
     },
-    editor : false
+    currentTags : [],
+    newTag : '',
+    query: '',
+    editMode: false,
+    editArticle : {
+      title : '',
+      content : '',
+      photo : '',
+      userId : localStorage.getItem('id')
+    }
   },
   methods: {
     // [LOGIN & AUTHENTICATE]
@@ -34,9 +42,13 @@ var app = new Vue({
       this.isLogin = false;
       localStorage.clear();
     },
+    showAll() {
+      this.page = 'all'
+    },
     successLogin() {
       this.loginUser.profPic = localStorage.getItem("image");
       this.loginUser.username = localStorage.getItem("username");
+      this.fetchArticles()
       this.isLogin = true;
       this.authenticate = "";
       this.page = "all";
@@ -45,7 +57,23 @@ var app = new Vue({
       this.showLogin();
     },
     showEditor() {
-      this.editor = true
+      this.page = 'editor'
+    },
+    showEditArticle(id){
+      this.currentTags = []
+      this.page = 'editor'
+      this.editMode = true
+      axios.get(`${baseURL}/articles/${id}`, { headers : { token : localStorage.getItem('token')}})
+           .then(({ data })=> {
+             this.editArticle = data
+      
+             data.tags.forEach( tag => {
+               this.currentTags.push(tag.tagName)
+             })
+           })
+           .catch((err) => {
+             console.log(err);
+           })
     },
     //------[FUNCTIONALITY]-------------
     fetchArticles() {
@@ -62,6 +90,20 @@ var app = new Vue({
           console.log(err);
         });
     },
+    showMine() {
+      axios
+        .get(`${baseURL}/articles/user`, {
+          headers: { token: localStorage.getItem("token") }
+        })
+        .then(({ data }) => {
+          console.log(data);
+          this.articles = data;
+          this.page = 'private'
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    },
     fetchDetails(id) {
       axios
         .get(`${baseURL}/articles/${id}`, {
@@ -77,7 +119,6 @@ var app = new Vue({
         });
     },
     addArticle() {
-      console.log('masuk');
       
       let formData = new FormData()
 
@@ -85,10 +126,14 @@ var app = new Vue({
       formData.append('content', this.newArticle.content)
       formData.append('photo', this.newArticle.photo)
       formData.append('userId', this.newArticle.userId)
+      formData.append('tags', this.currentTags)
 
       axios
         .post(`${baseURL}/articles`, formData , { headers : { token : localStorage.getItem('token')}})
         .then(({ data }) => {
+          this.fetchArticles()
+          this.newArticle = {}
+          swal('Congratulation!','Your post has been posted','success')
           console.log(data);
         })
         .catch((err) => {
@@ -100,17 +145,56 @@ var app = new Vue({
       this.newArticle.content = overview
       this.addArticle()
     },
-    getImage() {
+    getImage(event) {
+
       this.newArticle.photo = event.target.files[0]
+      
+      let formData = new FormData()
+
+      formData.append('photo', this.newArticle.photo)
+
+      axios.post(`${baseURL}/tags`, formData, { headers : { token : localStorage.getItem('token'), "Content-Type" : "multipart/form-data"}})
+        .then(({ data }) => {
+           data.forEach(tag => {
+            this.currentTags.push(tag)
+           });
+           console.log(data);
+           
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    },
+    createTag(){
+      axios.post(`${baseURL}/tags/add`, {tagName : this.newTag}, { headers : { token : localStorage.getItem('token')}})
+        .then(({ data }) => {
+          console.log(data);
+          this.currentTags.push(data.tagName)
+          this.newTag = ''
+        })
+        .catch((err)=> {
+          console.log(err);
+        })
+    },
+    deleteTag(value){
+        this.currentTags = this.currentTags.filter( tag => tag !== value )
     },
     updateArticle(id, value) {
       if (value == 'like') {
         axios
-          .put(`${baseURL}/articles/${id}`, { like : localStorage.getItem('id') }, { headers : { token : localStorage.getItem('token')}})
+          .put(`${baseURL}/articles/${id}`, { type : 'like', like : localStorage.getItem('id') }, { headers : { token : localStorage.getItem('token')}})
           .then(({ data }) => {
-            this.fetchArticles()
-            this.fetchDetails()
-            swal('You liked this blogs!','','success')
+            if (data.msg == 'like') {
+              swal('You liked this blogs!','','success')
+            } else {
+              swal('You dislike this blogs!','','success')
+            }
+            if(this.page == 'all'){
+              this.fetchArticles()
+            } else if(this.page == 'private' ) {
+              this.fetchArticles()
+            } 
+
             console.log(data);
           })
           .catch((err) => {
@@ -119,10 +203,54 @@ var app = new Vue({
             }
           })
       }
+    },
+    deleteArticle(id) {
+      axios
+        .delete(`${baseURL}/articles/${id}`, { headers : { token : localStorage.getItem('token')}})
+        .then(({ data }) => {
+          console.log(data);
+          swal('Deleted!','', 'success')
+          this.showMine()
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    },
+    showLikes() {
+      axios
+        .get(`${baseURL}/articles/likes`, {headers : { token : localStorage.getItem('token')}})
+        .then(({ data }) => {
+          console.log(data);
+          this.articles = data
+        })
+        .catch((err)=> {
+          console.log(err);
+        })
+    },
+    beforeEnter: (el) => {
+      el.style.opacity = 0
+      el.style.height = 0
+    },
+    enter: (el, done) => {
+      var delay = el.dataset.index * 150
+      setTimeout(function () {
+        Velocity(
+          el,
+          { opacity: 1, height : '1.6em'},
+          { complete : done }
+        )
+      }, delay)
+    },
+    leave: (el, done) => {
+      var delay = el.dataset.index * 150
+      setTimeout(function() {
+        Velocity(
+          el,
+          { opacity: 0, height: 0 },
+          { complete : done }
+        )
+      }, delay)
     }
-  },
-  mounted() {
-     this.$refs.editor.run('code','')
   },
   created() {
     if (localStorage.getItem("token")) {
@@ -130,7 +258,16 @@ var app = new Vue({
       this.loginUser.username = localStorage.getItem("username");
       this.fetchArticles();
       this.isLogin = true;
-      this.page = "all";
+      this.showAll()
     }
-  }
+  },
+  computed: {
+  
+    computedList: function() {
+      var vm = this
+      return this.articles.filter(function(item){
+        return item.title.toLowerCase().indexOf(vm.query.toLowerCase()) !== -1
+      })
+    }
+  },
 });

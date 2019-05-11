@@ -23,7 +23,7 @@ Vue.component("login", {
           console.log(data);
         })
         .catch((err) => {
-          swal('Sorry, buddy!', err.responseJSON.errors, 'warning')
+          swal('Sorry, buddy!', 'email/username is incorrect', 'warning')
           console.log(err);
         })
     },

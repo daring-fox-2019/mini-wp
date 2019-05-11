@@ -1,19 +1,23 @@
-Vue.component("articles", {
-  props: ["articles","fetchDetails","updateArticle"],
-  data() {
-      return {
-          userId : localStorage.getItem('id')
-      }
-  },
-  methods: {
-      getDetails(id) {
-          this.$parent.fetchDetails(id)
-      },
-      getUpdate(id, value) {
-        this.$parent.updateArticle(id, value)
-      }
-  },
-  template: `
+Vue.component('userArticles', {
+    props : ['articles','updateArticle','deleteArticle'],
+    data() {
+        return {
+            userId : localStorage.getItem('id')
+        }
+    },
+    methods: {
+        getUpdate(id, value){
+            this.$parent.updateArticle(id, value)
+        },
+        getDelete(id) {
+            this.$parent.deleteArticle(id)
+        },
+        getEdit(id) {
+            this.$parent.showEditArticle(id)
+        }
+    },
+    template : 
+    `
     <div data-spy="scroll" data-target="#list-example" data-offset="0" class="scrollspy-example" id="all-articles">
         <div class="row">
             <div class="col-6" v-for="(article, index) in articles" :key="index">
@@ -40,9 +44,13 @@ Vue.component("articles", {
                         </div>
                     </div>
                     </div>
+                    <div class="d-flex justify-content-center">
+                        <button @click.prevent="getEdit(article._id)" type="button" class="btn mt-3" style="background-color: #016087; width: 120px; font-size: 10px">Edit</button>
+                        <button @click.prevent="getDelete(article._id)" type="button" class="btn mt-3" style="background-color: #016087; width: 120px; font-size: 10px">Delete</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     `
-});
+})
