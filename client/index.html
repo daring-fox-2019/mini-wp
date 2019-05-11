@@ -33,7 +33,7 @@
   <div id="app">
     <v-app dark id="inspire">
 
-      <!-- ===================================== SIGNIN ===================================== -->
+      <!-- ===================================== SIGNIN - START ===================================== -->
       <v-content v-show="statusSign==0">
         <v-container fluid fill-height>
           <v-layout align-center justify-center>
@@ -62,8 +62,9 @@
           </v-layout>
         </v-container>
       </v-content>
+      <!-- ===================================== SIGNIN - END ===================================== -->
 
-      <!-- ===================================== SIGNUP ===================================== -->
+      <!-- ===================================== SIGNUP - START ===================================== -->
       <v-content v-if="statusSign==1">
         <v-container fluid fill-height>
           <v-layout align-center justify-center>
@@ -93,9 +94,14 @@
           </v-layout>
         </v-container>
       </v-content>
+      <!-- ===================================== SIGNUP - END ===================================== -->
 
+
+      <!-- ===================================== MAIN CONTENT - START ===================================== -->
       <div v-if="statusSign==2">
-        <!-- ===================================== HEADER ===================================== -->
+
+        
+        <!-- ===================================== HEADER - START ===================================== -->
         <v-toolbar color="red" dense fixed clipped-left app>
           <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
           <v-toolbar-title class="mr-5 align-center">
@@ -108,11 +114,18 @@
             </v-text-field>
           </v-layout>
         </v-toolbar>
+        <!-- ===================================== HEADER - END ===================================== -->
 
 
-        <!-- ===================================== NAVBAR ===================================== -->
+        <!-- ===================================== NAVBAR - START ===================================== -->
         <v-navigation-drawer fixed clipped v-model="drawer" app>
           <v-list>
+            <v-list-tile class="mt-3">
+              <v-list-tile-action>
+                <v-icon>person</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-title>{{ userLogin }}</v-list-tile-title>
+            </v-list-tile>
             <v-list-tile class="mt-3" @click="displayAddArticle">
               <v-list-tile-action>
                 <v-icon>add_circle_outline</v-icon>
@@ -142,9 +155,11 @@
             </v-list-tile>
           </v-list>
         </v-navigation-drawer>
+        <!-- ===================================== NAVBAR - END ===================================== -->
 
 
-        <!-- ===================================== HOME  ===================================== -->
+
+        <!-- ===================================== HOME - START ===================================== -->
         <v-content v-if="displayContent==0">
           <v-container fill-height>
             <v-layout justify-center align-center>
@@ -154,9 +169,10 @@
             </v-layout>
           </v-container>
         </v-content>
+        <!-- ===================================== HOME - END ===================================== -->
 
 
-        <!-- ===================================== FORM ADD ARTICLE  ===================================== -->
+        <!-- ===================================== FORM ADD ARTICLE - START ===================================== -->
         <v-content v-if="displayContent==1">
           <v-container fill-height>
             <v-layout justify-center align-center>
@@ -175,8 +191,8 @@
                   </v-text-field>
                   <input type="file" style="display: none" ref="image" accept="image/*" @change="onFilePicked">
                   <img :src="form.imageUrl" height="150" v-if="form.imageUrl" /><br />
-                  <v-combobox multiple v-model="form.tags" label="Tags" append-icon chips deletable-chips class="tag-input"
-                    :search-input.sync="search" @keyup.tab="updateTags" @paste="updateTags">
+                  <v-combobox multiple v-model="form.tags" label="Tags" append-icon chips deletable-chips
+                    class="tag-input" :search-input.sync="search" @keyup.tab="updateTags" @paste="updateTags">
                   </v-combobox>
 
                   <v-btn color="success" @click="addArticle">
@@ -190,12 +206,17 @@
             </v-layout>
           </v-container>
         </v-content>
+        <!-- ===================================== FORM ADD ARTICLE - END ===================================== -->
 
 
-        <!-- ===================================== LIST ARTICLE DRAFT ===================================== -->
+        <!-- ===================================== LIST ARTICLE DRAFT - START ===================================== -->
         <v-content v-if="displayContent==2">
           <v-container>
-            <div style="width: 100%; margin-top:0 !important;">
+            <h2>My Draft Article</h2>
+            <h3 class="search" v-if="searchTitle">Search title like : {{ searchTitle }}</h3>
+            <h3 class="search" v-if="searchTag">Search tag for : {{ searchTag }} <i class="far fa-times-circle"
+                @click="tagClose"></i></h3>
+            <div style="width: 100%; margin-top:0 !important;" v-if="articlesDraft.length!=0">
               <v-layout row v-for="article in articlesDraft" :key="article._id">
                 <v-flex>
                   <card-article :article='article' @show-detail="showModal" @edit-article="showEditArticle"
@@ -203,34 +224,54 @@
                 </v-flex>
               </v-layout>
             </div>
+            <v-layout justify-center align-center v-else>
+              <v-flex shrink>
+                <img src="./img/undraw_page_not_found_su7k.svg" height="300" />
+              </v-flex>
+            </v-layout>
           </v-container>
         </v-content>
+        <!-- ===================================== LIST ARTICLE DRAFT - END ===================================== -->
 
 
-        <!-- ===================================== LIST ARTICLE PUBLISHED ===================================== -->
+        <!-- ===================================== LIST ARTICLE PUBLISHED - START ===================================== -->
         <v-content v-if="displayContent==3">
           <v-container>
-            <div style="width: 100%; margin-top:0 !important;">
-
+            <h2>My Publish Article</h2>
+            <h3 class="search" v-if="searchTitle">Search title like : {{ searchTitle }}</h3>
+            <h3 class="search" v-if="searchTag">Search tag for : {{ searchTag }} <i class="far fa-times-circle"
+                @click="tagClose"></i></h3>
+            <div style="width: 100%; margin-top:0 !important;" v-if="articlesPublish.length!=0">
               <v-layout row v-for="article in articlesPublish" :key="article._id">
                 <v-flex>
                   <card-article :article='article' @show-detail="showModal" @edit-article="showEditArticle"
-                    @delete-article="deleteArticle" @searchTags="searchTags" />
+                    @delete-article="deleteArticle" @search-tag="searchTags" />
                 </v-flex>
               </v-layout>
-
             </div>
+            <v-layout justify-center align-center v-else>
+              <v-flex shrink>
+                <img src="./img/undraw_page_not_found_su7k.svg" height="300" />
+              </v-flex>
+            </v-layout>
           </v-container>
         </v-content>
+        <!-- ===================================== LIST ARTICLE PUBLISHED - END ===================================== -->
+
+        <!-- ===================================== MAIN CONTENT - END ===================================== -->
 
 
         <!-- MODAL DETAIL -->
         <div class="text-xs-center">
           <v-dialog v-model="dialog" width="500">
             <v-card>
-              <v-card-title class="headline grey" primary-title color="red">
+              <v-card-title class="headline grey" primary-title color="danger">
                 {{dialogTitle}}
               </v-card-title>
+              <div v-if="dialogImage" class="text-xs-center">
+                <img :src="dialogImage" alt="img" width="auto" height="300"></v-img>
+              </div>
+              <v-divider></v-divider>
 
               <v-card-text>
                 <span class="grey--text" v-html="dialogContent"></span>
@@ -298,13 +339,16 @@
     </v-app>
   </div>
 
+  <!-- VUE -->
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
+
   <script src="./js/index.js"></script>
   <script src="./js/card-article.js"></script>
   <script src="./js/tags.js"></script>
-  <script>
+  <script src="./js/v-tool.js"></script>
 
+  <script>
   </script>
 </body>
 

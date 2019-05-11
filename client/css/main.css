@@ -35,3 +35,9 @@
 #textEdit{
   overflow: scroll;
 }
+
+.tooltip {
+  color: red;
+  display: block !important;
+  z-index: 10000;
+}

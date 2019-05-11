@@ -8,6 +8,8 @@ let app = new Vue({
   },
   data: () => ({
 
+    userLogin: '',
+
     // List Article
     articles: [],
     articlesDraft: [],
@@ -46,12 +48,13 @@ let app = new Vue({
     statusSign: '0',      // login/register/main content
 
     search: "", // for tags
-    select: "",
     searchTitle: "",
+    searchTag: "",
 
     dialog: false,
     dialogEdit: false,
     dialogTitle: '',
+    dialogImage: '',
     dialogContent: '',
     dialogTags: [],
 
@@ -79,7 +82,7 @@ let app = new Vue({
     } else {
       this.statusSign = '2'
     }
-
+    this.userLogin = localStorage.name
     this.loadData()
   },
 
@@ -132,13 +135,15 @@ let app = new Vue({
     },
 
     editArticle() {
-      let data = {
-        title: this.form.title,
-        content: this.form.content,
-        status: this.form.status,
-        image: this.form.imageName,
-        tags: this.form.tags
+      let data = new FormData()
+      data.append("title", this.form.title)
+      data.append("content", this.form.content)
+      data.append("status", this.form.status)
+      if (this.form.imageFile) {
+        data.append("image", this.form.imageFile, this.form.imageName)
       }
+      data.append("tags", this.form.tags)
+
 
       axios.put(`http://localhost:3000/articles/${this.idArticleSelected}`, data, {
         headers: {
@@ -151,9 +156,15 @@ let app = new Vue({
               el.title = data.title
               el.content = data.content
               el.status = data.status
+              el.featured_image = data.featured_image
               el.tags = data.tags
             }
           })
+          swal(`Update article Success!`, {
+            icon: "success",
+          });
+          this.generateArticle()
+          this.dialogEdit = false
         })
         .catch(err => {
           console.log(err);
@@ -192,7 +203,11 @@ let app = new Vue({
           this.statusSign = '0'
         })
         .catch(err => {
+          swal(`Register Fail!`, {
+            icon: "warning",
+          });
           console.log(err);
+          
         })
     },
 
@@ -201,14 +216,19 @@ let app = new Vue({
         .then(({ data }) => {
           this.signin.email = ''
           this.signin.password = ''
-          swal(`Welcome back ${data.userName}`, {
+          swal(`Hi, ${data.userName}`, {
             icon: "success",
           });
           localStorage.setItem('token', data.token)
+          localStorage.setItem('name', data.userName)
+          this.userLogin = data.userName
           this.statusSign = '2'
           this.loadData()
         })
         .catch(err => {
+          swal(`Signin Fail!`, {
+            icon: "warning",
+          });
           console.log(err);
         })
     },
@@ -255,7 +275,8 @@ let app = new Vue({
 
     showModal(data) {
       this.dialogTitle = data.title,
-        this.dialogContent = data.content
+      this.dialogContent = data.content
+      this.dialogImage = data.featured_image
       this.dialog = true
       this.dialogTags = data.tags
     },
@@ -265,13 +286,16 @@ let app = new Vue({
       data.append("title", this.form.title)
       data.append("content", this.form.content)
       data.append("status", this.form.status)
-      if(this.form.imageFile){
+      if (this.form.imageFile) {
         data.append("image", this.form.imageFile, this.form.imageName)
       }
       data.append("tags", this.form.tags)
 
       axios.post('http://localhost:3000/articles', data, { headers: { token: localStorage.token } })
         .then(({ data }) => {
+          swal(`Create article Success!`, {
+            icon: "success",
+          });
           this.articles.push(data)
           this.reset()
           console.log("ADD SUKSES");
@@ -323,7 +347,7 @@ let app = new Vue({
     },
 
     searchTags(tag) {
-      console.log(tag);
+      this.searchTag = tag
       let statusMasuk
 
       this.articlesDraft = this.articles.filter(el => {
@@ -352,6 +376,24 @@ let app = new Vue({
           }
         }
       })
+    },
+
+    tagClose() {
+      this.searchTag = ''
+      this.generateArticle()
+    },
+
+    generateArticle() {
+      this.articlesDraft = this.articles.filter(el => {
+        if (el.status == 0) {
+          return el
+        }
+      })
+      this.articlesPublish = this.articles.filter(el => {
+        if (el.status == 1) {
+          return el
+        }
+      })
     }
   }
 })
@@ -363,8 +405,18 @@ function onSignIn(googleUser) {
     token: id_token
   })
     .then(({ data }) => {
+      swal(`Hi, ${data.userName}`, {
+        icon: "success",
+      });
       localStorage.setItem('token', data.token)
+      localStorage.setItem('name', data.userName)
+      console.log("OK1");
+
+      app.userLogin = data.userName
       app.statusSign = '2'
+      app.loadData()
+      console.log("OK2");
+      
     })
     .catch((jqXHR, textStatus) => {
       console.log(`request failed ${textStatus}`)
@@ -375,8 +427,11 @@ function signOut() {
   var auth2 = gapi.auth2.getAuthInstance()
   auth2.signOut().then(function () {
     localStorage.removeItem('token')
+    localStorage.removeItem('name')
+
     app.statusSign = '0'
     app.displayContent = '0'
-    console.log('User signed out.')
+    swal(`See you!`);
   });
 }
+

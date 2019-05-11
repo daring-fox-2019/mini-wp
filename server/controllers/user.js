@@ -40,8 +40,6 @@ class userController {
   }
 
   static googleLogin(req, res) {
-    console.log("MASUK 1");
-
     let payload;
     client.verifyIdToken({
       idToken: req.body.token,
@@ -56,13 +54,9 @@ class userController {
       })
       .then((foundUser) => {
         if (foundUser) {
-          console.log("MASUK 2");
-
           const token = sign({ _id: foundUser._id, name: foundUser.name, email: foundUser.email })
-          res.status(200).json({ token, userId: foundUser._id, name: foundUser.name })
+          res.status(200).json({ token, userId: foundUser._id, userName: foundUser.name })
         } else {
-          console.log("MASUK 3");
-
           let newUser = new modelUser({
             name: payload.name,
             email: payload.email,
@@ -74,7 +68,7 @@ class userController {
               queue.create('email').save()
 
               const token = sign({ _id: data._id, name: data.name, email: data.email })
-              res.status(200).json({ token, userId: data._id, name: data.name })
+              res.status(200).json({ token, userId: data._id, userName: data.name })
             })
 
         }

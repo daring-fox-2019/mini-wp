@@ -68,21 +68,25 @@ class Article {
   }
 
   static update(req, res) {
+    let tags = req.body.tags.split(",")
     let newArticle
-    if (req.body.image == '') {
+
+    if(req.file){
       newArticle = {
         title: req.body.title,
         content: req.body.content,
+        created_at: new Date,
         status: req.body.status,
-        featured_image: req.body.image,
-        tags: req.body.tags
+        featured_image: req.file.cloudStoragePublicUrl,
+        tags: tags
       }
-    } else {
+    }else{
       newArticle = {
         title: req.body.title,
         content: req.body.content,
+        created_at: new Date,
         status: req.body.status,
-        tags: req.body.tags
+        tags: tags
       }
     }
 

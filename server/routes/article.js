@@ -10,6 +10,6 @@ router.get('/', articleController.findAll)
 router.use('/:id', authorization)
 router.get('/:id', articleController.findOne)
 router.delete('/:id', articleController.delete)
-router.put('/:id', articleController.update)
+router.put('/:id', gcs.multer.single("image"), gcs.sendUploadToGCS, articleController.update)
 
 module.exports = router
