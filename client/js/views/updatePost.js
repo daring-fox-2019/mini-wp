@@ -18,7 +18,8 @@ Vue.component('update-post', {
             }
         },
         updatePost(data) {
-            axios.put({
+            axios({
+                method: 'PUT',
                 url: serverURL + '/posts',
                 data: formData,
                 headers: {
@@ -26,7 +27,7 @@ Vue.component('update-post', {
                 }
             })
             .then(({data}) => {
-                
+                console.log('post updated');
             })
             .catch(err => {
 
@@ -43,6 +44,6 @@ Vue.component('update-post', {
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <postform type="create" v-on:create="createPost"></postform>
+        <postform type="update" v-on:update="updatePost"></postform>
     </div>`
 })

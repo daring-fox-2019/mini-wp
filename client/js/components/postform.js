@@ -22,57 +22,40 @@ Vue.component('postform', {
     },
     computed: {
         filteredTags: function() {
-            return this.availableTags.filter(i => {
+            let filtered =  this.availableTags.filter(i => {
               return i.toLowerCase().indexOf(this.tag.toLowerCase()) !== -1;
             });
+
+            filtered = filtered.map(x => {
+                return {text: x}
+            })
+
+            return filtered
         }
     },
     created() {
-        this.availableTags = ['node', 'js', 'javascript', 'c#', 'bootstrap']
-
-        axios.get({
-            url: serverURL
-        })
-        .then(({data}) => {
-            data.forEach(x => {
-                this.availableTags.push(x.name)
-            })
-        })
-        .catch(err => {
-
-        })
+        $('[data-toggle="tooltip"]').tooltip();
+        this.getTags();
     },
     methods: {
+        getTags() {
+            this.availableTags = []
+
+            axios({
+                method: 'GET',
+                url: serverURL + '/tags'
+            })
+            .then(({data}) => {
+                data.forEach(x => {
+                    this.availableTags.push(x)
+                })
+            })
+            .catch(err => {
+                console.log(err.response.data);
+            })
+        },
         refreshTags(newTags) {
-            console.log('changed..',newTags);
-        },
-        createPost() {
-            backend.post({
-                data: formData,
-                headers: {
-                    token: localStorage.getItem('miniwp_token')
-                }
-            })
-            .then(({data}) => {
-                console.log('create done\n', formData);
-            })
-            .catch(err => {
-                console.log('error create --', err);
-            })
-        },
-        updatePost() {
-            backend.put({
-                data: formData,
-                headers: {
-                    token: localStorage.getItem('miniwp_token')
-                }
-            })
-            .then(({data}) => {
-                console.log('update done\n', formData);
-            })
-            .catch(err => {
-                console.log('error create --', err);
-            })
+            this.formData.tags = newTags;
         },
         processSubmit() {
             if(this.$props.type === 'create') {
@@ -82,11 +65,12 @@ Vue.component('postform', {
                 this.$emit('create', this.formData)
             }
             else {
-                this.updatePost()
+                this.$emit('update', this.formData)
             }
         },
-        onTakeImage() {
+        onTakeImage(data) {
             console.log('image loaded...');
+            this.formData.feature_image = data
         }
     },
     template: 
@@ -111,7 +95,7 @@ Vue.component('postform', {
             <label for="post-content"><h5>Content</h5></label>
             <vuewysiwyg v-model="formData.content"></vuewysiwyg>
         </div>
-        <div class="form-group">
+        <div class="form-group" data-toggle="tooltip" title="You can add new tag here">
             <label for="tags"><h5>Tags</h5></label>
             <vue-tags-input v-model="tag"
                 :tags="tags"

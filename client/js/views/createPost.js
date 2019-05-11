@@ -18,21 +18,33 @@ Vue.component('create-post', {
             }
         },
         createPost(data) {
-            console.log('form data emitted...', data);
+            this.formData = data
+            console.log(this.formData);
 
-            axios.post({
-                url: serverURL + '/posts',
-                data: formData,
+            uploadingImage = true;
+            this.newArticle.created_at = new Date
+
+            const formData = getFormData(this.newArticle)
+            
+            const config = {
                 headers: {
-                    token: localStorage.getItem('miniwp_token')
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': localStorage.miniwp_token
                 }
-            })
-            .then(({data}) => {
-                
-            })
-            .catch(err => {
+            };
 
-            })
+            axios.post(serverURL+'/articles', formData, config)
+                .then(({data}) => {
+                    console.log(`created successfully...${data}`);
+                    /* 
+                    this.addArticle()
+                    this.resetNewArticle() */
+
+                    this.$root.page = 'index'
+                })
+                .catch(err => {
+                    this.status.message = err.response
+                })
 
         }
     },

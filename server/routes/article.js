@@ -4,7 +4,6 @@ const {multer, sendUploadToGCS} = require('../helpers/images')
 const authorize = require('../middleware/authorize')
 
 route.get('/', ArticleController.findAll)
-// route.post('/', uploadLocal.single('featured_image'), ArticleController.create)
 route.post('/', multer.single('featured_image') , sendUploadToGCS, ArticleController.create)
 
 route.put('/:id', authorize, ArticleController.update)

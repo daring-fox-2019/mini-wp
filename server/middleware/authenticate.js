@@ -1,35 +1,28 @@
-const jwt = require('jsonwebtoken')
+const jwt = require('../helpers/jwt')
 const User = require('../models/user')
-const bcryptjs = require('bcryptjs')
 
 module.exports = function(req, res, next) {
-
-    console.log(req.headers);
     if(req.headers.authorization) {
         let payload
-        let username
-        let password
         
         try {
-            payload = jwt.verify(req.headers.authorization, process.env.SECRET)
-           
-            username = payload.username
-            password = payload.password
+            payload = jwt.verify(req.headers.authorization)
+            username = payload.email
 
-            User.findOne({username: username})
+            User.findOne({email: email})
             .then(user => {
                 req.user = user
                 next()
             })
             .catch(error => {
-                res.status(403).json({error: `Invalid username`})
+                res.status(403).json(`Invalid email`)
             })
         }
         catch(error) {
-            res.status(500).json({error: `Error checking token. Please try again`})
+            res.status(500).json(`Error checking token. Please try again`)
         }
     }
     else {
-        res.status(401).json({error: `Not Authorized`})
+        res.status(401).json('Please login first')
     }
 }

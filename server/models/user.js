@@ -42,6 +42,10 @@ const userSchema = new Schema({
     created_at: {
         type: Date,
         default: new Date
+    },
+    role: {
+        type: String,
+        default: 'user'
     }
 })
 

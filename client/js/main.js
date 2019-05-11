@@ -1,6 +1,6 @@
 'use strict';
-
 $(document).ready(function () {
+  // $('[data-toggle="tooltip"]').tooltip();
   $('#sidebarCollapse').on('click', function () {
     $('#sidebar').toggleClass('active');
     $('#content').toggleClass('active');
@@ -10,16 +10,16 @@ $(document).ready(function () {
   $('a[aria-expanded=true]').attr('aria-expanded', 'false');
 
   window.addEventListener('load', function() {
-  var forms = document.getElementsByClassName('needs-validation');
-  var validation = Array.prototype.filter.call(forms, function(form) {
-    form.addEventListener('submit', function(event) {
-      if (form.checkValidity() === false) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
-      form.classList.add('was-validated');
-    }, false);
-  });
+    var forms = document.getElementsByClassName('needs-validation');
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
 
   }, false);
 });
@@ -40,13 +40,20 @@ var app = new Vue({
     }
   },
   methods: {
+    loginSuccess() {
+      this.isLogin = true;
+      this.page = 'index'
+    },
     logout() {
         let self = this
         var auth2 = gapi.auth2.getAuthInstance();
         auth2.signOut().then(function () {
           localStorage.removeItem('miniwp_token')
-           self.isLogin = false;
-           self.page = 'login'
+          localStorage.removeItem('miniwp_name')
+          localStorage.removeItem('miniwp_email')
+
+          self.isLogin = false;
+          self.page = 'login'
         });
     },
     showIndex() {
@@ -60,7 +67,7 @@ var app = new Vue({
     },
     showRegister() {
       this.page = 'register'
-    }
+    },
   },
   created() {
     if(localStorage.getItem('miniwp_token')) {

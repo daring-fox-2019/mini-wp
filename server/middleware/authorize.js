@@ -1,43 +1,23 @@
-const User = require('../models/user')
+const Article = require('../models/article')
 
 module.exports = function(req, res, next) {
     let id
-
-    if(req.method === 'PUT' || req.method === 'PATCH' || req.method === 'DELETE') {
-        id = req.params.id
-
-        User.findOne({username: req.user.username})
-            .then(user => {
-                if(user) {
-                    //if client request to access 'user' resourec, check if username is same
-                    if(req.baseUrl.includes('user')) {
-                        if(user._id === id) {
-                            next()
-                        }
-                        else {
-                            res.status(403).json({error: `Not authorized to access the resource`})
-                        }
+    Article.findOne({_id: id})
+            .then(article => {
+                if(article) {
+                    if(article.author.toString() === req.user._id.toString()) {
+                        next()
                     }
-                    else if(req.baseUrl.includes('articles')) {
-                        let article = user.articles.find(x => x == req.params.id)
-                        if(article) {
-                            next()
-                        }
-                        else {
-                            res.status(403).json({error: `Not authorized to access the resource`})
-                        }
+                    else {
+                        res.status(403).json('Forbidden')
                     }
                 }
                 else {
-                    res.status(400).json({error: `Bad request`})
+                    res.status(400).json('Invalid article')
                 }
             })
             .catch(err => {
                 console.log(err);
-                res.status(500).json({error: `Error during authorization. Please try again.`})
+                res.status(500).json(`Error during authorization. Please try again.`)
             })
-    }
-    else {
-        next()
-    }
 }

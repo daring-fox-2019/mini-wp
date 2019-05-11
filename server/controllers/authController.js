@@ -1,7 +1,6 @@
 const User = require('../models/user')
-const {getHash} = require('../helpers/passwordHash')
 const {testPassword} = require('../helpers/passwordHash')
-const jwt = require('../helpers/generateJWT')
+const jwt = require('../helpers/jwt')
 const googleTokenParser = require('../helpers/googleTokenParser')
 
 class AuthController {
@@ -16,10 +15,10 @@ class AuthController {
             })
     }
 
-    static socialSignin(req, res) {
+    static googleSignIn(req, res) {
         googleTokenParser(req.body.token, function(err, miniwpToken) {
             if(err) {
-                res.status(401).json({error: `Not authorized. Please try again`})
+                res.status(401).json(err)
             }
             else {
                 res.status(200).json({token: miniwpToken})
@@ -27,30 +26,31 @@ class AuthController {
         })
     }
 
+    static linkedinSignIn(req, res) {
+        
+    }
+
     static signin(req, res) {
-        console.log(`signing.....${req.body.username}, ${req.body.password}`);
-        let username = req.body.username
+        let email = req.body.email
         let password = req.body.password
 
-        User.findOne({username: username})
+        User.findOne({email: email})
             .then(user => {
                 if(user && (testPassword(password, user.password))) {
-                    let newToken = jwt({
-                        username: user.username,
-                        password: user.password,
-                        email: user.email
+                    let newToken = jwt.sign({
+                        email: user.email,
+                        name: user.name,
+                        role: user.role
                     })
-                    
-                    console.log(`logged in....`);
+
                     res.status(200).json({token: newToken})
                 }
                 else {
-                    res.status(401).json({error: `Incorrect username/password`})
+                    res.status(401).json(`Incorrect username/password`)
                 }
             })
             .catch(err => {
-                console.log(err);
-                res.status(500).json({error: err})
+                res.status(500).json(err.message)
             })
     }
 }

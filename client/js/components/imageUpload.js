@@ -36,6 +36,7 @@ Vue.component('image-upload',{
         },
         removeFile() {
           this.image = '';
+          vm.$emit('take-image', {data: null, name: ''})
         }
     },
     template: `

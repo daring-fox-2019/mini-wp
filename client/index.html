@@ -26,14 +26,15 @@
         <div class="wrapper">
             <!-- control sidebar -->
             <sidebar></sidebar>
-
+            
             <!-- Actual Content -->
             <div id="content">
                 <a class="sidebar-btn" id="sidebarCollapse" href="#">
                     <i class="fas fa-chevron-right"></i>
                     <i class="fas fa-chevron-right" style="margin-left: -5px;"></i>
                 </a>
-                <login id="loginPage" v-show="page === 'login'" @success="page = 'index'"></login>
+
+                <login id="loginPage" v-show="page === 'login'" @success="loginSuccess"></login>
                 <register id="registerPage" v-if="page === 'register'"></register>
 
                 <div id="index" v-if="page === 'index'" class="container">
@@ -65,6 +66,7 @@
 
     <!-- local JS Components-->
     <script src="js/helpers/moment.js"></script>
+    <script src="js/components/badge.js"></script>
     <script src="js/components/vueWysiwyg.js"></script>
     <script src="js/components/postform.js"></script>
     <script src="js/components/postitemcard.js"></script>

@@ -28,6 +28,7 @@ Vue.component('login', {
                 localStorage.setItem('miniwp_token', data.token)
                 localStorage.setItem('miniwp_email', data.email)
                 localStorage.setItem('miniwp_name', data.name)
+                
                 this.$root.headers = {authorization: data.token}
 
                 this.$emit('success')

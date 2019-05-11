@@ -14,7 +14,7 @@ Vue.component('postitemcard', {
             </div>
             <div class="mb-1" v-html="post.content"></div>
             <div class="d-flex">
-                <span class="badge badge-info mr-1" v-for="(tag,i) in post.tags" :key="i">{{tag}}</span>
+                <tag-badge class="mr-1" v-for="(tag,i) in post.tags" :key="i" :tag="tag"></tag-badge>
             </div>
         </div>
         <div class="ml-3"><img style="width: 150px; height:100%;" src="img/user.png"></div>

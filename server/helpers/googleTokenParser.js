@@ -1,7 +1,6 @@
 const {OAuth2Client} = require('google-auth-library');
 const User = require('../models/user')
-const jwt = require('./generateJWT')
-const {getHash} = require('./passwordHash')
+const jwt = require('./jwt')
 
 module.exports = function(token, cb) {
     let access_token;
@@ -16,26 +15,26 @@ module.exports = function(token, cb) {
         const email = payload['email'];
         const name = payload['name']
 
-        User.findOne({username: email})
+        User.findOne({email: email})
             .then(found => {
                 if(found) {
-                    access_token = jwt({
-                        username: found.username,
-                        password: found.password,
-                        email: found.email
+                    access_token = jwt.sign({
+                        name: found.name,
+                        email: found.email,
+                        role: found.role
                     })
+
                     cb(null, access_token)
                 }
                 else {
-                    return User.create({username: email, password: getHash('pass123'), email: email})
+                    return User.create({email: email, password: process.env.DEFAULT_PWD})
                 }
             })
             .then(function(created) {
-                //if new user, we set default username and password
-                access_token = jwt({
-                    username: created.username,
-                    password: created.password,
-                    email: created.email
+                access_token = jwt.sign({
+                    email: created.email,
+                    name: created.name,
+                    role: created.role
                 })
 
                 cb(null, access_token)
