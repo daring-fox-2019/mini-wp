@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta
+      name="google-signin-client_id"
+      content="782348602721-v0lqbvi1e08scj9rf1r0vbg4cgb9vlmc.apps.googleusercontent.com"
+    />
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <title>miniWP</title>
     <link
       rel="stylesheet"
@@ -80,16 +85,16 @@
       </nav>
 
       <main style="height: 100%">
+        <list-article
+          :articles="articles"
+          :login="login"
+          @mounted="handleMountedListArticle"
+          @click-edit="handleClickEditArticle"
+          @click-delete="handleClickDeleteArticle"
+          @click-tag="handleClickTag"
+          v-if="page === 'list-article'"
+        ></list-article>
         <template v-if="login.token">
-          <list-article
-            :articles="articles"
-            :login="login"
-            @mounted="handleMountedListArticle"
-            @click-edit="handleClickEditArticle"
-            @click-delete="handleClickDeleteArticle"
-            @click-tag="handleClickTag"
-            v-if="page === 'list-article'"
-          ></list-article>
           <form-article
             :login="login"
             :article-id="selectedArticle"
@@ -104,6 +109,7 @@
             v-if="page === 'register'"
           ></form-register>
           <form-login
+            @google-signed="handleGoogleSigned"
             @on-login="handleLogin"
             v-if="page === 'login'"
           ></form-login>

@@ -5,6 +5,14 @@ Vue.component('FormLogin', {
       password: ''
     }
   },
+  mounted: function () {
+    gapi.signin2.render('g-signin2', {
+      scope: 'email',
+      width: '280',
+      longtitle: true,
+      onsuccess: this.googleSigned
+    })
+  },
   methods: {
     handleSubmitLogin: function () {
       axios
@@ -16,6 +24,14 @@ Vue.component('FormLogin', {
           this.$emit('on-login', data)
         })
         .catch(err => console.log(err))
+    },
+    googleSigned: function (googleUser) {
+      let {id_token} = googleUser.getAuthResponse()
+
+      this.$emit('google-signed', id_token)
+    },
+    renderButton: function () {
+      console.log('render button')
     }
   },
   template: `
@@ -49,6 +65,8 @@ Vue.component('FormLogin', {
             <button type="submit" class="btn btn-block btn-success border mt-3">
               Login
             </button>
+            <p class="text-secondary text-center mt-3 mb-1" style="font-size: 70%">Or, you can sign in with google</p>
+            <div id="g-signin2"></div>
           </form>
         </div>
       </div>
