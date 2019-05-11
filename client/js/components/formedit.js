@@ -22,8 +22,8 @@ Vue.component('editform', {
         text() {
             this.content = this.text
         },
-        tagz(){
-            this.tags = this.tagz 
+        tagz() {
+            this.tags = this.tagz
         }
     },
     template: `
@@ -60,10 +60,30 @@ Vue.component('editform', {
     `,
     methods: {
         updateBlogg() {
+            if(this.tags && this.tags[0] && this.tags[0].tiClasses){
+                this.tags = this.tags.map(el => el.text)
+                console.log(this.tags)
+            }
             if (this.title === "") {
                 swal("A great article always started by a title isn't it?")
             } else if (this.file === "") {
-                swal('Insert image to make your blog more interesting!')
+                axios
+                    .put(serverUrl + '/' + this.id, {
+                        id: this.id,
+                        title: this.title,
+                        content: this.content,
+                        tags: this.tags
+                    }, {
+                        headers: {
+                            auth: localStorage.jwtoken
+                        }
+                    })
+                    .then((data) => {
+                        this.$emit('editsuccess')
+                    })
+                    .catch((err) => {
+                        console.log(err.message)
+                    })
             } else {
                 file = this.file
                 const extension = file.name.split('.')[1]
