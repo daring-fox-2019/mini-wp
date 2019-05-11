@@ -60,6 +60,9 @@ Vue.component('login', {
         </form>
     </div>
     <div class="col"></div>
+    <div>
+     <div v-show class="g-signin2" data-onsuccess="onSignIn"></div>
+    </div>
   </div>
 </div>`
 })

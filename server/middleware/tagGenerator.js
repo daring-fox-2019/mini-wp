@@ -16,8 +16,13 @@ module.exports = {
                 const [result] = await client.labelDetection(req.file.cloudStoragePublicUrl );
                 const labels = result.labelAnnotations;
                 console.log('Labels:');
-                labels.forEach(label => console.log(label.description));
-                req.tags = labels
+                let temp = []
+                labels.forEach(label => {
+                    if (label.score > 0.600000) {
+                        temp.push(label.description.toLowerCase())
+                    }                   
+                });
+                req.tags = temp
                 next()
             }
         } catch (error) {

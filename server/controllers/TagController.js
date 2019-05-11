@@ -11,12 +11,11 @@ class TagController {
                 let arrTagsToShow = []
                 let datadata = await req.tags.forEach( async element => {
                     
-                   let hasil = await Tag.findOneAndUpdate({tagName: element.description}, {}, {upsert: true, new : true }).exec()
+                   let hasil = await Tag.findOneAndUpdate({tagName: element}, {}, {upsert: true, new : true }).exec()
                    await console.log(hasil, '???????');
-                   await arrTagsToShow.push(hasil)
                 });
                  
-                res.status(201).json({tags : req.tags})
+                res.status(201).json(req.tags)
                 
             } else {
                 res.status(200).json({message : 'No generated tags!'})
@@ -26,6 +25,25 @@ class TagController {
         }
         // console.log(req, 'dapet sini masuk ga ya')
         
+    }
+    
+    static async create(req, res) {
+        try {
+            console.log('kesinis');
+            
+            let found = await Tag.findOne({tagName : req.body.tagName})
+            console.log(found);
+            if (found == null) {
+               let hasil = await Tag.create({tagName : req.body.tag})
+                res.status(201).json(hasil)
+            } else {
+                res.status(400).json({msg : 'not found!'})
+            }
+        } catch (error) {
+            console.log(error);
+            
+            res.status(500).json(error)
+        }
     }
 
 }

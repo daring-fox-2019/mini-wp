@@ -16,7 +16,4 @@ router.post('/signin/google',  UserController.signInGoogle)
 router.get('/', authenticate, UserController.getAllUser)
 router.get('/:username', authenticate, UserController.getOneUser)
 
-// router.get('/location', UserController.getLoc)
-// router.get('/randomquotes', UserController.getQuotes)
-
 module.exports = router

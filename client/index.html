@@ -18,8 +18,10 @@
 
     <!-- GOOGLE -->
     <meta name="google-signin-client_id"
-        content="522157652010-mrfol17im61nm16pr6rdet26ppjhmurs.apps.googleusercontent.com">
+    content="445619934297-i30r489vqmcgldok747hptkr75q5fl5v.apps.googleusercontent.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://apis.google.com/js/platform.js" async defer></script>
+
 
     <!-- FONTS -->
     <link href="https://fonts.googleapis.com/css?family=Gentium+Book+Basic|Lato" rel="stylesheet">
@@ -37,6 +39,9 @@
     <!-- STYLE -->
     <script src="./style/other.css"></script>
 
+    <!-- MOMENT -->
+    <script src="https://momentjs.com/downloads/moment.js"></script>
+
     <style>
         body {
             font-family: 'Lato', sans-serif;
@@ -50,11 +55,15 @@
 </head>
 
 <body>
+    <!-- START OF APP VUE -->
     <div id="app">
 
         <!-- NAVBAR STARTS HERE -->
         <navbar v-on:sign-out="userSignOut" v-on:changestories="changestories" v-bind:is-login="isLogin"
-            v-on:gethome="gethome" v-bind:current-page="currentPage" v-bind:user-image="userImage"></navbar>
+            v-on:gethome="gethome" 
+            v-on:searchtag="searchtag"
+            v-bind:current-page="currentPage" v-bind:user-image="userImage" v-on:search="search">
+        </navbar>
         <!-- NAVBAR ENDS HERE -->
 
         <!-- LOGIN FORM STARTS HERE -->
@@ -62,14 +71,17 @@
         <!-- LOGIN FORM ENDS HERE -->
 
         <!-- REGISTER STARTS HERE -->
-        <register  v-if="currentPage == 'register'" v-if="!isLogin"></register>
+        <register 
+        v-if="currentPage == 'register'" 
+        v-on:successregister="showLogin" 
+        v-if="!isLogin"></register>
         <!-- REGISTER FORM ENDS HERE -->
 
         <!-- HOME SEGALA HOME STARTS HERE -->
         <div v-if="currentPage == 'home' && isLogin == true" class="container">
             <div class="row">
                 <div class="col-6 col-md-4">
-                    <headlinecard></headlinecard>
+                    <!-- <headlinecard></headlinecard> -->
                 </div>
                 <div class="col-6 col-md-4">
                     <smallcard></smallcard>
@@ -77,18 +89,12 @@
                     <smallcard></smallcard>
                 </div>
                 <div class="col-6 col-md-4">
-                    <headlinecard></headlinecard>
+
+                    <!-- <headlinecard></headlinecard> -->
                 </div>
             </div>
             <div class="row">
                 <div class="col-12 col-md-8">
-                    <mediumcard></mediumcard>
-                    <mediumcard></mediumcard>
-                    <mediumcard></mediumcard>
-                    <mediumcard></mediumcard>
-                    <mediumcard></mediumcard>
-                    <mediumcard></mediumcard>
-                    <mediumcard></mediumcard>
 
                 </div>
 
@@ -106,21 +112,28 @@
         <!-- HOME SEGALA HOME ENDS HERE -->
 
         <!-- START MODAL REGISTER -->
-        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div  style="background-color: transparent; min-width:0% !important;" class="modal-dialog modal-dialog-centered" role="document">
-                  <div  style=" background:url('./assets/smallbg1.jpg') no-repeat center"  class="modal-content">
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div style="background-color: transparent; min-width:0% !important;"
+                class="modal-dialog modal-dialog-centered" role="document">
+                <div style=" background:url('./assets/smallbg1.jpg') no-repeat center" class="modal-content">
 
                     <div class="modal-body">
+                        
+                        <div class="g-signin2" data-onsuccess="onSignIn"></div>
                         <br><br><br><br><br><br><br><br>
-                      <button data-dismiss="modal" v-on:click.prevent="showLogin" class="btn btn-light" style="margin-left:200px">Login</button>
-                      <br>
-                      <button data-dismiss="modal" v-on:click.prevent="showRegister" class="btn btn-light" style="margin-left:190px">Register</button>
-                      <br><br><br>
+                        <button data-dismiss="modal" v-on:click.prevent="showLogin" class="btn btn-light"
+                            style="margin-left:200px">Login</button>
+                        <br>
+                        <button data-dismiss="modal" v-on:click.prevent="showRegister" class="btn btn-light"
+                            style="margin-left:190px">Register</button>
+                        <br><br><br>
                     </div>
-                  </div>
                 </div>
-              </div>
-              <!-- MODAL REGISTER ENDS -->
+            </div>
+
+        </div>
+        <!-- MODAL REGISTER ENDS -->
 
         <!-- START MY STORIES -->
         <div v-show="currentPage == 'myStory'" class="container">
@@ -128,60 +141,102 @@
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
                         aria-controls="nav-home" aria-selected="true">Home</a>
-                    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
-                        aria-controls="nav-profile" aria-selected="false">Profile</a>
-
+                    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" :href="href" role="tab"
+                        aria-controls="nav-profile" aria-selected="false">My Likes</a>
                 </div>
             </nav>
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                     <div v-for="(art, index) in arrArticles" :key="index" id="myarticles">
-                        <mediumcard v-on:likearticle="updateArticle" v-on:fullarticle="fullarticle" v-bind:art="art">
+                        <mediumcard v-on:deletearticle="deletearticle" v-on:likearticle="updateArticle"
+                            v-on:fullarticle="fullarticle" v-on:editarticle="editarticle" v-bind:art="art">
                         </mediumcard>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                     <br>
-                    <h3>Write a Story</h3>
+                    <h3>Your Story Goes Here</h3>
                     <div class="form-group">
                         <input v-model="articleTitle" type="text" class="form-control" id="formGroupExampleInput"
-                            placeholder="Title goes here">
+                            placeholder="Write an eye-catching hook">
                     </div>
                     <wysiwyg v-model="articleBody"></wysiwyg>
-                    <div style="border-style:none" class="custom-file">
-                        <input v-on:change="getImage" style="border-style:none" type="file" class="custom-file-input" id="customFile">
-                        <label style="border-style:none" class="mt-2 custom-file-label" for="customFile">Add Featured
-                            Image To Reach More People</label>
-                    </div>
-                    <div>
-                        <button @click.prevent="postArticle" class="btn btn-light" type="submit"
-                            name="action">Submit</button>
-                        <chips style="display:flex;" v-bind:current-tags="currentTags" v-on:deletetag="deletetag">
-                        </chips>
-                    </div>
-                    <!-- <div >
-                        <button @click.prevent="patchArticle(currentArticle)"  class="btn btn-light" type="submit" name="action">Edit Post
-                        </button>
-                    </div> -->
+                    <small class="mt-2 mb-2">We automatically generate tags for you based on your featured image. You
+                        may delete tags you don't want or add a custom tag : </small>
+                    <div class="custom-file col-md-6">
+                        <input v-on:change="getImage" type="file" class="custom-file-input" id="customFile">
 
+                        <label class="mt-2 mb-2 custom-file-label" for="customFile">Add Featured Image To Reach More
+                            People</label>
+                    </div>
+                    <br><br>
+                    <form v-on:submit.prevent="createTagInputUser" class="form-inline">
+                        <div class="form-group mb-2">
+                            <label for="usertag" class="sr-only">More tags..</label>
+                            <input v-model="inputTag" type="text" value="">
+                        </div>
+                        <button type="submit" class="btn-sm btn btn-light mb-2">Insert Tag One By One</button>
+                    </form>
+                    <br>
 
+                    <div class="row">
+                        <div v-for="(tag, index) in currentTags" :key="index">
+                            <chips 
+                            v-on:deletetag="deletetag(tag)"
+                            v-bind:namanya="tag"
+                            >
+                            <i v-on:click.prevent="deletetag(tag)" class="ml-2 fas fa-times"></i>
+                            </chips>
+                        </div>
+                    </div>
+                    <button v-if="!editor" @click.prevent="postArticle" class="btn btn-light mt-2" type="submit"
+                        name="action">Submit</button>
+                    <button v-if="editor" @click.prevent="patchArticle()" class="btn btn-light mt-2" type="submit"
+                        name="action">Edit</button>
+                    <button id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
+                    aria-controls="nav-home" aria-selected="true" @click.prevent="changestories" class="btn btn-light mt-2" type="submit"
+                        name="action">Cancel</button>
                 </div>
             </div>
         </div>
         <!-- END OF MY STORIES -->
 
         <!-- START OF FULL ARTICLE -->
-        <div class="container">
-            <center>
-                <fullarticle v-bind:current-article="currentArticle" v-if="currentPage == 'fullarticle'"></fullarticle>
-            </center>
 
+        <div class="container">
+            <fullarticle 
+            v-bind:current-article="currentArticle" 
+            v-if="currentPage == 'fullarticle'"
+            v-on:translate="translate">
+            </fullarticle>
         </div>
         <!-- END OF FULL ARTICLE -->
 
 
+        <!-- START OF SEARCH SECTION -->
+        <div v-show="this.currentPage == 'searchpage'"  class="container">
+            <div class="row">
+                <div v-if="searchedInput.length == 0">
+                    <emptyarray></emptyarray>
+                </div>
+                <div v-else v-for="(art, index) in searchedInput" :key="index" class="col-6 col-md-4">
+                    <headlinecard
+                    v-bind:art="art"
+                    v-on:fullarticle="fullarticle"
+                    ></headlinecard>
+                </div>
+            </div>
+        </div>
+        <!-- END OF SEARCH -->
 
+
+    <!-- THIS BELOW DIV CLOSING BELONGS TO APP VUE DO NOT MOVE -->
     </div>
+    <!-- END OF APP -->
+
+
+
+
 
 
     <!-- Optional JavaScript -->
@@ -195,18 +250,18 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
     </script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.6/ScrollMagic.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.6/plugins/debug.addIndicators.min.js"></script>
-    <script src="js/scrollmagic/uncompressed/ScrollMagic.js"></script>
+
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="./components/vueWysiwyg.js"></script>
+    <script src="./components/FullArticle.js"></script>
+    <script src="./components/Loading.js"></script>
     <script src="./components/Navbar.js"></script>
+    <script src="./components/Empty.js"></script>
     <script src="./components/MediumCard.js"></script>
     <script src="./components/HeadlineCard.js"></script>
     <script src="./components/SmallCard.js"></script>
     <script src="./components/PopularCard.js"></script>
     <script src="./components/ModalLanding.js"></script>
-    <script src="./components//FullArticle.js"></script>
     <script src="./components/Login.js"></script>
     <script src="./components/Register.js"></script>
     <script src="./components/Chips.js"></script>

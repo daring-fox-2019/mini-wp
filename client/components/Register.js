@@ -35,6 +35,8 @@ Vue.component('register', {
                 'success'
               )
               
+              this.$emit('successregister')
+              
             })
             .catch(err => {
               console.log(err);
@@ -52,36 +54,6 @@ Vue.component('register', {
               )
             })
           },
-
-            // Axios.post(`/users/register`, {
-            //     username: this.registerUsername,
-            //     email: this.registerEmail,
-            //     password: this.registerPassword,
-            //     profilePicture : this.registerProfpic
-            //   })
-            //   .then(created => {
-            //     Swal.fire(
-            //       'Registered',
-            //       'You may login now',
-            //       'success'
-            //     )
-                
-            //   })
-            //   .catch(err => {
-            //     console.log(err);
-                
-            //     // let errors = ''
-            //     // for (let keys in err.responseJSON.err.errors) {
-            //     //   if (err.responseJSON.err.errors[keys].message) {
-            //     //     errors += `${err.responseJSON.err.errors[keys].message} \n`
-            //     //   }
-            //     // }
-            //     Swal.fire(
-            //       'Error',
-            //       'Cannot register',
-            //       'error'
-            //     )
-            //   })
     },
     template : `
     

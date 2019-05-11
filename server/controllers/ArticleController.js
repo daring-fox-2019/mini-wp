@@ -4,17 +4,19 @@ class ArticleController {
 
     static async create(req,res) {
         try {
-            let parsedTag = JSON.parse(req.body.tags)
-            // console.log(JSON.parse(req.body.tags))
+            let taghehe = req.body.tags.split(',')
             let alltags = await Tag.find({})
             let tagListFromDb = []
+            console.log(taghehe)
+
             alltags.forEach(tag => {
-               parsedTag.tags.forEach(userTag => { 
-                  if( tag.tagName == userTag.description ) {
+               taghehe.forEach(userTag => { 
+                  if( tag.tagName == userTag ) {
                       tagListFromDb.push(tag._id)
                   }
                 })
             })            
+            console.log(tagListFromDb, '.????');
             
             let url = req.file ? req.file.cloudStoragePublicUrl : '';
             let art = await Article.create({
@@ -23,6 +25,7 @@ class ArticleController {
                 image : url,
                 userId: req.authenticatedUser.id
             })
+          
             let updatedTag = await Article.findByIdAndUpdate(art._id, {$set : {tags : tagListFromDb}}, {new : true})
             res.status(201).json(updatedTag)
         
@@ -34,6 +37,8 @@ class ArticleController {
 
     static async update(req, res) {
         try {
+                   
+
             let cloudStoragePublicUrl = ''
             if (req.file) cloudStoragePublicUrl = req.file.cloudStoragePublicUrl
             else cloudStoragePublicUrl = req.body.image
@@ -53,9 +58,24 @@ class ArticleController {
                     res.status(404).json({ message: `No such id exist` })
                 }
             } else {
-                let url = cloudStoragePublicUrl
-                let foundUpdated = await Article.findOneAndUpdate({_id : req.params.id}, {$set : {...req.body}}, {new : true})
-                if (foundUpdated) res.status(200).json(found)
+                console.log(req.file, '???');
+                
+                console.log('ASDKJAOSDJNKAJP2190IJO21KQW');
+                let taghehe = req.body.tags.split(',')
+                let alltags = await Tag.find({})
+                let tagListFromDb = []
+                console.log(taghehe)
+    
+                alltags.forEach(tag => {
+                   taghehe.forEach(userTag => { 
+                      if( tag.tagName == userTag ) {
+                          tagListFromDb.push(tag._id)
+                      }
+                    })
+                })           
+                let url = req.file ? req.file.cloudStoragePublicUrl : '';
+                let foundUpdated = await Article.findOneAndUpdate({_id : req.params.id}, {$set : {...req.body, image : url, tags : tagListFromDb,  userId: req.authenticatedUser.id}}, {new : true})
+                if (foundUpdated) res.status(200).json(foundUpdated)
                 else res.status(404).json({ message: `No such id exist` })
             }
         } catch (error) {
@@ -65,8 +85,8 @@ class ArticleController {
     }
 
     static async delete(req, res) {
-        try {
-            let foundDeleted = Article.findOneAndDelete({ _id: req.params.id })
+        try {            
+            let foundDeleted = await Article.findOneAndDelete({ _id: req.params.id })
             if (foundDeleted) res.status(200).json(foundDeleted)
             else res.status(404).json({ message: `No such id exist` })
         } catch (error) {
@@ -113,10 +133,32 @@ class ArticleController {
         }
     }
 
+    static async findAll(req, res) {
+        try {
+            let { tag, title } = req.query
+            let obj = {}
+    
+            if( tag || title ) { 
+               let data = await Tag.find({tagName : tag})
+                   title = new RegExp(`${title}`) 
+                   obj = { $or: [{'title' :{ $regex: title , $options: 'i' }} ,{ 'tags' : {$in : data} }] }
+            }
+         
+            let result = await Article.find(obj).populate('userId').populate('tags')
+            res.status(200).json(result)
+            
+        } catch (error) {
+            console.log(error);
+        
+            res.status(500).json(error)
+        }        
+    }
 
-     // static findAll(req, res) {
+
+    //  static findAll(req, res) {
     //     let query = {}
     //     if (req.query) {
+    //         let { tag, title } = req.query
     //         let arr = []
     //         let field = Object.keys(req.query)
     //         field.forEach((keyword) => {
@@ -127,11 +169,10 @@ class ArticleController {
     //         if (arr.length > 0) {
     //             query = { $or: arr }
     //         }
-    //         // console.log(arr)
+    //         console.log(arr)
     //     }
     //     Article.find({
     //         $and : [
-    //             {userId : req.authenticatedUser.id},
     //             query
     //         ]
     //     })

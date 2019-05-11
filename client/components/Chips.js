@@ -1,5 +1,5 @@
 Vue.component('chips', {
-    props : ['currentTags'],
+    props : ['namanya', 'currentPage'],
     data() {
         return {
             wanttodel : ''
@@ -11,12 +11,11 @@ Vue.component('chips', {
       }
         
     },
-    template :`
-    <div>
-    <div v-for="(tag, index) in currentTags.tags" :key="index" >
-    <a v-on:click="deltag(tag.description)" class="badge badge-light">{{tag.description}}</a>
-    </div>
-    </div>`
+
+    template :` 
+    <a class="badge badge-light">{{namanya}}<slot></slot></a>
+    `
 })
 
 
+{/* <i v-if="currentPage == 'myStory'" v-on:click="deltag(namanya)" class="ml-2 fas fa-times"></i> */}

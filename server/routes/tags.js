@@ -6,5 +6,6 @@ const images = require('../middleware/images')
 const {generateTag} = require('../middleware/tagGenerator')
 
 router.post('/', authenticate, images.multer.single('image'), images.sendUploadToGCS,  generateTag, TagController.generate)
+router.post('/user', authenticate, TagController.create)
 
 module.exports = router

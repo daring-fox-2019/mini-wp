@@ -5,14 +5,20 @@ console.log('hi disini translate g');
 module.exports = {
 
   translate  : async function (req, res, next) {
-    let [translations] = await translate.translate("my name is martin  and i live in jakarta with azhar", "de");
+    console.log(req);
+    
+    let [translations] = await translate.translate([req.body.content, req.body.title], req.body.language);
     translations = Array.isArray(translations) ? translations : [translations];
+
+    console.log(translations);
+    
     console.log('Translations:');
     translations.forEach((translation, i) => {
       console.log(translation);
       
       // console.log(`${text[i]} => (${target}) ${translation}`);
     });
+    res.status(200).json(translations)
   }
 }
 

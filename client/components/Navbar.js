@@ -1,5 +1,18 @@
 Vue.component('navbar', {
-  props: ['isLogin', 'searchBox', 'userImage'],
+  props: ['isLogin', 'userImage'],
+  data() {
+    return {
+      searchInput : ''
+    }
+  },
+  created() {
+    window.addEventListener("keydown", e => {
+      if (e.keyCode == 13 && this.searchInput !== '') {
+        this.hitsearch()
+        e.preventDefault()
+      }
+    })
+  },
   methods: {
     signOut() {
       console.log('hehe');
@@ -12,8 +25,13 @@ Vue.component('navbar', {
     },
     home() {
       this.$emit('gethome')
+    },
+    hitsearch() {
+      this.$emit('search', this.searchInput)
+    },
+    searchFilter(data) {
+      this.$emit('searchtag', data)
     }
-
 
   },
   template: `<div>
@@ -25,13 +43,13 @@ Vue.component('navbar', {
             </button>
             <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav mr-auto">
-            <form class=" ml-10 form-inline">
-                <input class="mx-auto form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <form @submit="hitsearch" class=" ml-10 form-inline">
+                <input class="mx-auto form-control mr-sm-2" type="search" placeholder="Search" v-model="searchInput"  aria-label="Search">
             </form>
                 </ul>
-                <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#exampleModalCenter" v-if="!isLogin" type="button" class="btn btn-outline-secondary">Get Started</button>
+                <button type="button"  data-toggle="modal" data-target="#exampleModalCenter" v-if="!isLogin"  class="btn btn-outline-secondary">Get Started</button>
 
-                <div class="dropdown">
+                <div v-if="isLogin" class="dropdown">
                 <span class="navbar-text">
                   <img data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="dropdownMenu2" v-if="isLogin" v-bind:src="userImage"
                   style="border-radius:50%; max-height:40px; max-width:40px;" class=" dropdown-toggle card-img-top"
@@ -56,18 +74,18 @@ Vue.component('navbar', {
            
             <nav class=" navbar navbar-expand-lg navbar-light white">
                 
-                <div class="collapse  navbar-collapse" id="navbarNavAltMarkup">
-                    <div class="  mx-auto center navbar-nav">
-                        <a style="text-transform: uppercase; font-family: 'Lato', sans-serif;"  class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
-                        <a style="text-transform: uppercase;font-family: 'Lato', sans-serif;"  class="nav-item nav-link" href="#">Human</a>
-                        <a style="text-transform: uppercase;font-family: 'Lato', sans-serif;"  class="nav-item nav-link" href="#">Technology</a>
-                        <a style="text-transform: uppercase;font-family: 'Lato', sans-serif;" class="nav-item nav-link" href="#">Politics</a>
-                        <a style="text-transform: uppercase;font-family: 'Lato', sans-serif;" class="nav-item nav-link" href="#">Lifestyle</a>
-                        <a style="text-transform: uppercase;font-family: 'Lato', sans-serif;" class="nav-item nav-link" href="#">Health</a>
-                        <a style="text-transform: uppercase;font-family: 'Lato', sans-serif;"  class="nav-item nav-link" href="#">Humor</a>
-                        <a style="text-transform: uppercase;font-family: 'Lato', sans-serif;" class="nav-item nav-link" href="#">Design</a>
-                        <a style="text-transform: uppercase;font-family: 'Lato', sans-serif;" class="nav-item nav-link" href="#">Self</a>
-                        <a style="text-transform: uppercase;font-family: 'Lato', sans-serif;" class="nav-item nav-link" href="#">Trends</a>
+                <div class="collapse active navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="mx-auto center navbar-nav">
+                        <a v-on:click.prevent="searchFilter('home')" name="home" style="text-transform: uppercase; font-family: 'Lato', sans-serif;"  class="nav-item nav-link ">Home </a>
+                        <a v-on:click.prevent="searchFilter('human')" name="human" style="text-transform: uppercase;font-family: 'Lato', sans-serif;"  class="nav-item nav-link">Human</a>
+                        <a v-on:click.prevent="searchFilter('technology')" name="technology" style="text-transform: uppercase;font-family: 'Lato', sans-serif;"  class="nav-item nav-link">Technology</a>
+                        <a v-on:click.prevent="searchFilter('politics')" name="politics" style="text-transform: uppercase;font-family: 'Lato', sans-serif;" class="nav-item nav-link">Politics</a>
+                        <a v-on:click.prevent="searchFilter('lifestyle')" name="lifestyle" style="text-transform: uppercase;font-family: 'Lato', sans-serif;" class="nav-item nav-link">Lifestyle</a>
+                        <a v-on:click.prevent="searchFilter('health')" name="health" style="text-transform: uppercase;font-family: 'Lato', sans-serif;" class="nav-item nav-link">Health</a>
+                        <a v-on:click.prevent="searchFilter('humor')" name="humor" style="text-transform: uppercase;font-family: 'Lato', sans-serif;"  class="nav-item nav-link">Humor</a>
+                        <a v-on:click.prevent="searchFilter('design')" name="design" style="text-transform: uppercase;font-family: 'Lato', sans-serif;" class="nav-item nav-link">Design</a>
+                        <a v-on:click.prevent="searchFilter('self')" name="self" style="text-transform: uppercase;font-family: 'Lato', sans-serif;" class="nav-item nav-link">Self</a>
+                        <a v-on:click.prevent="searchFilter('trends')" name="trends"  style="text-transform: uppercase;font-family: 'Lato', sans-serif;" class="nav-item nav-link">Trends</a>
                     </div>
                 </div>
             </nav>

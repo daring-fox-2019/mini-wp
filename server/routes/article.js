@@ -8,16 +8,16 @@ const {safeImage} = require('../middleware/safeImage')
 const {translate} = require('../middleware/translate')
 
 
-router.get('/translate', translate)
+router.post('/translate', translate)
 router.get('/all', ArticleController.findFromAllUsers)
 router.use(authenticate)
 router.get('/', authenticate, ArticleController.findByUser)
+router.get('/query/?', ArticleController.findAll)
 router.get('/:id', ArticleController.findOne)
-router.post('/', images.multer.single('image'), images.sendUploadToGCS, safeImage, generateTag, ArticleController.create)
+router.put('/:id', images.multer.single('image'), images.sendUploadToGCS, generateTag, authorizedUser, ArticleController.update)
 router.delete('/:id', authorizedUser, ArticleController.delete)
-router.patch('/:id', images.multer.single('image'), images.sendUploadToGCS, generateTag, authorizedUser, ArticleController.update)
+router.post('/', images.multer.single('image'), images.sendUploadToGCS, safeImage, generateTag, ArticleController.create)
 
-// router.get('/?', ArticleController.findAll)
 
 
 module.exports = router
