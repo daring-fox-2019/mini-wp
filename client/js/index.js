@@ -38,9 +38,9 @@ function getBase64(file) {
 
 var app = new Vue({
     el: '#app',
-    components: {
-        wysiwyg: vueWysiwyg.default.component,
-    },
+    // components: {
+    //     wysiwyg: vueWysiwyg.default.component,
+    // },
     data() {
         return {
             text: '',
@@ -72,44 +72,44 @@ var app = new Vue({
             this.createdAt = createdAt
             // document.getElementById('editor2').innerHTML = this.blog_content
         },
-        updateBlogg() {
-            if (this.blog_title === "") {
-                swal("A great article always started by a title isn't it?")
-            } else if (this.file === "") {
-                swal('Insert image to make your blog more interesting!')
-            } else {
-                file = this.file
-                const extension = file.name.split('.')[1]
-                const validExtensions = ['png', 'jpg', 'jpeg']
-                if (validExtensions.indexOf(extension) === -1) {
-                    swal('Valid extensions: .png, .jpeg, or .jpg')
-                } else {
-                    getBase64(file)
-                        .then((image) => {
-                            axios
-                                .put(serverUrl, {
-                                    id: this.id,
-                                    title: this.blog_title,
-                                    content: this.text,
-                                    createdAt: this.createdAt,
-                                    img: image,
-                                    extension: extension
-                                }, {
-                                    headers: {
-                                        auth: localStorage.jwtoken
-                                    }
-                                })
-                                .then((data) => {
-                                    console.log(data)
-                                    this.listBlog()
-                                })
-                                .catch((err) => {
-                                    console.log(err.message)
-                                })
-                        })
-                }
-            }
-        },
+        // updateBlogg() {
+        //     if (this.blog_title === "") {
+        //         swal("A great article always started by a title isn't it?")
+        //     } else if (this.file === "") {
+        //         swal('Insert image to make your blog more interesting!')
+        //     } else {
+        //         file = this.file
+        //         const extension = file.name.split('.')[1]
+        //         const validExtensions = ['png', 'jpg', 'jpeg']
+        //         if (validExtensions.indexOf(extension) === -1) {
+        //             swal('Valid extensions: .png, .jpeg, or .jpg')
+        //         } else {
+        //             getBase64(file)
+        //                 .then((image) => {
+        //                     axios
+        //                         .put(serverUrl, {
+        //                             id: this.id,
+        //                             title: this.blog_title,
+        //                             content: this.text,
+        //                             createdAt: this.createdAt,
+        //                             img: image,
+        //                             extension: extension
+        //                         }, {
+        //                             headers: {
+        //                                 auth: localStorage.jwtoken
+        //                             }
+        //                         })
+        //                         .then((data) => {
+        //                             console.log(data)
+        //                             this.listBlog()
+        //                         })
+        //                         .catch((err) => {
+        //                             console.log(err.message)
+        //                         })
+        //                 })
+        //         }
+        //     }
+        // },
         deleteBlog_btn(id) {
             this.id = id
             axios

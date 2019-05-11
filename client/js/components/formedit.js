@@ -1,43 +1,47 @@
-Vue.component('formadd', {
-    props: ['page'],
+Vue.component('editform', {
+    props: ['blog_title','text','id','createdat'],
     components: {
         wysiwyg: vueWysiwyg.default.component,
     },
     data(){
         return {
             listBlogg: "",
-            blog_title: "",
-            text: "",
-            createdAt: "",
+            title: this.blog_title,
+            content: "",
+            // createdAt: "",
             file: "",
             author: ""
         }
     },
+    watch: {
+        blog_title(){
+            this.title = this.blog_title
+        },
+        text(){
+            this.content = this.text
+        }
+    },
     template: `
-    <form class="form-blog-add-subpage" method="POST">
-    <div>
+    <form class="form-blog-edit-subpage">
+        <div>
         <label for title>Title: </label><br>
-        <input class="form-control form-control-lg" v-model="blog_title" type="text"
-            name="title" size="35" placeholder="Your title here.." required>
-    </div><br>
-    <label for editor>Content:</label>
-    <div>
-        <wysiwyg id="editor" v-model="text"></wysiwyg>
-    </div>
-    <div>
-        <input type="text" v-model="author" placeholder="Author of this article.."
-            id="author-input">
-    </div>
-    <div>
-        <input type="file" v-on:change="onChangeUpload" required>
-    </div><br>
-    <button class="btn btn-dark" v-on:click.prevent="addBlogg">Add</button>
+        <input v-model="title" type="text" name="title" id="blog_title" size="35"
+            placeholder="Your title here.." required>
+        </div><br>
+        <label for editor>Content:</label>
+        </div>
+        <div>
+            <wysiwyg id="editor" v-model="content"></wysiwyg>
+        </div><br>
+        <div>
+            <input type="file" v-on:change="onChangeUpload" required>
+        </div><br>
+        <button class="btn btn-dark" type="submit" v-on:click.prevent="updateBlogg">Update</button>
     </form>
     `,
-    
     methods: {
-        addBlogg() {
-            if (this.blog_title === "") {
+        updateBlogg() {
+            if (this.title === "") {
                 swal("A great article always started by a title isn't it?")
             } else if (this.file === "") {
                 swal('Insert image to make your blog more interesting!')
@@ -50,25 +54,25 @@ Vue.component('formadd', {
                 } else {
                     getBase64(file)
                         .then((image) => {
-                            return axios
-                                .post(serverUrl, {
-                                    title: this.blog_title,
-                                    content: this.text,
-                                    createdAt: new Date(),
+                            axios
+                                .put(serverUrl, {
+                                    id: this.id,
+                                    title: this.title,
+                                    content: this.content,
+                                    createdAt: this.createdAt,
                                     img: image,
-                                    extension: extension,
-                                    author: this.author,
+                                    extension: extension
                                 }, {
                                     headers: {
                                         auth: localStorage.jwtoken
                                     }
                                 })
-                                .then(() => {
-                                    this.$emit('addsuccess')
+                                .then((data) => {
+                                    this.$emit('editsuccess')
                                 })
-                        })
-                        .catch((err) => {
-                            console.log(err)
+                                .catch((err) => {
+                                    console.log(err.message)
+                                })
                         })
                 }
             }
