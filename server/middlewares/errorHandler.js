@@ -13,7 +13,7 @@ module.exports = (err, req, res, next) => {
     if (name === 'ValidationError') {
       res.status(400).json({ message });
     } else {
-      res.status(500).json('internal server error');
+      res.status(500).json({ message: 'internal server error' });
     }
   }
 }
