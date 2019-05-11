@@ -11,8 +11,8 @@ Vue.component('blog', {
             </div><br>
         </div>
         <h6 v-html="blog.content"></h6>
-                <h6>Created At: {{blog.createdAt}}</h6>
-                <h6>By: {{blog.author}}</h6><br>
+        <h6><small>Created At: {{blog.createdAt}}</small></h6>
+        <h6><small>By: {{blog.author}}</small></h6><br>             
     </div>
     `
 })

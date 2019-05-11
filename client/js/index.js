@@ -72,44 +72,6 @@ var app = new Vue({
             this.createdAt = createdAt
             // document.getElementById('editor2').innerHTML = this.blog_content
         },
-        // updateBlogg() {
-        //     if (this.blog_title === "") {
-        //         swal("A great article always started by a title isn't it?")
-        //     } else if (this.file === "") {
-        //         swal('Insert image to make your blog more interesting!')
-        //     } else {
-        //         file = this.file
-        //         const extension = file.name.split('.')[1]
-        //         const validExtensions = ['png', 'jpg', 'jpeg']
-        //         if (validExtensions.indexOf(extension) === -1) {
-        //             swal('Valid extensions: .png, .jpeg, or .jpg')
-        //         } else {
-        //             getBase64(file)
-        //                 .then((image) => {
-        //                     axios
-        //                         .put(serverUrl, {
-        //                             id: this.id,
-        //                             title: this.blog_title,
-        //                             content: this.text,
-        //                             createdAt: this.createdAt,
-        //                             img: image,
-        //                             extension: extension
-        //                         }, {
-        //                             headers: {
-        //                                 auth: localStorage.jwtoken
-        //                             }
-        //                         })
-        //                         .then((data) => {
-        //                             console.log(data)
-        //                             this.listBlog()
-        //                         })
-        //                         .catch((err) => {
-        //                             console.log(err.message)
-        //                         })
-        //                 })
-        //         }
-        //     }
-        // },
         deleteBlog_btn(id) {
             this.id = id
             axios
@@ -156,47 +118,7 @@ var app = new Vue({
             this.id = ""
             this.text = ""
             this.page = "blog-add-page"
-            // console.log('a')
-            // input.addEventListener('change', function () {})
-            // console.log(input)
         },
-        // addBlogg() {
-        //     if (this.blog_title === "") {
-        //         swal("A great article always started by a title isn't it?")
-        //     } else if (this.file === "") {
-        //         swal('Insert image to make your blog more interesting!')
-        //     } else {
-        //         file = this.file
-        //         const extension = file.name.split('.')[1]
-        //         const validExtensions = ['png', 'jpg', 'jpeg']
-        //         if (validExtensions.indexOf(extension) === -1) {
-        //             swal('Valid extensions: .png, .jpeg, or .jpg')
-        //         } else {
-        //             getBase64(file)
-        //                 .then((image) => {
-        //                     return axios
-        //                         .post(serverUrl, {
-        //                             title: this.blog_title,
-        //                             content: this.text,
-        //                             createdAt: new Date(),
-        //                             img: image,
-        //                             extension: extension,
-        //                             author: this.author,
-        //                         }, {
-        //                             headers: {
-        //                                 auth: localStorage.jwtoken
-        //                             }
-        //                         })
-        //                         .then(() => {
-        //                             this.listBlog()
-        //                         })
-        //                 })
-        //                 .catch((err) => {
-        //                     console.log(err)
-        //                 })
-        //         }
-        //     }
-        // },
         searchBlog() {
             axios
                 .get(serverUrl, {
@@ -271,10 +193,6 @@ var app = new Vue({
                         })
                 })
                 .catch(err => {
-                    Swal.fire({
-                        type: 'error',
-                        text: err
-                    })
                     console.log(err)
                 })
         },
@@ -331,10 +249,6 @@ var app = new Vue({
                         })
                 })
                 .catch(err => {
-                    Swal.fire({
-                        type: 'error',
-                        text: 'Your email/password must be wrong, please try again ><'
-                    })
                     console.log(err.message)
                 })
         },

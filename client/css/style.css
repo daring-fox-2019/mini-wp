@@ -145,23 +145,19 @@ form.form-inline{
     background-color: rgb(255, 250, 242);
 }
 #login-f-btn{
-    height: 36px;
+    font-size: 15px;
+    height: 40px;
     width: 120px;
     position: fixed;
     left: 45%;
-    top: 35%;
-    padding-bottom: 40px;
+    top: 38%;
 }
 .g-signin2{
     position: fixed;
     left: 45%;
     top: 45%;
 }
-.or-login-with-google{
-    position: fixed;
-    left: 44.2%;
-    top: 41.5%;
-}
+
 .signout-btn{
     color: white;
     background-color: #13386a;
@@ -170,17 +166,13 @@ form.form-inline{
     margin: 15px;
     margin-left: 0;
 }
-.or-signup{
-    position: fixed;
-    left: 44.2%;
-    top: 50.5%;
-}
+
 #register-f-btn{
-    height: 36px;
+    height: 40px;
+    font-size: 15px;
     width: 120px;
     position: fixed;
     left: 45%;
-    top: 54%;
-    padding-bottom: 40px;
+    top: 52%;
 
 }
