@@ -15,6 +15,7 @@ module.exports = {
             })
     },
     create: function (req, res) {
+        console.log(req.body.tags,'oooooooooooooooop')
         if (req.body.img) {
             imgSavetoLocale(req, res, function (title, content, createdAt, newFile, author, user) {
                 Blog.create({title, content, createdAt, img:newFile, author, user,tags:req.body.tags})
@@ -22,6 +23,7 @@ module.exports = {
                         res.status(201).json(data)
                     })
                     .catch(err => {
+                        console.log(err)
                         res.status(500).json(err.message)
                     })
             })
@@ -109,6 +111,25 @@ module.exports = {
                 res.json(err.message)
             })
     },
+    findAllbyTag(req,res){
+        let tag = req.params.tag
+        Blog.find({tags:tag})
+        .then(data => {
+            res.status(200).json(data)
+        })
+        .catch(err =>{
+            res.status(500).json(err)
+        })
+    },
+    findAll(req,res){
+        Blog.find({})
+        .then(data => {
+            res.status(200).json(data)
+        })
+        .catch(err =>{
+            res.status(500).json(err)
+        })
+    }
 
     // function methods for users
 

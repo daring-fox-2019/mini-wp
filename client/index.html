@@ -17,6 +17,7 @@
     <!-- my CSS -->
     <link rel="stylesheet" type="text/css" media="screen" href="./css/style.css">
     <!-- bootstrapVue JS -->
+    <title>MiniWP | QFS</title>
     <script src="//unpkg.com/@babel/polyfill@latest/dist/polyfill.min.js"></script>
     <script src="//unpkg.com/vue@latest/dist/vue.min.js"></script>
     <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
@@ -40,7 +41,8 @@
                 <button class="btn btn-outline-primary btn-lg" id="login-f-btn" v-on:click="regularLogin()">Login</button>
             </div>
             <div>
-                <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                    <!-- Ini Google Sign In -->
+                <div class="g-signin2" data-onsuccess="onSignIn"></div> 
             </div>
             <div>
                 <button class="btn btn-outline-primary btn-lg" id="register-f-btn" v-on:click="register()">Register</button>
@@ -55,15 +57,15 @@
             <div class="navbar">
                 <div id="left-bar">
                     <ul class="navbar-list" id="most-left">
-                        <li><span class="nav-icon" style="font-size: 30px; color: white;"><i
+                        <li><span class="nav-icon" style="font-size: 30px;"><i
                                     class="fab fa-wordpress-simple"></i></span></li>
                         <li>MiniWP</li>
                     </ul>
-                    <ul class="navbar-list">
-                        <li><span class="nav-icon" style="font-size: 30px; color: white;"><i
-                                    class="far fa-newspaper"></i></span></li>
-                        <li>Reader</li>
-                    </ul>
+                    <button class="navbar-list" id="readermenu" @click="showallblogs" style="background-color: transparent;color:white">
+                        <span><span class="nav-icon" style="font-size: 30px; color: white;"><i
+                                    class="far fa-newspaper"></i></span></span>
+                        <span>Reader</span>
+                    </button>
                 </div>
                 <div>
                     <ul class="navbar-list" id="most-right">
@@ -130,14 +132,13 @@
                     <div class="lb" v-if="page === 'blog-list'">
                         <div class="menubar-articles-list d-flex">
                             <ul class="sub-menubar-articles-list p-2">
-                                <li>Published List</li>
-                                <li>Draft</li>
+                                <strong>on Your Blogs List</strong> ({{listBlogg.length}} article(s))
                             </ul>
 
                             <ul class="sub-menubar-articles-list ml-auto p-2">
                                 <li>
                                     <form class="form-inline md-form form-sm active-pink active-pink-2 mt-2"
-                                        v-on:submit.prevent="searchBlog">
+                                        v-on:submit.prevent="searchBlog(false)">
                                         <i class="fas fa-search" aria-hidden="true"></i>
                                         <input class="form-control form-control-sm ml-3 w-75" size="30" type="text"
                                             placeholder="Search" aria-label="Search" v-model="value">
@@ -150,10 +151,10 @@
                             <ul>
                                 <li v-if="listBlogg[0].title" v-for="(blog,index) in listBlogg">
                                     <div id="per-blog">
-                                        <blog :blog="blog"></blog>
+                                        <blog :blog="blog" @foundbytag=showbytag></blog>
                                         <br>
                                         <p><button
-                                                v-on:click="editBlog_btn(blog._id,blog.title,blog.content,blog.createdAt)"
+                                                v-on:click="editBlog_btn(blog._id,blog.title,blog.content,blog.createdAt,blog.tags)"
                                                 class="btn btn-dark">Edit</button> || <button
                                                 v-on:click="deleteBlog_btn(blog._id)"
                                                 class="btn btn-dark">Delete</button></p>
@@ -168,6 +169,48 @@
                         </div>
                     </div>
 
+                    <!-- List All Blog -->
+
+                    <div class="lb" v-if="page === 'allblog-list'">
+                            <div class="menubar-articles-list d-flex">
+                                <ul class="sub-menubar-articles-list p-2"><strong>
+                                    on Reading List </strong> ({{listAllBlog.length}} article(s))
+                                </ul>
+    
+                                <ul class="sub-menubar-articles-list ml-auto p-2">
+                                    <li>
+                                        <form class="form-inline md-form form-sm active-pink active-pink-2 mt-2"
+                                            v-on:submit.prevent="searchBlog(true)">
+                                            <i class="fas fa-search" aria-hidden="true"></i>
+                                            <input class="form-control form-control-sm ml-3 w-75" size="30" type="text"
+                                                placeholder="Search" aria-label="Search" v-model="value">
+                                        </form>
+                                    </li>
+                                </ul>
+    
+                            </div>
+                            <div class="listBlog-detail">
+                                <ul>
+                                    <li v-if="listAllBlog[0].title" v-for="(blog,index) in listAllBlog">
+                                        <div id="per-blog">
+                                            <blog :blog="blog" @foundbytag=showbytag></blog>
+                                            <br>
+                                            <p v-if="blog.user == userId"><button
+                                                    v-on:click="editBlog_btn(blog._id,blog.title,blog.content,blog.createdAt)"
+                                                    class="btn btn-dark">Edit</button> || <button
+                                                    v-on:click="deleteBlog_btn(blog._id)"
+                                                    class="btn btn-dark">Delete</button></p>
+                                        </div>
+                                        <br>
+    
+                                    </li>
+                                    <li v-else>
+                                        <h6>{{ listAllBlogg[0] }}</h6>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
                     <!-- ADD BLOG SUB-PAGE -->
 
                     <formadd v-show="page === 'blog-add-page'" :page="page" class="blog-add-subpage"
@@ -176,7 +219,7 @@
                     <!-- EDIT BLOG SUB-PAGE -->
 
                     <editform v-show="page === 'blog-update-page'" class="blog-update-page" :blog_title=blog_title
-                        :text=text :id=id :createdat=createdAt @editsuccess="listBlog"></editform>
+                        :text=text :id=id :createdat=createdAt :tagz="tags" @editsuccess="listBlog"></editform>
                 </div>
             </div>
 
@@ -189,10 +232,11 @@
 
         </div>
     </div>
-
+    <script src="https://unpkg.com/@johmun/vue-tags-input/dist/vue-tags-input.js"></script>
     <!-- wysiwyg JS -->
     <script src="./wysiwyg/index.js"></script>
     <!-- my JS -->
+    <script src="./js/components/tag.js"></script>
     <script src="./js/components/formedit.js"></script>
     <script src="./js/components/article.js"></script>
     <script src="./js/components/formadd.js"></script>

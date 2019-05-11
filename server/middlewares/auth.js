@@ -22,13 +22,14 @@ module.exports = {
         let idBlog = req.body.id
         Blog.findOne({_id:idBlog})
         .then(data => {
-            if (data.user === req.headers.idAuthenticated){
-                throw new Error('you are not authorized to update this Blog!')
-            } else {
+            if (data.user.toString() == req.headers.idAuthenticated.toString()){
                 next()
+            } else {
+                throw new Error('you are not authorized to update this Blog!')
             }
         })
         .catch(err => {
+            console.log(err)
             res.status(401).json(err)
         })
     },
@@ -36,13 +37,14 @@ module.exports = {
         let idBlog = req.body.id
         Blog.findOne({_id:idBlog})
         .then(data => {
-            if (data.user === req.headers.idAuthenticated){
-                throw new Error('you are not authorized to delete this Blog!')
-            } else {
+            if (data.user.toString() == req.headers.idAuthenticated.toString()){
                 next()
+            } else {
+                throw new Error('you are not authorized to delete this Blog!')
             }
         })
         .catch(err => {
+            console.log(err)
             res.status(401).json(err)
         })
     }

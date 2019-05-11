@@ -69,7 +69,8 @@ module.exports = {
                             res.status(200).json({
                                 jwtoken,
                                 name: data.name,
-                                pp: data.pp
+                                pp: data.pp,
+                                id: data._id
                             })
                         } else {
                             throw new Error('your password is wrong')

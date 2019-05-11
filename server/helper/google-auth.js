@@ -27,7 +27,8 @@ module.exports = function (req, res) {
                     res.status(200).json({
                         jwtoken,
                         pp: payload.picture,
-                        name: payload.name
+                        name: payload.name,
+                        id: data._id
                     })
                 } else {
                     let password = bcrypt.generateHash('12345')
@@ -45,7 +46,8 @@ module.exports = function (req, res) {
                             res.status(200).json({
                                 jwtoken,
                                 pp: payload.picture,
-                                name: payload.name
+                                name: payload.name,
+                                id: data._id
                             })
                         })
                 }

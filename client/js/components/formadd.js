@@ -1,7 +1,7 @@
 Vue.component('formadd', {
     props: ['page'],
     components: {
-        wysiwyg: vueWysiwyg.default.component,
+        wysiwyg: vueWysiwyg.default.component
     },
     data(){
         return {
@@ -11,6 +11,7 @@ Vue.component('formadd', {
             createdAt: "",
             file: "",
             author: "",
+            tag: '',
             tags: []
         }
     },
@@ -25,12 +26,28 @@ Vue.component('formadd', {
     <div>
         <wysiwyg id="editor" v-model="text"></wysiwyg>
     </div>
-    <div>
+    <div class="row">
+    <div class="col-6" style="margin-top:10px">
+                <div class="input-group mb-3">
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" v-on:change="onChangeUpload">
+            <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+          </div>
+        </div>
+    </div>
+    <div class="col-6">
         <input type="text" v-model="author" placeholder="Author of this article.."
             id="author-input">
     </div>
+    <br>
+    </div>
+    
     <div>
-        <input type="file" v-on:change="onChangeUpload" required>
+    <vue-tags-input
+      v-model="tag"
+      :tags="tags"
+      @tags-changed="newTags => tags = newTags"
+    />
     </div><br>
     <button class="btn btn-dark" v-on:click.prevent="addBlogg">Add</button>
     </form>
@@ -46,6 +63,8 @@ Vue.component('formadd', {
                 file = this.file
                 const extension = file.name.split('.')[1]
                 const validExtensions = ['png', 'jpg', 'jpeg']
+                this.tags = this.tags.map(el => el.text)
+                console.log(this.tags)
                 if (validExtensions.indexOf(extension) === -1) {
                     swal('Valid extensions: .png, .jpeg, or .jpg')
                 } else {
@@ -59,6 +78,7 @@ Vue.component('formadd', {
                                     img: image,
                                     extension: extension,
                                     author: this.author,
+                                    tags: this.tags
                                 }, {
                                     headers: {
                                         auth: localStorage.jwtoken
@@ -92,3 +112,5 @@ function getBase64(file) {
         reader.onerror = error => reject(error)
     })
 }
+
+{/* <input type="file" style="opacity:1; position:relative; left:0px;" v-on:change="onChangeUpload" required> */}

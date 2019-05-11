@@ -18,6 +18,7 @@ function onSignIn(googleUser) {
                 localStorage.setItem('jwtoken', data.data.jwtoken)
                 localStorage.setItem('name', data.data.name)
                 localStorage.setItem('pp', data.data.pp)
+                localStorage.setItem('id', data.data.id)
                 app.isLoggedIn = true
             })
             .catch(err => {
@@ -48,8 +49,10 @@ var app = new Vue({
         };
     },
     data: {
+        userId: localStorage.id,
         id: "",
         listBlogg: "",
+        listAllBlog: "",
         page: "",
         blog_title: "",
         myHtmlCode: "",
@@ -58,25 +61,32 @@ var app = new Vue({
         createdAt: "",
         file: "",
         isLoggedIn: false,
-        author: ""
+        author: "",
+        tags: ""
         // blog_content: "",
+    },
+    watch: {
+        userId: function () {
+            this.userId = localStorage.id
+        }
     },
     methods: {
 
         // function methods for blog
 
-        editBlog_btn(id, title, content, createdAt) {
+        editBlog_btn(id, title, content, createdAt, tags) {
             this.page = "blog-update-page"
             this.blog_title = title
             this.text = content
             this.id = id
-            this.createdAt = createdAt
+            this.createdAt = createdAt,
+            this.tags = tags
             // document.getElementById('editor2').innerHTML = this.blog_content
         },
         deleteBlog_btn(id) {
             this.id = id
             axios
-                .delete(serverUrl+'/'+id, {
+                .delete(serverUrl + '/' + id, {
                     headers: {
                         auth: localStorage.jwtoken
                     },
@@ -120,9 +130,15 @@ var app = new Vue({
             this.text = ""
             this.page = "blog-add-page"
         },
-        searchBlog() {
+        searchBlog(all) {
+            let url
+            if(all){
+                url = serverUrl+'/all'
+            } else {
+                url = serverUrl
+            }
             axios
-                .get(serverUrl, {
+                .get(url, {
                     headers: {
                         auth: localStorage.jwtoken
                     }
@@ -131,9 +147,18 @@ var app = new Vue({
                     data
                 }) => {
                     let x = new RegExp(this.value, "i")
-                    this.listBlogg = data.filter(blog => x.test(blog.title))
-                    if (!this.listBlogg[0]) {
-                        this.listBlogg[0] = "sorry there is nothing to show for this keyword"
+                    if(all){
+                        console.log('aaa')
+                        this.listAllBlog = data.filter(blog => x.test(blog.title))
+                        if (!this.listAllBlog && !this.listAllBlogg[0]) {
+                            this.listAllBlogg[0] = "sorry there is nothing to show for this keyword"
+                        }
+                    } else {
+                        console.log('bbb')
+                        this.listBlogg = data.filter(blog => x.test(blog.title))
+                        if (!this.listBlogg && !this.listBlogg[0]) {
+                            this.listBlogg[0] = "sorry there is nothing to show for this keyword"
+                        }
                     }
                 })
         },
@@ -255,6 +280,7 @@ var app = new Vue({
                                 localStorage.setItem('jwtoken', data.data.jwtoken)
                                 localStorage.setItem('name', data.data.name)
                                 localStorage.setItem('pp', data.data.pp)
+                                localStorage.setItem('id', data.data.id)
                                 app.isLoggedIn = true
                                 Swal.fire({
                                     text: 'You have succesfully logged in',
@@ -280,6 +306,27 @@ var app = new Vue({
             this.listBlogg = ''
             localStorage.clear()
             this.isLoggedIn = false
+        },
+        showbytag(list) {
+            this.listAllBlog = list
+            this.page = 'allblog-list'
+        },
+        showallblogs() {
+            axios
+                .get(serverUrl + "/all", {
+                    headers: {
+                        auth: localStorage.jwtoken
+                    }
+                })
+                .then(({
+                    data
+                }) => {
+                    this.listAllBlog = data
+                    this.page = 'allblog-list'
+                })
+                .catch(err => {
+                    console.log(err)
+                })
         },
 
         // onstart function
