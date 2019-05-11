@@ -16,3 +16,6 @@ body > .grid {
   bottom:0;
   width:100%
 }
+#editor{
+  min-height: 270px;
+}

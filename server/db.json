@@ -29,6 +29,12 @@
       "email": "",
       "password": "",
       "id": 5
+    },
+    {
+      "name": "deni",
+      "email": "deni",
+      "password": "deni",
+      "id": 6
     }
   ],
   "articles": [
