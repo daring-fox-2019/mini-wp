@@ -5,17 +5,45 @@ const Blog = require('../model/blogs-mod')
 module.exports = {
     authenticate: (req,res,next) => {
         let user = jwt.decodeToken(req.headers.auth)
-        User.findOneByEmail(user.email)
+        User.findOne({email: user.email})
         .then(data => {
             if(data){
                 req.headers.idAuthenticated = data._id
                 next()
             } else {
-                res.status(402).json("please login to continue")
+                res.status(401).json("please login to continue")
             }
         })
         .catch(err => {
             res.status(500).json(err.message)
+        })
+    },
+    authorUpdate: function(req,res,next){
+        let idBlog = req.body.id
+        Blog.findOne({_id:idBlog})
+        .then(data => {
+            if (data.user === req.headers.idAuthenticated){
+                throw new Error('you are not authorized to update this Blog!')
+            } else {
+                next()
+            }
+        })
+        .catch(err => {
+            res.status(401).json(err)
+        })
+    },
+    authorDelete: function(req,res,next){
+        let idBlog = req.body.id
+        Blog.findOne({_id:idBlog})
+        .then(data => {
+            if (data.user === req.headers.idAuthenticated){
+                throw new Error('you are not authorized to delete this Blog!')
+            } else {
+                next()
+            }
+        })
+        .catch(err => {
+            res.status(401).json(err)
         })
     }
 }

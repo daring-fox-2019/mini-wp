@@ -10,7 +10,8 @@ Vue.component('formadd', {
             text: "",
             createdAt: "",
             file: "",
-            author: ""
+            author: "",
+            tags: []
         }
     },
     template: `

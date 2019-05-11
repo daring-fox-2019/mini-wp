@@ -24,28 +24,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    pp: String
+    pp: String,
+    name:String
 })
 
 const User = mongoose.model('User', userSchema)
 
-module.exports = {
-    findOne: function(id){
-        return User.findOne({_id:id})
-    },
-    findOneByEmail: function(email){
-        return User.findOne({email:email})
-    },
-    find: function(){
-        return User.find()
-    },
-    register: function(email,password,pp){
-        return User.create({email,password,pp})
-    },
-    update: function(id,email,password,pp){
-        return User.updateOne({_id:id}, {email,password,pp})
-    },
-    delete: function(id){
-        return User.deleteOne({_id:id})
-    }
-}
+module.exports = User

@@ -55,7 +55,7 @@ Vue.component('editform', {
                     getBase64(file)
                         .then((image) => {
                             axios
-                                .put(serverUrl, {
+                                .put(serverUrl+'/'+this.id, {
                                     id: this.id,
                                     title: this.title,
                                     content: this.content,

@@ -3,7 +3,7 @@ const input = document.querySelector('input[type="file"]')
 let file = null
 
 function onSignIn(googleUser) {
-    if(googleUser){
+    if (googleUser) {
         var profile = googleUser.getBasicProfile();
         var id_token = googleUser.getAuthResponse().id_token
         axios
@@ -15,9 +15,10 @@ function onSignIn(googleUser) {
                 idToken: id_token
             })
             .then(data => {
-                localStorage.setItem('jwtoken', data.data)
+                localStorage.setItem('jwtoken', data.data.jwtoken)
+                localStorage.setItem('name', data.data.name)
+                localStorage.setItem('pp', data.data.pp)
                 app.isLoggedIn = true
-                console.log('signed in', data)
             })
             .catch(err => {
                 console.log(err.message)
@@ -75,7 +76,7 @@ var app = new Vue({
         deleteBlog_btn(id) {
             this.id = id
             axios
-                .delete(serverUrl, {
+                .delete(serverUrl+'/'+id, {
                     headers: {
                         auth: localStorage.jwtoken
                     },
@@ -144,8 +145,19 @@ var app = new Vue({
                     input: 'text',
                     confirmButtonText: 'Next &rarr;',
                     showCancelButton: true,
-                    progressSteps: ['1', '2', '3']
+                    progressSteps: ['1', '2', '3', '4']
                 }).queue([{
+                        text: 'Please register your name',
+                        preConfirm: result => {
+                            if (!result) {
+                                Swal.fire({
+                                    type: 'error',
+                                    text: 'Name field must not empty!'
+                                })
+                                throw new Error('Name field must not empty!')
+                            }
+                        }
+                    }, {
                         text: 'Please register your email',
                         preConfirm: result => {
                             if (!result) {
@@ -174,14 +186,16 @@ var app = new Vue({
                         text: 'Please input your desired profile picture url',
                     }
                 ]).then((result) => {
-                    let email = result.value[0]
-                    let password = result.value[1]
-                    let pp = result.value[2] || null
+                    let name = result.value[0]
+                    let email = result.value[1]
+                    let password = result.value[2]
+                    let pp = result.value[3] || null
                     return axios
                         .post(serverUrl + '/user/register', {
                             email: email,
                             password: password,
-                            pp: pp
+                            pp: pp,
+                            name
                         })
                         .then(data => {
                             if (data) {
@@ -231,21 +245,25 @@ var app = new Vue({
                     // 
                     let email = result.value[0]
                     let password = result.value[1]
-                    return axios
+                    axios
                         .post(serverUrl + '/user/login', {
                             email: email,
                             password: password
                         })
                         .then(data => {
                             if (data) {
-                                console.log(data.data)
-                                localStorage.setItem('jwtoken', data.data)
+                                localStorage.setItem('jwtoken', data.data.jwtoken)
+                                localStorage.setItem('name', data.data.name)
+                                localStorage.setItem('pp', data.data.pp)
                                 app.isLoggedIn = true
                                 Swal.fire({
                                     text: 'You have succesfully logged in',
                                     confirmButtonText: 'Lovely!'
                                 })
                             }
+                        })
+                        .catch(err => {
+                            Swal.fire('Please check your input!')
                         })
                 })
                 .catch(err => {
@@ -259,6 +277,7 @@ var app = new Vue({
                     console.log('User signed out.');
                 });
             }
+            this.listBlogg = ''
             localStorage.clear()
             this.isLoggedIn = false
         },

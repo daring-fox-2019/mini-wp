@@ -6,8 +6,8 @@ const auth = require('../middlewares/auth')
 router.use('/user', user)
 router.get('/', auth.authenticate, controller.showAll)
 router.post('/', auth.authenticate, controller.create)
-router.patch('/', auth.authenticate, controller.updateOne)
-router.put('/', auth.authenticate, controller.update)
-router.delete('/', auth.authenticate, controller.delete)
+router.patch('/:id', auth.authenticate, auth.authorUpdate, controller.updateOne)
+router.put('/:id', auth.authenticate, auth.authorUpdate, controller.update)
+router.delete('/:id', auth.authenticate, auth.authorDelete,controller.delete)
 
 module.exports = router

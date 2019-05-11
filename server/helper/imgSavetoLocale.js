@@ -12,10 +12,6 @@ const storage = new googleStorage.Storage({
 
 getPublicUrl = (bucketName, fileName) => `https://storage.googleapis.com/${bucketName}/${fileName}`;
 
-// const {
-//     storage
-// } = gcsHelpers;
-
 const DEFAULT_BUCKET_NAME = 'mini-wp-qfs'; // Replace with the name of your bucket
 
 
