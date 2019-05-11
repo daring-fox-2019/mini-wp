@@ -1,384 +1,142 @@
-let myvjs = new Vue({
+let vue = new Vue({
   el : "#thepage",
   data : {
+    user : "user",
+    islogin : false,
+    page : "login",
+    name : "",
+    email : "",
+    password : "",
     articlelist : [],
-    articlelistempty : null,
-    userid : localStorage.getItem('id') ,
-    user : localStorage.getItem('name'),
-    navigation : false,
-    write : false,
-    list : false,
-    update : false,
-    footer : false,
-    update : false,
-    register : false,
-    registernameform : "",
-    registeremailform : "",
-    registerpasswordform : "",
-    registererror : false,
-    registersuccess : false,
-    registersuccessmsg : "",
-    registererrormsg : "",
-    login : false,
-    loginemailform : "",
-    loginpasswordform : "",
-    loginerror : false,
-    loginerrormsg: "",
-    date : new Date().toDateString(),
-    newarticletitle : "",
-    newarticleerror : false,
-    newarticleerrormsg : "",
-    newarticlesuccess : false,
-    newarticlesuccessmsg : "",
-    currentarticletitle : "",
-    currentarticlecontent : "",
-    currentarticlestatus : "",
-    updatearticleerror : false,
-    updatearticleerrormsg : ""
+    date : new Date ().toDateString(),
+    title : "",
+    content : "",
+    image : ""
   },
-  created() {
-    console.log('masuk')
-      if(localStorage.getItem('token')){
-        this.register = false
-        this.login = false
-        this.write = false
-        this.update = false
-        this.navigation = true
-        this.list = true
-        this.footer = true
-        
-        axios({
-          method : "get",
-          url : "http://localhost:3000/articles"
-        })
-        .then(response=>{
-          if(response.data.length == 0){
-            this.articlelistempty = true
-            this.articlelist = []
-          } else {
-            this.articlelistempty = false
-            this.articlelist = response.data
-            this.articlelist.forEach(article=>{
-              article.author = this.user
-            })
-            console.log(this.user)
-          }
-        })
-        .catch(error=>{
-          console.log(error)
-        })
-      } else {
-        this.register = false
-        this.navigation = false
-        this.write = false
-        this.list = false
-        this.update = false
-        this.footer = false
-        this.login = true
-      }
+  created(){
+    if(localStorage.getItem('token')){
+      this.islogin = true
+      this.footer = true
+      this.navigation = true
+      this.page = "articles"
+      this.viewarticles()
+    } else {
+      this.islogin = false
+      this.page = "login"
+    }
   },
   methods : {
-    checklogin : function(){
-      console.log("ceklogin")
-      if(localStorage.getItem('token')){
-        this.viewlist()
-      } else {
-        this.viewlogin()
-      }
-    },
-    viewregister : function (){
-      console.log("view halaman register")
-      this.login = false
-      this.navigation = false
-      this.write = false
-      this.list = false
-      this.update = false
-      this.footer = false
-      this.register = true
-      this.loginemailform = ""
-      this.loginpasswordform = ""
-    },
-    viewlogin : function(){
-      console.log("view halaman login")
-      this.register = false
-      this.navigation = false
-      this.write = false
-      this.list = false
-      this.update = false
-      this.footer = false
-      this.login = true
-      this.registernameform = ""
-      this.registeremailform = ""
-      this.registerpasswordform = ""
-    },
-    viewlist : function(){
-      console.log("view halaman utama")
-      this.loginemailform = ""
-      this.loginpasswordform = ""
-      this.register = false
-      this.login = false
-      this.write = false
-      this.update = false
-      this.navigation = true
-      this.list = true
-      this.footer = true
-    },
-    viewwrite : function(){
-      console.log("view halaman new article")
-      this.register = false
-      this.login = false
-      this.update = false
-      this.list = false
-      this.navigation = true
-      this.write = true
-      this.footer = true
-      
-      
-    },
-    viewupdate : function(){
-      console.log("view halaman update article")
-      this.register = false
-      this.login = false
-      this.update = true
-      this.list = false
-      this.navigation = true
-      this.write = false
-      this.footer = true
-    },
-    showerrormsgeditarticle : function(){
-      this.updatearticleerror = true
-      setTimeout(function(){
-        this.updatearticleerror = false
-      },
-      2000)
-    },
-    seearticledetail : function(id){
-      this.viewupdate()
+    viewarticles(){
       axios({
-        method : 'get',
-        url : `http://localhost:3000/articles?userId=${id}`
+        method : "get",
+        url : "http://localhost:3000/articles?userId="+localStorage.getItem('id'),
       })
-      .then(result=>{
-        this.currentarticletitle = result.data[0].title
-        editorupdatearticle.firstChild.innerHTML = result.data[0].content
-        this.currentarticlestatus = result.data[0].status
-      })
-      .catch(error=>{
-        this.updatearticleerrormsg = "failed to get your data, please reload"
-        this.showerrormsgeditarticle()
-        console.log(error)
-      })
+        .then(({data})=>{
+          console.log(data)
+          this.articlelist = data
+        })
+        .catch(({errors})=>{
+          swal("Error", "Fail to fetch data from database", "error")
+          console.log(errors)
+        })
     },
-    registernewaccount : function(){
-      console.log("prosess register")
-      let newUser = {
-        name : this.registernameform,
-        email : this.registeremailform,
-        password : this.registerpasswordform
+    checklogin(){
+      if(localStorage.getItem('token')){
+        this.islogin = true
+        this.footer = true
+        this.navigation = true
+        this.page = "articles"
+        this.user = localStorage.getItem('user')
+        this.viewarticles()
+      } else {
+        this.islogin = false
+        this.page = "login"
       }
-      if(newUser.name == "" || newUser.email == "" || newUser.password == ""){
-        this.registererrormsg = "please fill the form below"
-        this.showerrormsgregister()
-      }
-      else{
+    },
+    login(){
+      console.log("login mulai")
+      if(this.email == "" || this.password == ""){
+        swal("Attention", "Complete the form below to make an account")
+      } else {
         axios({
-          method : "POST",
+          method : "get",
+          url : "http://localhost:3000/users?email="+this.email+"&password="+this.password,
+        })
+          .then(({ data })=>{
+            if(data.length > 0){
+              data = data[0]
+              console.log(data)
+              console.log("user found")
+              localStorage.setItem('token', "ceritanya token")
+              localStorage.setItem('email', data.email)
+              localStorage.setItem('id', data.id)
+              localStorage.setItem('user', data.name)
+              this.checklogin()
+              swal("Success",`hello ${data.name}!`,"success")
+            } else {
+              console.log(data)
+              swal("Info",`username / password incorrect`,"warning")
+            }
+          })
+          .catch(error=>{
+            swal("Sorry", "Something bad happen :(", "error");
+            console.log(error)
+          })
+      }
+    },
+    register(){
+      if(this.name == "" || this.email == "" || this.password == ""){
+        swal("Attention", "Complete the form below to make an account")
+      } else {
+        console.log("register mulai")
+        axios({
+          method : "post",
           url : "http://localhost:3000/users",
-          data : newUser
-        })
-        .then(response=>{
-          console.log(response)
-          this.registersuccessmsg = "berhasil create account"
-          this.loginemailform = response.data.email
-          this.showsuccessmsgregister()
-          this.viewlogin()
-          console.log("selesai proses register : sukses")
-        })
-        .catch(err=>{
-          this.registererrormsg = "we can't process your request right now"
-          this.showerrormsgregister()
-          console.log("selesai proses register : gagal")
-        })
-      }
-    },
-    showsuccessmsgregister : function(){
-      this.loginerror = false
-      this.registersuccess = true
-        setTimeout(function(){
-          this.registersuccess = false
-        }, 1000)
-    },
-    showerrormsgregister : function(){
-      this.registererror = true
-      setTimeout(function(){
-        this.registererror = false
-      },
-      1000)
-    },
-    
-    logintoyouraccount : function(){
-      console.log("proses login")
-      let user = {
-        email : this.loginemailform,
-        password : this.loginpasswordform
-      }
-      if(user.email == "" || user.password == ""){
-        this.loginerrormsg = "please fill the form below"
-        this.showerrormsglogin();
-      }
-      else{
-        console.log(user)
-        axios({
-          method : "GET",
-          url : `http://localhost:3000/users?name=${user.email}&password=${user.password}`
-        })
-        .then(response=>{
-          if(response.data.length == 0){
-            this.loginerrormsg = "email / password is wrong"
-            this.showerrormsglogin()
-          } else {
-            console.log(response)
-            localStorage.setItem('token', 'ceritanya token jwt')
-            localStorage.setItem('name', response.data[0].name)
-            localStorage.setItem('email', response.data[0].email)
-            localStorage.setItem('id', response.data[0].id)
-            this.viewlist()
-            console.log("selesai proses login : sukses")
+          data : {
+              name : this.name,
+              email : this.email,
+              password : this.password,
           }
         })
-        .catch(error=>{
-          this.loginerrormsg = "email / password is wrong"
-          this.showerrormsglogin()
-          console.log("selesai proses login : gagal")
-        })
+          .then(({ data })=>{
+            console.log(data)
+            console.log("user created")
+            this.name = ""
+            this.password = ""
+            this.viewlogin()
+            swal("Success","your account has been created","success")
+          })
+          .catch(error=>{
+            swal("Sorry", "Something bad happen :(", "error");
+            console.log(error)
+          })
       }
     },
-    showerrormsglogin : function(){
-      this.loginerror = true
-      setTimeout(function(){
-        this.loginerror = false
-      },
-      2000)
-    },
-    logoutfromyouraccount : function(){
+    logout(){
+      console.log("user telah logout")
       localStorage.removeItem('token')
       localStorage.removeItem('id')
       localStorage.removeItem('email')
+      this.islogin = false
+      this.viewlogin()
+    },
+    viewlogin(){
+      this.page = "login"
+    },
+    viewregister(){
+      this.page = "register"
+    },
+    viewwrite(){
+      this.page = "writearticle"
+    },
+    savearticle(){
       
-      this.user = ""
-      this.userid = ""
-      this.checklogin();
     },
-    showerrormsgnewarticle : function(){
-      this.newarticleerror = true
-      setTimeout(function(){
-        this.newarticleerror = false
-      },
-      2000)
+    saveandpostarticles(){
+
     },
-    showsuccessmsgnewarticle : function(){
-      this.newarticlesuccess = true
-      setTimeout(function(){
-        this.newarticlesuccess = false
-      },
-      2000)
-    },
-    postnewarticle : function(){
-      console.log(`"input new article from user ${this.userid}"`)
-      let htmlcontent = editornewarticle.firstChild.innerHTML
-      let text = $(htmlcontent).text()
-      let snippet = ""
-      if(text == "\n" || this.newarticletitle == ""){
-        this.newarticleerrormsg = "you can't post or save an empty article"
-        this.showerrormsgnewarticle()
-      } else {
-        if(text.length > 100){
-          text.split("").forEach((el,i)=>{
-            if(i < 100){
-              snippet += el
-            }
-          })
-        } else {
-          snippet = text
-        }
-        let articleData = {
-          title: this.newarticletitle,
-          snippet: snippet,
-          content: htmlcontent,
-          createdAt: new Date,
-          postedAt: new Date,
-          userId: localStorage.getItem('id'),
-          status: "posted"
-        }
-        console.log(articleData)
-        
-        axios({
-          method : 'post',
-          url : 'http://localhost:3000/articles',
-          data : articleData
-        })
-        .then(response=>{
-          console.log(response)
-          this.newarticlesuccessmsg = "successful creating new article"
-          this.newarticletitle = ""
-          quill.setText("")
-          editornewarticle.firstChild.innerHTML = "<p></p><br>"
-          this.showsuccessmsgnewarticle();
-        })
-        .catch(error=>{
-          this.newarticleerrormsg = "you can't post or save an empty article"
-          this.showerrormsgnewarticle()
-        })
-      }
-    },
-    savenewarticle : function(){
-      console.log(`"input new article from user ${this.userid}"`)
-      let htmlcontent = editornewarticle.firstChild.innerHTML
-      let text = $(htmlcontent).text()
-      let snippet = ""
-      if(text == "\n" || this.newarticletitle == ""){
-        this.newarticleerrormsg = "you can't post or save an empty article"
-        this.showerrormsgnewarticle()
-      } else {
-        if(text.length > 100){
-          text.split("").forEach((el,i)=>{
-            if(i < 100){
-              snippet += el
-            }
-          })
-        } else {
-          snippet = text
-        }
-        let articleData = {
-          title: this.newarticletitle,
-          snippet: snippet,
-          content: htmlcontent,
-          createdAt: new Date,
-          postedAt: null,
-          userId: localStorage.getItem('id'),
-          status: "saved"
-        }
-        console.log(articleData)
-        
-        axios({
-          method : 'post',
-          url : 'http://localhost:3000/articles',
-          data : articleData
-        })
-        .then(response=>{
-          console.log(response)
-          this.newarticlesuccessmsg = "successful creating new article"
-          this.newarticletitle = ""
-          quill.setText("")
-          editornewarticle.firstChild.innerHTML = "<p></p><br>"
-          this.showsuccessmsgnewarticle();
-        })
-        .catch(error=>{
-          this.newarticleerrormsg = "you can't post or save an empty article"
-          this.showerrormsgnewarticle()
-        })
-      }
+    updatearticles(){
+
     }
   }
 })
-
