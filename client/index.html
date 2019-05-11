@@ -7,7 +7,10 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta name="description" content="">
   <meta name="author" content="">
+  <meta name="google-signin-client_id" content="274958665765-khhnbmeuhs41ttp4ftmgnfbvpte095cd.apps.googleusercontent.com">
+
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
@@ -17,6 +20,7 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
     integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
   <link rel="stylesheet" href="./assets/css/style.css">
+  <link rel="stylesheet" href="./assets/css/vueWysiwyg.css">
 
   <title>Momenku</title>
 </head>
@@ -24,272 +28,122 @@
 <body>
   <div id="app">
     <div class="d-flex" id="wrapper" v-bind:class="{ toggled }">
-      <nav id="sidebar" class="sidebar--container bg-light border-right">
-        <div class="sidebar__heading">Parampampam</div>
-        <ul class="list-group list-group-flush">
-          <li 
-            class="list-group-item 
-              list-group-item-action 
-              bg-light
-              cursor-pointer" 
-            @click="goToListPage"
-          >List</li>
-          <li 
-            class="list-group-item 
-              list-group-item-action 
-              bg-light
-              cursor-pointer" 
-            @click="goToArticlePage"
-          >Create Article</li>
-          <li href="#" class="list-group-item list-group-item-action bg-light">Article</li>
-        </ul>
-      </nav>
+      <sidebar v-on:go-to-list-page="goToListPage" v-on:go-to-article-page="goToArticlePage"></sidebar>
 
       <div id="page-content-wrapper" style="min-width: 100vw;">
 
-        <header id="header" class="my-nav my-nav--fixed my-nav--big white border-bottom"
-          style="justify-content: space-between;">
-          <button
-            @click="menuToggle"
-            class="btn btn-link
-              cursor-pointer" 
-            id="menu-toggle" 
-          ><i class="fas fa-bars color-grey4"></i></button>
-
-          <div style="width: 85%">
-            <div class="relative">
-              <i class="fas fa-search search-icon"></i>
-              <input type="search" name="search" placeholder="Search your article here" class="searchbar searchbar--input"
-                style="width:100%;" id="header__search">
-            </div>
-          </div>
-
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div id="navbarSupportedContent" v-if="user.loggedIn">
-            <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                  aria-haspopup="true" aria-expanded="false">
-                  Lutfi
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="#">Edit Profile</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">Logout</a>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </header>
+        <myheader 
+          v-bind:user="user"
+          v-on:menu-toggle="menuToggle"
+          v-on:logout="logout"
+        ></myheader>
 
         <div style="height: 14vh">&nbsp;</div>
 
         <!-- menus -->
-        <section id="login" v-if="menus.login" class="relative">
-          <div class="container-sm">
-            <div class="row my-card my-card--border">
-              <div class="">
-                <h4>Login</h4>
-              </div>
-              <div class="">
-                <div>
-                  <form v-on:submit.prevent="login">
-                    <div class="form-group">
-                      <input 
-                        type="email" 
-                        class="form-control" 
-                        v-model="userForm.email"
-                        placeholder="email@mail.com"
-                      >
-                    </div>
-                    <div class="form-group">
-                      <input 
-                        type="password" 
-                        class="form-control" 
-                        v-model="userForm.password"
-                        placeholder="Password"
-                      >
-                    </div>
+        <login-form 
+          v-bind:menus="menus" 
+          v-bind:user="user" 
+          v-on:go-to-register-page="goToRegisterPage"
+          v-on:login="login"
+        ></login-form>
+        
 
-                    <div class="d-flex justify-content-between">
-                      <div 
-                        class="color-red 
-                          cursor-pointer
-                          pointer-underline
-                          "
-                        @click="goToRegisterPage"
-                      >
-                        Create new account
-                      </div>
-                      <button 
-                        type="submit" 
-                        class="btn 
-                        btn-danger
-                        cursor-pointer"
-                      >
-                        Login
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </div>
+        <register-form 
+          v-bind:menus="menus" 
+          v-bind:user="user" 
+          v-on:register="register"
+          v-on:go-to-login-page="goToLoginPage"
+        >
+        </register-form>
+
+        <section id="home">
+          <div class="d-flex flex-column">
+            <div 
+              class="my-card 
+              d-flex 
+              justify-content-between" v-for="article in filteredArticle" :key="article.id">
+              <mycard 
+                v-bind:article="article"
+                v-on:click-edit="fetchEdit"
+                v-on:click-delete="deleteArticle"
+              >
+              </mycard>
             </div>
           </div>
         </section>
 
-        <section id="register" v-else-if="menus.register">
-
-          <div class="container-sm">
-            <div class="row my-card my-card--border">
-              <div class="">
-                <h4>Register</h4>
-              </div>
-              <div class="">
-                <div>
-                  <form v-on:submit.prevent="register">
-                    <div class="form-group">
-                      <input 
-                        type="text" 
-                        class="form-control" 
-                        v-model="userForm.name"
-                        placeholder="Name"
-                      >
-                    </div>
-
-                    <div class="form-group">
-                      <input 
-                        type="email" 
-                        class="form-control" 
-                        v-model="userForm.email"
-                        placeholder="email@mail.com"
-                      >
-                    </div>
-                    
-                    <div class="form-group">
-                      <input 
-                        type="password" 
-                        class="form-control" 
-                        v-model="userForm.password"
-                        placeholder="Password"
-                      >
-                    </div>
-
-                    <button 
-                      type="submit" 
-                      class="btn 
-                        btn-danger
-                        cursor-pointer"
-                    >
-                      Submit
-                    </button>
-
-                    <div>
-                      Already have account? Login <span @click="goToLoginPage" class="cursor-pointer
-                      color-red
-                      pointer-underline">here</span>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="list" class="article--container container-md" v-else-if="menus.list">
-          <h1 class="mt-4 text-center">Your Story</h1>
+        <section id="list" class="article--container container-md" v-if="menus.list && user.loggedIn===true">
 
           <div class="container" style="max-width: 1000px !important">
             <div class="row">
+              <h4 class="text-center">Your Article</h5>
               <div class="input-group mb-3">
-                <input type="search" class="form-control" placeholder="Search your article"
-                  aria-label="Recipient's username" aria-describedby="button-addon2" v-model.trim="search">
+                <!-- <searchbar
+                  v-on:searchvalue="searchValue"
+                ></searchbar> -->
+
+                  <input 
+                    type="search" 
+                    class="form-control" 
+                    placeholder="Search your article"
+                    aria-label="Recipient's username" 
+                    aria-describedby="button-addon2" 
+                    v-model.trim="searchValue"
+                  >
               </div>
             </div>
           </div>
 
           <div class="d-flex flex-column">
-            <div class="my-card d-flex justify-content-between" v-for="article in filteredArticle" :key="article.id">
-              <div class="content">
-                <div class="my-card-header">
-                  {{article.title}}
-                </div>
-                <div class="my-card-content">
-                  {{article.content}}
-                </div>
-              </div>
-              <div class="action">
-                <div 
-                  class="btn 
-                    btn-link 
-                    cursor-pointer" 
-                  @click="fetchEdit(article._id)"
-                >Edit</div>
-                <div 
-                  class="color-red 
-                    fs-17
-                    pointer-underline" 
-                  @click="deleteArticle(article._id)"
-                >Delete</div>
-              </div>
+            <div 
+              class="my-card 
+              d-flex 
+              justify-content-between" v-for="article in filteredArticle" :key="article.id">
+              <mycard 
+                v-bind:article="article"
+                v-on:click-edit="fetchEdit"
+                v-on:click-delete="deleteArticle"
+              >
+              </mycard>
             </div>
           </div>
         </section>
 
-        <section id="article" v-else-if="menus.article">
-          <div class="article__container">
-            <h3>Article</h3>
-
-            <form v-on:submit.prevent="editArticle" v-show="!createPage">
-              <div class="form-group">
-                <input type="text" v-model.trim="newArticle.title" class="form-control" placeholder="Title">
-              </div>
-              <div class="form-group">
-                <textarea v-model.trim="newArticle.content" class="form-control" rows="5" id="summernote"></textarea>
-              </div>
-
-              <input type="hidden" v-model.trim="newArticle.id">
-
-              <button 
-                class="btn 
-                  btn-primary
-                  cursor-pointer"
-              >Edit</button>
-            </form>
-
-            <form v-on:submit.prevent="createArticle" v-show="createPage">
-              <div class="form-group">
-                <input type="text" v-model.trim="newArticle.title" class="form-control" placeholder="Title">
-              </div>
-              <div class="form-group">
-                <textarea v-model.trim="newArticle.content" class="form-control" rows="5" id="summernote"></textarea>
-              </div>
-
-              <button id="article__draft-btn" class="btn btn-success">Draft</button>
-              <button id="article__publish-btn" class="btn btn-primary">Publish</button>
-            </form>
-          </div>
+        <section id="article" v-else-if="menus.article && user.loggedIn===true">
+          <article-page
+            v-bind:createpage="createPage"
+            v-bind:newarticle="newArticle"
+            v-on:submit-create="createArticle"
+            v-on:submit-edit="editArticle"
+          >
+            <wysiwyg 
+              slot="wysiwyg"
+              v-model="newArticle.content"
+            ></wysiwyg>
+          </article-page>
         </section>
-
         <!-- end of menus -->
 
-        <footer class="footer">
-          <div class="footer__content">
-            &copy; 1989-2019, Momen.
-            Dirancang oleh Muhammad Lutfi di Jakarta
-          </div>
-        </footer>
+        <myfooter></myfooter>
       </div>
     </div>
   </div>
-
+  
   <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
   <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+  <script src="./assets/js/vueWysiwyg.js"></script>
+  <script src="./assets/js/components/articlePage.js"></script>
+  <script src="./assets/js/components/header.js"></script>
+  <script src="./assets/js/components/loginForm.js"></script>
+  <script src="./assets/js/components/registerForm.js"></script>
+  <script src="./assets/js/components/sidebar.js"></script>
+  <script src="./assets/js/components/searchbar.js"></script>
+  <script src="./assets/js/components/card.js"></script>
+  <script src="./assets/js/components/footer.js"></script>
 
   <script src="./assets/js/vue.js"></script>
 </body>

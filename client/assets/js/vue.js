@@ -1,42 +1,162 @@
 const ARTICLE_PATH = `http://localhost:3000/articles`
+const USER_PATH = `http://localhost:3000/users`
 
-var app = new Vue({
+const app = new Vue({
     el: '#app',
+    components: {
+        wysiwyg: vueWysiwyg.default.component,
+    },
     data: {
         articles: [],
         message: 'Hello vue!',
         user: {
-            loggedIn: false
+            loggedIn: false,
+            name: '',
+            email: ''
         },
         newArticle: {
             title: '',
             content: '',
             id: '',
+            featured_image: ''
         },
-        userForm: {
-            name: '',
-            email: '',
-            password: ''
-        },
-        search: '',
+        homeArticles: [],
+        // userForm: {
+        //     name: '',
+        //     email: '',
+        //     password: ''
+        // },
+        auth2: '',
+        searchValue: '',
         createPage: true,
         menus: 
         {
             login: true,
             register: false,
+            home: false,
             list: false,
             article: false
         },
         toggled: false
     },
+    created() {
+        if(localStorage.token) {
+            this.user.loggedIn = true
+            this.user.name=localStorage.name
+            this.goToListPage()
+            this.fetchMyArticles()
+        }
+    },
     mounted() {
-        this.fetchArticles()
+        // gapi.signin2.render('google-signin-button', {
+        //     onsuccess: this.googleSignIn
+        // })
     },
     methods: {
+        login: function(userForm) {
+            axios
+            .post(`${USER_PATH}/signin`, {
+                email: userForm.email,
+                password: userForm.password
+            })
+            .then(user => {
+                userForm={}
+                localStorage.token = user.data.token
+                localStorage.name = user.data.name
+                this.user.name=localStorage.name
+                this.user.loggedIn=true
+                this.fetchMyArticles()
+                this.goToListPage()
+            })
+            .catch(err => {
+                userForm={}
+                console.log(err);
+            })
+        },
+        googleSignIn: function(googleUser) {
+            const token = googleUser.getAuthResponse().id_token;
+            // const profile = googleUser.getBasicProfile()
+            
+            let config = {
+                headers: {
+                  token
+                }
+            }
+        
+            axios
+            .post(`${USER_PATH}/signinGoogle`, {}, config)
+            .then( ({data}) => {
+                localStorage.token = data.token
+                app.user.name=data.name
+                app.user.loggedIn=true
+                app.fetchMyArticles()
+                app.goToListPage()
+                console.log(app.user);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        },
+        register: function(userForm) {
+            axios
+            .post(`${USER_PATH}/signup`, {
+                name: userForm.name,
+                email: userForm.email,
+                password: userForm.password
+            })
+            .then(user => {
+                userForm= {}
+                this.goToLoginPage()
+            })
+            .catch(err => {
+                userForm= {}
+                console.log(err);
+            })
+        },
+        logout: function() {
+            // logoutGoogle()
+            this.articles=[]
+            this.user.loggedIn=false
+            
+            // GoogleAuth.signOut()
+            // var auth2 = gapi.auth2.getAuthInstance();
+            // auth2.logout().then(function () {});
+            
+            localStorage.clear()
+            
+            this.goToRegisterPage()
+        },
         fetchArticles: function() {
+            let config = {
+                headers: {
+                  token: localStorage.token,
+                  id: localStorage.id
+                }
+            }
+
             this.createPage=false
             axios
-            .get(`${ARTICLE_PATH}`)
+            .get(`${ARTICLE_PATH}`, config)
+            .then(({data}) => {
+                data.forEach(element => {
+                    this.homeArticles.push(element)
+                });
+            })
+            .catch(function(err) {
+                console.log(err);
+            })
+        },
+        fetchMyArticles: function() {
+            let config = {
+                headers: {
+                  token: localStorage.token,
+                  id: localStorage.id
+                }
+            }
+
+            this.createPage=false
+            axios
+            .get(`${ARTICLE_PATH}/myarticle`, config)
             .then(({data}) => {
                 data.forEach(element => {
                     this.articles.push(element)
@@ -47,11 +167,21 @@ var app = new Vue({
             })
         },
         createArticle: function() {
+
+            let formData = new FormData()
+            formData.append('title', this.newArticle.title)
+            formData.append('content', this.newArticle.content)
+            formData.append('featured_image', this.newArticle.featured_image)
+            
+            let config = {
+                headers: {
+                  token: localStorage.token,
+                  id: localStorage.id
+                }
+            }
+
             axios
-            .post(`${ARTICLE_PATH}`, {
-                title: this.newArticle.title,
-                content: this.newArticle.content
-            })
+            .post(`${ARTICLE_PATH}`, formData, config)
             .then( ({data}) => {
                 this.newArticle={}
 
@@ -63,18 +193,28 @@ var app = new Vue({
             })
         },
         editArticle: function() {
+            let formData = new FormData()
+            formData.append('title', this.newArticle.title)
+            formData.append('content', this.newArticle.content)
+            formData.append('featured_image', this.newArticle.featured_image)
+
+            let config = {
+                headers: {
+                  token: localStorage.token,
+                  id: localStorage.id
+                }
+            }
+
             const id = this.newArticle.id
 
             axios
-            .patch(`${ARTICLE_PATH}/${id}`, {
-                title: this.newArticle.title,
-                content: this.newArticle.content
-            })
+            .patch(`${ARTICLE_PATH}/${id}`, formData, config)
             .then( ({data}) => {
                 this.articles=this.articles.map(e=> {
                     if(e._id===this.newArticle.id) {
                         e.title=data.title
                         e.content=data.content
+                        e.featured_image=data.featured_image
                     }
 
                     return e
@@ -89,9 +229,16 @@ var app = new Vue({
             })
         },
         fetchEdit: function(id) {
+            let config = {
+                headers: {
+                  token: localStorage.token,
+                  id: localStorage.id
+                }
+            }
+
             this.goToArticlePage()
             axios
-            .get(`${ARTICLE_PATH}/${id}`)
+            .get(`${ARTICLE_PATH}/${id}`, config)
             .then(({data}) => {
                 this.newArticle.title=data.title
                 this.newArticle.content=data.content
@@ -104,19 +251,44 @@ var app = new Vue({
             })
         },
         deleteArticle: function(id) {
-            axios
-            .delete(`${ARTICLE_PATH}/${id}`)
-            .then((deleted) => {
-
-                this.articles = this.articles.filter(article => {
-                    if(article._id!==id) {
-                        return article
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+              }).then((result) => {
+                if (result.value) {
+                    let config = {
+                        headers: {
+                          token: localStorage.token,
+                          id: localStorage.id
+                        }
                     }
-                })
-            })
-            .catch(err => {
-                console.log(err);
-            })
+                    
+                    axios
+                    .delete(`${ARTICLE_PATH}/${id}`, config)
+                    .then((deleted) => {
+        
+                        this.articles = this.articles.filter(article => {
+                            if(article._id!==id) {
+                                return article
+                            }
+                        })
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+                  
+                Swal.fire(
+                    'Deleted!',
+                    'Your article has been deleted.',
+                    'success'
+                  )
+                }
+              })
         },
         goToLoginPage: function() {
             this.menus.login=true
@@ -137,10 +309,13 @@ var app = new Vue({
             this.menus.article=false
         },
         goToArticlePage: function() {
+            this.createPage=true
             this.menus.login=false
             this.menus.register=false
             this.menus.list=false
             this.menus.article=true
+
+            this.newArticle={}
         },
         menuToggle: function() {
             this.toggled = !this.toggled
@@ -149,8 +324,40 @@ var app = new Vue({
     computed: {
         filteredArticle() {
             return this.articles.filter(article => {
-                return article.title.toLowerCase().includes(this.search.toLowerCase())
+                return article.title.toLowerCase().includes(this.searchValue.toLowerCase())
             })
         }
     }
 })
+
+// function googleSignIn(googleUser) {
+//     const token = googleUser.getAuthResponse().id_token;
+    
+//     let config = {
+//         headers: {
+//           token
+//         }
+//     }
+
+//     axios
+//     .post(`${USER_PATH}/signinGoogle`, {}, config)
+//     .then( ({data}) => {
+//         localStorage.token = data.token
+//         app.user.name=data.name
+//         app.user.loggedIn=true
+//         app.fetchMyArticles()
+//         app.goToListPage()
+//         console.log(app.user);
+//     })
+//     .catch(err => {
+//         console.log(err);
+//     })
+// }
+
+// function logoutGoogle() {
+//     var auth2 = gapi.auth2.getAuthInstance();
+//     localStorage.clear()
+
+    // auth2.logout().then(function () {});
+// }
+
