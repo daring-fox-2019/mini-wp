@@ -8,6 +8,8 @@ const jwtVerifyToken = token => {
     return jwt.verify(token, secret)
 }
 
+
+
 const generateStringOfNumber = (length) => Array.from(Array(length), _ => ~~(Math.random() * 10)).join('')
 const givesError = (statusCode, msg, payload) => {
     let error = new Error(msg || `internal server error`)

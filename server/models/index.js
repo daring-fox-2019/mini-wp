@@ -2,13 +2,13 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 
 const Schema = require('mongoose').Schema
+
 let articleSchema = new Schema({
-    //name, description, status, due date
-    creator: { type: Schema.Types.ObjectId, ref: 'User' },
-    title: String,
-    content: String,
-    created_at:Date,
-    // link: String,    
+    author: { type: Schema.Types.ObjectId, ref: 'User' },
+    title:{type:String, required:true},
+    content: {type:String, required:true},
+    created_at:Date,    
+    featured_image:String,
     tags: [{ type: Schema.Types.ObjectId, ref: 'Tag' }]
 })
 
@@ -41,8 +41,8 @@ userSchema.pre('save', function () {
 userSchema.methods.comparePassword = function (str) {
     return bcrypt.compareSync(str, this.password)
 }
+
 let User = mongoose.model('User', userSchema)
-// let Project = mongoose.model('Project', projectSchema)
 let Article = mongoose.model('Article', articleSchema)
 let Tag = mongoose.model('Tag', tagSchema)
 
