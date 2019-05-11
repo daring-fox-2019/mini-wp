@@ -9,12 +9,12 @@ Vue.component('postlist', {
     },
     methods: {
         getPosts() {
-            axios.get(this.$root.serverURL + '/articles', this.$root.headers)
+            axios.get(serverURL + '/articles', this.$root.headers)
                 .then(({data}) => {
                     this.posts = data
                 })
                 .catch(({response}) => {
-                    console.log('postlist === ',response.data.error);
+                    console.log('postlist ==>', response);
                 })
         }
     },

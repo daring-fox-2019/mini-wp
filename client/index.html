@@ -29,6 +29,10 @@
 
             <!-- Actual Content -->
             <div id="content">
+                <a class="sidebar-btn" id="sidebarCollapse" href="#">
+                    <i class="fas fa-chevron-right"></i>
+                    <i class="fas fa-chevron-right" style="margin-left: -5px;"></i>
+                </a>
                 <login id="loginPage" v-show="page === 'login'" @success="page = 'index'"></login>
                 <register id="registerPage" v-if="page === 'register'"></register>
 

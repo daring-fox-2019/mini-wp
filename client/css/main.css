@@ -4,6 +4,26 @@ a, a:hover, a:focus {
     transition: all 0.3s;
 }
 
+.navbar-collapse {
+    z-index: 20;
+}
+
+.sidebar-btn {
+    padding: 5px;
+    width: 30px;
+    position: relative;
+    left: -20px;
+    z-index: 0;
+    font-size: 14px;
+    border-radius: 3px;
+    background: rgba(24, 106, 212, 0.301);
+    color: white;
+}
+.sidebar-btn:hover {
+    background: rgba(24, 105, 212, 0.726);
+    color: white;
+}
+
 .wrapper {
     display: flex;
     width: 100%;
@@ -28,7 +48,7 @@ a, a:hover, a:focus {
 #sidebar {
     width: 200px;
     position: fixed;
-    top: 46px;
+    top: 56px;
     left: 0;
     height: 100vh;
     max-height: 100vh;
@@ -81,7 +101,6 @@ ul ul a {
 
 .main-bg-color {
     background:#065a92fa;
-    max-height: 46px;
 }
 
 .loginRegisterForm  {

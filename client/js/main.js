@@ -1,3 +1,4 @@
+'use strict';
 
 $(document).ready(function () {
   $('#sidebarCollapse').on('click', function () {
@@ -8,11 +9,8 @@ $(document).ready(function () {
   $('.collapse.in').toggleClass('in');
   $('a[aria-expanded=true]').attr('aria-expanded', 'false');
 
-  'use strict';
   window.addEventListener('load', function() {
-  // Fetch all the forms we want to apply custom Bootstrap validation styles to
   var forms = document.getElementsByClassName('needs-validation');
-  // Loop over them and prevent submission
   var validation = Array.prototype.filter.call(forms, function(form) {
     form.addEventListener('submit', function(event) {
       if (form.checkValidity() === false) {
@@ -26,18 +24,13 @@ $(document).ready(function () {
   }, false);
 });
 
-function onSignIn(googleUser) {
-  
-}
-
 // start VUE codes
-
+var serverURL = 'http://localhost:3000';
 
 var app = new Vue({
   el: '#miniWP',
   data: {
     headers: {authorization: localStorage.getItem('miniwp_token')},
-    serverURL: 'http://localhost:3000',
     isLogin: false,
     page: '',
     user: {

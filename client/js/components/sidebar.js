@@ -11,7 +11,7 @@ Vue.component('sidebar', {
                 </div>
             </div>
             <li>
-                <a href="#">Explore</a>
+                <a href="#" onclick="app.page = 'explore'">Explore</a>
             </li>
             <li>
                 <a href="#" onclick="app.page = 'createPost'">New Post</a>
