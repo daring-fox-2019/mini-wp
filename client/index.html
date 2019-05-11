@@ -159,26 +159,13 @@
                             <ul>
                                 <li v-if="listBlogg[0].title" v-for="(blog,index) in listBlogg">
                                     <div id="per-blog">
-                                        <div>
-                                            <div>
-                                                <h2><strong>{{ blog.title }}</strong></h2><br>
-                                            </div>
-                                            <div>
-                                                <img v-bind:src="blog.img" style="margin:auto" width="70%">
-                                            </div><br>
-                                        </div>
-                                        <h6 v-html="blog.content">
-                                            <h6><br>
-                                                <h6>Created At: {{blog.createdAt}}</h6>
-                                                <h6>By: {{blog.author}}</h6><br>
-
-                                                <!-- edit-delete button -->
-
-                                                <p><button
-                                                        v-on:click="editBlog_btn(blog._id,blog.title,blog.content,blog.createdAt)"
-                                                        class="btn btn-dark">Edit</button> || <button
-                                                        v-on:click="deleteBlog_btn(blog._id)"
-                                                        class="btn btn-dark">Delete</button></p>
+                                        <blog :blog="blog"></blog>
+                                        <br>
+                                        <p><button
+                                                v-on:click="editBlog_btn(blog._id,blog.title,blog.content,blog.createdAt)"
+                                                class="btn btn-dark">Edit</button> || <button
+                                                v-on:click="deleteBlog_btn(blog._id)"
+                                                class="btn btn-dark">Delete</button></p>
                                     </div>
                                     <br>
 
@@ -216,6 +203,7 @@
     <script src="./wysiwyg/index.js"></script>
     <!-- my JS -->
     <script src="./js/components/formedit.js"></script>
+    <script src="./js/components/article.js"></script>
     <script src="./js/components/formadd.js"></script>
     <script src="./js/index.js"></script>
 </body>
