@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 const Schema = mongoose.Schema
 
-mongoose.connect(`mongodb+srv://admin:${process.env.PASSWORD_SERVER}@mini-wp-efobx.gcp.mongodb.net/test?retryWrites=true`,{useNewUrlParser : true})
+mongoose.connect('mongodb://localhost/mini-wp',{useNewUrlParser : true})
 
 let articleSchema = new Schema({
     title : String,
