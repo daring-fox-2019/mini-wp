@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 mongoose.set('useCreateIndex', true)
 const {Schema } = mongoose;
+const Helper = require('../helpers/helper')
 
 const memberSchema = new Schema({
     name: {
@@ -37,8 +38,13 @@ const memberSchema = new Schema({
     password: {
         type: String,
         required: true,
-        minlength: [11, 'Phone length 11~13'],
+        minlength: [4, 'Password min length is 4'],
     }
+});
+
+memberSchema.pre('save', function(next, done) {
+    this.password = Helper.hashPassword(this.password)
+    next()
 });
 
 const Member = mongoose.model('Member', memberSchema);

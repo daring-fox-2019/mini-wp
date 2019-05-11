@@ -28,12 +28,16 @@
 <body>
   <div id="app">
     <div class="d-flex" id="wrapper" v-bind:class="{ toggled }">
-      <sidebar v-on:go-to-list-page="goToListPage" v-on:go-to-article-page="goToArticlePage"></sidebar>
+      <sidebar 
+        v-on:go-to-home-page="goToHomePage" 
+        v-on:go-to-list-page="goToListPage" 
+      ></sidebar>
 
       <div id="page-content-wrapper" style="min-width: 100vw;">
 
         <myheader 
           v-bind:user="user"
+          v-on:go-to-article-page="goToArticlePage"
           v-on:menu-toggle="menuToggle"
           v-on:logout="logout"
         ></myheader>
@@ -57,16 +61,15 @@
         >
         </register-form>
 
-        <section id="home">
-          <div class="d-flex flex-column">
+        <section id="home" v-if="menus.home && user.loggedIn===true">
+          <div class="container d-flex flex-column">
             <div 
               class="my-card 
               d-flex 
-              justify-content-between" v-for="article in filteredArticle" :key="article.id">
+              justify-content-between" v-for="article in homeArticles" :key="article.id">
               <mycard 
                 v-bind:article="article"
-                v-on:click-edit="fetchEdit"
-                v-on:click-delete="deleteArticle"
+                v-bind:menus="menus"
               >
               </mycard>
             </div>
@@ -98,10 +101,14 @@
           <div class="d-flex flex-column">
             <div 
               class="my-card 
-              d-flex 
-              justify-content-between" v-for="article in filteredArticle" :key="article.id">
+                d-flex 
+                justify-content-between" 
+              v-for="article in filteredArticle" 
+              :key="article.id"
+            >
               <mycard 
                 v-bind:article="article"
+                v-bind:menus="menus"  
                 v-on:click-edit="fetchEdit"
                 v-on:click-delete="deleteArticle"
               >

@@ -1,5 +1,5 @@
 Vue.component('mycard',{
-    props: ['article'],
+    props: ['article', 'menus'],
     methods: {
         clickEdit(id) {
             this.$emit('click-edit', id)
@@ -27,17 +27,22 @@ Vue.component('mycard',{
                     <div class="my-card-content" v-html="article.content">
                     </div>
                 </div>
+                <div v-if="menus.home">
+                    by {{article.author.name}}
+                </div>
             </div>
         </div>
         <div class="action">
             <div class="btn 
                 btn-link 
                 cursor-pointer" 
-                @click="clickEdit(article._id)">Edit</div>
+                @click="clickEdit(article._id)"
+                v-if="menus.list">Edit</div>
             <div class="color-red 
                 fs-17
                 pointer-underline" 
-                @click="clickDelete(article._id)">Delete</div>
+                @click="clickDelete(article._id)"
+                v-if="menus.list">Delete</div>
         </div>
     </div>
     `

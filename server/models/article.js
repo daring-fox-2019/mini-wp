@@ -5,17 +5,20 @@ const {Schema } = mongoose;
 const articleSchema = new Schema({
     title: {
         type: String,
-        required: true,
-        unique: true
+        required: true    
     },
     content: {
         type: String,
         required: true
     },
+    featured_image: {
+        type: String,
+        // required: true
+    },
     created_at: {
         type: Date
     },
-    owner : { type: Schema.Types.ObjectId, ref: 'Member' }    
+    author : { type: Schema.Types.ObjectId, ref: 'Member' } 
 });
 
 articleSchema.pre('save', function() {

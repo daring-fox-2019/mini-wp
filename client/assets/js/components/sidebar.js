@@ -3,9 +3,6 @@ Vue.component('sidebar', {
       toListPage() {
         this.$emit('go-to-list-page')
       },
-      toArticlePage() {
-        this.$emit('go-to-article-page')
-      },
       toHomePage() {
         this.$emit('go-to-home-page')
       }
@@ -35,8 +32,7 @@ Vue.component('sidebar', {
                 list-group-item-action 
                 bg-light
                 cursor-pointer"
-              @click="toArticlePage"
-            >Create Article</li>
+            >About</li>
           </ul>
       </nav>
     </div>

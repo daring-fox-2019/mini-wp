@@ -43,8 +43,8 @@ const app = new Vue({
         if(localStorage.token) {
             this.user.loggedIn = true
             this.user.name=localStorage.name
-            this.goToListPage()
-            this.fetchMyArticles()
+            this.goToHomePage()
+            this.fetchArticles()
         }
     },
     mounted() {
@@ -66,7 +66,7 @@ const app = new Vue({
                 this.user.name=localStorage.name
                 this.user.loggedIn=true
                 this.fetchMyArticles()
-                this.goToListPage()
+                this.goToHomePage()
             })
             .catch(err => {
                 userForm={}
@@ -90,7 +90,7 @@ const app = new Vue({
                 app.user.name=data.name
                 app.user.loggedIn=true
                 app.fetchMyArticles()
-                app.goToListPage()
+                app.goToHomePage()
                 console.log(app.user);
             })
             .catch(err => {
@@ -171,7 +171,10 @@ const app = new Vue({
             let formData = new FormData()
             formData.append('title', this.newArticle.title)
             formData.append('content', this.newArticle.content)
-            formData.append('featured_image', this.newArticle.featured_image)
+
+            if(this.newArticle.featured_image) {
+                formData.append('featured_image', this.newArticle.featured_image)
+            }
             
             let config = {
                 headers: {
@@ -196,7 +199,11 @@ const app = new Vue({
             let formData = new FormData()
             formData.append('title', this.newArticle.title)
             formData.append('content', this.newArticle.content)
-            formData.append('featured_image', this.newArticle.featured_image)
+
+            if(this.newArticle.featured_image) {
+                formData.append('featured_image', this.newArticle.featured_image)
+            }
+
 
             let config = {
                 headers: {
@@ -293,25 +300,36 @@ const app = new Vue({
         goToLoginPage: function() {
             this.menus.login=true
             this.menus.register=false
+            this.menus.home=false
             this.menus.list=false
             this.menus.article=false
         },
         goToRegisterPage: function() {
             this.menus.login=false
             this.menus.register=true
+            this.menus.home=false
+            this.menus.list=false
+            this.menus.article=false
+        },
+        goToHomePage: function() {
+            this.menus.login=false
+            this.menus.register=false
+            this.menus.home=true
             this.menus.list=false
             this.menus.article=false
         },
         goToListPage: function() {
+            this.fetchMyArticles()
             this.menus.login=false
             this.menus.register=false
+            this.menus.home=false
             this.menus.list=true
             this.menus.article=false
         },
         goToArticlePage: function() {
-            this.createPage=true
             this.menus.login=false
             this.menus.register=false
+            this.menus.home=false
             this.menus.list=false
             this.menus.article=true
 

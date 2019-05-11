@@ -6,6 +6,9 @@ Vue.component('myheader', {
         },
         clickLogout() {
             this.$emit('logout')
+        },
+        toArticlePage() {
+            this.$emit('go-to-article-page')
         }
     },
     template: 
@@ -15,9 +18,10 @@ Vue.component('myheader', {
         id="header" 
         class="my-nav 
             my-nav--fixed 
-            black 
+            white 
             border-bottom"
-            style="justify-content: space-between;"
+            style="justify-content: space-between;
+                height: 3.9em;"
         v-show="user.loggedIn"
     >
         <div class="d-flex">
@@ -27,16 +31,31 @@ Vue.component('myheader', {
                     @click="clickMenuToggle"
                     class="btn btn-link
                         cursor-pointer" 
-                ><i class="fas fa-bars color-white"></i></button>
+                ><i class="fas fa-bars color-grey4"></i></button>
             </div>
             <div 
-                class="color-white" 
+                class="color-grey4" 
                 style="margin-left: 35px;
                     margin-top: 6px;"
-            ><i class="fas fa-feather"></i> Miniwp</div>
+            > Miniwp</div>
         </div>
 
-        <div id="navbarSupportedContent" v-if="user.loggedIn">
+        <div 
+            id="navbarSupportedContent" 
+            class="d-flex" 
+            v-if="user.loggedIn"
+            style="width: 10em;
+                justify-content: space-around;"
+        >
+            <div 
+                class="btn 
+                    btn-light 
+                    color-grey4 
+                    cursor-pointer" 
+                @click="toArticlePage"
+            >
+                <i class="fas fa-feather" style="margin-right: 11px;"></i>Write
+            </div>
             <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
                 <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"

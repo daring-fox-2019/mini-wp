@@ -15,6 +15,7 @@ class UserController {
             res.status(201).json(user)
         })
         .catch(err => {
+            console.log(err);
             res.status(400).json({msg: err})
         })
     }
@@ -60,6 +61,7 @@ class UserController {
             }
         })
         .catch(err => {
+            console.log(err);
             res.status(400).json({msg: err})
         })
     }
@@ -115,7 +117,6 @@ class UserController {
         Article.create( {
             name,
             content,
-            owner: localStorage.id
         } )
         .then(article => {
             res.status(201).json(article)
@@ -128,7 +129,7 @@ class UserController {
     static findUserArticle(req, res) {
         const id=req.params.id
 
-        Article.find({owner:id})
+        Article.find({author:id})
         .then(todos=> {
             res.status(201).json(todos)
         })
