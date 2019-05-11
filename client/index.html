@@ -15,9 +15,24 @@
     <!-- wysiwyg CSS -->
     <link rel="stylesheet" type="text/css" href="./wysiwyg/style.css">
     <!-- my CSS -->
-    <link rel="stylesheet" type="text/css" media="screen" href="style.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="./css/style.css">
     <!-- sweetalert2 -->
     <!-- <link rel="stylesheet" href="sweetalert2.min.css" type="text/css"> -->
+    <!-- bootstrapVue JS -->
+    <script src="//unpkg.com/@babel/polyfill@latest/dist/polyfill.min.js"></script>
+    <script src="//unpkg.com/vue@latest/dist/vue.min.js"></script>
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+    <!-- axios JS -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- vue JS -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- swal2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <!-- <script src="sweetalert2.min.js"></script> -->
+    <!-- swal -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <!-- Google Platform Library -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
 </head>
 
 <body>
@@ -177,17 +192,14 @@
 
                     <!-- ADD BLOG SUB-PAGE -->
 
-                    <div v-show="page === 'blog-add-page'" class="blog-add-subpage">
-                        <form class="form-blog-add-subpage" method="POST">
+                    <formadd v-show="page === 'blog-add-page'" class="blog-add-subpage" @addsuccess="listBlog">
+                        <!-- <form class="form-blog-add-subpage" method="POST">
                             <div>
                                 <label for title>Title: </label><br>
                                 <input class="form-control form-control-lg" v-model="blog_title" type="text"
                                     name="title" size="35" placeholder="Your title here.." required>
                             </div><br>
                             <label for editor>Content:</label>
-                            <!-- <div id="editor">
-                            <p>Your content here..</p>
-                        </div><br> -->
                             <div>
                                 <wysiwyg id="editor" v-model="text"></wysiwyg>
                             </div>
@@ -199,8 +211,8 @@
                                 <input type="file" v-on:change="onChangeUpload" required>
                             </div><br>
                             <button class="btn btn-dark" v-on:click.prevent="addBlogg">Add</button>
-                        </form>
-                    </div>
+                        </form> -->
+                    </formadd>
 
                     <!-- EDIT BLOG SUB-PAGE -->
 
@@ -236,25 +248,12 @@
 
         </div>
     </div>
-    <!-- bootstrapVue JS -->
-    <script src="//unpkg.com/@babel/polyfill@latest/dist/polyfill.min.js"></script>
-    <script src="//unpkg.com/vue@latest/dist/vue.min.js"></script>
-    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
-    <!-- axios JS -->
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <!-- vue JS -->
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
     <!-- wysiwyg JS -->
     <script src="./wysiwyg/index.js"></script>
-    <!-- swal2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
-    <!-- <script src="sweetalert2.min.js"></script> -->
-    <!-- swal -->
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <!-- Google Platform Library -->
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <!-- my JS -->
-    <script src="index.js"></script>
+    <script src="./js/components/formadd.js"></script>
+    <script src="./js/index.js"></script>
 </body>
 
 </html>

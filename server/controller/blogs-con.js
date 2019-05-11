@@ -24,6 +24,7 @@ module.exports = {
             })
     },
     create: function (req, res) {
+        console.log('a')
         if (req.body.img) {
             imgSavetoLocale(req, res, function (title, content, createdAt, newFile, author, user) {
                 Blog.create(title, content, createdAt, newFile, author, user)

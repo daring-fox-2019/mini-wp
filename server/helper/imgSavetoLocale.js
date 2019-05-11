@@ -3,10 +3,10 @@ const googleStorage = require('@google-cloud/storage')
 // const gcsHelpers = require('../helpers/google-cloud-storage')
 
 const GOOGLE_CLOUD_PROJECT_ID = "mini-wp-qfs"
-const GOOGLE_CLOUD_KEYFILE = "/home/qoyyima/Documents/Hacktiv8/Phase 2/week2/day1/mini-wp/server/keyfile.json"
+const GOOGLE_CLOUD_KEYFILE = "/home/qoyyima/Documents/Hacktiv8/phase2ke2/week2/day1/mini-wp-1/server/mini-wp-qfs-c352353740cc.json"
 
 const storage = new googleStorage.Storage({
-    projectId: GOOGLE_CLOUD_PROJECT_ID,
+    projectId: "mini-wp-qfs",
     keyFilename: GOOGLE_CLOUD_KEYFILE
 })
 
@@ -29,7 +29,7 @@ module.exports = function (req, res, cb) {
         if (err) {
             console.log(err);
             res.status(500).json({
-                msg: 'Internal server error',
+                msg: err,
             });
         } else {
             console.log(extension)
@@ -68,7 +68,7 @@ sendUploadToGCS = (req, res, cb) => {
 
     stream.on('error', (err) => {
         console.log('bbb')
-
+        console.log(err)
         req.file.cloudStorageError = err;
         res.status(500).json(err.message);
     });

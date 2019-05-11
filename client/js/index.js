@@ -3,24 +3,26 @@ const input = document.querySelector('input[type="file"]')
 let file = null
 
 function onSignIn(googleUser) {
-    var profile = googleUser.getBasicProfile();
-    var id_token = googleUser.getAuthResponse().id_token
-    axios
-        .post("http://localhost:3000/user/login", {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            user_google_email: profile.getEmail(),
-            idToken: id_token
-        })
-        .then(data => {
-            localStorage.setItem('jwtoken', data.data)
-            app.isLoggedIn = true
-            console.log('signed in', data)
-        })
-        .catch(err => {
-            console.log(err.message)
-        })
+    if(googleUser){
+        var profile = googleUser.getBasicProfile();
+        var id_token = googleUser.getAuthResponse().id_token
+        axios
+            .post("http://localhost:3000/user/login", {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                user_google_email: profile.getEmail(),
+                idToken: id_token
+            })
+            .then(data => {
+                localStorage.setItem('jwtoken', data.data)
+                app.isLoggedIn = true
+                console.log('signed in', data)
+            })
+            .catch(err => {
+                console.log(err.message)
+            })
+    }
 }
 
 function getBase64(file) {
@@ -158,43 +160,43 @@ var app = new Vue({
             // input.addEventListener('change', function () {})
             // console.log(input)
         },
-        addBlogg() {
-            if (this.blog_title === "") {
-                swal("A great article always started by a title isn't it?")
-            } else if (this.file === "") {
-                swal('Insert image to make your blog more interesting!')
-            } else {
-                file = this.file
-                const extension = file.name.split('.')[1]
-                const validExtensions = ['png', 'jpg', 'jpeg']
-                if (validExtensions.indexOf(extension) === -1) {
-                    swal('Valid extensions: .png, .jpeg, or .jpg')
-                } else {
-                    getBase64(file)
-                        .then((image) => {
-                            return axios
-                                .post(serverUrl, {
-                                    title: this.blog_title,
-                                    content: this.text,
-                                    createdAt: new Date(),
-                                    img: image,
-                                    extension: extension,
-                                    author: this.author,
-                                }, {
-                                    headers: {
-                                        auth: localStorage.jwtoken
-                                    }
-                                })
-                                .then(() => {
-                                    this.listBlog()
-                                })
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                }
-            }
-        },
+        // addBlogg() {
+        //     if (this.blog_title === "") {
+        //         swal("A great article always started by a title isn't it?")
+        //     } else if (this.file === "") {
+        //         swal('Insert image to make your blog more interesting!')
+        //     } else {
+        //         file = this.file
+        //         const extension = file.name.split('.')[1]
+        //         const validExtensions = ['png', 'jpg', 'jpeg']
+        //         if (validExtensions.indexOf(extension) === -1) {
+        //             swal('Valid extensions: .png, .jpeg, or .jpg')
+        //         } else {
+        //             getBase64(file)
+        //                 .then((image) => {
+        //                     return axios
+        //                         .post(serverUrl, {
+        //                             title: this.blog_title,
+        //                             content: this.text,
+        //                             createdAt: new Date(),
+        //                             img: image,
+        //                             extension: extension,
+        //                             author: this.author,
+        //                         }, {
+        //                             headers: {
+        //                                 auth: localStorage.jwtoken
+        //                             }
+        //                         })
+        //                         .then(() => {
+        //                             this.listBlog()
+        //                         })
+        //                 })
+        //                 .catch((err) => {
+        //                     console.log(err)
+        //                 })
+        //         }
+        //     }
+        // },
         searchBlog() {
             axios
                 .get(serverUrl, {
@@ -355,7 +357,7 @@ var app = new Vue({
             }
         }
     },
-    beforeMount() {
+    created() {
         this.onstart()
         onSignIn()
     }
