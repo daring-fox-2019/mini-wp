@@ -173,7 +173,26 @@ color: #aaa;
     display: inline-flex;
     justify-content: space-between;
 }
+.card-content {
+    width: 96%;
+}
+.itemcard-actions {
+    width: 4%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    left: 10px;
+}
 
+.itemcard-action-btn {
+    font-size: 20px;
+    padding: 5px;
+}
+.itemcard-action-btn:hover {
+    font-size: 20px;
+    padding: 5px;
+    color: red;
+}
 
 /* Media Queries (auto hide sidebars on smaller screen) */
 @media (max-width: 768px) {

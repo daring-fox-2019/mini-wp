@@ -24,8 +24,9 @@ const articleSchema = new Schema({
     slug: {
         type: String
     },
+    comments: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
+    tags: [{type: Schema.Types.ObjectId, ref: 'Tag'}],
     author: {type: Schema.Types.ObjectId, ref: 'User'},
-    comments: [{type: Schema.Types.ObjectId, ref: 'Comment'}]
 })
 
 articleSchema.pre('save', function(next) {

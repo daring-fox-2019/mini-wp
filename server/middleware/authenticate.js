@@ -7,7 +7,7 @@ module.exports = function(req, res, next) {
         
         try {
             payload = jwt.verify(req.headers.authorization)
-            username = payload.email
+            email = payload.email
 
             User.findOne({email: email})
             .then(user => {

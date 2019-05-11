@@ -13,7 +13,7 @@ app.use(cors())
 
 app.use('/', indexRoute)
 
-mongoose.connect(process.env.DB_URI, {useNewUrlParser: true});
+mongoose.connect(process.env.DB_URI, {useNewUrlParser: true, useFindAndModify: false});
 var db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));

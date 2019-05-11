@@ -4,7 +4,15 @@ const Schema  = mongoose.Schema
 const tagSchema = new Schema({
     text: {
         type: String,
-        required: [true, 'tag name is required']
+        required: [true, 'tag name is required'],
+        validate: {
+            validator: function(value) {
+                if(value === '' || value === ' ') {
+                    return false
+                }
+            },
+            msg: 'Must not empty'
+        }
     }
 })
 

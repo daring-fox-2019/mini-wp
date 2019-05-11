@@ -28,6 +28,7 @@ const sendUploadToGCS = (req, res, next) => {
   })
 
   stream.on('error', (err) => {
+    console.log('ERROR ----',err);
     req.file.cloudStorageError = err
     next(err)
   })
@@ -49,7 +50,6 @@ const Multer = require('multer'),
         limits: {
           fileSize: 2 * 1024 * 1024
         },
-        dest: '../img'
       })
 
 module.exports = {

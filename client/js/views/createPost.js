@@ -17,35 +17,40 @@ Vue.component('create-post', {
                 return 'alert alert-dismissible fade alert-success show'
             }
         },
+        getFormData(object) {
+            console.log(object);
+            const formData = new FormData();
+            Object.keys(object).forEach(key => { 
+                if(key === 'featured_image') {
+                    formData.append('featured_image', object[key].data, object[key].name)
+                }
+                else formData.append(key, object[key])
+            });
+            return formData;
+        },
         createPost(data) {
             this.formData = data
-            console.log(this.formData);
-
             uploadingImage = true;
-            this.newArticle.created_at = new Date
+            this.formData.created_at = new Date()
+            const formData = this.getFormData(this.formData)
 
-            const formData = getFormData(this.newArticle)
-            
             const config = {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
+                    // 'Content-Type': 'multipart/form-data',
                     'Authorization': localStorage.miniwp_token
                 }
             };
-
+            
+            
             axios.post(serverURL+'/articles', formData, config)
                 .then(({data}) => {
                     console.log(`created successfully...${data}`);
-                    /* 
-                    this.addArticle()
-                    this.resetNewArticle() */
 
                     this.$root.page = 'index'
                 })
                 .catch(err => {
                     this.status.message = err.response
                 })
-
         }
     },
     template:

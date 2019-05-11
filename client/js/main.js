@@ -68,6 +68,16 @@ var app = new Vue({
     showRegister() {
       this.page = 'register'
     },
+    showUpdatePost(id) {
+      axios.get(serverURL + '/articles/' + id, {headers: {authorization: localStorage.getItem('miniwp_token')}})
+      .then(({data}) => {
+        console.log('updated post...')
+      })
+      .catch(({response}) => {
+        console.log(response);
+      })
+      this.page = 'updatePost'
+    },
   },
   created() {
     if(localStorage.getItem('miniwp_token')) {

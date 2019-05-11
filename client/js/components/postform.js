@@ -8,9 +8,9 @@ Vue.component('postform', {
         return {
             formData: {
                 title: '',
-                feature_image: '',
+                featured_image: '',
                 content: '',
-                createdat: '',
+                created_at: '',
                 author: '',
                 tags: [],
             },
@@ -22,15 +22,22 @@ Vue.component('postform', {
     },
     computed: {
         filteredTags: function() {
-            let filtered =  this.availableTags.filter(i => {
-              return i.toLowerCase().indexOf(this.tag.toLowerCase()) !== -1;
-            });
+            let filtered
+            if(this.availableTags && this.availableTags.length > 0) {
+                filtered =  this.availableTags.filter(x => {
+                  return x.text.indexOf(this.tag.toLowerCase()) !== -1;
+                });
+    
+                filtered = filtered.map(x => {
+                    return {text: x.text}
+                })
+                
+                return filtered
+            }
+            else {
+                return []
+            }
 
-            filtered = filtered.map(x => {
-                return {text: x}
-            })
-
-            return filtered
         }
     },
     created() {
@@ -51,17 +58,20 @@ Vue.component('postform', {
                 })
             })
             .catch(err => {
-                console.log(err.response.data);
+                console.log(err.response);
             })
         },
         refreshTags(newTags) {
-            this.formData.tags = newTags;
+            this.formData.tags = newTags
         },
         processSubmit() {
-            if(this.$props.type === 'create') {
-                this.tags.map(x => {
-                    this.formData.tags.push(x.text.toLowerCase())
+            if(this.formData.tags && this.formData.tags.length > 0) {
+                this.formData.tags = this.formData.tags.map(x => {
+                    return x.text
                 })
+            }
+
+            if(this.$props.type === 'create') {
                 this.$emit('create', this.formData)
             }
             else {
@@ -70,7 +80,7 @@ Vue.component('postform', {
         },
         onTakeImage(data) {
             console.log('image loaded...');
-            this.formData.feature_image = data
+            this.formData.featured_image = data
         }
     },
     template: 
