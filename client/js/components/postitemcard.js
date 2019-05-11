@@ -8,7 +8,16 @@ Vue.component('postitemcard', {
     computed: {
         formattedDate: function() {
             return moment(new Date(this.$props.post.created_at)).format('MMM DD, YYYY')
-        }
+        },
+        cardImage() {
+            console.log(this.$props.post.featured_image);
+            if(this.$props.post.featured_image) {
+                return this.$props.post.featured_image
+            }
+            else {
+                return "https://storage.googleapis.com/miniwp-images/user.png"
+            }
+        },
     },
     methods: {
         updatePost(id) {
@@ -32,10 +41,10 @@ Vue.component('postitemcard', {
                     <tag-badge class="mr-1" v-for="(tag,i) in post.tags" :key="i" :tag="tag"></tag-badge>
                 </div>
             </div>
-            <div class="ml-3"><img style="width: 150px; height:100%;" src="img/user.png"></div>
+            <div class="ml-3"><img style="width: 150px; height:100%;" v-bind:src="cardImage"></div>
         </a>
         <div class="itemcard-actions" v-show="showActionButtons">
-            <a href="#" class="itemcard-action-btn" v-on:click="updatePost(post._id)"><i class="fas fa-edit"></i></a>
+            <a href="#" class="itemcard-action-btn" v-on:click="$root.showUpdatePost(post._id)"><i class="fas fa-edit"></i></a>
             <a href="#" class="itemcard-action-btn" v-on:click="deletePost(post._id)"><i class="fas fa-trash-alt"></i></a>
         </div>
     </div>

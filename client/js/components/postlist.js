@@ -9,7 +9,7 @@ Vue.component('postlist', {
     },
     methods: {
         getPosts() {
-            axios.get(serverURL + '/articles',{headers: {authorization: this.$root.headers.authorization}})
+            axios.get(serverURL + '/articles',this.$root.config)
                 .then(({data}) => {
                     console.log(data);
                     this.posts = data
@@ -19,13 +19,22 @@ Vue.component('postlist', {
                 })
         },
         deletePost(id) {
-            axios.delete(serverURL + '/articles/' + id, {headers: this.$root.headers.authorization})
+            console.log('delete...', id, this.$root.config);
+            axios({
+                method: 'DELETE',
+                url: serverURL + '/articles/' + id, 
+                headers: this.$root.config.headers,
+            })
                 .then(({data}) => {
-                    console.log('deleted...');
                     this.getPosts()
+                    this.posts = this.posts.filter(x => x._id !== id)
                 })
-                .catch(({response}) => {
-                    console.log(response);
+                .catch((err) => {
+                    swal.fire({
+                        title: 'Error!',
+                        text: err,
+                        type: 'error',
+                    })
                 })
         },
         updatePost(id) {
@@ -34,6 +43,8 @@ Vue.component('postlist', {
     },
     template: 
     `<div class="list-group post-list">
-        <postitemcard v-for="post in posts" :post="post" :key="post._id" @updatePost="updatePost" @deletePost="deletePost"></postitemcard>
+        <postitemcard v-for="post in posts" 
+            :post="post" :key="post._id" 
+            @updatePost="updatePost" @deletePost="deletePost"></postitemcard>
     </div>`
 })

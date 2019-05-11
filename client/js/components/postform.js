@@ -40,9 +40,16 @@ Vue.component('postform', {
 
         }
     },
-    created() {
+    mounted() {
         $('[data-toggle="tooltip"]').tooltip();
         this.getTags();
+
+        //populate tags if the current mode is update
+        this.formData.tags.forEach(x => {
+            this.tags.push(x.text)
+        })
+        this.formData = data
+        this.formData.featured_image = data.featured_image
     },
     methods: {
         getTags() {

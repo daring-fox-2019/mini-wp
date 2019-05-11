@@ -1,6 +1,5 @@
 const Article = require('../models/article')
 const Tag = require('../models/tag')
-const ObjectId = require('mongoose').ObjectId
 
 class ArticleController {
     static findAll(req, res) {
@@ -13,7 +12,7 @@ class ArticleController {
                     x.author = req.user.name
                     return x
                 })
-                console.log(result);
+
                 res.status(200).json(result)
             }
             else {
@@ -27,7 +26,7 @@ class ArticleController {
     }
 
     static create(req, res) {
-        let article = {}, tagIds = [], promiseAll = []
+        let article = {}, tagIds = [], promises = []
 
         for(let key of Object.keys(req.body)) {
             if(key !== '_id') {
@@ -35,8 +34,15 @@ class ArticleController {
             }
         }
 
-        /* article.featured_image_name = req.file.cloudStorageObject
-        article.featured_image = req.file.cloudStoragePublicUrl */
+        if(req.file) {
+            article.featured_image_name = req.file.cloudStorageObject
+            article.featured_image = req.file.cloudStoragePublicUrl
+        }
+        else {
+            article.featured_image_name = 'user.png'
+            article.featured_image = "https://storage.googleapis.com/miniwp-images/user.png"
+        }
+
         article.author = req.user._id
 
         //process tags
@@ -44,14 +50,15 @@ class ArticleController {
 
         article.tags.forEach(x => {
             if(!x) {
-                promiseAll.push(Tag.findOneAndUpdate({text: x}, {text: x}, {upsert: true, new: true}))
+                promises.push(Tag.findOneAndUpdate({text: x}, {$setOnInsert: {text: x}}, {upsert: true, new: true}))
             }
         });
 
-        Promise.all(promiseAll)
-            .then(results => {
-                console.log('hasil promise all', results);
+        console.log('alll ', promises);
 
+        Promise.all(promises)
+            .then(results => {
+                console.log('hasil promise all ------> ', results);
                 article.tags = results.map(x => x._id)
 
                 Article.create(article)
@@ -59,12 +66,12 @@ class ArticleController {
                     res.status(201).json(newArticle)
                 })
                 .catch(err => {
-                    console.log(`article error...${err}`);
+                    console.log(`create article error...${err}`);
                     res.status(500).json(err)
                 })
             })
             .catch(err => {
-                console.log(err.message);
+                console.log('promise all error ', err);
             })
     }
 
@@ -84,6 +91,7 @@ class ArticleController {
     }
 
     static delete(req, res) {
+        console.log('masuk barangtu..');
         Article.findOneAndDelete({_id: req.params.id})
             .then(article => {
                 console.log(`delete successfully...`);

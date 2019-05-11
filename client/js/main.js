@@ -30,14 +30,15 @@ var serverURL = 'http://localhost:3000';
 var app = new Vue({
   el: '#miniWP',
   data: {
-    headers: {authorization: localStorage.getItem('miniwp_token')},
+    config: null,
     isLogin: false,
     page: '',
     user: {
       _id: '',
       email: '',
       name: '',
-    }
+    },
+    currentPost: null,
   },
   methods: {
     loginSuccess() {
@@ -69,9 +70,12 @@ var app = new Vue({
       this.page = 'register'
     },
     showUpdatePost(id) {
-      axios.get(serverURL + '/articles/' + id, {headers: {authorization: localStorage.getItem('miniwp_token')}})
+      axios.get(serverURL + '/articles/' + id, this.config)
       .then(({data}) => {
         console.log('updated post...')
+        this.currentPost = data
+        this.page = 'updatePost'
+        
       })
       .catch(({response}) => {
         console.log(response);
@@ -83,6 +87,12 @@ var app = new Vue({
     if(localStorage.getItem('miniwp_token')) {
       this.isLogin = true
       this.page = 'index'
+      this.config = {
+        headers: {
+            // 'Content-Type': 'multipart/form-data',
+            'Authorization': localStorage.miniwp_token
+        }
+    };
     }
     else {
       this.isLogin = false;

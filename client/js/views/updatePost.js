@@ -1,4 +1,5 @@
 Vue.component('update-post', {
+    props: ['initData'],
     data() {
         return {
             formData: null,
@@ -44,6 +45,6 @@ Vue.component('update-post', {
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <postform type="update" v-on:update="updatePost"></postform>
+        <postform type="update" v-on:update="updatePost" :data="initData"></postform>
     </div>`
 })

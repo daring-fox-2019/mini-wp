@@ -1,7 +1,7 @@
 const Article = require('../models/article')
 
 module.exports = function(req, res, next) {
-    let id
+    let id = req.params.id
     Article.findOne({_id: id})
             .then(article => {
                 if(article) {

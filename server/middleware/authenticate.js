@@ -4,7 +4,6 @@ const User = require('../models/user')
 module.exports = function(req, res, next) {
     if(req.headers.authorization) {
         let payload
-        
         try {
             payload = jwt.verify(req.headers.authorization)
             email = payload.email
