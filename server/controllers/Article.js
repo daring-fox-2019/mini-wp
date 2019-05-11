@@ -2,13 +2,10 @@ const ArticleModel = require('../models/Article')
 
 class Article {
   static findAll (req, res) {
-    let query = {
-      authorId: req.user.id
-    }
+    let query = {}
 
     if (req.query.q) {
       query = {
-        ...query,
         $or: [{
           title: {
             $regex: new RegExp(`.*${req.query.q}.*`, 'i')
@@ -25,6 +22,7 @@ class Article {
 
     ArticleModel
       .find(query)
+      .populate('authorId')
       .then(articles => res.status(200).json({ articles }))
       .catch(() => res.status(500).json({ message: 'Internal Server Error' }))
   }

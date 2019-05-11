@@ -1,7 +1,9 @@
 Vue.component('ListArticle', {
   props: ['login', 'articles'],
   data: function () {
-    return {}
+    return {
+
+    }
   },
   mounted: function () {
     this.$emit('mounted')
@@ -18,7 +20,7 @@ Vue.component('ListArticle', {
         <div class="row justify-content-center mt-5">
           <div class="col-8 px-3 mt-4">
             <div class="text-center mb-3">
-              <div class="text-left" style="position: absolute; top: 0; right: -80px;">
+              <div class="text-left" style="position: absolute; top: 0; right: -80px;" v-if="login.user._id === article.authorId._id">
                 <div>
                   <a
                     href="#"
@@ -42,7 +44,7 @@ Vue.component('ListArticle', {
               <small
                 class="text-secondary"
                 style="line-height: 1em; letter-spacing: 0.1em;"
-                >Posted on <span class="text-dark">{{ moment(article.createdAt).format('LL') }}</span></small
+                >Posted by <span class="text-dark">{{ article.authorId.email }}</span> on <span class="text-dark">{{ moment(article.createdAt).format('LL') }}</span></small
               >
             </div>
             <figure class="mb-5">

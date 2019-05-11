@@ -1,7 +1,7 @@
 moment.locale('id')
 
 var axios = axios.create({
-  baseURL: 'http://localhost:3000'
+  baseURL: 'http://api.mini-wp.afdallismen.me'
 })
 
 Vue.use(CKEditor)
@@ -9,11 +9,12 @@ Vue.use(CKEditor)
 new Vue({
   el: '#app',
   data: {
+    googleSignout: false,
     login: {
       user: {},
       token: ''
     },
-    page: 'login',
+    page: 'list-article',
     articles: [],
     selectedArticle: '',
     searchQuery: ''
@@ -30,19 +31,12 @@ new Vue({
         user: JSON.parse(localStorage.getItem('miniwp_user')),
         token: localStorage.getItem('miniwp_token')
       }
-
-      axios.get('/articles', {
-        headers: {
-          Authorization: this.login.token
-        }
-      })
-        .then(({ data }) => {
-          this.articles = data.articles
-        })
-        .catch(err => console.log(err))
-
-      this.page = 'list-article'
     }
+    axios.get('/articles')
+      .then(({ data }) => {
+        this.articles = data.articles
+      })
+      .catch(err => console.log(err))
   },
   methods: {
     handleRegister: function (data) {
@@ -53,6 +47,10 @@ new Vue({
       this.page = 'list-article'
     },
     logout: function () {
+      try {
+        gapi.auth2.getAuthInstance().signOut()
+      } catch (e) {}
+      this.googleSignout = true
       this.login = {
         user: {},
         token: ''
@@ -63,7 +61,7 @@ new Vue({
       if (link === 'logout') {
         this.logout()
       } else if (link === 'home') {
-        this.page = this.login.token ? 'list-article' : 'login'
+        this.page = 'list-article'
       } else {
         this.page = link
       }
@@ -97,11 +95,7 @@ new Vue({
     },
     handleClickSearch: function () {
       axios
-        .get(`/articles?q=${this.searchQuery}`, {
-          headers: {
-            Authorization: this.login.token
-          }
-        })
+        .get(`/articles?q=${this.searchQuery}`)
         .then(({ data }) => {
           this.articles = data.articles
         })
@@ -110,6 +104,18 @@ new Vue({
     handleClickTag: function (tag) {
       this.searchQuery = tag
       this.handleClickSearch()
+    },
+    handleGoogleSigned: function (id_token) {
+      if (!this.googleSignout) {
+        axios
+          .post('/auth/google-signin', { id_token })
+          .then(({ data }) => {
+            this.handleLogin(data)
+          })
+          .catch(err => console.log(err))
+      } else {
+        this.googleSignout = false
+      }
     }
   }
 })
