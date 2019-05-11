@@ -73,7 +73,7 @@ class ArticleController {
                       }
                     })
                 })           
-                let url = req.file ? req.file.cloudStoragePublicUrl : '';
+                let url = req.file ? req.file.cloudStoragePublicUrl : req.body.image;
                 let foundUpdated = await Article.findOneAndUpdate({_id : req.params.id}, {$set : {...req.body, image : url, tags : tagListFromDb,  userId: req.authenticatedUser.id}}, {new : true})
                 if (foundUpdated) res.status(200).json(foundUpdated)
                 else res.status(404).json({ message: `No such id exist` })

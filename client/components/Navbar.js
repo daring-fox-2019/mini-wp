@@ -20,8 +20,10 @@ Vue.component('navbar', {
     },
     seeStories() {
       console.log('hhuahah');
-      
       this.$emit('changestories')
+    },
+    writeStories() {
+      this.$emit('writestories')
     },
     home() {
       this.$emit('gethome')
@@ -60,7 +62,9 @@ Vue.component('navbar', {
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                   <button class="dropdown-item" type="button">Profile</button>
-                  <button v-on:click.prevent="seeStories" class="dropdown-item" type="button">Stories</button>
+                  <button v-on:click.prevent="seeStories" class="dropdown-item" type="button">See Stories</button>
+                  <button v-on:click.prevent="writeStories" class="dropdown-item" type="button">Write Story</button>
+
                   <div class="dropdown-divider"></div>
                   <button class="dropdown-item" type="button">Suprise Me</button>
                 </div>

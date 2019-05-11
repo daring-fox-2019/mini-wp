@@ -62,7 +62,11 @@
         <navbar v-on:sign-out="userSignOut" v-on:changestories="changestories" v-bind:is-login="isLogin"
             v-on:gethome="gethome" 
             v-on:searchtag="searchtag"
-            v-bind:current-page="currentPage" v-bind:user-image="userImage" v-on:search="search">
+            v-bind:current-page="currentPage"
+            v-bind:user-image="userImage"
+            v-on:search="search"
+            v-on:writestories="writestories"
+            >
         </navbar>
         <!-- NAVBAR ENDS HERE -->
 
@@ -141,7 +145,7 @@
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
                         aria-controls="nav-home" aria-selected="true">Home</a>
-                    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" :href="href" role="tab"
+                    <a class="nav-item nav-link"id="nav-profile-tab" data-toggle="tab" :href="href" role="tab"
                         aria-controls="nav-profile" aria-selected="false">My Likes</a>
                 </div>
             </nav>
@@ -154,52 +158,68 @@
                     </div>
                 </div>
                 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-                    <br>
-                    <h3>Your Story Goes Here</h3>
-                    <div class="form-group">
-                        <input v-model="articleTitle" type="text" class="form-control" id="formGroupExampleInput"
-                            placeholder="Write an eye-catching hook">
-                    </div>
-                    <wysiwyg v-model="articleBody"></wysiwyg>
-                    <small class="mt-2 mb-2">We automatically generate tags for you based on your featured image. You
-                        may delete tags you don't want or add a custom tag : </small>
-                    <div class="custom-file col-md-6">
-                        <input v-on:change="getImage" type="file" class="custom-file-input" id="customFile">
-
-                        <label class="mt-2 mb-2 custom-file-label" for="customFile">Add Featured Image To Reach More
-                            People</label>
-                    </div>
-                    <br><br>
-                    <form v-on:submit.prevent="createTagInputUser" class="form-inline">
-                        <div class="form-group mb-2">
-                            <label for="usertag" class="sr-only">More tags..</label>
-                            <input v-model="inputTag" type="text" value="">
-                        </div>
-                        <button type="submit" class="btn-sm btn btn-light mb-2">Insert Tag One By One</button>
-                    </form>
-                    <br>
-
-                    <div class="row">
-                        <div v-for="(tag, index) in currentTags" :key="index">
-                            <chips 
-                            v-on:deletetag="deletetag(tag)"
-                            v-bind:namanya="tag"
-                            >
-                            <i v-on:click.prevent="deletetag(tag)" class="ml-2 fas fa-times"></i>
-                            </chips>
-                        </div>
-                    </div>
-                    <button v-if="!editor" @click.prevent="postArticle" class="btn btn-light mt-2" type="submit"
-                        name="action">Submit</button>
-                    <button v-if="editor" @click.prevent="patchArticle()" class="btn btn-light mt-2" type="submit"
-                        name="action">Edit</button>
-                    <button id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
-                    aria-controls="nav-home" aria-selected="true" @click.prevent="changestories" class="btn btn-light mt-2" type="submit"
-                        name="action">Cancel</button>
-                </div>
+                   <!-- INI BAGIAN LIKES -->
             </div>
         </div>
+    </div>
         <!-- END OF MY STORIES -->
+
+
+
+        <!-- START ON WRITE STORIES -->
+        <div class = "container">
+            <div v-if="currentPage == 'writePage' ">
+                <br>
+                <h3>Your Story Goes Here</h3>
+                <div class="dropdown-divider"></div>
+
+                <div class="form-group">
+                    <input v-model="articleTitle" type="text" class="form-control" id="formGroupExampleInput"
+                        placeholder="Write an eye-catching hook">
+                </div>
+                <wysiwyg v-model="articleBody"></wysiwyg>
+                <small class="mt-2 mb-2">We automatically generate tags for you based on your featured image. You
+                    may delete tags you don't want or add a custom tag : </small>
+                <div class="custom-file col-md-6">
+                    <input v-on:change="getImage" type="file" class="custom-file-input" id="customFile">
+        
+                    <label class="mt-2 mb-2 custom-file-label" for="customFile">Add Featured Image To Reach More
+                        People</label>
+                </div>
+                <br><br>
+                <form v-on:submit.prevent="createTagInputUser" class="form-inline">
+                    <div class="form-group mb-2">
+                        <label for="usertag" class="sr-only">More tags..</label>
+                        <input v-model="inputTag" type="text" value="">
+                    </div>
+                    <button type="submit" class="btn-sm btn btn-light mb-2">Insert Tag One By One</button>
+                </form>
+                <br>
+        
+                <div class="row">
+                    <div v-for="(tag, index) in currentTags" :key="index">
+                        <chips 
+                        v-on:deletetag="deletetag(tag)"
+                        v-bind:namanya="tag"
+                        >
+                        <i v-on:click.prevent="deletetag(tag)" class="ml-2 fas fa-times"></i>
+                        </chips>
+                    </div>
+                </div>
+                <button v-if="!editor" @click.prevent="postArticle" class="btn btn-light mt-2" type="submit"
+                    name="action">Submit</button>
+                <button v-if="editor" @click.prevent="patchArticle()" class="btn btn-light mt-2" type="submit"
+                    name="action">Edit</button>
+                <button id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
+                aria-controls="nav-home" aria-selected="true" @click.prevent="changestories" class="btn btn-light mt-2" type="submit"
+                    name="action">Cancel</button>
+            </div>
+        </div>
+
+
+
+
+        <!-- END ON WRITE STORIES -->
 
         <!-- START OF FULL ARTICLE -->
 

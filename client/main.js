@@ -180,18 +180,26 @@ new Vue({
                 this.user.myArticles = data
                 this.currentPage = 'myStory'
                 console.log((data));
-                
             })
             .catch(err => {
                 console.log(err);
                 
             })
         },
+        writestories(id) {
+            this.articleBody = ''
+            this.articleTitle = ''
+            this.currentTags = []
+
+            this.currentPage = "writePage"
+        },
         editarticle(id) {
             Axios.get(`/articles/${id}`, {headers: {
                 'token': localStorage.getItem('token')
             }})
             .then(({data}) => {
+                console.log(data, 'ITU APA YA?S');
+                
                 this.currentArticle = data
                 this.editor = true
                 this.articleBody = data.content
@@ -201,8 +209,7 @@ new Vue({
                 data.tags.forEach(tag => {temp.push(tag.tagName)})
                 this.currentTags = temp
 
-                this.href = '#nav-profile'
-                // id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false"  
+                this.currentPage = "writePage"
             })
             .catch(err => {
                 console.log(err);

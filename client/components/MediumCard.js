@@ -56,7 +56,7 @@ Vue.component('mediumcard', {
 
         <button v-show="art.userId._id == userId"  class="btn button-like float-sm-left" >
         <i class="fas fa-edit"></i>
-        <span id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false" @click="editArticle(art._id)" >Edit</span>
+        <span @click="editArticle(art._id)" >Edit</span>
         </button>
 
         </div>
