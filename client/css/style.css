@@ -1,4 +1,15 @@
 .scroll {
     height:89vh;
     overflow-y: scroll;
-  } 
+    overflow-x:hidden;
+  }
+
+  body {
+    overflow-x:hidden;
+    padding-top: 49px;
+    padding-bottom: 50px;
+  }
+  .navbar{
+    background-color:#286087;
+  }
+  
