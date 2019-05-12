@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="google-signin-client_id"
+    content="554072221554-qvkbt2crc407q4str3ckl8h7s1mo8qah.apps.googleusercontent.com">
+
+  <title>WordTree</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Just+Another+Hand|Architects+Daughter" rel="stylesheet">
+  <!-- Material Design Icons -->
+  <link rel="stylesheet" href="https://cdn.materialdesignicons.com/2.5.94/css/materialdesignicons.min.css">
+  <!-- Font Awesome 5 -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
+  <!-- Buefy -->
+  <link rel="stylesheet" href="./lib/buefy.css">
+  <!-- WYSIWYG -->
+  <link rel="stylesheet" href="./lib/vueWysiwyg.css">
+  <!-- Website Icon -->
+  <link rel="icon" href="./src/img/lemon-tree.png">
+  <link rel="stylesheet" href="./src/css/custom-button.css">
+  <link rel="stylesheet" href="./src/css/margin-padding.css">
+  <link rel="stylesheet" href="./src/css/main.css">
+
+  <script src="https://apis.google.com/js/platform.js" defer></script>
+</head>
+
+<body>
+  <div id="app">
+    <div id="before-login" v-show="!isLoggedIn">
+
+      <div class="container" id="container-before-login">
+
+        <div class="card" id="card-before-login">
+          <div class="card-image" id="card-image-before-login">
+            <img src="./src/img/home-page-earth-cute.gif" alt="Earth cute gif" style="height: 150px; width: auto;">
+          </div>
+          <div class="card-content" id="card-content-before-login" style="color: rgb(247, 255, 247)">
+
+            <div class="content">
+
+              <div id="word-tree" v-show="currentPage === 'homePage'">
+                <div class="columns">
+                  <div class="column"
+                    style="text-align: center; font-family: 'Just Another Hand', cursive; letter-spacing: 0.3rem;">
+                    <div style="font-size: 4.5rem;">
+                      <div class="columns flex-center">
+                        <div class="column pb-0">
+                          <img src="./src/img/home-page-tree.png" alt="Tree">
+                        </div>
+                        <div class="column pb-0">
+                          WordTree
+                        </div>
+                        <div class="column pb-0">
+                          <img src="./src/img/home-page-tree.png" alt="Tree">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="columns">
+                  <div class="column"
+                    style="text-align: center; font-family: 'Just Another Hand', cursive; letter-spacing: 0.3rem;">
+                    <div style="font-size: 2.5rem;">
+                      Create a blog with ease
+                    </div>
+                  </div>
+                </div>
+
+                <div class="columns">
+                  <div class="column flex-center">
+                    <b-button @click="changeState('login')" type="is-custom-button" inverted>Login</b-button>
+                    <b-button @click="changeState('register')" class="ml-2" type="is-custom-button">Register</b-button>
+                  </div>
+                </div>
+              </div>
+
+              <div id="login-form" v-show="currentPage === 'login'">
+                <label for="login-form-username" class="label" style="color: rgb(247, 255, 247)">Username</label>
+                <b-field>
+                  <b-input id="login-form-username" type="text" v-model="loginForm.username" icon-pack="fas" icon="user"
+                    @keyup.native.enter="submitLogin">
+                  </b-input>
+                </b-field>
+                <label for="login-form-password" class="label" style="color: rgb(247, 255, 247)">Password</label>
+                <b-field>
+                  <b-input id="login-form-password" type="password" v-model="loginForm.password" icon-pack="fas"
+                    icon="unlock-alt" @keyup.native.enter="submitLogin" password-reveal>
+                  </b-input>
+                </b-field>
+                <b-button class="is-fullwidth mt-3" @click="submitLogin" type="is-custom-button">Login</b-button>
+                <b-button class="is-fullwidth mt-2" @click="changeState('homePage')" type="is-custom-button" inverted>
+                  Cancel</b-button>
+
+                <div class="columns is-gapless" id="or-text-row">
+                  <div class="column is-two-fifths">
+                    <hr>
+                  </div>
+                  <div class="column" id="or-text-col">
+                    <span id="or-text">OR</span>
+                  </div>
+                  <div class="column is-two-fifths">
+                    <hr>
+                  </div>
+                </div>
+
+                <div class="columns">
+                  <div class="column">
+                    <div class="g-signin2" data-onsuccess="onSignIn" data-longtitle="true"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="register-form" v-show="currentPage === 'register'">
+                <label for="register-form-username" class="label" style="color: rgb(247, 255, 247)">Username</label>
+                <b-field>
+                  <b-input id="register-form-username" type="text" v-model="registerForm.username" icon-pack="fas"
+                    icon="user" @keyup.native.enter="submitRegister">
+                  </b-input>
+                </b-field>
+                <label for="login-form-fullName" class="label" style="color: rgb(247, 255, 247)">Full Name</label>
+                <b-field>
+                  <b-input id="login-form-fullName" type="text" v-model="registerForm.fullName" icon-pack="fas"
+                    icon="user" @keyup.native.enter="submitLogin">
+                  </b-input>
+                </b-field>
+                <label for="register-form-password" class="label" style="color: rgb(247, 255, 247)">Password</label>
+                <b-field>
+                  <b-input id="register-form-password" type="password" v-model="registerForm.password" icon-pack="fas"
+                    icon="unlock-alt" @keyup.native.enter="submitRegister" password-reveal>
+                  </b-input>
+                </b-field>
+                <b-button class="is-fullwidth mt-3" @click="submitRegister" type="is-custom-button">Register</b-button>
+                <b-button class="is-fullwidth mt-2" @click="changeState('homePage')" type="is-custom-button" inverted>
+                  Cancel</b-button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+      </div>
+
+
+
+
+    </div>
+
+    <div id="after-login" v-if="isLoggedIn">
+
+      <div id="main-page" style="height: 100vh; overflow: hidden;"
+        :class="{ overflowVisible: 
+          currentPage === 'afterLoginNewPost' || 
+          currentPage === 'afterLoginHome' || 
+          currentPage === 'afterLoginViewPost' ||
+          currentPage === 'afterLoginBrowse'
+        }">
+        <nav id="nav-after-login" class="navbar">
+
+          <div class="ml-3">
+            <div class="columns flex-center is-gapless">
+              <div class="column">
+                <a>
+                  <img src="./src/img/lemon-tree.png" alt="Logo" style="height: 50px;">
+                </a>
+              </div>
+              <div class="column ml-3">
+                <h1
+                  style="font-family: 'Just Another Hand', cursive; letter-spacing: 0.3rem; font-size: 2.5rem; cursor: pointer;">
+                  WordTree
+                </h1>
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="mr-3">
+            <b-dropdown hoverable aria-role="list">
+              <button class="button is-warning" inverted slot="trigger">
+                <span><i class="fas fa-user" style="margin-right: 0.3rem;"></i> {{ fullName }}</span>
+                <b-icon icon="menu-down"></b-icon>
+              </button>
+
+              <b-dropdown-item aria-role="listitem" @click="changeState('afterLoginProfile')">Profile</b-dropdown-item>
+              <b-dropdown-item aria-role="listitem" @click="logout">Logout</b-dropdown-item>
+            </b-dropdown>
+          </div>
+
+        </nav>
+
+        <div class="columns is-gapless" style="min-height: 100vh;">
+          <div class="column is-one-fifth" id="sidebar-after-login" style="text-align: center">
+
+            <div class="flex-center">
+              <hr class="hr-sidebar">
+            </div>
+            <div class="sidebar-link" @click="changeState('afterLoginHome')">
+              Home
+            </div>
+            <div class="flex-center">
+              <hr class="hr-sidebar">
+            </div>
+            <div class="sidebar-link" @click="changeState('afterLoginNewPost')">
+              New Post
+            </div>
+            <div class="flex-center">
+              <hr class="hr-sidebar">
+            </div>
+            <div class="sidebar-link" @click="changeState('afterLoginBrowse')">
+              Browse
+            </div>
+
+
+
+          </div>
+
+          <div class="column" id="content-after-login">
+
+            <div id="after-login-home" v-if="currentPage === 'afterLoginHome'">
+              <div class="container">
+                <div class="columns">
+                  <div class="column">
+                    <b-field>
+                      <b-input placeholder="Search..." type="search" icon="magnify" v-model="search">
+                      </b-input>
+                    </b-field>
+                  </div>
+                </div>
+                <div class="columns is-multiline">
+
+                  <div class="column is-one-third" v-for="(article, index) in filteredArticles" :key="index">
+                    <article-component :article="article" @read-more="currentArticle" @update-search="updateSearch">
+                    </article-component>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div id="after-login-new-post" v-if="currentPage === 'afterLoginNewPost'">
+              <div class="container" v-if="!isLoading">
+
+                <b-field label="Blog Image">
+                  <b-upload v-model="article.dropFiles" multiple drag-drop>
+                    <section class="section">
+                      <div class="content has-text-centered">
+                        <p>
+                          <b-icon icon="upload" size="is-large">
+                          </b-icon>
+                        </p>
+                        <p>Drop your files here or click to upload</p>
+                      </div>
+                    </section>
+                  </b-upload>
+                </b-field>
+
+                <div class="tags">
+                  <span v-for="(file, index) in article.dropFiles" :key="index" class="tag is-primary">
+                    {{file.name}}
+                    <button class="delete is-small" type="button" @click="deleteDropFile(index)">
+                    </button>
+                  </span>
+                </div>
+
+
+                <div class="field">
+                  <label class="label" for="article-title">Title</label>
+                  <div class="control">
+                    <input id="article-title" class="input is-rounded" type="text" v-model="article.title">
+                  </div>
+                </div>
+                <b-field label="Tags">
+                  <b-taginput v-model="article.tags" ellipsis icon="label" placeholder="Add a tag">
+                  </b-taginput>
+                </b-field>
+
+                <b-field label="Visibility">
+                  <b-select placeholder="Select a character" rounded required v-model="article.visibility">
+                    <option value="private">Private</option>
+                    <option value="public">Public</option>
+                  </b-select>
+                </b-field>
+
+                <b-field label="Content">
+                  <wysiwyg v-model="article.content"></wysiwyg>
+                </b-field>
+                <b-button type="is-success" @click="submitArticle" v-if="!isEdit">Add Post</b-button>
+                <b-button type="is-success" @click="updateArticle" v-else>Edit Post</b-button>
+                <b-button type="is-danger" outlined @click="changeState('afterLoginHome')">Cancel</b-button>
+
+              </div>
+
+              <div v-else>
+                <div class="container" style="display: flex; justify-content: center; padding-top: 10%;">
+                  <img src="./src/img/loading.gif" alt="Loading Gif" style="border-radius: 50%;">
+                </div>
+              </div>
+            </div>
+
+            <div id="after-login-view-post" v-if="currentPage === 'afterLoginViewPost'">
+              <div class="container">
+                <div class="columns">
+                  <div class="column" style="font-size: 2rem; font-weight: bold; padding-bottom: 0;">
+                    {{ selectedArticle.title }}
+                  </div>
+                </div>
+
+                <div class="columns">
+                  <div class="column">
+
+                    <div class="media">
+                      <div class="media-left">
+                        <figure class="image is-48x48">
+                          <img :src="selectedArticle.displayPicture" alt="Placeholder image">
+                        </figure>
+                      </div>
+                      <div class="media-content">
+                        <p class="title is-4">{{ selectedArticle.fullName }}</p>
+                        <p class="subtitle is-6">@{{ selectedArticle.username }}</p>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="columns">
+                  <div class="column">
+                    <img :src="selectedArticle.featuredImage" alt="Featured Image">
+                  </div>
+                </div>
+                <div class="columns">
+                  <div class="column" v-html="selectedArticle.content"></div>
+                </div>
+                <div class="columns">
+                  <div class="column">
+                    <b-button type="is-success" @click="editArticle(selectedArticle)" v-if="isAuthorized">Edit</b-button>
+                    <b-button type="is-danger" @click="deleteArticle()" v-if="isAuthorized">Delete</b-button>
+                    <b-button type="is-danger" @click="changeState('afterLoginHome')" outlined>Back</b-button>
+                  </div>
+                </div>
+                <div class="columns">
+                  <div class="column"></div>
+                </div>
+                <div class="columns">
+                  <div class="column"></div>
+                </div>
+              </div>
+
+            </div>
+
+            <div id="after-login-browse" v-if="currentPage === 'afterLoginBrowse'">
+              <div class="container">
+                <div class="columns">
+                  <div class="column">
+                    <b-field>
+                      <b-input placeholder="Search..." type="search" icon="magnify" v-model="searchAll">
+                      </b-input>
+                    </b-field>
+                  </div>
+                </div>
+                <div class="columns is-multiline">
+
+                  <div class="column is-one-third" v-for="(article, index) in filteredAllArticles" :key="index">
+                    <article-component :article="article" @read-more="currentArticle" @update-search="updateSearch">
+                    </article-component>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div id="after-login-profile" v-if="currentPage === 'afterLoginProfile'">
+              <h1>PROFILE</h1>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div id="new-post-page">
+
+
+
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+  <!-- development version, includes helpful console warnings -->
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <!-- Axios -->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <!-- Buefy -->
+  <script src="./lib/buefy.min.js"></script>
+  <!-- WYSIWYG -->
+  <script src="./lib/vueWysiwyg.js"></script>
+  <script src="./src/js/components/article.js"></script>
+  <script src="./src/js/google-signin.js"></script>
+  <script src="./src/js/main.js"></script>
+
+</body>
+
+</html>

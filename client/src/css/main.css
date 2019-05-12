@@ -1,0 +1,175 @@
+* {
+  /* background-color: red; */
+  margin: 0;
+  padding: 0;
+  /* font-family: 'Just Another Hand', cursive; letter-spacing: 0.3rem; */
+}
+
+body {
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+/* =================== */
+/* BEFORE LOGIN */
+/* =================== */
+
+#before-login {
+  padding-top: 10%;
+  background-image: url("../img/home-page-background2.jpg");
+	/* background-image: url("../img/pine_forest_by_boneswolbach_d9tshtb-fullview.jpg"); */
+	background-position: 0px 0px;
+  background-repeat: repeat-x;
+  height: 100vh;
+
+	animation: animatedBackground 80s linear infinite alternate;
+}
+
+
+@keyframes animatedBackground {
+	from { background-position: 0 0; }
+	to { background-position: 100% 0; }
+}
+
+body {
+}
+
+#card-before-login {
+  background-color: transparent;
+  box-shadow: none;
+
+}
+
+#container-before-login {
+  max-width: 30vw;
+  opacity: 0.98;
+}
+
+#card-image-before-login {
+  display: flex;
+  justify-content: center;
+  /* border-style: solid;  */
+  background-color: #21315A;
+  border-radius: 3px;
+  box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+}
+
+#card-content-before-login {
+  margin-top: 1rem;
+  background-color: rgb(4, 51, 0);
+  /* background-color: rgb(0, 100, 0); */
+
+  box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+  border-radius: 3px;
+}
+
+#login-form,
+#register-form {
+  padding: 1rem 6rem;
+}
+
+
+#or-text-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+#or-text {
+  font-size: 90%;
+  color: #6D7884;
+}
+
+#or-text-row {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.abcRioButton.abcRioButtonLightBlue {
+  width: 100% !important;
+}
+
+
+/* =================== */
+/* AFTER LOGIN */
+/* =================== */
+
+#after-login {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 1.3rem;
+
+}
+
+#nav-after-login {
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center;
+  background-color: rgb(4, 51, 0);
+  color: rgb(242, 255, 236);
+  box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.53);
+}
+
+#sidebar-after-login {
+  background-color: rgb(107, 57, 0);
+  color: rgb(242, 255, 236);
+
+}
+
+#content-after-login {
+  background-color: rgb(250, 255, 184);
+  padding: 10rem;
+  color: rgb(36, 14, 0);
+  padding: 2rem 2rem !important;
+}
+
+.hr-sidebar {
+  border: 0; 
+  height: 2px; 
+  background-image: -webkit-linear-gradient(left, #fff, #8c8b8b, #fff);
+  background-image: -moz-linear-gradient(left, #fff, #8c8b8b, #fff);
+  background-image: -ms-linear-gradient(left, #fff, #8c8b8b, #fff);
+  background-image: -o-linear-gradient(left, #fff, #8c8b8b, #fff);
+  opacity: 0.5;
+  margin: 0;
+  width: 100%;
+  float: right
+}
+
+.sidebar-link:hover {
+  background-color: white;
+  color: black;
+  cursor: pointer;
+}
+
+/* WYSIWYG */
+.editr {
+  background-color: white;
+  font-family: sans-serif;
+  font-size: 1rem;
+}
+
+.overflowVisible {
+  overflow: visible !important;
+}
+
+.article-list {
+  overflow: hidden;
+  max-height: 10rem;
+  /* line-height: 1.5em; */
+  /* width: 200px; */
+  /* box-shadow: inset 0px -95px 54px -71px rgba(0,0,0,0.09); */
+}
+
+#card-article {
+  /* width: 25rem;  */
+  /* min-height: 650px;  */
+  height: 100%;
+  overflow: hidden; 
+  border-radius: 10px;
+}
