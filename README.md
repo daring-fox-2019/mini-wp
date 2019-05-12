@@ -1,1 +1,21 @@
 # mini-wp
+
+##API Documentation
+
+| Path                    | Method      | Request                                                                                                         | Resp (Success)                                | Resp (Error)                                                |
+|-------------------------|-------------|-----------------------------------------------------------------------------------------------------------------|-----------------------------------------------|-------------------------------------------------------------|
+|  /                      | GET         | none                                                                                                            | 200 {message}                                 | none                                                        |
+| /auth/signup            | POST        | {username, password, name, email}                                                                               | 201 {username, password, name, email} | 500 {message}                                               |
+| /auth/signin            | POST        | {email, password}                                                                                               | 200 {token: JWT access token}                 | 401 {'Incorrect username/password'}, 500 {message} |
+| /auth/google    | POST        | {token: token from Google OAuth2}                                                                               | 200 {token: JWT Token}                        | 401 {'Not authorized. Please try again'}           |
+| /user/                  | GET         | none                                                                                                            | 200 {data: user}                              | 500 {error from server}                            |
+| /user/:email         | PUT & PATCH | {user}                                                                                                    | 200 {updatedUser}                       | 500 {error from server}                            |
+| /user/:email         | DELETE      | {loggedinUser}                                                                                        | 200 {data: deletedUser}                       | 500 {error from server}                            |
+| /articles               | GET         | none                                                                                                            | 201 {all post of the logged in user}               | 500 { error from server}                            |
+| /articles/:id               | GET         | none                                                                                                            | 200 {post matching the id}                | 500 { error from server}                            |
+| /articles/              | POST        | {title, content, author, created_at, featured_image, feature_image_name}                                | 201 {created data}                      | 500 {error from server}                            |
+| /articles/:id           | PUT & PATCH | param: {id: ObjectId of article},body: {title, content, author, created_at, featured_image, feature_image_name} | 200 {updated data}                      | 500 {error from server}                            |
+| /articles/:id           | DELETE      | {id: ObjectId of article}                                                                                       | 200 {deleted data}                      | 500 {error from server}                            |
+| /explore/:slug           | GET      | {slug: slug-link}                                                                                       | 200 {article object}                      | 500 {error from server}                            |
+| /tag/:tagName | GET         | param: {id: tagName}, search post based on tag                                         | 200 [{article}]                               | 500 {error from server}                            |
+| /tags | GET         | none                                         | 200 [all tags]                               | 500 {error from server}                            |

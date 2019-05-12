@@ -26,7 +26,7 @@ $(document).ready(function () {
 });
 
 // start VUE codes
-var serverURL = 'http://localhost:3000';
+var serverURL = 'http://35.247.179.99';
 
 var app = new Vue({
   el: '#miniWP',

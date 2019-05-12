@@ -3,6 +3,8 @@ const {testPassword} = require('../helpers/passwordHash')
 const jwt = require('../helpers/jwt')
 const googleTokenParser = require('../helpers/googleTokenParser')
 
+const linkedinRequestAuth = `https://www.linkedin.com/oauth/v2/accessToken`
+
 class AuthController {
     static signup(req, res) {
         User.create({...req.body})
@@ -28,7 +30,8 @@ class AuthController {
     }
 
     static linkedinSignIn(req, res) {
-        
+        console.log('...linkedin arrive...', req.query);
+        let signinCode = req.query.code
     }
 
     static signin(req, res) {

@@ -22,7 +22,6 @@ route.get('/tag/:tagText', (req, res) => {
                     .populate('comment')
                     .populate('tags')
                     .then(list => {
-                        console.log(list);
                         res.status(200).json(list)
                     })
                     .catch(err => {
