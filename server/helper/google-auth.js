@@ -36,7 +36,7 @@ module.exports = function (req, res) {
                             email: payload.email,
                             password,
                             pp: payload.picture,
-                            name: data.name
+                            name: payload.name
                         })
                         .then(data => {
                             let jwtoken = jwt.generateToken({
