@@ -16,6 +16,9 @@ class Controller {
         path: 'creator',
         select: ['_id', 'name', 'email']
       })
+      .populate({
+        path: 'tags',
+      })
       .then(articles => {
         if (articles.length === 0) {
           const err = {
@@ -52,6 +55,9 @@ class Controller {
         path: 'creator',
         select: ['_id', 'name', 'email']
       })
+      .populate({
+        path: 'tags',
+      })
       .then(articles => {
         if (articles.length === 0) {
           const err = {
@@ -70,7 +76,7 @@ class Controller {
   
   static create(req, res, next) {
     const { title, text } = req.body
-    const { decoded } = req;
+    const { decoded, tags } = req;
     let imageURL = null;
     
     if (req.file) {
@@ -80,6 +86,7 @@ class Controller {
       title, text,
       imageURL: imageURL || null,
       status: 0,
+      tags,
       creator: decoded.id,
       created: new Date(),
       updated: new Date()
@@ -98,6 +105,9 @@ class Controller {
       .populate({
         path: 'creator',
         select: ['_id', 'name', 'email']
+      })
+      .populate({
+        path: 'tags',
       })
       .then(article => {
         if (!article) {

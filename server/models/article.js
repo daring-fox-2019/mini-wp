@@ -12,6 +12,10 @@ const articleSchema = new Schema({
   imageURL: String,
   created: Date,
   updated: Date,
+  tags: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Tag'
+  }],
   creator: {
     type: Schema.Types.ObjectId,
     ref: 'User'
@@ -26,6 +30,9 @@ articleSchema.post('save', function(doc, next) {
     .populate({
       path: 'creator',
       select: ['_id', 'name', 'email']
+    })
+    .populate({
+      path: 'tags',
     })
     .then(article => {
         doc.creator = article.creator;
