@@ -7,8 +7,9 @@ const morgan   = require('morgan');
 const PORT     = process.env.PORT || 3000;
 const routes   = require('./routes');
 const mongoose = require('mongoose');
+const DB       = process.DB_URI
 
-mongoose.connect('mongodb://localhost/mini-wp-1', { useNewUrlParser: true });
+mongoose.connect(DB, { useNewUrlParser: true });
 
 app.use(morgan('dev'));
 app.use(cors());

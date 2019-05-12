@@ -14,7 +14,7 @@ class ArticleController {
                 $in: req.query.tags
             };
         }
-        console.log(req.query)
+        
         Article
             .find(field)
             .sort({ created_at: -1 })
