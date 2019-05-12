@@ -2,6 +2,7 @@ var serverUrl = "http://localhost:3000"
 const input = document.querySelector('input[type="file"]')
 let file = null
 
+
 function onSignIn(googleUser) {
     if (googleUser) {
         var profile = googleUser.getBasicProfile();
@@ -73,11 +74,11 @@ var app = new Vue({
         userId: function () {
             this.userId = localStorage.id
         },
-        pp : function(){
-            this.pp= localStorage.pp
+        pp: function () {
+            this.pp = localStorage.pp
         },
-        username: function(){
-            this.username =  localStorage.name
+        username: function () {
+            this.username = localStorage.name
         }
     },
     methods: {
@@ -95,23 +96,38 @@ var app = new Vue({
         },
         deleteBlog_btn(id) {
             this.id = id
-            axios
-                .delete(serverUrl + '/' + id, {
-                    headers: {
-                        auth: localStorage.jwtoken
-                    },
-                    data: {
-                        id: this.id
-                    }
-                })
-                .then(({
-                    data
-                }) => {
-                    this.listBlog()
-                })
-                .catch((err) => {
-                    console.log(err.message)
-                })
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You are going to delete this article!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#0d3d69',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.value) {
+                    return axios
+                        .delete(serverUrl + '/' + id, {
+                            headers: {
+                                auth: localStorage.jwtoken
+                            },
+                            data: {
+                                id: this.id
+                            }
+                        })
+                        .then(() => {
+                            Swal.fire(
+                                'Deleted!',
+                                'Your article has been deleted.',
+                                'success'
+                            )
+                            this.listBlog()
+                        }) 
+                }
+            })
+            .catch((err) => {
+                console.log(err.message)
+            })
         },
         listBlog() {
             axios
@@ -359,8 +375,9 @@ var app = new Vue({
             if (localStorage.jwtoken) {
                 this.isLoggedIn = true
                 this.userId = localStorage.id
-                this.pp= localStorage.pp
-                this.username =  localStorage.name    
+                this.pp = localStorage.pp
+                this.username = localStorage.name
+                this.listBlog()
             }
         }
     },

@@ -66,38 +66,62 @@ Vue.component('formadd', {
             } else if (this.file === "") {
                 swal('Insert image to make your blog more interesting!')
             } else {
-                file = this.file
-                const extension = file.name.split('.')[1]
-                const validExtensions = ['png', 'jpg', 'jpeg']
-                this.tags = this.tags.map(el => el.text)
-                console.log(this.tags)
-                if (validExtensions.indexOf(extension) === -1) {
-                    swal('Valid extensions: .png, .jpeg, or .jpg')
-                } else {
-                    getBase64(file)
-                        .then((image) => {
-                            return axios
-                                .post(serverUrl, {
-                                    title: this.blog_title,
-                                    content: this.text,
-                                    createdAt: new Date(),
-                                    img: image,
-                                    extension: extension,
-                                    author: this.author,
-                                    tags: this.tags
-                                }, {
-                                    headers: {
-                                        auth: localStorage.jwtoken
-                                    }
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You are going to add new article!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#0d3d69',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, add it!'
+                  }).then((result) => {
+                    if (result.value) {
+                        file = this.file
+                        const extension = file.name.split('.')[1]
+                        const validExtensions = ['png', 'jpg', 'jpeg']
+                        if (this.tags && this.tags[0] && this.tags[0].tiClasses) {
+                            this.tags = this.tags.map(el => {
+                                if (el.text) {
+                                    return el.text
+                                } else {
+                                    return el
+                                }
+                            })
+                        }
+                        if (validExtensions.indexOf(extension) === -1) {
+                            swal('Valid extensions: .png, .jpeg, or .jpg')
+                        } else {
+                            return getBase64(file)
+                                .then((image) => {
+                                    return axios
+                                        .post(serverUrl, {
+                                            title: this.blog_title,
+                                            content: this.text,
+                                            createdAt: new Date(),
+                                            img: image,
+                                            extension: extension,
+                                            author: this.author,
+                                            tags: this.tags
+                                        }, {
+                                            headers: {
+                                                auth: localStorage.jwtoken
+                                            }
+                                        })
+                                        .then(() => {
+                                            this.$emit('addsuccess')
+                                            Swal.fire(
+                                              'Added!',
+                                              'Your article has been added.',
+                                              'success'
+                                            )
+                                        })
                                 })
-                                .then(() => {
-                                    this.$emit('addsuccess')
-                                })
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                }
+                        }
+                    }
+                  })
+                  .catch((err) => {
+                    console.log(err)
+                })
             }
         },
         onChangeUpload(e) {

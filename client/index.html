@@ -17,10 +17,13 @@
     <!-- my CSS -->
     <link rel="stylesheet" type="text/css" media="screen" href="./css/style.css">
     <!-- bootstrapVue JS -->
+    <link href="https://fonts.googleapis.com/css?family=Baloo+Bhai" rel="stylesheet">
     <title>MiniWP | QFS</title>
     <script src="//unpkg.com/@babel/polyfill@latest/dist/polyfill.min.js"></script>
     <script src="//unpkg.com/vue@latest/dist/vue.min.js"></script>
     <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+    <!-- chartjs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.js"></script>
     <!-- axios JS -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <!-- vue JS -->
@@ -36,9 +39,13 @@
 <body>
     <div id="app">
         <!-- beforelogin -->
-        <div v-show="!isLoggedIn">
+        <div v-show="!isLoggedIn" style="background-color: #0d3d69;">
+            <h1 style="font-family:'Baloo Bhai', cursive; font-size:20em; color:rgb(214, 214, 214);text-align: center; padding-top:15%; padding-bottom:14.7%"><i
+                class="fab fa-wordpress-simple"></i> Mini-WP</h1>
+            <!-- <h1 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji', cursive; font-size:25em; color:rgba(255, 255, 255, 1);text-align: center; padding-top:10%; padding-bottom:14.5%">Mini-WP</h1> -->
+
             <div>
-                <button class="btn btn-outline-primary btn-lg" id="login-f-btn"
+                <button class="btn btn-primary btn-lg" id="login-f-btn"
                     v-on:click="regularLogin()">Login</button>
             </div>
             <div>
@@ -46,7 +53,7 @@
                 <div class="g-signin2" data-onsuccess="onSignIn"></div>
             </div>
             <div>
-                <button class="btn btn-outline-primary btn-lg" id="register-f-btn"
+                <button class="btn btn-primary btn-lg" id="register-f-btn"
                     v-on:click="register()">Register</button>
             </div>
         </div>
@@ -72,14 +79,11 @@
                 </div>
                 <div>
                     <ul class="navbar-list" id="most-right">
-                        <!-- <li><button v-on:click="addBlogPageFunc" class="btn btn-light" id="write-btn"><span
-                                    id="edit-ico"><i class="far fa-edit"></i></span>
-                                Write</button></li> -->
                         <li><span class="nav-icon" style="font-size: 30px; color: white;"><img :src="pp" alt="prof pict"
                                     style="width:35px;height:35px;overflow:hidden; border-radius:15px; margin-bottom:3px"><i
                                     v-if="!pp" class="fas fa-user-circle"></i>
                             </span><span> Hello, {{username}}</span></li>
-                            
+
                         <li><span class="nav-icon" style="font-size: 30px; color: white;"><i
                                     class="fas fa-bell"></i></span>
 
@@ -105,7 +109,8 @@
                         <li @click="getTags" style="cursor: pointer;" class="nav-menu-item" id="first-menu"><i
                                 class="fas fa-tags"></i> Tags List</li>
                         <li class="nav-menu-item"><i class="far fa-chart-bar"></i> Stats</li>
-                        <li class="nav-menu-item"><i class="fas fa-hiking"></i> Activity</li>
+                        <li style="cursor: pointer;" @click="page = 'activity'" class="nav-menu-item"><i
+                                class="fas fa-hiking"></i> Activity</li>
                         <li class="nav-menu-item"><i class="fas fa-ruler-combined"></i> Plan</li>
                     </ul>
                     <p>Manage</p>
@@ -132,8 +137,12 @@
                 </div>
 
                 <!-- CONTENT DYNAMIC -->
+                <!-- <div > -->
+                <!-- </div> -->
 
                 <div class="articles-list content col-sm-8 col-xl-10">
+                    
+                    <activity v-show="page == 'activity'" :list="listBlogg"></activity>
 
                     <div v-if="page == 'tags-list'" style="margin: 60px 80px 40px 80px">
                         <h2 style="margin-bottom:50px">Here are the list of all the tags we have so far</h2>
@@ -258,6 +267,7 @@
     <script src="./js/components/formedit.js"></script>
     <script src="./js/components/article.js"></script>
     <script src="./js/components/formadd.js"></script>
+    <script src="./js/components/activity.js"></script>
     <script src="./js/index.js"></script>
 </body>
 

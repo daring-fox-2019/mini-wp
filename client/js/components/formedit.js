@@ -60,26 +60,48 @@ Vue.component('editform', {
     `,
     methods: {
         updateBlogg() {
-            if(this.tags && this.tags[0] && this.tags[0].tiClasses){
-                this.tags = this.tags.map(el => el.text)
-                console.log(this.tags)
+            if (this.tags && this.tags[0] && this.tags[0].tiClasses) {
+                this.tags = this.tags.map(el => {
+                    if (el.text) {
+                        return el.text
+                    } else {
+                        return el
+                    }
+                })
             }
             if (this.title === "") {
                 swal("A great article always started by a title isn't it?")
             } else if (this.file === "") {
-                axios
-                    .put(serverUrl + '/' + this.id, {
-                        id: this.id,
-                        title: this.title,
-                        content: this.content,
-                        tags: this.tags
-                    }, {
-                        headers: {
-                            auth: localStorage.jwtoken
+                Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You are going to update this article!",
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#0d3d69',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, update it!'
+                    }).then((result) => {
+                        if (result.value) {
+                            return axios
+                                .put(serverUrl + '/' + this.id, {
+                                    id: this.id,
+                                    title: this.title,
+                                    content: this.content,
+                                    tags: this.tags
+                                }, {
+                                    headers: {
+                                        auth: localStorage.jwtoken
+                                    }
+                                })
+                                .then((data) => {
+                                    Swal.fire(
+                                        'Updated!',
+                                        'Your article has been updated.',
+                                        'success'
+                                    )
+                                    this.$emit('editsuccess')
+                                })
                         }
-                    })
-                    .then((data) => {
-                        this.$emit('editsuccess')
                     })
                     .catch((err) => {
                         console.log(err.message)
@@ -88,33 +110,59 @@ Vue.component('editform', {
                 file = this.file
                 const extension = file.name.split('.')[1]
                 const validExtensions = ['png', 'jpg', 'jpeg']
-                this.tags = this.tags.map(el => el.text)
+                if (this.tags && this.tags[0] && this.tags[0].tiClasses) {
+                    this.tags = this.tags.map(el => {
+                        if (el.text) {
+                            return el.text
+                        } else {
+                            return el
+                        }
+                    })
+                }
                 if (validExtensions.indexOf(extension) === -1) {
                     swal('Valid extensions: .png, .jpeg, or .jpg')
                 } else {
-                    getBase64(file)
-                        .then((image) => {
-                            axios
-                                .put(serverUrl + '/' + this.id, {
-                                    id: this.id,
-                                    title: this.title,
-                                    content: this.content,
-                                    createdAt: this.createdAt,
-                                    img: image,
-                                    extension: extension,
-                                    tags: this.tags
-                                }, {
-                                    headers: {
-                                        auth: localStorage.jwtoken
-                                    }
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You are going to update this article!",
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#0d3d69',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, update it!'
+                    }).then((result) => {
+                        if (result.value) {
+                            return getBase64(file)
+                                .then((image) => {
+                                   return axios
+                                        .put(serverUrl + '/' + this.id, {
+                                            id: this.id,
+                                            title: this.title,
+                                            content: this.content,
+                                            createdAt: this.createdAt,
+                                            img: image,
+                                            extension: extension,
+                                            tags: this.tags
+                                        }, {
+                                            headers: {
+                                                auth: localStorage.jwtoken
+                                            }
+                                        })
+                                        .then((data) => {
+                                            Swal.fire(
+                                                'Updated!',
+                                                'Your file has been updated.',
+                                                'success'
+                                            )
+                                            this.$emit('editsuccess')
+                                        })
+                                        
                                 })
-                                .then((data) => {
-                                    this.$emit('editsuccess')
-                                })
-                                .catch((err) => {
-                                    console.log(err.message)
-                                })
-                        })
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err.message)
+                    })
                 }
             }
         },
