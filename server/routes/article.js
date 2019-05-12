@@ -12,4 +12,6 @@ route.patch('/:id', authorize, ArticleController.update)
 route.delete('/:id', authorize, ArticleController.delete)
 route.get('/search/:query', ArticleController.search)
 
+route.get('/:slug', ArticleController.findBySlug)
+
 module.exports = route

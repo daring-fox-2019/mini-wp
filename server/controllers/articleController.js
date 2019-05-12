@@ -44,6 +44,27 @@ class ArticleController {
         })
     }
 
+    static findBySlug(req, res) {
+        let slug = req.params.slug
+
+        Article.findOne({slug: slug})
+        .populate('comment')
+        .populate('author')
+        .populate('tags')
+        .then(result => {
+            if(result) {
+                res.status(200).json(result)
+            }
+            else {
+                res.status(400).json('Link is not existed')
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({error: err})
+        })
+    }
+
     static create(req, res) {
         let article = {}, tagIds = [], promises = []
 
@@ -65,22 +86,41 @@ class ArticleController {
         article.author = req.user._id
 
         //process tags
-        article.tags = article.tags.split(',')
+        article.tags = (article.tags && article.tags !== '' ) ? article.tags.split(',') : ''
 
-        promises = article.tags.map(x => {
-            if(x) {
-                return Tag.findOneAndUpdate({text: x}, {$setOnInsert: {text: x}}, {upsert: true, new: true})
-            }
-            else {
-                // console.log('empty tag...');
-            }
-        });
+        console.log(article);
 
-        Promise.all(promises)
-            .then(results => {
-                article.tags = results.map(x => x._id)
+        if(article.tags && article.tags !== '') {
+            promises = article.tags.map(x => {
+                if(x && x !== '') {
+                    return Tag.findOneAndUpdate({text: x}, {$setOnInsert: {text: x}}, {upsert: true, new: true})
+                }
+                else {
+                    // console.log('empty tag...');
+                }
+            });
+    
+            Promise.all(promises)
+                .then(results => {
+                    article.tags = results.map(x => x._id)
+    
+                    Article.create(article)
+                    .then(newArticle => {
+                        res.status(201).json(newArticle)
+                    })
+                    .catch(err => {
+                        console.log(`create article error...${err}`);
+                        res.status(500).json(err)
+                    })
+                })
+                .catch(err => {
+                    console.log('promise all error ', err);
+                })
+        }
+        else {
+            article.tags = undefined
 
-                Article.create(article)
+            Article.create(article)
                 .then(newArticle => {
                     res.status(201).json(newArticle)
                 })
@@ -88,10 +128,8 @@ class ArticleController {
                     console.log(`create article error...${err}`);
                     res.status(500).json(err)
                 })
-            })
-            .catch(err => {
-                console.log('promise all error ', err);
-            })
+        }
+        
     }
 
     static update(req, res) {
@@ -104,8 +142,8 @@ class ArticleController {
         }
         article.author = req.user._id
 
-        if(article.tags && article.tags.length && article.tags.length > 0) {
-            article.tags = !article.tags.length ? article.tags.split(',') : article.tags
+        if(article.tags && article.tags.length > 0) {
+            article.tags = article.tags.split(',')
         }
         else {
             article.tags = []

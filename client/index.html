@@ -6,10 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="google-signin-client_id" content="460094986334-isi4pb2bokq5adebc9obp1nqp3nn4bm1.apps.googleusercontent.com">
+    <link rel="shortcut icon" type="image/png" href="https://storage.googleapis.com/miniwp.andresuchitra.com/favicon.ico"/>
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
         integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i" rel="stylesheet">
     <link rel="stylesheet" href="css/tagsinput.css">
     <link rel="stylesheet" href="css/vueWysiwyg.css">
     <link rel="stylesheet" href="css/imageUpload.css">
@@ -18,6 +22,7 @@
 </head>
 
 <body>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.3&appId=357508474873802&autoLogAppEvents=1"></script>
     <div id="miniWP">
         <!-- top navbar -->
         <navigation :islogin="isLogin" @logout="logout"></navigation>
@@ -31,30 +36,35 @@
                     <i class="fas fa-chevron-right" style="margin-left: -5px;"></i>
             </a>
             <moon-loader style="z-index: 100; position: relative; top: 50px; margin: 0 auto;" v-if="loading" :loading="loading" :size="200"></moon-loader>
-            <!-- Actual Content -->
+            
+            <!-- Actual Content Wrapper -->
             <div id="content">
-
-                <login id="loginPage" v-show="page === 'login' && !loading" @success="loginSuccess"></login>
-                <register id="registerPage" v-if="page === 'register' && !loading"></register>
-
-                <div id="index" v-if="page === 'index' && !loading" class="container">
-                    <index></index>
+                <div style="padding: 20px;">
+                    <login id="loginPage" v-show="page === 'login' && !loading" @success="loginSuccess"></login>
+                    <register id="registerPage" v-if="page === 'register' && !loading"></register>
+    
+                    <div id="index" v-if="page === 'index' && !loading && isLogin" class="container">
+                        <index></index>
+                    </div>
+                    <div id="createPost" v-if="page === 'createPost' && !loading && isLogin" class="container">
+                        <create-post></create-post>
+                    </div>
+                    <div id="updatePost" v-if="page === 'updatePost' && !loading && isLogin" class="container">
+                        <update-post :initdata="currentPost"></update-post>
+                    </div>
+                    <div id="detailPost" v-if="page === 'detailPost' && !loading && isLogin" class="container">
+                        <detail-page :post="currentPost"></detail-page>
+                    </div>
                 </div>
-                <div id="createPost" v-if="page === 'createPost' && !loading" class="container">
-                    <create-post></create-post>
-                </div>
-                <div id="updatePost" v-if="page === 'updatePost' && !loading" class="container">
-                    <update-post :initdata="currentPost"></update-post>
-                </div>
-                <div id="detailPost" v-if="page === 'detailPost' && !loading" class="container">
-                    <detail-post :post="currentPost"></detail-post>
-                </div>
+                <mwfooter></mwfooter>
             </div>
         </div>
+        
     </div>
 
     <!-- Script section -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="https://apis.google.com/js/platform.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -73,18 +83,20 @@
     <script src="js/helpers/moment.js"></script>
     <script src="js/components/badge.js"></script>
     <script src="js/components/vueWysiwyg.js"></script>
+    <script src="js/components/postdetail.js"></script>
     <script src="js/components/postform.js"></script>
     <script src="js/components/postitemcard.js"></script>
     <script src="js/components/postlist.js"></script>
     <script src="js/components/navigation.js"></script>
     <script src="js/components/sidebar.js"></script>
+    <script src="js/components/footer.js"></script>
     <script src="js/components/imageUpload.js"></script>
     <script src="js/components/loginRegisterForm.js"></script>
     
     <!-- Views -->
     <script src="js/views/login.js"></script>
     <script src="js/views/register.js"></script>
-    <script src="js/views/detailPost.js"></script>
+    <script src="js/views/detailPage.js"></script>
     <script src="js/views/updatePost.js"></script>
     <script src="js/views/createPost.js"></script>
     <script src="js/views/index.js"></script>

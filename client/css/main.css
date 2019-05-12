@@ -4,6 +4,7 @@ a, a:hover, a:focus {
     transition: all 0.3s;
 }
 
+
 .navbar-collapse {
     z-index: 20;
 }
@@ -11,6 +12,7 @@ a, a:hover, a:focus {
 .sidebar-btn {
     padding: 5px;
     width: 30px;
+    max-height: 30px;
     position: relative;
     top: 10px;
     left: 0;
@@ -35,7 +37,6 @@ a, a:hover, a:focus {
 }
 
 #content {
-    padding: 20px;
     width: 100%;
     height: calc(100vh - 56px);
     max-height: calc(100vh - 56px);
@@ -198,6 +199,41 @@ color: #aaa;
     font-size: 30px;
     padding: 5px;
     color: red;
+}
+.item-card-content {
+    max-height: 150px;
+    overflow: hidden;
+}
+
+/* DETAIL POST */
+.detail__date {
+    color: gray;
+}
+
+.detail__title {
+    font-size: 2em;
+    font-family: 'Montserrat';
+    font-weight: 700;
+    min-height: 60px;
+    margin-bottom: 30px;
+    color: rgb(5, 5, 112);
+}
+.detail__content {
+    min-height: 300px;
+    /* font-family: "Playfair Display", serif; */
+    font-size: 20px;
+}
+
+._2tga._49ve {
+    height: 28px;
+}
+
+
+/* FOOTER */
+.footer {
+    min-height: 100px;
+    margin-top: 300px;
+    background: #065a92fa;
 }
 
 /* Media Queries (auto hide sidebars on smaller screen) */

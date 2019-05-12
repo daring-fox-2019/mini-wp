@@ -118,7 +118,7 @@ Vue.component('postform', {
         </div>
         <div class="form-group">
             <label for="post-content"><h5>Content</h5></label>
-            <vuewysiwyg v-model="formData.content"></vuewysiwyg>
+            <vuewysiwyg style="min-height: 300px;" v-model="formData.content"></vuewysiwyg>
         </div>
         <div class="form-group">
             <label for="tags"><h5>Tags</h5></label>
@@ -129,8 +129,9 @@ Vue.component('postform', {
                 @tags-changed="refreshTags"
             />
         </div>
-        <div class="form-group">
-            <button class="btn-sm btn-success" type="submit">Submit</button>
+        <div class="d-flex">
+            <button class="btn btn-success" type="submit">Submit</button>
+            <button class="btn btn-danger ml-1" type="button" @click="$root.showIndex()">Cancel</button>
         </div>
     </form>`
 })

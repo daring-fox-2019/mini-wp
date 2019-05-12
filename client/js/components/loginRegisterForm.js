@@ -83,9 +83,7 @@ Vue.component('loginregister',{
             </div>
             <div class="form-group mt-5">
                 <button style="width: 100%;"  class="btn btn-success" type="submit">Submit</button>
-            </div>
-            <div class="form-group">
-                <button style="width: 100%;" class="btn btn-primary" type="button" @click="$emit('showregister')">Register</button>
+                <button style="width: 100%;" class="btn btn-primary mt-1" type="button" @click="$emit('showregister')">Register</button>
             </div>
             <hr>
             <div class="form-group" id="googleSignInBtn">

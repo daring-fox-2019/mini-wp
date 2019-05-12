@@ -41,8 +41,15 @@ var app = new Vue({
       name: '',
     },
     currentPost: null,
+    baseURL: 'http://miniwp.andresuchitra',
   },
   methods: {
+    formattedDate: function(date, formatStr) {
+      if(!formatStr) {
+        formatStr = 'MMMM Do YYYY, h:mm:ss a'
+      }
+      return moment(new Date(date)).format(formatStr)
+    },
     loginSuccess() {
       this.isLogin = true;
       this.page = 'index'
@@ -71,7 +78,12 @@ var app = new Vue({
       }
     },
     showCreatePost() {
-      this.page = 'createPost'
+      if(localStorage.getItem('miniwp_token')) {
+        this.page = 'createPost'
+      }
+      else {
+        this.page = 'login'
+      }
     },
     showLogin() {
       this.page = 'login'
@@ -80,34 +92,44 @@ var app = new Vue({
       this.page = 'register'
     },
     showUpdatePost(id) {
-      axios.get(serverURL + '/articles/' + id, this.config)
-      .then(({data}) => {
-        this.currentPost = data
-        this.page = 'updatePost'
-      })
-      .catch(({response}) => {
-        console.log(response);
-        Swal.fire(
-          'Error!',
-          response.data.error.message,
-          'error'
-        )
-      })
+      if(localStorage.getItem('miniwp_token')) {
+        axios.get(serverURL + '/articles/' + id, this.config)
+        .then(({data}) => {
+          this.currentPost = data
+          this.page = 'updatePost'
+        })
+        .catch(({response}) => {
+          console.log(response);
+          Swal.fire(
+            'Error!',
+            response.data.error.message,
+            'error'
+          )
+        })
+      }
+      else {
+        this.page = 'login'
+      }
     },
     showDetailPost(id) {
-      axios.get(serverURL + '/articles/' + id, this.config)
-      .then(({data}) => {
-        this.currentPost = data
-        this.page = 'detailPost'
-      })
-      .catch(({response}) => {
-        console.log(response);
-        Swal.fire(
-          'Error!',
-          response.data.error.message,
-          'error'
-        )
-      })
+      if(localStorage.getItem('miniwp_token')) {
+        axios.get(serverURL + '/articles/' + id, this.config)
+        .then(({data}) => {
+          this.currentPost = data
+          this.page = 'detailPost'
+        })
+        .catch(({response}) => {
+          console.log(response);
+          Swal.fire(
+            'Error!',
+            response.data.error.message,
+            'error'
+          )
+        })
+      }
+      else {
+        this.page = 'login'
+      }
     },
   },
   mounted() {
