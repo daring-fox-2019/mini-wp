@@ -18,7 +18,8 @@ const app = new Vue({
             title: '',
             content: '',
             id: '',
-            featured_image: ''
+            featured_image: '',
+            tags: []
         },
         homeArticles: [],
         // userForm: {
@@ -48,9 +49,9 @@ const app = new Vue({
         }
     },
     mounted() {
-        // gapi.signin2.render('google-signin-button', {
-        //     onsuccess: this.googleSignIn
-        // })
+        gapi.signin2.render('google-signin-button', {
+            onsuccess: this.googleSignIn
+        })
     },
     methods: {
         login: function(userForm) {
@@ -138,9 +139,7 @@ const app = new Vue({
             axios
             .get(`${ARTICLE_PATH}`, config)
             .then(({data}) => {
-                data.forEach(element => {
-                    this.homeArticles.push(element)
-                });
+                this.homeArticles = data
             })
             .catch(function(err) {
                 console.log(err);
@@ -158,22 +157,23 @@ const app = new Vue({
             axios
             .get(`${ARTICLE_PATH}/myarticle`, config)
             .then(({data}) => {
-                data.forEach(element => {
-                    this.articles.push(element)
-                });
+                this.articles=data
             })
             .catch(function(err) {
                 console.log(err);
             })
         },
-        createArticle: function() {
-
+        createArticle: function(tags) {
             let formData = new FormData()
             formData.append('title', this.newArticle.title)
             formData.append('content', this.newArticle.content)
 
             if(this.newArticle.featured_image) {
                 formData.append('featured_image', this.newArticle.featured_image)
+            }
+
+            if(tags.length>0) {
+                formData.append('tags', JSON.stringify(tags))
             }
             
             let config = {
@@ -333,6 +333,7 @@ const app = new Vue({
             this.menus.list=false
             this.menus.article=true
 
+            this.createPage=true
             this.newArticle={}
         },
         menuToggle: function() {

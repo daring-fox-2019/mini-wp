@@ -18,6 +18,7 @@ const articleSchema = new Schema({
     created_at: {
         type: Date
     },
+    tags : [String],
     author : { type: Schema.Types.ObjectId, ref: 'Member' } 
 });
 

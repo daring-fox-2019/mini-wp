@@ -37,28 +37,31 @@ Vue.component('myheader', {
                 class="color-grey4" 
                 style="margin-left: 35px;
                     margin-top: 6px;"
-            > Miniwp</div>
+            ><i class="fas fa-dove" style="margin-right: 5px"></i> Miniwp</div>
+            <div 
+                class="btn 
+                    btn-warning 
+                    cursor-pointer" 
+                style="margin-left: 2em"
+                @click="toArticlePage"
+            >
+                <i class="fas fa-feather" style="margin-right: 11px;"></i>Write
+            </div>
         </div>
 
         <div 
             id="navbarSupportedContent" 
             class="d-flex" 
             v-if="user.loggedIn"
-            style="width: 10em;
-                justify-content: space-around;"
+            style="width: 26em;
+                justify-content: flex-end;
+        "
         >
-            <div 
-                class="btn 
-                    btn-light 
-                    color-grey4 
-                    cursor-pointer" 
-                @click="toArticlePage"
-            >
-                <i class="fas fa-feather" style="margin-right: 11px;"></i>Write
-            </div>
-            <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+            <ul class="navbar-nav">
                 <li class="nav-item dropdown">
+                <i class="far fa-user-circle color-grey4" style="margin-right:5px;"></i>
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                style="display:inline-block"
                     aria-haspopup="true" aria-expanded="false">
                     {{user.name ? user.name : 'User'}}
                 </a>

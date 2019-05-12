@@ -1,14 +1,33 @@
 Vue.component('article-page', {
     props:['createpage', 'newarticle'],
+    data() {
+        return {
+            tags: [],
+            tagValue : ''
+        }
+    },
     methods: {
         submitCreate() {
-            this.$emit('submit-create')
+            this.$emit('submit-create', this.tags)
         },
         submitEdit() {
             this.$emit('submit-edit')
         },
         handleFileUpload(event) {
             this.newarticle.featured_image = event.target.files[0]
+        },
+        clickAddTags() {
+            if(this.tagValue.trim()) {
+                this.tags.push( this.tagValue )
+            }
+            this.tagValue=""
+        },
+        removeTag(tagName) {
+            this.tags = this.tags.filter(tag => {
+                if(tag!==tagName) {
+                    return tag
+                }
+            })
         }
     },
     template:
@@ -83,6 +102,39 @@ Vue.component('article-page', {
                     name="wysiwyg"
                     v-model.trim="newArticle.content"    
                 ></slot>
+            </div>
+
+
+            <h6>Tags</h6>
+            <div class="input-group mb-3" style="width: 20em;">
+
+                <input 
+                    type="text" 
+                    class="form-control" 
+                    placeholder="Article tags" 
+                    aria-label="Article tags" 
+                    aria-describedby="button-addon2"
+                    v-model="tagValue"
+                >
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button"
+                    @click.prevent="clickAddTags" 
+                    id="button-addon2">Add</button>
+                </div>
+            </div>
+
+            <div v-show="tags.length>0">
+                <div 
+                    v-for="tag in tags"
+                    style="background-color: #f27474;
+                        color: #fff;
+                        border-radius: 4px;
+                        display:inline-block;
+                        margin-top: 5px;
+                        padding: 2px 12px;
+                        margin-right: 8px;"
+                >{{tag}} <span @click="removeTag(tag)" style="display:inline-block; margin-right: 3px;">x</span>
+                </div>
             </div>
 
             <button 

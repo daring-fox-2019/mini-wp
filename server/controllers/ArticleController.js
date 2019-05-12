@@ -34,20 +34,22 @@ class ArticleController {
     }
 
     static create(req, res) {
-        const { title, content } = req.body
-
-        console.log('boddy>>>>', req.body);
-        
-        console.log('fileeeeee >>>>', req.file);
-
+        const { title, content,tags } = req.body        
         const featured_image = req.file.cloudStoragePublicUrl
 
         let author = req.headers.id
+
+        let parseTags = []
+
+        JSON.parse(tags).forEach(e=> {
+            parseTags.push(e)
+        })
 
         Article.create({
             title,
             content,
             featured_image,
+            tags: parseTags,
             author
         })
         .then(article => {
