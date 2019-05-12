@@ -1,4 +1,4 @@
-const url = `http://server-miniwp.sutansyah.co/`;
+const url = `http://localhost:3000`;
 let app = new Vue({
   el: "#app",
   data: {
@@ -51,6 +51,7 @@ let app = new Vue({
       })
       .then(({data})=>{
         data = data.map(element=>{
+          element.author = element.author.name
           element.created = moment(element.createdAt).format("LLLL");
           return element
         })
