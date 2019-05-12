@@ -11,7 +11,6 @@ let vue = new Vue({
     date : new Date ().toDateString(),
     article : {
       title : "",
-      content : "",
       image : ""
     }
   },
@@ -29,11 +28,8 @@ let vue = new Vue({
     }
   },
   methods : {
-    getGCSurl(){
-
-    },
     previewFile(event){
-      this.image = event.target.files[0]      
+      this.article.image = event.target.files[0]      
     },
     viewarticles(){
       axios({
@@ -150,48 +146,123 @@ let vue = new Vue({
     },
     savearticle(){
       console.log("save article")
-      console.log(this.image)
-      const blob = new Blob([this.image], {type : this.image.type});
-      console.log(blob)
-      const formdata = new FormData();
-      formdata.append("image", blob);
-      axios({
-        method : "post",
-        url : "http://localhost:3000/uploadimg",
-        data : formdata,
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          token : localStorage.getItem('token'),
-          id : localStorage.getItem('id')
-        }
-      }).then(response=>{
-        console.log(response)
-      }).catch(error=>{
-        console.log(error)
-      })
-      // var form = new FormData();
-      // let blobIMG = new Blob()
-      // form.append("featuredimg", this.image)
-      // console.log(data)
-      // axios({
-      //   method : "post",
-      //   url : "",
-      // })
-      // let editor = document.getElementById('editor')
-      // let htmlcontent = editor.firstChild.innerHTML
-      // let data = {
-      //   title: this.title,
-      //   snippet : quill.getText(0,100),
-      //   content: htmlcontent,
-      //   createdAt: new Date,
-      //   postedAt: null,
-      //   status: "saved",
-      //   image : this.image
-      // }
-      // console.log(data)
+      console.log(this.article.image)
+      if(this.article.image == ""){
+        swal("Required an Image","please upload your image first","info")
+      } else {
+        swal("Please wait while we do your request", {
+          buttons: false,
+          timer: 3000,
+        });
+        const blob = new Blob([this.article.image], {type : this.article.image.type});
+        console.log(blob)
+        const formdata = new FormData();
+        formdata.append("image", blob);
+        axios({
+          method : "post",
+          url : "http://localhost:3000/uploadimg",
+          data : formdata,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            token : localStorage.getItem('token'),
+            id : localStorage.getItem('id')
+          }
+        }).then(({data})=>{
+          this.article.image = ""
+          let gcloudURL = data
+          let editor = document.getElementById('editor')
+          let htmlcontent = editor.firstChild.innerHTML
+          let newArticle = {
+            title: this.article.title,
+            snippet : quill.getText(0,100),
+            content: htmlcontent,
+            status: "saved",
+            image : gcloudURL,
+            createdAt: new Date,
+            updatedAt : "",
+            postedAt : "",
+            }
+            axios({
+              method : "post",
+              url : "http://localhost:3000/articles",
+              headers : {
+                token : localStorage.getItem('token'),
+                id : localStorage.getItem('id')
+              },
+              data : newArticle
+            })
+            .then(({data})=>{
+              console.log(data)
+              $('#createfeaturedimg').val('')
+              this.article.title = ""
+              quill.setText("\n\n\n")
+              swal("Article Created!","successfully saved your article","success")
+            })
+            .catch(error=>{
+              console.log(error)
+            })
+        }).catch(error=>{
+          console.log(error)
+        })
+      }
     },
     saveandpostarticles(){
       console.log("post article")
+      console.log("save article")
+      console.log(this.article.image)
+      if(this.article.image == ""){
+        swal("Required an Image","please upload your image first","info")
+      } else {
+        const blob = new Blob([this.article.image], {type : this.article.image.type});
+        console.log(blob)
+        const formdata = new FormData();
+        formdata.append("image", blob);
+        axios({
+          method : "post",
+          url : "http://localhost:3000/uploadimg",
+          data : formdata,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            token : localStorage.getItem('token'),
+            id : localStorage.getItem('id')
+          }
+        }).then(({data})=>{
+          this.article.image = ""
+          let gcloudURL = data
+          let editor = document.getElementById('editor')
+          let htmlcontent = editor.firstChild.innerHTML
+          let newArticle = {
+            title: this.article.title,
+            snippet : quill.getText(0,100),
+            content: htmlcontent,
+            status: "posted",
+            image : gcloudURL,
+            createdAt: new Date,
+            updatedAt : "",
+            postedAt : new Date,
+            }
+            axios({
+              method : "post",
+              url : "http://localhost:3000/articles",
+              headers : {
+                token : localStorage.getItem('token'),
+                id : localStorage.getItem('id')
+              },
+              data : newArticle
+            })
+            .then(({data})=>{
+              console.log(data)
+              this.article.title = ""
+              quill.setText("\n\n\n")
+              swal("Article Posted!","successfully posted your article","success")
+            })
+            .catch(error=>{
+              console.log(error)
+            })
+        }).catch(error=>{
+          console.log(error)
+        })
+      }
     },
     updatearticles(){
       console.log("update article")
