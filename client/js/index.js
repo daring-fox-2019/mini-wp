@@ -20,13 +20,22 @@ new Vue ({
     drawerchild: null,
 
     filtered: [],
-    articles: []
+    articles: [],
+    myArticles: [],
   },
 
   watch: {
     drawerchild() {
       if (this.drawerchild !== this.drawer) {
         this.drawer = this.drawerchild;
+      }
+    },
+
+    isGeneral() {
+      if (this.isGeneral) {
+        this.fetchAll();
+      } else {
+        this.fetchMine();
       }
     }
   },
@@ -38,9 +47,9 @@ new Vue ({
   methods: {
     search(keyword) {
       if (!keyword) {
-        this.filtered = this.articles;
+        this.filtered = isGeneral ? this.articles : this.myArticles;
       } else {
-        this.filtered = this.articles.filter(article => article.title === keyword);
+        this.filtered = (isGeneral ? this.articles : this.myArticles).filter(article => article.title === keyword);
       }
     },
 
@@ -147,12 +156,48 @@ new Vue ({
         })
         .catch(err => {
           this.loading = false;
+          const { status } = err.response;
           const { message } = err.response.data;
+          if (status === 500) {
+            Swal.fire({
+              position: 'center',
+              type: 'error',
+              title: message,
+              showConfirmButton: false,
+              timer: 1500
+            })
+          }
         })
     },
 
     fetchMine() {
-
+      this.loading = true;
+      const { token } = localStorage;
+      axios({
+        method: 'get',
+        url: `${serverURL}/user/articles`,
+        headers: { token }
+      })
+        .then(({ data }) => {
+          const { articles } = data;
+          this.loading = false;
+          this.articles = articles;
+          this.filtered = this.articles;
+        })
+        .catch(err => {
+          this.loading = false;
+          const { status } = err.response;
+          const { message } = err.response.data;
+          if (status === 500) {
+            Swal.fire({
+              position: 'center',
+              type: 'error',
+              title: message,
+              showConfirmButton: false,
+              timer: 1500
+            })
+          }
+        })
     },
 
     toggleApp() {

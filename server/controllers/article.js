@@ -78,7 +78,7 @@ class Controller {
     }
     Article.create({
       title, text,
-      imageURL: imageURL || './assets/noPhoto.png',
+      imageURL: imageURL || null,
       status: 0,
       creator: decoded.id,
       created: new Date(),
