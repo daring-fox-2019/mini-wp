@@ -1,19 +1,29 @@
 {
-    "article" : [
-        {
-            "title": "Politik",
-            "content": "Prabowo masuk rumah sakit jiwa",
-            "created_at": "2019/02/02"
-        },
-        {
-            "title": "Ekonomi",
-            "content": "Mata uang rupiah naik",
-            "created_at": "2019/02/03"
-        },
-        {
-            "title": "Cuaca",
-            "content": "Jakarta di serang banjir kiriman dari kota hujan (bogor)",
-            "created_at": "2019/02/06"
-        }
-    ]
+  "articles": [
+    {
+      "title": "cuaca bilLK",
+      "description": "Jakarta di serang banjir kiriman dari kota hujan (bogor)",
+      "id": 3
+    },
+    {
+      "title": "Avenger",
+      "description": "yoi",
+      "id": 4
+    },
+    {
+      "title": "makan",
+      "description": "nasi padang<br>",
+      "id": 6
+    },
+    {
+      "title": "amamamamama",
+      "description": "bukber",
+      "id": 7
+    },
+    {
+      "title": "yoi",
+      "description": "yoyoy",
+      "id": 8
+    }
+  ]
 }
