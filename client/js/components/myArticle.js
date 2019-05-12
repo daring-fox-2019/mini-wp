@@ -13,7 +13,7 @@ Vue.component('dd-my-article', {
     },
 
     deleteArticle() {
-
+      this.$emit('delete-article', this.article._id);
     }
   },
   

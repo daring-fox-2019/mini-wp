@@ -107,7 +107,7 @@
                       <dd-gen-article v-for="(article, i) in filtered" :article="article" :key="i"></dd-gen-article>
                     </div>
                     <div v-else>
-                      <dd-my-article @edit-article="fetchOne" v-for="(article, i) in filtered" :article="article" :key="i"></dd-my-article>
+                      <dd-my-article @delete-article="deleteArticle" @edit-article="fetchOne" v-for="(article, i) in filtered" :article="article" :key="i"></dd-my-article>
                     </div>
                   </div>
                   

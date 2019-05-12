@@ -286,7 +286,6 @@ new Vue ({
           this.closeEditing();
         })
         .catch(err => {
-          console.log(err);
           const { message } = err.response.data;
           Swal.fire({
             position: 'center',
@@ -296,6 +295,54 @@ new Vue ({
             timer: 1500
           })
         })
+    },
+
+    deleteArticle(id) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: 'green',
+        cancelButtonColor: 'red',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.value) {
+          this.loading = true;
+          const { token } = localStorage;
+    
+          axios({
+            method: 'delete',
+            headers: { token },
+            url: `${serverURL}/articles/${id}`
+          })
+            .then(({ data }) => {
+              this.loading = false;
+              const { message } = data;
+              Swal.fire({
+                position: 'center',
+                type: 'success',
+                title: message,
+                showConfirmButton: false,
+                timer: 1500
+              })
+              this.articles = this.articles.filter(article => article._id !== id);
+              this.myArticles = this.myArticles.filter(article => article._id !== id)
+              this.filtered = this.myArticles;
+            })
+            .catch(err => {
+              const { message } = err.response.data;
+              Swal.fire({
+                position: 'center',
+                type: 'error',
+                title: message,
+                showConfirmButton: false,
+                timer: 1500
+              })
+            })
+        }
+      })
+
     },
 
     toggleApp() {
