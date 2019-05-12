@@ -46,6 +46,9 @@
                     <div id="index" v-if="page === 'index' && !loading && isLogin" class="container">
                         <index></index>
                     </div>
+                    <div id="search" v-if="page === 'search' && !loading" class="container">
+                        <search-result :tag="searchTag"></search-result>
+                    </div>
                     <div id="createPost" v-if="page === 'createPost' && !loading && isLogin" class="container">
                         <create-post></create-post>
                     </div>
@@ -94,6 +97,7 @@
     <script src="js/components/loginRegisterForm.js"></script>
     
     <!-- Views -->
+    <script src="js/views/searchResult.js"></script>
     <script src="js/views/login.js"></script>
     <script src="js/views/register.js"></script>
     <script src="js/views/detailPage.js"></script>

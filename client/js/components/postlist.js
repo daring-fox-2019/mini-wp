@@ -1,26 +1,13 @@
 Vue.component('postlist', {
+    props: ['posts'],
     data() {
         return {
-            posts: [],
+            
         }
     },
     created() {
-        this.getPosts()
     },
     methods: {
-        getPosts() {
-            axios.get(serverURL + '/articles',this.$root.config)
-                .then(({data}) => {
-                    this.posts = data
-                })
-                .catch(({response}) => {
-                    Swal.fire(
-                        'Error!',
-                        response.data.error.message,
-                        'error'
-                      )
-                })
-        },
         deletePost(id) {
             axios({
                 method: 'DELETE',
@@ -31,10 +18,10 @@ Vue.component('postlist', {
                     this.getPosts()
                     this.posts = this.posts.filter(x => x._id !== id)
                 })
-                .catch((err) => {
+                .catch(({response}) => {
                     swal.fire({
                         title: 'Error!',
-                        text: err,
+                        text: response.data,
                         type: 'error',
                     })
                 })

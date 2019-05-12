@@ -1,10 +1,19 @@
 Vue.component('navigation', {
     data: '',
     props: ['islogin'],
+    data() {
+        return {
+            searchKey: '',
+        }
+    },
     methods: {
         logout() {
             this.$emit('logout')
-        }
+        },
+        onSearch() {
+            this.$root.searchTag = this.searchKey
+            this.$root.page = 'search'
+        },
     },
     template: 
     `<nav class="navbar navbar-expand-lg navbar-dark main-bg-color">
@@ -32,10 +41,10 @@ Vue.component('navigation', {
                 </li>
             </ul>
             </ul>
-            <form class="form-inline my-2 my-lg-0">
+            <form class="form-inline my-2 my-lg-0" @submit.prevent="onSearch">
                 <div class='has-search'>
                     <span class="fa fa-search form-control-feedback"></span>
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search">
+                    <input class="form-control mr-sm-2" type="search" v-model="searchKey" placeholder="Search">
                 </div>
             </form>
             <button v-if="!islogin" class="btn btn-warning my-2 my-sm-0" type="button" onclick="app.page = 'login'">Login</button>

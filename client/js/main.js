@@ -42,6 +42,7 @@ var app = new Vue({
     },
     currentPost: null,
     baseURL: 'http://miniwp.andresuchitra',
+    searchTag: '',
   },
   methods: {
     formattedDate: function(date, formatStr) {
@@ -102,7 +103,7 @@ var app = new Vue({
           console.log(response);
           Swal.fire(
             'Error!',
-            response.data.error.message,
+            response.data,
             'error'
           )
         })
@@ -122,7 +123,7 @@ var app = new Vue({
           console.log(response);
           Swal.fire(
             'Error!',
-            response.data.error.message,
+            response.data,
             'error'
           )
         })

@@ -224,8 +224,19 @@ color: #aaa;
     font-size: 20px;
 }
 
+/* facebook share button */
 ._2tga._49ve {
     height: 28px;
+}
+
+.detail-badge:hover {
+    background: #016087;
+    transition: 0.2s all;
+}
+.detail-badge {
+    min-width: 50px;
+    font-size: 14px;
+    padding: 8px;
 }
 
 

@@ -35,6 +35,10 @@ Vue.component('post-detail', {
                 return 'alert alert-dismissible fade alert-success show'
             }
         },
+        processTag(tag) {
+            this.$root.searchTag = tag
+            this.$root.page = 'search'
+        }
     },
     template:
     `<div class="d-flex flex-column pb-5">
@@ -60,7 +64,9 @@ Vue.component('post-detail', {
         <div class="align-self-center my-4"><img v-bind:src="post.featured_image"></div>
         <div class="my-3 detail__content" v-html="post.content"></div>
         <div class="d-flex mt-5">
-            <a v-for="tag in post.tags" :key="tag._id" v-bind:href="tagLink(tag.text)"><tag-badge :tag="tag" class="mr-2" ></tag-badge></a>
+            <a v-for="tag in post.tags" :key="tag._id" @click="processTag(tag.text)">
+                <tag-badge :tag="tag" class="mr-2 detail-badge" ></tag-badge>
+            </a>
         </div>
     </div>`
 })

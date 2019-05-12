@@ -88,7 +88,7 @@ class ArticleController {
         //process tags
         article.tags = (article.tags && article.tags !== '' ) ? article.tags.split(',') : ''
 
-        console.log(article);
+        // console.log(article);
 
         if(article.tags && article.tags !== '') {
             promises = article.tags.map(x => {

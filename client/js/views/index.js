@@ -2,9 +2,23 @@ Vue.component('index', {
     data() {
         return {
             mode: 'all',
+            posts: [],
         }
     },
     methods: {
+        getPosts() {
+            axios.get(serverURL + '/articles',this.$root.config)
+                .then(({data}) => {
+                    this.posts = data
+                })
+                .catch(({response}) => {
+                    Swal.fire(
+                        'Error!',
+                        response.data.error.message,
+                        'error'
+                      )
+                })
+        },
         getClass(option) {
             let activeClass = 'category-item active', normal = 'category-item'
             if(option === this.mode) {
@@ -14,6 +28,9 @@ Vue.component('index', {
                 return normal
             }
         },
+    },
+    mounted () {
+        this.getPosts()
     },
     template: 
     `<div class="container">
@@ -25,7 +42,7 @@ Vue.component('index', {
             </nav>
         </div>
         <div class="row mt-4">
-            <postlist></postlist>
+            <postlist :posts="posts"></postlist>
         </div>
     </div>
     `
