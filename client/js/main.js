@@ -41,7 +41,7 @@ var app = new Vue({
       name: '',
     },
     currentPost: null,
-    baseURL: 'http://miniwp.andresuchitra',
+    baseURL: 'http://miniwp.andresuchitra.com',
     searchTag: '',
   },
   methods: {
@@ -113,8 +113,7 @@ var app = new Vue({
       }
     },
     showDetailPost(id) {
-      if(localStorage.getItem('miniwp_token')) {
-        axios.get(serverURL + '/articles/' + id, this.config)
+      axios.get(serverURL + '/articles/' + id, this.config)
         .then(({data}) => {
           this.currentPost = data
           this.page = 'detailPost'
@@ -127,11 +126,22 @@ var app = new Vue({
             'error'
           )
         })
-      }
-      else {
-        this.page = 'login'
-      }
     },
+    showDetailPostSlug(slug) {
+      axios.get(serverURL + '/explore/' + slug)
+        .then(({data}) => {
+          this.currentPost = data
+          this.page = 'detailPost'
+        })
+        .catch(({response}) => {
+          console.log(response);
+          Swal.fire(
+            'Error!',
+            response.data,
+            'error'
+          )
+        })
+    }
   },
   mounted() {
     if(localStorage.getItem('miniwp_token')) {

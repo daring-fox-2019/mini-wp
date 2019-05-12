@@ -14,7 +14,7 @@ Vue.component('index', {
                 .catch(({response}) => {
                     Swal.fire(
                         'Error!',
-                        response.data.error.message,
+                        response.data,
                         'error'
                       )
                 })
@@ -33,7 +33,7 @@ Vue.component('index', {
         this.getPosts()
     },
     template: 
-    `<div class="container">
+    `<div class="container" style="min-height: calc(100vh - 56px);">
         <div class="row">
             <nav class="navbar">
                 <a href="#" id="cat-all" v-bind:class="getClass('all')" @click="mode = 'all'">ALL</a>

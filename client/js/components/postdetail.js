@@ -16,7 +16,7 @@ Vue.component('post-detail', {
             return `https://api.whatsapp.com/send?text=Hi, checkout this post: ${this.articlePublicUrl}`
         },
         articlePublicUrl() {
-            return this.$root.baseURL + '/articles/' + this.$props.post.slug
+            return this.$root.baseURL + '/explore/' + this.$props.post.slug
         },
         fbShareLink() {
             let finalLink = `https://www.facebook.com/plugins/share_button.php?href=${this.articlePublicUrl}&layout=button_count&size=small&appId=357508474873802`

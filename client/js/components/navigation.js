@@ -35,7 +35,7 @@ Vue.component('navigation', {
             </ul>
             <ul class="navbar-nav ml-auto mt-2 mt-lg-0 mr-2">
                 <li class="nav-item">
-                    <a class="btn btn-light" style="min-width" href="#" onclick="app.page = 'createPost'">
+                    <a class="btn btn-light" style="min-width" href="#" @click="$root.showCreatePost">
                         <i class="fas fa-edit mr-2"></i>Write
                     </a>
                 </li>

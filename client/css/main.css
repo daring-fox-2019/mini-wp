@@ -239,6 +239,91 @@ color: #aaa;
     padding: 8px;
 }
 
+/* public reader / explore */
+.explore__headline {
+    padding: 10px;
+}
+.headline-title {
+    cursor: pointer;
+}
+.headline-title:hover {
+    color: rgb(202, 161, 128);
+}
+.headline-summary-img {
+    min-height: 300px;
+    max-height: 400px;
+}
+.headline-summary {
+    overflow-y: hidden;
+    max-height: 300px;
+    padding: 0 0 20px 0;
+    margin-bottom: 30px;
+}
+.headline-img {
+    width: 200px;
+    height: 200px;
+}
+.headline-seemore {
+    font-weight: 700;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 0.8em;
+    background: #ee270d;
+    color: white;
+    padding: 5px;
+    min-width: 150px;
+    max-width: 150px;
+    text-align: center;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.headline-seemore:hover {
+    background: #ad1c08;
+}
+
+.explore__tags-main {
+    max-height: 500px;
+}
+
+.explore__tag-list {
+    overflow-y: scroll;
+    max-height: inherit;
+}
+
+.explore__tag-item {
+    display: flex;
+    align-items: center;
+    min-height: 50px;
+    cursor: pointer;
+    padding-left: 20px;
+    border-bottom: 2px solid gainsboro;
+}
+
+.explore__tag-item:hover {
+    background: rgba(135, 206, 250, 0.356);
+    transition: 0.2s all;
+}
+
+.explore__item-content {
+    max-height: 120px;
+    overflow-y: hidden;
+}
+.explore__card-item-panel {
+    cursor: pointer;
+    padding: 10px;
+}
+.explore__card-item-panel:hover {
+    cursor: pointer;
+    background: rgba(211, 211, 211, 0.301);
+}
+
+.explore__card-item-body {
+    padding: 10px;
+}
+.explore__card-img {
+    max-width: 160px;
+    max-height: 160px;
+}
 
 /* FOOTER */
 .footer {

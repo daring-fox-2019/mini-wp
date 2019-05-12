@@ -25,6 +25,20 @@ class ArticleController {
         })
     }
 
+    static random(req, res) {
+        Article.countDocuments().exec()
+            .then(count => {
+                let random = Math.floor(Math.random() * count);
+                return Article.findOne().skip(random).exec()
+            })
+            .then(data => {
+                res.status(200).json(data)
+            })
+            .catch(err => {
+                res.status(500).json()
+            })
+    }
+
     static findOne(req, res) {
         Article.findOne({_id: req.params.id})
         .populate('comment')
@@ -149,8 +163,6 @@ class ArticleController {
             article.tags = []
         }
 
-        console.log('art ----> ', article);
-
         promises = article.tags.map(x => {
             if(x) {
                 return Tag.findOneAndUpdate({text: x}, {$setOnInsert: {text: x}}, {upsert: true, new: true})
@@ -183,7 +195,6 @@ class ArticleController {
                         return origArticle.save()
                     })
                     .then(newPost => {
-                        console.log('done....', newPost);
                         res.status(200).json(newPost)
                     })
                     .catch(err => {
@@ -213,7 +224,6 @@ class ArticleController {
                     return origArticle.save()
                 })
                 .then(newPost => {
-                    console.log('done....', newPost);
                     res.status(200).json(newPost)
                 })
                 .catch(err => {
@@ -224,11 +234,9 @@ class ArticleController {
     }
 
     static delete(req, res) {
-        console.log('masuk barangtu..');
         Article.findOneAndDelete({_id: req.params.id})
             .then(article => {
-                console.log(`delete successfully...`);
-                res.status(200).json({data: article})
+                res.status(200).json(article)
             })
             .catch(err => {
                 res.status(500).json(err)

@@ -9,7 +9,7 @@ module.exports = function(req, res, next) {
                         next()
                     }
                     else {
-                        res.status(403).json('Forbidden')
+                        res.status(403).json('Forbidden: Not authorized to access this resource')
                     }
                 }
                 else {
