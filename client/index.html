@@ -46,6 +46,9 @@
                 <div id="updatePost" v-if="page === 'updatePost' && !loading" class="container">
                     <update-post :initdata="currentPost"></update-post>
                 </div>
+                <div id="detailPost" v-if="page === 'detailPost' && !loading" class="container">
+                    <detail-post :post="currentPost"></detail-post>
+                </div>
             </div>
         </div>
     </div>

@@ -17,7 +17,6 @@ Vue.component('detail-post', {
                 return 'alert alert-dismissible fade alert-success show'
             }
         },
-
     },
     template:
     `<div class="d-flex flex-column pb-5">

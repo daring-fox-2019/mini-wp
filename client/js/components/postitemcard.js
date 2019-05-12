@@ -3,6 +3,7 @@ Vue.component('postitemcard', {
     data() {
         return {
             showActionButtons: false,
+            loading: false,
         }
     },
     computed: {
@@ -29,7 +30,7 @@ Vue.component('postitemcard', {
     template:
     `
     <div class="d-flex" v-on:mouseover="showActionButtons = true" v-on:mouseleave="showActionButtons = false">
-        <a href="#" class="list-group-item list-group-item-action flex-row post-list-item p-3 card-content">
+        <a href="#" v-on:click="$root.showDetailPost(post._id)" class="list-group-item list-group-item-action flex-row post-list-item p-3 card-content">
             <div class="d-flex flex-column justify-content-between w-100">
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">{{post.title}}</h5>

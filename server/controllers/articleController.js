@@ -95,22 +95,23 @@ class ArticleController {
     }
 
     static update(req, res) {
-        let article = {}, promises = []
+        let article = {}, promises = [], origArticle
         for(let key of Object.keys(req.body)) {
-            article[key] = req.body[key]
+            if(key !== 'featured_image' && key !== 'featured_image_name' && key !== 'comments')
+            {
+                article[key] = req.body[key]
+            }
         }
+        article.author = req.user._id
 
-        if(req.file) {
-            article.featured_image_name = req.file.cloudStorageObject
-            article.featured_image = req.file.cloudStoragePublicUrl
+        if(article.tags && article.tags.length && article.tags.length > 0) {
+            article.tags = !article.tags.length ? article.tags.split(',') : article.tags
         }
         else {
-            article.featured_image_name = 'user.png'
-            article.featured_image = "https://storage.googleapis.com/miniwp-images/user.png"
+            article.tags = []
         }
-        
-        article.tags = !article.tags.length ? article.tags.split(',') : article.tags
-        console.log(article);
+
+        console.log('art ----> ', article);
 
         promises = article.tags.map(x => {
             if(x) {
@@ -121,11 +122,58 @@ class ArticleController {
             }
         });
 
-        Promise.all(promises)
-            .then(results => {
-                article.tags = results.map(x => x._id)
+        if(promises.length > 0) {
+            Promise.all(promises)
+                .then(results => {
+                    article.tags = results.map(x => x._id)
 
-                Article.findOneAndUpdate({_id: req.params.id}, article, {new: true})
+                    Article.findOne({_id: req.params.id})
+                    .then(found => {
+                        origArticle = found
+                        origArticle.tags = article.tags
+
+                        for(let key of Object.keys(article)) {
+                            origArticle[key] = article[key]
+                        }
+
+                        //update if image is change
+                        if(req.file) {
+                            origArticle.featured_image_name = req.file.cloudStorageObject
+                            origArticle.featured_image = req.file.cloudStoragePublicUrl
+                        }
+
+                        return origArticle.save()
+                    })
+                    .then(newPost => {
+                        console.log('done....', newPost);
+                        res.status(200).json(newPost)
+                    })
+                    .catch(err => {
+                        console.log('update error...', err);
+                        res.status(500).json(err)
+                    })
+                })
+                .catch(err => {
+                    console.log('promise all error ', err);
+                })
+        }
+        else {
+            Article.findOne({_id: req.params.id})
+                .then(found => {
+                    origArticle = found
+                    origArticle.tags = []
+
+                    for(let key of Object.keys(article)) {
+                        origArticle[key] = article[key]
+                    }
+                    //update if image is change
+                    if(req.file) {
+                        origArticle.featured_image_name = req.file.cloudStorageObject
+                        origArticle.featured_image = req.file.cloudStoragePublicUrl
+                    }
+
+                    return origArticle.save()
+                })
                 .then(newPost => {
                     console.log('done....', newPost);
                     res.status(200).json(newPost)
@@ -134,10 +182,7 @@ class ArticleController {
                     console.log('update error...', err);
                     res.status(500).json(err)
                 })
-            })
-            .catch(err => {
-                console.log('promise all error ', err);
-            })
+        }
     }
 
     static delete(req, res) {

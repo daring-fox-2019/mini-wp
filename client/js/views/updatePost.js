@@ -13,6 +13,16 @@ Vue.component('update-post', {
         this.formData = this.$props.initdata;
     },
     methods: {
+        getFormData(object) {
+            const formData = new FormData();
+            Object.keys(object).forEach(key => { 
+                if(key === 'featured_image') {
+                    formData.append('featured_image', object[key].data, object[key].name)
+                }
+                else formData.append(key, object[key])
+            });
+            return formData;
+        },
         getAlertClass() {
             if(status.type === 'error') {
                 return 'alert alert-dismissible fade alert-danger'
@@ -22,39 +32,34 @@ Vue.component('update-post', {
             }
         },
         updatePost(data) {
-            console.log(data, '---- toupdate');
+            const newData = this.getFormData(data)
+
+            this.$root.loading = true;
             axios({
                 method: 'PUT',
                 url: serverURL + '/articles/' + data._id,
-                data: data,
+                data: newData,
                 headers: {
                     'Authorization': localStorage.getItem('miniwp_token')
                 }
             })
             .then(({data}) => {
-                console.log('post updated');
-            })
-            .catch(err => {
-
-            })
-        },
-        showUpdatePost(id) {
-            axios.get(serverURL + '/articles/' + id, this.config)
-            .then(({data}) => {
-              console.log('main: updated post...')
-              this.currentPost = data
-              this.page = 'updatePost'
-              
+                Swal.fire(
+                    'Success',
+                    'Update done',
+                    'success'
+                )
+                this.$root.loading = false;
+                this.$root.showIndex()
             })
             .catch(({response}) => {
-              console.log(response);
-              Swal.fire(
-                'Error!',
-                response.data.error.message,
-                'error'
-              )
+                Swal.fire(
+                    'Oops',
+                    response.data,
+                    'error'
+                )
+                this.$root.loading = false;
             })
-            this.page = 'updatePost'
         },
     },
     template:

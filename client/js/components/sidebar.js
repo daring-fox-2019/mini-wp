@@ -18,9 +18,6 @@ Vue.component('sidebar', {
                 <a href="#" onclick="app.page = 'createPost'">New Post</a>
             </li>
             <li>
-                <a href="#" onclick="app.page = 'updatePost'">Update Post</a>
-            </li>
-            <li>
                 <a href="#" onclick="app.page = 'index'">Posts</a>
             </li>
             </div>

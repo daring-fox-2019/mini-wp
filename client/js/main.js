@@ -62,7 +62,13 @@ var app = new Vue({
         });
     },
     showIndex() {
-      this.page = 'index'
+      if(localStorage.getItem('miniwp_token')) {
+        this.page = 'index'
+
+      }
+      else {
+        this.page = 'login'
+      }
     },
     showCreatePost() {
       this.page = 'createPost'
@@ -88,6 +94,21 @@ var app = new Vue({
         )
       })
     },
+    showDetailPost(id) {
+      axios.get(serverURL + '/articles/' + id, this.config)
+      .then(({data}) => {
+        this.currentPost = data
+        this.page = 'detailPost'
+      })
+      .catch(({response}) => {
+        console.log(response);
+        Swal.fire(
+          'Error!',
+          response.data.error.message,
+          'error'
+        )
+      })
+    },
   },
   mounted() {
     if(localStorage.getItem('miniwp_token')) {
@@ -98,10 +119,11 @@ var app = new Vue({
             // 'Content-Type': 'multipart/form-data',
             'Authorization': localStorage.miniwp_token
         }
-    };
+      }
     }
     else {
       this.isLogin = false;
+      this.page = 'login'
     }
   }
 })
