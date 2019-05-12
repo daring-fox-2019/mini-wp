@@ -15,11 +15,14 @@ const functions = {
     }),
 
     login: wrapAsync(async (req, res) => {
+        console.log(req.body)
         let user = await User.findOne({ email: req.body.email }).select('+password')
+        // console.log(user.toObject())
         if (user && user.comparePassword(req.body.password)) {
+            user = user.toObject()
             delete user.password;            
             let token = jwtGiveToken(user)
-            console.log(user)
+            console.log(token)
             res.status(201).json({ user, token })
         }
         else throw givesError(404, 'check your username / password')
@@ -43,7 +46,7 @@ const functions = {
         } else throw givesError(404, 'have you supplied the right google credentials')
     }),
 
-    authorize: wrapasync(async (req, res, next) => {
+    authorize: wrapAsync(async (req, res, next) => {
         let token = jwtVerifyToken(req.headers.token)
         let user = User.findOne({ _id: token._id })
         if (user) {

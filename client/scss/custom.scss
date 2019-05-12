@@ -4,8 +4,8 @@ $font-family-base:Open Sans;
 @import url(https://fonts.googleapis.com/css?family=Autour+One:200,300,400,700);
 $headings-font-family:Autour One;
 
-$enable-grid-classes:false;
-$primary:#FAFAFA;
+// $enable-grid-classes:false;
+$primary:#FFFAAA;
 $secondary:#47813d;
 $success:#FEC100;
 $danger:#ff5050;
@@ -17,3 +17,17 @@ $dark:#4c4636;
 @import "../node_modules/bootstrap/scss/bootstrap.scss";
 
 // Add SASS theme customizations here..
+@media only screen and (max-width: 768px) { 
+    .post-tile {
+        width: 100px; 
+        height: 100px;
+        object-fit: cover;
+    }
+}
+
+@media only screen and (min-width: 768px) { 
+.post-tile {
+    width: 200px; 
+    height: 200px;
+    object-fit: cover;
+}}

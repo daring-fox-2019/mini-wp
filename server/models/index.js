@@ -13,8 +13,7 @@ let articleSchema = new Schema({
 })
 
 let tagSchema = new Schema({
-    title: String,
-    articles: [{ type: Schema.Types.ObjectId, ref: 'Todo' }]
+    title: String
 })
 
 let userSchema = new Schema({
