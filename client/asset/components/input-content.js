@@ -23,7 +23,7 @@ Vue.component('input-content', {
             </div>
 
             <div class="mt-3">
-                <wysiwyg v-model="dataArticle.text" :options="{image: { uploadURL:'http://localhost:4000/upload'}}"> </wysiwyg>
+                <wysiwyg v-model="dataArticle.text" :options="{image: { uploadURL:'http://miniwp-server.komangmahendra.me/upload'}}"> </wysiwyg>
             </div>
             
             <div>

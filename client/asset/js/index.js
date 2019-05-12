@@ -1,5 +1,5 @@
 
-var url = `http://localhost:4000`
+var url = `http://miniwp-server.komangmahendra.me`
 Vue.config.keyCodes.backspace = 8
 
 new Vue({
