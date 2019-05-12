@@ -10,27 +10,24 @@ Vue.component('sidebar', {
     template: 
     `
     <div>
-      <nav class="sidebar--container bg-light border-right">
-          <div class="sidebar__heading">Parampampam</div>
-          <ul class="list-group list-group-flush">
+      <nav class="sidebar--container bg-white border-right">
+          <div class="sidebar__heading">Menu</div>
+          <ul class="list-group list-group-flush bg-white">
             <li 
               class="list-group-item 
                 list-group-item-action 
-                bg-light
                 cursor-pointer"
                 @click="toHomePage"
             >Home</li>
             <li 
               class="list-group-item 
                 list-group-item-action 
-                bg-light
                 cursor-pointer"
                 @click="toListPage"
             >Article</li>
             <li 
               class="list-group-item 
                 list-group-item-action 
-                bg-light
                 cursor-pointer"
             >About</li>
           </ul>

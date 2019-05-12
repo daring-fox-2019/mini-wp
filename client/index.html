@@ -62,11 +62,29 @@
         </register-form>
 
         <section id="home" v-if="menus.home && user.loggedIn===true">
+          <div class="container">
+            <div class="row">
+              <h4 class="text-center">Your Article</h5>
+              <div class="input-group mb-3">
+                  <input 
+                    type="search" 
+                    class="form-control" 
+                    placeholder="Search your article"
+                    aria-describedby="button-addon2" 
+                    v-model.trim="searchValue"
+                  >
+              </div>
+            </div>
+          </div>
+
           <div class="container d-flex flex-column">
             <div 
+              :key="article.id"
+              v-for="article in filteredHomeArticle" 
               class="my-card 
-              d-flex 
-              justify-content-between" v-for="article in homeArticles" :key="article.id">
+                d-flex 
+                justify-content-between" 
+            >
               <mycard 
                 v-bind:article="article"
                 v-bind:menus="menus"
@@ -85,7 +103,6 @@
                 <!-- <searchbar
                   v-on:searchvalue="searchValue"
                 ></searchbar> -->
-
                   <input 
                     type="search" 
                     class="form-control" 
@@ -124,7 +141,7 @@
             v-on:submit-create="createArticle"
             v-on:submit-edit="editArticle"
           >
-            <wysiwyg 
+            <wysiwyg
               slot="wysiwyg"
               v-model="newArticle.content"
             ></wysiwyg>

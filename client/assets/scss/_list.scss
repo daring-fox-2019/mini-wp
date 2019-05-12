@@ -1,5 +1,7 @@
 .list {
     &-group {
+        position: fixed;
+        width: 9em;
         display: -ms-flexbox;
         display: flex;
         -ms-flex-direction: column;

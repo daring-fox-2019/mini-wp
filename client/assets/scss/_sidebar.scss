@@ -1,6 +1,6 @@
 .sidebar {
     &--container {
-        min-height: 100vh;
+        width: 10em;
         margin-left: -12.5em;
         -webkit-transition: margin .25s ease-out;
         -moz-transition: margin .25s ease-out;
@@ -9,7 +9,7 @@
     }
 
     &__heading {
-        padding: 1.68rem 2.1rem;
+        padding: 1rem 2.1rem;
         font-size: 1.2rem;
     }
 

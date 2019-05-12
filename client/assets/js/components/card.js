@@ -13,9 +13,9 @@ Vue.component('mycard',{
     <div class="d-flex justify-content-between w-100">
         <div class="content">
             <div class="d-flex justify-content-between">
-                <div style="max-width: 115px">
+                <div style="max-width: 145px">
                     <img 
-                        :src="article.featured_image ? article.featured_image : 'https://via.placeholder.com/70x70' " 
+                        :src="article.featured_image ? article.featured_image : 'https://via.placeholder.com/155x155' " 
                         alt="article.title"
                         style="width:100%;"
                     >
@@ -26,9 +26,15 @@ Vue.component('mycard',{
                     </div>
                     <div class="my-card-content" v-html="article.content">
                     </div>
-                    <div v-if="menus.home">
-                        by {{article.author.name}}
-                    </div>
+                    <div 
+                        v-if="menus.home"
+                        class="color-grey4"
+                        style="margin-top: 21px;" 
+                    >by {{article.author.name}}</div>
+                    <div style="color: #616161;
+                    font-weight: 500;
+                    margin-top: 5px;
+                    font-size: 13px;">{{new Date(article.created_at).toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}}</div>
                     <div v-if="article.tags">
                         <div 
                             v-for="tag in article.tags"

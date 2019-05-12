@@ -1,3 +1,4 @@
+
 const ARTICLE_PATH = `http://localhost:3000/articles`
 const USER_PATH = `http://localhost:3000/users`
 
@@ -22,11 +23,6 @@ const app = new Vue({
             tags: []
         },
         homeArticles: [],
-        // userForm: {
-        //     name: '',
-        //     email: '',
-        //     password: ''
-        // },
         auth2: '',
         searchValue: '',
         createPage: true,
@@ -349,8 +345,26 @@ const app = new Vue({
     computed: {
         filteredArticle() {
             return this.articles.filter(article => {
-                return article.title.toLowerCase().includes(this.searchValue.toLowerCase())
+                if(article.title.toLowerCase().includes(this.searchValue.toLowerCase())) {
+                    return article.title
+                } else if(article.tags.includes(this.searchValue)) {
+                    return article.title
+                }
             })
+        },
+        filteredHomeArticle() {
+            return this.homeArticles.filter(article => {
+                if(article.title.toLowerCase().includes(this.searchValue.toLowerCase())) {
+                    return article.title
+                } else if(article.tags.includes(this.searchValue)) {
+                    return article.title
+                }
+            })
+        }
+    },
+    filters: {
+        moment: function (date) {
+          return moment(date).format('dddd');
         }
     }
 })
