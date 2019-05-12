@@ -39,10 +39,11 @@ nav{
     background-color: rgb(113, 213, 255)
 }
 .footer {
-    position: sticky;
+    position: fixed;
+    left: 0;
     bottom: 0;
     width: 100%;
-    background-color:#77C1E3;
-    color: darkblue;
+    background-color: #77C1E3;
+    color: white;
     text-align: center;
-}
+  }
