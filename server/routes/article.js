@@ -10,13 +10,14 @@ const {translate} = require('../middleware/translate')
 
 router.post('/translate', translate)
 router.get('/all', ArticleController.findFromAllUsers)
-router.use(authenticate)
-router.get('/', authenticate, ArticleController.findByUser)
-router.get('/query/?', ArticleController.findAll)
-router.get('/:id', ArticleController.findOne)
-router.put('/:id', images.multer.single('image'), images.sendUploadToGCS, generateTag, authorizedUser, ArticleController.update)
-router.delete('/:id', authorizedUser, ArticleController.delete)
-router.post('/', images.multer.single('image'), images.sendUploadToGCS, safeImage, generateTag, ArticleController.create)
+router.get('/',authenticate, ArticleController.findByUser)
+router.get('/likes', authenticate, ArticleController.getLikes)
+router.get('/query/?',authenticate, ArticleController.findAll)
+router.get('/:id', authenticate, ArticleController.findOne)
+router.put('/like/:id',authenticate,  ArticleController.like)
+router.put('/:id',authenticate,  images.multer.single('image'), images.sendUploadToGCS, generateTag, authorizedUser, ArticleController.update)
+router.delete('/:id',authenticate, authorizedUser, ArticleController.delete)
+router.post('/', authenticate, images.multer.single('image'), images.sendUploadToGCS, safeImage, generateTag, ArticleController.create)
 
 
 

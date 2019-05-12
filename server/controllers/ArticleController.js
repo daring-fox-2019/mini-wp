@@ -35,49 +35,57 @@ class ArticleController {
         }
     }
 
-    static async update(req, res) {
+    static async getLikes(req,res) {
         try {
-                   
+            let likedByMe = await Article.find({likes : {$in : req.authenticatedUser.id}}).populate('tags').populate('userId')
+            res.status(200).json(likedByMe)
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    }
 
-            let cloudStoragePublicUrl = ''
-            if (req.file) cloudStoragePublicUrl = req.file.cloudStoragePublicUrl
-            else cloudStoragePublicUrl = req.body.image
-
-            if (req.body.type == 'like') {
-                let foundArticle = await Article.findById(req.params.id)
-                if (foundArticle) {
-                    let checkUser = foundArticle.likes.indexOf(req.authenticatedUser.id) >= 0
-                    if (checkUser) {
-                        let deleteLike = await Article.findOneAndUpdate({_id : req.params.id}, {$pull : {likes : req.authenticatedUser.id}}, {new : true})
-                        res.status(200).json({deleteLike, msg : "dislike"})
-                    } else {
-                        let okLike = await Article.findOneAndUpdate({_id : req.params.id}, {$push : {likes : req.authenticatedUser.id}}, {new : true})
-                        res.status(200).json({okLike, msg : "like"})
-                    }
+    static async like(req,res) {
+        try {
+            let foundArticle = await Article.findById(req.params.id)
+            if (foundArticle) {
+                let checkUser = foundArticle.likes.indexOf(req.authenticatedUser.id) >= 0
+                if (checkUser) {
+                    let deleteLike = await Article.findOneAndUpdate({_id : req.params.id}, {$pull : {likes : req.authenticatedUser.id}}, {new : true})
+                    res.status(200).json({deleteLike, msg : "dislike"})
                 } else {
-                    res.status(404).json({ message: `No such id exist` })
+                    let okLike = await Article.findOneAndUpdate({_id : req.params.id}, {$push : {likes : req.authenticatedUser.id}}, {new : true})
+                    res.status(200).json({okLike, msg : "like"})
                 }
             } else {
-                console.log(req.file, '???');
-                
-                console.log('ASDKJAOSDJNKAJP2190IJO21KQW');
-                let taghehe = req.body.tags.split(',')
-                let alltags = await Tag.find({})
-                let tagListFromDb = []
-                console.log(taghehe)
-    
-                alltags.forEach(tag => {
-                   taghehe.forEach(userTag => { 
-                      if( tag.tagName == userTag ) {
-                          tagListFromDb.push(tag._id)
-                      }
-                    })
-                })           
-                let url = req.file ? req.file.cloudStoragePublicUrl : req.body.image;
-                let foundUpdated = await Article.findOneAndUpdate({_id : req.params.id}, {$set : {...req.body, image : url, tags : tagListFromDb,  userId: req.authenticatedUser.id}}, {new : true})
-                if (foundUpdated) res.status(200).json(foundUpdated)
-                else res.status(404).json({ message: `No such id exist` })
+                res.status(404).json({ message: `No such id exist` })
             }
+        } catch (error) {
+            
+        }
+    }
+
+    static async update(req, res) {
+        try {
+            console.log(req.file, '???');
+            
+            console.log('ASDKJAOSDJNKAJP2190IJO21KQW');
+            let taghehe = req.body.tags.split(',')
+            let alltags = await Tag.find({})
+            let tagListFromDb = []
+            console.log(taghehe)
+
+            alltags.forEach(tag => {
+                taghehe.forEach(userTag => { 
+                    if( tag.tagName == userTag ) {
+                        tagListFromDb.push(tag._id)
+                    }
+                })
+            })           
+            let url = req.file ? req.file.cloudStoragePublicUrl : req.body.image;
+            let foundUpdated = await Article.findOneAndUpdate({_id : req.params.id}, {$set : {...req.body, image : url, tags : tagListFromDb,  userId: req.authenticatedUser.id}}, {new : true})
+            if (foundUpdated) res.status(200).json(foundUpdated)
+            else res.status(404).json({ message: `No such id exist` })
+    
         } catch (error) {
             console.log(error, 'gagal update atc');
             res.status(500).json(error)
@@ -122,11 +130,10 @@ class ArticleController {
 
     static async findFromAllUsers(req, res) {
         try {
-            let found = await Article.find({}).populate('userId')
+            let found = await Article.find({}).populate('userId').populate('tags')
             console.log('ap', found);
             
-            if (found) res.status(200).json(found)
-            else res.status(404).json({ message: `No such id exist` })
+           res.status(200).json(found)
 
         } catch (error) {
          res.status(500).json(error)

@@ -9,16 +9,14 @@ Vue.component('mediumcard', {
   methods: {
     
     getRandomInteger() {
-      return Math.floor(Math.random() * (this.art.tags.length - 0 + 1)) + 0;
+      return Math.floor(Math.random() * (this.art.tags.length - 0 - 1 ) + 0);
     },
     getFullArticle(id) {
       console.log('ada kesini');
       this.$emit('fullarticle', id)
     },
-    likeThis(id) {
-      console.log('coy');
-      
-      this.$emit('likearticle', {id, type : 'like'})
+    likeThis(id) {      
+      this.$emit('likearticle', id)
     },
     deleteArticle(id) {
       console.log(id);
@@ -42,8 +40,8 @@ Vue.component('mediumcard', {
         <p style="margin:0 !important;padding-top:20px;" class="card-text text-left text-muted">Author : {{art.userId ? (art.userId.username) : (null) }} in {{art.tags ? (art.tags[getRandomInteger()].tagName) : (null) }} </p>
        
        
-        <button @click="likeThis(art._id)" class="btn button-like float-sm-left" >
-        <i v-if="art.likes.indexOf(art.userId._id) >= 0" class="fa fa-heart" style="color:#cc4b37"></i>
+        <button v-if="art.userId" @click="likeThis(art._id)" class="btn button-like float-sm-left" >
+        <i v-if="art.likes.indexOf(userId) >= 0" class="fa fa-heart" style="color:#cc4b37"></i>
         <i v-else class="fa fa-heart"></i>
         <span>Like</span>
         </button> 
@@ -56,7 +54,7 @@ Vue.component('mediumcard', {
 
         <button v-show="art.userId._id == userId"  class="btn button-like float-sm-left" >
         <i class="fas fa-edit"></i>
-        <span @click="editArticle(art._id)" >Edit</span>
+        <span  @click="editArticle(art._id)" >Edit</span>
         </button>
 
         </div>

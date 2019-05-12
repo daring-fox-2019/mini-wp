@@ -18,7 +18,7 @@
 
     <!-- GOOGLE -->
     <meta name="google-signin-client_id"
-    content="445619934297-i30r489vqmcgldok747hptkr75q5fl5v.apps.googleusercontent.com">
+        content="550504097732-9hl6mpuctfa6335mhh43oi9maqcqj480.apps.googleusercontent.com">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://apis.google.com/js/platform.js" async defer></script>
 
@@ -60,13 +60,8 @@
 
         <!-- NAVBAR STARTS HERE -->
         <navbar v-on:sign-out="userSignOut" v-on:changestories="changestories" v-bind:is-login="isLogin"
-            v-on:gethome="gethome" 
-            v-on:searchtag="searchtag"
-            v-bind:current-page="currentPage"
-            v-bind:user-image="userImage"
-            v-on:search="search"
-            v-on:writestories="writestories"
-            >
+            v-on:gethome="gethome" v-on:searchtag="searchtag" v-bind:current-page="currentPage"
+            v-bind:user-image="userImage" v-on:search="search" v-on:writestories="writestories">
         </navbar>
         <!-- NAVBAR ENDS HERE -->
 
@@ -75,42 +70,40 @@
         <!-- LOGIN FORM ENDS HERE -->
 
         <!-- REGISTER STARTS HERE -->
-        <register 
-        v-if="currentPage == 'register'" 
-        v-on:successregister="showLogin" 
-        v-if="!isLogin"></register>
+        <register v-if="currentPage == 'register'" v-on:successregister="showLogin" v-if="!isLogin"></register>
         <!-- REGISTER FORM ENDS HERE -->
 
         <!-- HOME SEGALA HOME STARTS HERE -->
         <div v-if="currentPage == 'home' && isLogin == true" class="container">
-            <div class="row">
-                <div class="col-6 col-md-4">
-                    <!-- <headlinecard></headlinecard> -->
-                </div>
-                <div class="col-6 col-md-4">
-                    <smallcard></smallcard>
-                    <smallcard></smallcard>
-                    <smallcard></smallcard>
-                </div>
-                <div class="col-6 col-md-4">
 
-                    <!-- <headlinecard></headlinecard> -->
+            <div class ="row">
+                <div v-for="(art, index) in [arrArticles[getRandomInt(0, arrArticles.length)]]"  class ="col-4">
+                        <headlinecard v-bind:art="art" v-on:fullarticle="fullarticle"></headlinecard>
+                </div>
+                <div class ="col-4" >
+                    <smallcard v-for="(art, index) in arrArticles.slice(0,3)" :key="index" v-bind:art="art" v-on:fullarticle="fullarticle" v-on:likearticle="likearticle">
+                    </smallcard>
+                </div>
+                <div  v-for="(art, index) in [arrArticles[getRandomInt(0, arrArticles.length)]]" class ="col-4">
+                        <headlinecard v-bind:art="art" v-on:fullarticle="fullarticle"></headlinecard>
                 </div>
             </div>
+
             <div class="row">
-                <div class="col-12 col-md-8">
+                <div class="col md-6">
+                    <div v-for="(art, index) in arrArticles" :key="index" class=" col-md-12">
+                        <mediumcard v-on:deletearticle="deletearticle" v-on:likearticle="likearticle"
+                            v-on:fullarticle="fullarticle" v-on:editarticle="editarticle" v-bind:art="art">
+                        </mediumcard>
+                    </div>
+
+                </div>
+                <div style="background: url('./assets/nevermiss.png')"  class="col md-6">
+                    <div class="col-md-4">
+                    </div>
 
                 </div>
 
-                <div class="col-12 col-md-4">
-                    <h4 style="font-family: 'Habibi', serif;">Popular On Sprache</h4>
-                    <div class="mb-3 mt-3 dropdown-divider"></div>
-                    <popularcard></popularcard>
-                    <popularcard></popularcard>
-                    <popularcard></popularcard>
-                    <popularcard></popularcard>
-
-                </div>
             </div>
         </div>
         <!-- HOME SEGALA HOME ENDS HERE -->
@@ -123,8 +116,7 @@
                 <div style=" background:url('./assets/smallbg1.jpg') no-repeat center" class="modal-content">
 
                     <div class="modal-body">
-                        
-                        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+
                         <br><br><br><br><br><br><br><br>
                         <button data-dismiss="modal" v-on:click.prevent="showLogin" class="btn btn-light"
                             style="margin-left:200px">Login</button>
@@ -140,34 +132,49 @@
         <!-- MODAL REGISTER ENDS -->
 
         <!-- START MY STORIES -->
-        <div v-show="currentPage == 'myStory'" class="container">
+        <div v-show="currentPage == 'mystories'" class="container">
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
                         aria-controls="nav-home" aria-selected="true">Home</a>
-                    <a class="nav-item nav-link"id="nav-profile-tab" data-toggle="tab" :href="href" role="tab"
-                        aria-controls="nav-profile" aria-selected="false">My Likes</a>
+                    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
+                        aria-controls="nav-profile" v-on:click="getMyLikes()" aria-selected="false">My Likes</a>
                 </div>
             </nav>
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                     <div v-for="(art, index) in arrArticles" :key="index" id="myarticles">
-                        <mediumcard v-on:deletearticle="deletearticle" v-on:likearticle="updateArticle"
+                        <mediumcard v-on:deletearticle="deletearticle" v-on:likearticle="likearticle"
                             v-on:fullarticle="fullarticle" v-on:editarticle="editarticle" v-bind:art="art">
+
                         </mediumcard>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-                   <!-- INI BAGIAN LIKES -->
+                    <!-- INI BAGIAN LIKES -->
+                    <div class="row ">
+                        <div v-for="(art, index) in myLikes" :key="index" class="col-md-4 align-self-baseline">
+                            <smallcard v-bind:art="art" v-on:fullarticle="fullarticle" v-on:likearticle="likearticle">
+                                <button v-if="art.userId" @click="likeThis(art._id)" style="font-size:12px;"
+                                    class="btn button-like float-sm-left">
+                                    <i v-if="art.likes.indexOf(userId) >= 0" class="fa fa-heart"
+                                        style="color:#cc4b37"></i>
+                                    <i v-else class="fa fa-heart"></i>
+                                    <span>Like</span>
+                                </button>
+                            </smallcard>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
-    </div>
         <!-- END OF MY STORIES -->
 
 
 
         <!-- START ON WRITE STORIES -->
-        <div class = "container">
+        <div class="container">
             <div v-if="currentPage == 'writePage' ">
                 <br>
                 <h3>Your Story Goes Here</h3>
@@ -182,7 +189,7 @@
                     may delete tags you don't want or add a custom tag : </small>
                 <div class="custom-file col-md-6">
                     <input v-on:change="getImage" type="file" class="custom-file-input" id="customFile">
-        
+
                     <label class="mt-2 mb-2 custom-file-label" for="customFile">Add Featured Image To Reach More
                         People</label>
                 </div>
@@ -195,14 +202,11 @@
                     <button type="submit" class="btn-sm btn btn-light mb-2">Insert Tag One By One</button>
                 </form>
                 <br>
-        
+
                 <div class="row">
                     <div v-for="(tag, index) in currentTags" :key="index">
-                        <chips 
-                        v-on:deletetag="deletetag(tag)"
-                        v-bind:namanya="tag"
-                        >
-                        <i v-on:click.prevent="deletetag(tag)" class="ml-2 fas fa-times"></i>
+                        <chips v-on:deletetag="deletetag(tag)" v-bind:namanya="tag">
+                            <i v-on:click.prevent="deletetag(tag)" class="ml-2 fas fa-times"></i>
                         </chips>
                     </div>
                 </div>
@@ -210,8 +214,8 @@
                     name="action">Submit</button>
                 <button v-if="editor" @click.prevent="patchArticle()" class="btn btn-light mt-2" type="submit"
                     name="action">Edit</button>
-                <button id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
-                aria-controls="nav-home" aria-selected="true" @click.prevent="changestories" class="btn btn-light mt-2" type="submit"
+                <button id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home"
+                    aria-selected="true" @click.prevent="changestories" class="btn btn-light mt-2" type="submit"
                     name="action">Cancel</button>
             </div>
         </div>
@@ -224,33 +228,28 @@
         <!-- START OF FULL ARTICLE -->
 
         <div class="container">
-            <fullarticle 
-            v-bind:current-article="currentArticle" 
-            v-if="currentPage == 'fullarticle'"
-            v-on:translate="translate">
+            <fullarticle v-bind:current-article="currentArticle" v-if="currentPage == 'fullarticle'"
+                v-on:translate="translate">
             </fullarticle>
         </div>
         <!-- END OF FULL ARTICLE -->
 
 
         <!-- START OF SEARCH SECTION -->
-        <div v-show="this.currentPage == 'searchpage'"  class="container">
+        <div v-show="this.currentPage == 'searchpage'" class="container">
             <div class="row">
                 <div v-if="searchedInput.length == 0">
                     <emptyarray></emptyarray>
                 </div>
                 <div v-else v-for="(art, index) in searchedInput" :key="index" class="col-6 col-md-4">
-                    <headlinecard
-                    v-bind:art="art"
-                    v-on:fullarticle="fullarticle"
-                    ></headlinecard>
+                    <headlinecard v-bind:art="art" v-on:fullarticle="fullarticle"></headlinecard>
                 </div>
             </div>
         </div>
         <!-- END OF SEARCH -->
 
 
-    <!-- THIS BELOW DIV CLOSING BELONGS TO APP VUE DO NOT MOVE -->
+        <!-- THIS BELOW DIV CLOSING BELONGS TO APP VUE; DO NOT MOVE -->
     </div>
     <!-- END OF APP -->
 

@@ -7,8 +7,10 @@ const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken');
 const cors = require('cors')
 const routes = require('./routes')
+const url = process.env.MONGO_URL
+const uri = process.env.MONGO_ATLAS_URI
 
-mongoose.connect(`${process.env.MONGO_URL}`, { useNewUrlParser: true, useCreateIndex: true })
+mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true })
 .then(() => { console.log(('====>> Yay MongoDB Conected <<====')) })
 .catch(err => { console.log(err); })
 

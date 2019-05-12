@@ -2,9 +2,10 @@ var Axios = axios.create({
     baseURL: 'http://localhost:3000'
 });
 
-new Vue({
+let app = new Vue({
     el: '#app',
     data: {
+        userId : localStorage.getItem('userId'),
         currentPage: '',
         isLoading : false,
         isLogin: false,
@@ -19,14 +20,13 @@ new Vue({
         articleTitle : '',
         currentArticle : '',
         currentTags : [],
+        myLikes : [],
         inputTag : '',
         empty : '',
         searchInput : '',
         searchedInput : [],
         currentTagInputUser : [],
-        arrArticles : [{
-            title: ''
-        }],
+        arrArticles : [],
         image : '',
         user : {
             myArticles : [],
@@ -57,11 +57,17 @@ new Vue({
 
 
         if (this.currentPage == 'home') {
-            console.log('ehehe');
+            this.getAllOverWebArticle()
+
 
         }
     },
     methods: {
+        getRandomInt(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+        },
         signIn(pp) {
             this.isLogin = true
             this.currentPage = 'home'
@@ -125,6 +131,18 @@ new Vue({
           deletetag(namatag) {
             this.currentTags = this.currentTags.filter(tag =>  tag !== namatag)
           },
+          getMyLikes() {
+            Axios.get(`/articles/likes`, {headers: {
+                'token': localStorage.getItem('token')
+            }})
+            .then(({data}) => {
+                this.myLikes = data
+            })
+            .catch(err => {
+                console.log(err);
+                
+            })
+          },
           fullarticle(id) {
               console.log(id , 'masuk');
               
@@ -162,9 +180,7 @@ new Vue({
                     this.searchedInput = data
                     console.log(data, 'hehe');
                     this.currentPage = 'searchpage'
-
-                }
-                
+                }    
             })
             .catch(err => {
                 console.log(err);
@@ -178,12 +194,11 @@ new Vue({
                 
                 this.arrArticles = data
                 this.user.myArticles = data
-                this.currentPage = 'myStory'
+                this.currentPage = 'mystories'
                 console.log((data));
             })
             .catch(err => {
                 console.log(err);
-                
             })
         },
         writestories(id) {
@@ -238,7 +253,6 @@ new Vue({
                     'Entry Posted!',
                     'View it on your dashboard',
                     'success')
-
                 
                 this.articleBody = ""
                 this.articleTitle = ""
@@ -254,13 +268,15 @@ new Vue({
             })
         },
         getAllOverWebArticle() {
+            console.log('nyari smuaaaaa');
+            
             Axios.get(`/articles/all`)
             .then(({data}) => {
+                this.arrArticles = data
                 console.log(data);
             })
             .catch(err => {
-                console.log(err);
-                
+                console.log(err);       
             })
         },
         
@@ -272,8 +288,7 @@ new Vue({
                 this.inputTag = ''
             })
             .catch(err => {
-                console.log(err);
-                
+                console.log(err);  
             })
         },
          postArticle(apa) {
@@ -305,47 +320,83 @@ new Vue({
                 this.getUserArticlesAll()
             })
             .catch(function (err, textStatus) {
-                console.log(err)
+                console.log(err.response)
+                if (err.response.status == 406) {
+                swal({
+                    text: `${err.response.data.msg}`,
+                    icon: "warning",
+                    button: "Understood",
+                })
+            }
+                else {
+                    swal({
+                        text: `Something is wrong`,
+                        icon: "warning",
+                        button: "Understood",
+                    }) 
+                }
+            })
+        },
+        likearticle(id) {
+            console.log(id)
+            console.log(localStorage.getItem('token'));
+            
+            Axios.put(`/articles/like/${id}`, {}, {headers: {
+                'token': localStorage.getItem('token')
+            
+            }})
+            .then(({data}) => {
+                if (data.msg == 'dislike') {
+                    Swal.fire( 'You disliked this post!', '', 'success')
+                    if (this.currentPage == 'mystories') {
+                        this.getUserArticlesAll()
+                    } else if (this.currentPage == 'home') {
+                        this.getAllOverWebArticle()
+                    }
+                } else if (data.msg == 'like') {
+                    Swal.fire( 'You liked this post!', '', 'success')
+                    if (this.currentPage == 'mystories') {
+                        this.getUserArticlesAll()
+                    } else if (this.currentPage == 'home') {
+                        this.getAllOverWebArticle()
+                    }
+                } else {
+                    console.log(data, 'dapet data gak?');
+                }
+            })
+            .catch(err => {
+                console.log(err.response);           
                 swal({
                     text: 'Something is wrong',
                     icon: "warning",
                     button: "Understood",
                 });
+
             })
         },
         updateArticle(obj) {
-            console.log(obj, '//');
             
-            if (obj.type == 'like') {
-                console.log('hehe');
-                
-                Axios.put(`/articles/${obj.id}`, {type : 'like'}, {
-                    headers: {
-                        'token': localStorage.getItem('token'),
-                        'Access-Control-Allow-Origin' : '*'
-                    }
-                })
-                .then(({data}) => {
-                    if (data.msg == 'dislike') {
-                        Swal.fire( 'You disliked this post!', '', 'success')
-                        this.getUserArticlesAll()
-                    } else if (data.msg == 'like') {
-                        Swal.fire( 'You liked this post!', '', 'success')
-                        this.getUserArticlesAll()
-                    } else {
-                        console.log(data, 'dapet data gak?');
-                    }
-                })
-                .catch(err => {
-                    console.log(err.response);
-                    
-                    swal({
-                        text: 'Something is wrong',
-                        icon: "warning",
-                        button: "Understood",
-                    });
-                })
-            }
+            Axios.put(`/articles/${obj.id}`, {type : 'like'}, {
+                headers: {
+                    'token': localStorage.getItem('token'),
+                    'Access-Control-Allow-Origin' : '*'
+                }
+            })
+            .then(({data}) => {
+                if (data.msg == 'dislike') {
+                    Swal.fire( 'You disliked this post!', '', 'success')
+                    this.getUserArticlesAll()
+                } else if (data.msg == 'like') {
+                    Swal.fire( 'You liked this post!', '', 'success')
+                    this.getUserArticlesAll()
+                } else {
+                    console.log(data, 'dapet data gak?');
+                }
+            })
+            .catch(err => {
+                console.log(err.response);           
+
+            })
         } ,
         deletearticle(id) {
             console.log('asjkasd', id);
@@ -403,3 +454,34 @@ new Vue({
         }
     }
 })
+
+let serverURL = 'http://localhost:3000'
+
+function onSignIn(googleUser) {
+  var profile = googleUser.getBasicProfile();
+  var id_token = googleUser.getAuthResponse().id_token;
+
+  Axios.post(`${serverURL}/signin/google`, {
+      id_token
+    })
+    .then((response) => {
+      let { data } = response
+      console.log(response, '///')
+      localStorage.setItem('token', data.token)
+      localStorage.setItem('userId', data.id)
+      localStorage.setItem('username', data.username)
+      localStorage.setItem('userImage', data.image)
+
+
+      app.isLogin = true
+      app.currentPage = 'mystories'
+
+    })
+    .catch((err, textStatus) => {
+      swal({
+        text: 'Something is wrong',
+        icon: "warning",
+        button: "Understood",
+      });
+    })
+}

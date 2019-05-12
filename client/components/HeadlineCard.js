@@ -5,14 +5,23 @@ Vue.component('headlinecard', {
       console.log('ada kesini');
       this.$emit('fullarticle', id)
     },
-      
+    truncate(tulisan) {
+      if (tulisan.length >= 250) {
+        return tulisan.substring(0,250).concat('...')
+      } else {
+        return tulisan
+      }
+    }
+  },
+  created() {
+    console.log('huahuahua')
   },
   template : `
   <div style="border: none;" class="card mb-3">
     <img :src="art.image"  class="card-img-top" alt="headline_photo">
     <div class="card-body">
       <h5 @click="getFullArticle(art._id)" style="font-family: 'Abril Fatface', cursive; letter-spacing: 0.02em;"  class="text-left card-title">{{art.title}}</h5>
-      <p style="font-family: 'Lato', sans-serif;"  class="text-left card-text">{{art.content}}</p>
+      <p style="font-family: 'Lato', sans-serif;"  class="text-left card-text">{{truncate(art.content)}}</p>
       <div id="keterangan" class="">
             <div style="display:flex">
             <img :src="art.userId.image" style="border-radius:50%; max-height:50px; max-width:50px;"  class="card-img-top" alt="foto user">

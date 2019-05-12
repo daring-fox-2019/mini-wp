@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "phase2hacktiv",
+  "private_key_id": "2fe4896a3f3a26733cc386f4870e31a5f93f19fb",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCkCQ2gmr2c73f5\nBbT4xO9Zav62kJYxCE2nGBY7B/44Mx5v4j+8uTu8I1Ybxo3QW08B3SWlbQVvmvZy\nSJiJMGkTgA0GAuyXhFXoIBBOnni3XtnXazzEJnZFjISkwmujuce80RHiC4D/Ck6j\nWEoYa2pkCOxLPlazOCtE32jp4cAk1BIB/5LGu18bwtq7iLEae4TqxFoUqiSszohq\n31Qc9GElUEShzKGpf2Y0lKwSvPiiS+HWapEfl4FXGu6Shd7qEpiBKYd3m0kgrOjL\n5Sj5ziVxEcvLRaYlm+wKel+3ivhHMA5srgfsr1wkQrstAulFqkw9G2EnuW1Rhupl\nbtKbIzATAgMBAAECggEAKe44ggvcGVArYkf/rTGmHzzW9HL8OXduZh6lnBxccyA6\nEQ6MDWFqMBr2SW5VVOPqS8csdt9p6s/5XFhLSZJK4dWzPoyjzs1gqk/76yTeJb2E\nwOikJV3RkNCtHXKnUjhMoursf9RB+q+3T1Djy981WHHheRBr2C8s/FOBfXucAq2c\nFWs0aDLV71XPMyNCOJlwCCR0LPNprWoWE0vkklvRQSHN4OtnDzvZgsX83XW3rIze\n64Qdk91xVKRuRthbwe65ywiu7m/pajstPyPRrPUgTAivLN0fWtIcEmqOk7NaCUSq\nkN+b1Lf/2jxfj2a1ZHZ6PkV5njJRRHIbqu03Bsd+jQKBgQDbRHMhXtI/QtW0qfxx\nnwD2+GplsbAMa+OXFn4sJ5KsEmx7cJ9zsXlSySNCMFzuc+claPClzHNGrUrK2q2l\nH8ggaarNKEv4qErz3Qwlkyz4+qPmQol3jZS4Qh9pO1hbmDSquRABLIi2UGsLR9yo\nn1UTYAILA8kyYMPnQNUDN40HJQKBgQC/g+koRWTkrPFrVukJx0OQDeVqIWlBsQRw\nkEKA+dSJdD7+ADfyEGYXmOWzwzUqgTW3R5IIHXNKp2b5j3odQWyWvAWCZr0LQlDl\nQdbmTwfYSHqL3NqmSwyTRmyRJqGS1y0l3YAr1VNn1ddHEZ8dkaLou3wCcSvMG9tg\nZ3sx2qpw1wKBgF5MdNsgJXmRa8kT5f6TbF3Kfi+YGGdvKuT6hm7E4h5gmgkIaXrf\nE5dX63L2y7C9ZeY/2Gblo5n8wxK0s0M1hOLzrsIml22sKvfv096BCjFV0ZEggnBJ\nEnGf9lRScnCJ5/SYPFrU5ULLGQ4z7KEUTQlVG+vSx/+DgBz/U9zbUiqFAoGANR4g\nD/RXTHmPKCdd0UF8Qrsn8yy7JeY0Bghs+ZrRUSJ1yjtDSRc1Sbw1kYtF9rkJrgDi\nxu9sJ7uQew1JYE3iEViq6oUWT8Yf68Y8FXq8AUfw/VPPLSpJnZt9xzCAxdp6gjMS\nNpYfYQBVijef+zKGjahad87tx9m+Gdn5uFUeytcCgYEAtnWbWacnEHgunNCEyMN5\n7zqlnWEcK045A7crC8JKov5AbmGi7ppufasxpOwxQm8aRy+K+tNiPj0d0Sh46WZM\nBjcqLAMZ3mQcLaynZUTfD3gKXEpeQli6U1X+wUKuYiUgIhsKdZA1ZvJ5WSc+G7BT\ny2fMJEHIZXYOoJXMq+neFDA=\n-----END PRIVATE KEY-----\n",
+  "client_email": "davitabuckethehe@phase2hacktiv.iam.gserviceaccount.com",
+  "client_id": "100339881975467944822",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/davitabuckethehe%40phase2hacktiv.iam.gserviceaccount.com"
+}
