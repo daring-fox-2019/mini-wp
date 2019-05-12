@@ -20,7 +20,7 @@ class ControllerUser{
     })
     .catch(err=>{
       console.log(err)
-      res.json(err.errors)
+      res.json({ message : err.message })
     })
   }
 
@@ -51,9 +51,9 @@ class ControllerUser{
         throw { message : "password / email wrong" }
       }
     })
-    .catch(error=>{
-      console.log(error)
-      res.json(error)
+    .catch(err=>{
+      console.log(err)
+      res.json({ message : err.message})
     })
   }
 
@@ -101,7 +101,7 @@ class ControllerUser{
         })
         .catch(function(err) {
             console.log(err)
-            res.status(500).json(err)
+            res.status(500).json({message : err.message})
         })
   }
 

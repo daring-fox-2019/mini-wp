@@ -19,6 +19,16 @@ router.put("/articles/:id", authorization, cArticle.updateArticle)
 router.delete("/articles/:id", authorization, cArticle.deleteArticle) // headers : token, id 
 // response on success { _id }
 
+router.post("/uploadimg", multer.single('image'), sendUploadToGCS,
+   function(res,req,next){
+      if (req.file) { 
+        res.status(200).json(req.file.cloudStoragePublicUrl);
+        // balikin ke client
+      } else {
+        res.status(500).send('Unable to upload');
+      }
+   });
+
 /**
  * router.post("/uploadimg", multer.single('image'), sendUploadtoGCS,
  *   function(res,req,next){

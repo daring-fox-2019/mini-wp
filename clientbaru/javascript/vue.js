@@ -38,7 +38,11 @@ let vue = new Vue({
     viewarticles(){
       axios({
         method : "get",
-        url : "http://localhost:3000/articles?userId="+localStorage.getItem('id'),
+        url : "http://localhost:3000/articles",
+        headers : {
+          token : localStorage.getItem('token'),
+          id : localStorage.getItem('id')
+        }
       })
         .then(({data})=>{
           this.articlelist = data
@@ -67,15 +71,18 @@ let vue = new Vue({
         swal("Attention", "Complete the form below to make an account")
       } else {
         axios({
-          method : "get",
-          url : "http://localhost:3000/users?email="+this.email+"&password="+this.password,
+          method : "post",
+          url : "http://localhost:3000/login",
+          data : {
+            email : this.email,
+            password : this.password
+          }
         })
           .then(({ data })=>{
-            if(data.length > 0){
-              data = data[0]
+            if(data){
               console.log(data)
               console.log("user found")
-              localStorage.setItem('token', "ceritanya token")
+              localStorage.setItem('token', data.token)
               localStorage.setItem('email', data.email)
               localStorage.setItem('id', data.id)
               localStorage.setItem('user', data.name)
@@ -99,7 +106,7 @@ let vue = new Vue({
         console.log("register mulai")
         axios({
           method : "post",
-          url : "http://localhost:3000/users",
+          url : "http://localhost:3000/register",
           data : {
               name : this.name,
               email : this.email,
@@ -107,12 +114,16 @@ let vue = new Vue({
           }
         })
           .then(({ data })=>{
-            console.log(data)
-            console.log("user created")
-            this.name = ""
-            this.password = ""
-            this.viewlogin()
-            swal("Success","your account has been created","success")
+            if(data.message){
+              console.log(data)
+              swal("Error",`Validation Failed => ${data.message}`,"error")
+            } else {
+              console.log("user created")
+              this.name = ""
+              this.password = ""
+              this.viewlogin()
+              swal("Success","your account has been created","success")
+            }
           })
           .catch(error=>{
             swal("Sorry", "Something bad happen :(", "error");
