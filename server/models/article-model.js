@@ -13,10 +13,6 @@ const articleSchema = new Schema({
         type : String,
         default : null
     },
-    createdAt : {
-        type : Date,
-        default : new Date()
-    },
     like : [{
         type : Schema.Types.ObjectId,
         ref : 'User',
@@ -30,11 +26,8 @@ const articleSchema = new Schema({
         type : Schema.Types.ObjectId,
         ref : 'User'
     },
-    updatedAt : {
-        type : Date,
-        default : null
-    }
-})
+},
+{timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }})
 
 const Article = mongoose.model('Article', articleSchema)
 

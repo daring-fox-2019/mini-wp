@@ -14,7 +14,7 @@ Vue.component("articleDetails", {
     <div data-spy="scroll" data-target="#list-example" data-offset="0" class="scrollspy-example" >
         <div class="card">
             <div class="card-body">
-            <h1 class="card-title">{{details.title}}</h1>
+            <h1 class="card-title display-3">{{details.title}}</h1>
             <p class="card-text" v-html="details.content"></p>
             <div class="row">
                 <div class="col-6">

@@ -17,9 +17,12 @@ module.exports = async function generateTags(req, res, next) {
         const labels = result.labelAnnotations;
         const tags = []
         console.log("Labels:");
-        labels.forEach(label => 
-            tags.push(label.description));
-
+        labels.forEach(label => {
+          if (label.score > 0.6) {
+             let smallLabel = label.description.toLowerCase()
+             tags.push(smallLabel)
+          }
+        })
         req.tags = tags
         next()
     } else {

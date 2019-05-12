@@ -12,6 +12,7 @@ router.get('/', articleController.showAll)
 router.get('/user', articleController.showMine)
 router.get('/likes', articleController.showLikes)
 router.get('/:id', articleController.showOne)
-router.put('/:id', articleController.update)
+router.put('/:id', multer.single('photo'), gcsMiddlewares.sendUploadToGCS, googleVision, articleController.update)
+
 router.delete('/:id', authorization, articleController.delete)
 module.exports = router

@@ -31,7 +31,7 @@ Vue.component("login", {
   template: `
     <div class="container py-5" style="width:500px;">
           <h1>Login</h1>
-          <form v-on:submit.prevent="login">
+          <form v-on:submit.prevent="login" class="mt-5">
             <div class="form-group">
               <label for="exampleInputEmail1">Email address</label>
               <input
@@ -63,7 +63,8 @@ Vue.component("login", {
             >
               Submit
             </button>
-          </form>
+            </form>
+            <slot></slot>
     </div>
     `
 });

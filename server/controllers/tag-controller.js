@@ -1,7 +1,14 @@
 const Tag = require('../models/tag-model')
 
 class TagController {
-
+    static async showAll(req, res) {
+        try {
+            let tags = await Tag.find({})
+            res.status(200).json(tags)
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    }
     static async generate(req, res) {
        
         try {

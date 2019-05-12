@@ -13,6 +13,7 @@ const gcsHelpers = require('../helpers/google-cloud-storage')
    */
   exports.sendUploadToGCS = (req, res, next) => {
     if (!req.file) {
+     
       return next();
     }  
     const bucketName = req.body.bucketName || DEFAULT_BUCKET_NAME;
@@ -33,6 +34,7 @@ const gcsHelpers = require('../helpers/google-cloud-storage')
   
     stream.on('finish', () => {
       req.file.cloudStorageObject = gcsFileName;
+    
         return file.makePublic()
         .then(() => {
           req.file.gcsUrl = gcsHelpers.getPublicUrl(bucketName, gcsFileName);

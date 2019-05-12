@@ -1,5 +1,39 @@
 const baseURL = "http://localhost:3000";
 
+function onSignIn(googleUser) {
+  event.preventDefault()
+  
+  var profile = googleUser.getBasicProfile();
+  console.log("ID: " + profile.getId()); // Do not send to your backend! Use an ID token instead.
+  console.log("Name: " + profile.getName());
+  console.log("Image URL: " + profile.getImageUrl());
+  console.log("Email: " + profile.getEmail()); // This is null if the 'email' scope is not present.
+
+  var id_token = googleUser.getAuthResponse().id_token;
+
+  axios.post(`${baseURL}/users/google`,{ token : id_token })
+    .then(({data}) => {
+      console.log(data,'dapet apa?');
+      localStorage.setItem('token', data.token)
+      localStorage.setItem('id', data.id)
+      localStorage.setItem('username', data.username)
+      localStorage.setItem('image', data.profPic)
+      app.successLogin()
+     
+    })
+    .catch((err)=> {
+      console.log(err);
+    });
+}
+
+function signOut() {
+  app.logout()
+  var auth2 = gapi.auth2.getAuthInstance();
+  auth2.signOut().then(function () {
+      console.log('User signed out.');
+  });
+}
+
 var app = new Vue({
   el: "#app",
   data: {
@@ -10,7 +44,7 @@ var app = new Vue({
       username: ""
     },
     articles: [],
-    page: "",
+    page: "home",
     details: {},
     newArticle : {
         title : '',
@@ -23,22 +57,30 @@ var app = new Vue({
     query: '',
     editMode: false,
     editArticle : {
+      _id : '',
       title : '',
       content : '',
       photo : '',
       userId : localStorage.getItem('id')
-    }
+    },
+    isSearch : false,
+    isTags : false,
+    allTags : []
   },
   methods: {
     // [LOGIN & AUTHENTICATE]
+    
+    showHome() {
+      this.page = 'home'
+    },
     showRegister() {
-      this.authenticate = "register";
+      this.page = "register";
     },
     showLogin() {
-      this.authenticate = "login";
+      this.page = "login";
     },
     logout() {
-      this.authenticate = "";
+      this.page = "home";
       this.isLogin = false;
       localStorage.clear();
     },
@@ -57,16 +99,21 @@ var app = new Vue({
       this.showLogin();
     },
     showEditor() {
+      this.clearState()
       this.page = 'editor'
+      this.editMode = false
+    },
+    showSearch() {
+      this.isSearch == true ? this.isSearch = false : this.isSearch = true
     },
     showEditArticle(id){
-      this.currentTags = []
-      this.page = 'editor'
-      this.editMode = true
       axios.get(`${baseURL}/articles/${id}`, { headers : { token : localStorage.getItem('token')}})
            .then(({ data })=> {
+             console.log(data);
+             this.currentTags = []
              this.editArticle = data
-      
+             this.page = 'editor'
+             this.editMode = true
              data.tags.forEach( tag => {
                this.currentTags.push(tag.tagName)
              })
@@ -75,7 +122,39 @@ var app = new Vue({
              console.log(err);
            })
     },
+    clearState(){
+      this.articles = []
+      this.currentTags = []
+      this.newArticle = {}
+      this.editArticle = {
+        title : '',
+        content : '',
+        photo : '',
+        userId : ''
+      }
+    },
     //------[FUNCTIONALITY]-------------
+    search(){
+     
+      let params = {
+        title : this.query,
+        tag : this.query
+      }
+      axios
+        .get(`${baseURL}/articles`,
+              { headers : { token : localStorage.getItem('token')},
+                params
+              })
+        .then(({ data }) => {
+          this.articles = data
+          console.log(data);
+          
+        })
+        .catch((err)=> {
+          console.log(err.response.data.message);
+          
+        })
+    },
     fetchArticles() {
       axios
         .get(`${baseURL}/articles`, {
@@ -145,20 +224,29 @@ var app = new Vue({
       this.newArticle.content = overview
       this.addArticle()
     },
+    getEditValue() {
+      let overview = this.$refs.editor.getVal()
+      this.editArticle.content = overview
+      this.updateArticle(this.editArticle._id)
+    },
     getImage(event) {
 
-      this.newArticle.photo = event.target.files[0]
-      
       let formData = new FormData()
-
-      formData.append('photo', this.newArticle.photo)
-
+      if(this.editMode) {
+        this.editArticle.photo = event.target.files[0]
+        formData.append('photo', this.editArticle.photo)
+      } else {
+        this.newArticle.photo = event.target.files[0]
+        formData.append('photo', this.newArticle.photo)
+      }
+      
       axios.post(`${baseURL}/tags`, formData, { headers : { token : localStorage.getItem('token'), "Content-Type" : "multipart/form-data"}})
         .then(({ data }) => {
            data.forEach(tag => {
             this.currentTags.push(tag)
            });
            console.log(data);
+           swal("Great!","Your image has been uploaded!","success")
            
         })
         .catch((err) => {
@@ -202,6 +290,27 @@ var app = new Vue({
               swal('Oops', err.response.data.msg, 'warning')
             }
           })
+      } else {
+       
+        
+        let formData = new FormData()
+
+        formData.append('title', this.editArticle.title)
+        formData.append('content', this.editArticle.content)
+        formData.append('photo', this.editArticle.photo)
+        formData.append('userId', this.editArticle.userId)
+        formData.append('tags', this.currentTags)
+
+        axios
+        .put(`${baseURL}/articles/${id}`, formData, { headers : { token : localStorage.getItem('token')}})
+        .then(({ data }) => {
+          console.log(data);
+          swal("Great!","Your post has been successfully updated!","success")
+          this.fetchDetails(data._id)
+        })
+        .catch((err) => {
+          console.log(err);
+        })
       }
     },
     deleteArticle(id) {
@@ -222,34 +331,42 @@ var app = new Vue({
         .then(({ data }) => {
           console.log(data);
           this.articles = data
+          this.page = 'all'
         })
         .catch((err)=> {
           console.log(err);
         })
     },
-    beforeEnter: (el) => {
-      el.style.opacity = 0
-      el.style.height = 0
+    showTags() {
+      if (this.isTags) {
+         this.isTags = false
+      } else {
+        axios
+          .get(`${baseURL}/tags`, {headers : { token : localStorage.getItem('token')}})
+          .then(({ data })=> {
+            console.log(data);
+            this.allTags = data
+            this.isTags = true
+          })
+          .catch((err)=> {
+            console.log(err);
+          })
+      }
     },
-    enter: (el, done) => {
-      var delay = el.dataset.index * 150
-      setTimeout(function () {
-        Velocity(
-          el,
-          { opacity: 1, height : '1.6em'},
-          { complete : done }
-        )
-      }, delay)
-    },
-    leave: (el, done) => {
-      var delay = el.dataset.index * 150
-      setTimeout(function() {
-        Velocity(
-          el,
-          { opacity: 0, height: 0 },
-          { complete : done }
-        )
-      }, delay)
+    showByTag(value) {
+      let params = { tag : value }
+      axios
+        .get(`${baseURL}/articles`, { headers : { token : localStorage.getItem('token')},
+        params 
+      })
+      .then(({ data })=> {
+        this.page = 'all'
+        this.articles = data
+        console.log(data);
+      })
+      .catch((err)=> {
+        console.log(err);
+      })
     }
   },
   created() {
@@ -259,7 +376,7 @@ var app = new Vue({
       this.fetchArticles();
       this.isLogin = true;
       this.showAll()
-    }
+    } 
   },
   computed: {
   

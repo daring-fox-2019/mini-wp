@@ -1,5 +1,5 @@
 Vue.component('summer-note', {
-    props: ['edit'],
+    props: ['edit','editMode'],
     data(){
         return {
             localEdit : ''
@@ -26,19 +26,38 @@ Vue.component('summer-note', {
             } else {
                 $(this.$refs.summernote).summernote(code, value)
             }
+        },
+        updateEdit() {
+            return this.localEdit = ''
         }
-    },
-    mounted() {
-        $(this.$refs.summernote).summernote({
-            height: 250
-          });
-          $('#summernote').summernote('code', this.localEdit.content );
-      
     },
     created() {
         this.summernote.summernote({
             height: 250
         })
-        this.localEdit = this.edit
+        if (this.editMode) {
+            this.localEdit = this.edit
+        } else {
+            this.localEdit = ''
+        }
     },
+  
+    mounted() {
+        $(this.$refs.summernote).summernote({
+            height: 250
+          });
+          if (!this.localEdit.content) {
+            $('#summernote').summernote('code', '' )
+          } else {
+              $('#summernote').summernote('code', this.localEdit.content );
+          }
+      
+    },
+    beforeDestroy() {
+        $('#summernote').summernote('code', '' );
+        this.localEdit = ''
+        this.$emit('edit-mode',false)   
+        this.updateEdit()
+
+    }
 })

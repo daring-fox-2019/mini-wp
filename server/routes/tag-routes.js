@@ -7,6 +7,7 @@ const authentication = require('../middlewares/authentication')
 const authorization = require('../middlewares/authorization')
 
 router.post('/', authentication, multer.single('photo'), gcsMiddlewares.sendUploadToGCS, generateTags, tagController.generate)
+router.get('/', authentication, tagController.showAll)
 router.post('/add',tagController.generate)
 router.delete('/:id', authentication, authorization, tagController.delete)
 

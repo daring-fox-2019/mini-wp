@@ -16,13 +16,16 @@
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
       integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
       crossorigin="anonymous"
-    />
+      />
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="301492189565-6gqvq6gfnktlo7jfqoh7o1t4e45sddbb.apps.googleusercontent.com">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-bs4.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-bs4.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
     <link rel="stylesheet" href="css/style.css" />
     <title>Mini Wordpress</title>
@@ -32,8 +35,14 @@
 
       <!-- NAVBAR -->
       <nav>
-        <h1 class="brand"></h1>
+      
         <ul>
+          <li style="float:left">
+              <i class="fab fa-wordpress-simple" style="color:white"></i>
+          </li>
+          <li>
+            <a @click.prevent="showHome" style=" text-decoration: none;color: white" href="#">Home</a>
+          </li>
           <li>
             <a
               style=" text-decoration: none;color: white"
@@ -44,81 +53,135 @@
             >
           </li>
           <li>
-            <a style=" text-decoration: none;color: white" href="#">About</a>
-          </li>
-          <li>
             <a
               style=" text-decoration: none;color: white"
               href="#"
               v-on:click.prevent="showRegister"
+              v-if="!isLogin"
               >Register</a
             >
           </li>
           <li>
-            <a
-              style=" text-decoration: none;color: white"
-              href="#"
-              v-if="!isLogin"
-              v-on:click.prevent="showLogin"
-              >Sign in</a
-            >
-            <a
-              style=" text-decoration: none;color: white"
-              href="#"
-              v-else="isLogin"
-              v-on:click.prevent="logout"
-              >Sign Out</a
-            >
+              <transition name="slide-fade">
+                <a
+                  style=" text-decoration: none;color: white"
+                  href="#"
+                  v-if="!isLogin"
+                  v-on:click.prevent="showLogin"
+                  >Sign in</a
+                >
+              </transition>
+              <transition name="slide-fade">
+                <a
+                  style=" text-decoration: none;color: white"
+                  href="#"
+                  v-if="isLogin"
+                  v-on:click.prevent="logout"
+                  >Sign Out</a
+                >
+              </transition>
           </li>
         </ul>
       </nav>
 
-      <section id="home" v-if="!isLogin">
-        <!--REGISTER FORM-->
-        <register
-          v-if="!isLogin && authenticate == 'register'"
-          v-on:success-register="successRegister"
-        ></register>
-
-        <!-- LOGIN FORM-->
-        <login
-          v-if="!isLogin && authenticate == 'login'"
-          v-on:success-login="successLogin"
-        ></login>
+      <section id="home"  v-show="page == 'home'">
+        <div class="container">
+          <div class="row justify-content-center align-items-center" style="height:30vh">
+            <small>mini </small>
+            <h1 class="display-1" style="font-size:72px;">WordPress</h1>
+          </div>
+          <div class="row justify-content-center">  
+            <h2 class="h6 font-weight-lighter">WordPress.com gives you everything you need to start your website today.</h2><br>
+          </div>
+          <div class="row justify-content-center"> 
+            <h2 class="h6 font-weight-lighter">Free hosting, your own domain, a world‑class support team, and so much more.</h2>
+          </div>
+          <div class="row align-items-center" style="height:30vh">
+            <div data-width="300"  v-show="!isLogin && page == 'login'" class="g-signin2 col-12 d-flex justify-content-center"  data-onsuccess="onSignIn"  data-longtitle="true"></div>
+          </div>
+        </div>
       </section>
 
-      <section id="main-content" v-if="isLogin" >
+      <section v-show="!isLogin" id="home">
+        <!--REGISTER FORM-->
+        <transition name="slide-fade">
+          <register
+            v-show="!isLogin && page == 'register'"
+            v-on:success-register="successRegister"
+          ></register>
+        </transition>
+        <!-- LOGIN FORM-->
+        <transition name="slide-fade">
+            <login
+              v-show="!isLogin && page == 'login'"
+              v-on:success-login="successLogin"
+            >
+          </login>
+        </transition>
+      </section>
+
+      <section id="main-content" v-if="isLogin && page !== 'home'" >
           <div class="row py-5" style="height:100vh">
             <div class="col-2 border-right">
-                <div class="media ">
+                <div class="media">
                   <img id="profPic" class="align-self-start mx-auto" v-bind:src="loginUser.profPic" alt="Generic placeholder image">
                 </div>
                     <h4 class="text-center py-4">{{loginUser.username}}</h4>
                 <div class="col-12 px-5">
                   <div class="list-group" id="list-tab" role="tablist">
-                    <a class="list-group-item list-group-item-action border-0 pl-2" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home"><i class="fas fa-search"></i> Search</a>
+                    <a @click.prevent="showSearch" class="list-group-item list-group-item-action border-0 pl-2" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home"><i class="fas fa-search"></i> Search</a> 
                     <a @click.prevent="showMine" class="list-group-item list-group-item-action border-0 pl-2" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile"><i class="fas fa-book-open"></i> My Blogs</a>
                     <a @click.prevent="showLikes" class="list-group-item list-group-item-action border-0 pl-2" id="list-messages-list" data-toggle="list" href="#list-messages" role="tab" aria-controls="messages"><i class="fas fa-star"></i> My Likes</a>
-                    <a class="list-group-item list-group-item-action border-0 pl-2" id="list-settings-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings"><i class="fas fa-tags"></i> Tags</a>
-                    <button @click.prevent="showEditor" type="button" class="btn mt-3" style="background-color: #016087; width: 120px; font-size: 10px"><i class="fas fa-feather-alt px-2"></i> Write</button>
+                    <a @click.prevent="showTags" class="list-group-item list-group-item-action border-0 pl-2" id="list-settings-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings"><i class="fas fa-tags"></i> Tags</a>
                   </div>
+                  <button @click.prevent="showEditor" type="button" class="btn mt-3" style="background-color: #016087; font-size: 10px"><i class="fas fa-feather-alt px-2"></i> Write</button>
                 </div>
             </div>
             <div class="col-9">
-               <div class="row">
-                 <div class="col-12">
-                   <div class="container px-4 py-4">
-                     <div class="form-group has-search">
-                         <span class="fa fa-search form-control-feedback"></span>
-                         <input type="text" class="form-control" placeholder="Search">
-                     </div>
-                   </div>
-                 </div>
-               </div>
+              <transition name="fade">
+                <div class="row" v-if="isSearch" >
+                  <div class="col-12">
+                    <div class="container px-4 py-2">
+                      <div class="form-group has-search">
+                        <div class="d-flex align-items-center" >
+                           <span class="fa fa-search form-control-feedback"></span>
+                            <input v-model="query" type="text" class="form-control" placeholder="Search">
+                            <button @click.prevent="search" type="button" class="btn mt-3 mx-3" style="background-color: #016087; width: 120px; font-size: 10px">Search </button>
+                         </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </transition>
+              <transition name="fade">
+                <div v-if="isTags" data-spy="scroll" data-target="#navbar-example2" data-offset="0" id="tags" class="container row col-12 mt-0 mb-4  justify-content-center">
+                      <div class="mx-2 my-1" v-for="(tag, index) in allTags" :key="index">
+                         <a @click.prevent="showByTag(tag.tagName)" href="#" class="badge badge-light p-2">{{tag.tagName}}</a>
+                      </div>
+                </div>
+              </transition>
+
+            
                <!--All Articles-->
-               <articles v-bind:articles="articles" v-if="page == 'all'"></articles>
+               <div data-spy="scroll" data-target="#list-example" class="scrollspy-example" id="all-articles">
+                  <div class="row">
+                    <div class="col-6" v-for="(article, index) in articles" :key="index">
+                      <articles v-bind:article="article" v-if="page == 'all'"></articles>
+                      <articles v-bind:article="article" v-if="page == 'private'" v-on:edit-article="showEditArticle">
+                          <div class="d-flex justify-content-center">
+                              <button @click.prevent="showEditArticle(article._id)" type="button" class="btn mt-3" style="background-color: #016087; width: 120px; font-size: 10px">Edit</button>
+                              <button @click.prevent="deleteArticle(article._id)" type="button" class="btn mt-3" style="background-color: #016087; width: 120px; font-size: 10px">Delete</button>
+                          </div>
+                      </articles>  
+                    </div>
+                    <div v-if="articles.length == 0 && page !== 'editor'" class="d-flex justify-content-center">
+                      <h1 id="no-data">There is no Post...</h1>
+                      <img src="https://assets-ouch.icons8.com/preview/826/3331bbd7-6698-4a7b-bacb-be274dd83c83.png" style=" width: 55%;height:90vh" alt="" srcset="" >
+                    </div>
+                  </div>
+               </div>
+
                <article-details  v-if="page == 'details'" v-bind:details="details"></article-details>
-               <user-articles v-if="page == 'private'" v-bind:articles="articles"></user-articles>
 
                <!-- Editor -->
                <div class="container" v-if="page == 'editor'">
@@ -143,8 +206,14 @@
                        />
                    </div>
                    <h1>Description : </h1>
-                   <summer-note v-if="!editMode" ref="editor"></summer-note>
-                   <summer-note v-if="editMode" ref="editor" v-bind:edit="editArticle" ></summer-note>
+                   <summer-note v-if="!editMode && page == 'editor'" ref="editor"  v-bind:edit-mode="editMode" v-on:edit-mode="editMode = false" ></summer-note>
+                   <summer-note 
+                   v-if="editMode && page == 'editor'" 
+                   ref="editor" 
+                   v-bind:edit="editArticle" 
+                   v-on:edit-mode="editMode = false" 
+                   v-bind:edit-mode="editMode"
+                   ></summer-note>
                    <div class="custom-file mt-3">
                       <input
                         type="file"
@@ -153,9 +222,10 @@
                         v-on:change="getImage"
                       />
                       <label class="custom-file-label" for="inputGroupFile01">{{newArticle.getImage}}</label>
-                      <span  class="badge badge-pill badge-light" v-for="(tag, index) in currentTags" :key="index" style="font-size: 8px" @click.prevent="deleteTag(tag)" >{{tag}} <i class="fas fa-times"></i></span>
+                      
+                      <a class="badge badge-pill badge-light" v-for="(tag, index) in currentTags" :key="index" style="font-size: 8px;max-width:150px !important;" @click.prevent="deleteTag(tag)" >{{tag}} <i class="fas fa-times"></i></a>
                   </div>
-                  <div class="form-group my-3" v-if="!editMode">
+                  <div class="form-group my-3">
                       <input
                         type="text"
                         class="form-control"
@@ -166,7 +236,8 @@
                       <button @click.prevent="createTag" type="button" class="btn mt-3" style="background-color: #016087; width: 120px; font-size: 10px">Add Tag</button>
                   </div>
                    <div class="col-12 px-0 d-flex justify-content-center">
-                       <button @click.prevent="getValue" type="button" class="btn mt-3" style="background-color: #016087; width: 120px; font-size: 10px">Post</button>
+                       <button v-if="!editMode" @click.prevent="getValue" type="button" class="btn mt-3" style="background-color: #016087; width: 120px; font-size: 10px">Post</button>
+                       <button v-else @click.prevent="getEditValue" type="button" class="btn mt-3" style="background-color: #016087; width: 120px; font-size: 10px">Edit</button>
                        <button @click.prevent="showAll" type="button" class="btn mt-3" style="background-color: #016087; width: 120px; font-size: 10px">Cancel</button>
                    </div>
                </div>        
@@ -184,8 +255,13 @@
     <script src="components/login.js"></script>
     <script src="components/articles.js"></script>
     <script src="components/details.js"></script>
-    <script src="components/user-article.js"></script>
     <script src="components/summernote.js"></script>
+   
+    <script>
+        if (!window.moment) { 
+            document.write('<script src="assets/plugins/moment/moment.min.js"><\/script>');
+        }
+    </script>
     <script src="js/script.js"></script>
     <script>
         $('#summernote').summernote({

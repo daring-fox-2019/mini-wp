@@ -1,48 +1,60 @@
 Vue.component("articles", {
-  props: ["articles","fetchDetails","updateArticle"],
+  props: ["article", "fetchDetails", "updateArticle","updateArticle","deleteArticle"],
   data() {
-      return {
-          userId : localStorage.getItem('id')
-      }
+    return {
+      userId: localStorage.getItem("id"),
+      date: moment().format('[today] dddd')
+    };
   },
   methods: {
-      getDetails(id) {
-          this.$parent.fetchDetails(id)
-      },
-      getUpdate(id, value) {
+    getUpdate(id, value){
         this.$parent.updateArticle(id, value)
-      }
+    },
+    getDelete(id) {
+        this.$parent.deleteArticle(id)
+    },
+    getEdit(id) {
+        this.$emit('edit-article', id )
+    },
+    getDetails(id){
+        this.$parent.fetchDetails(id)
+    },
+    toTimestamp(strDate){
+        var datum = Date.parse(strDate);
+        return datum/1000;
+     }
+    //  alert(toTimestamp('02/13/2009 23:31:30'));
   },
   template: `
-    <div data-spy="scroll" data-target="#list-example" data-offset="0" class="scrollspy-example" id="all-articles">
-        <div class="row">
-            <div class="col-6" v-for="(article, index) in articles" :key="index">
-                <div class="card mb-3">
-                    <img :src=article.photo class="card-img-top" alt="">
-                    <div class="card-body">
-                    <h5 class="card-title">{{article.title}}</h5>
-                    <p class="card-text text-truncate" style="max-width: 300px;" v-html="article.content"></p>
-                    <div class="row">
+  
+    <div class="card mb-3">
+            <img :src=article.photo class="card-img-top" alt="">
+            <div class="card-body">
+                <h3 class="card-title">{{article.title}}</h3>
+                <div class="row card-body">
+                    <p  class="h6 pl-1 d-inline-block text-truncate" style="max-width: 400px;" v-html="article.content">....</p>
                         <div class="col-6">
-                        <a href="#" class="stretched-link text-warning" @click.prevent="getDetails(article._id)">Read more...</a>
-                        <p class="card-text text-left"><small class="text-muted">Author : {{article.userId.username}} </small></p>
-                        <div class="d-flex">
-                            <i class="fas fa-tags"></i>
-                            <small class="px-2" v-for="(tag, index) in article.tags">{{tag.tagName}}</small> 
-                        </div>
+                            <a href="#" class="stretched-link text-warning" @click.prevent="getDetails(article._id)">Read more...</a>
+                            <p class="card-text text-left"><small class="text-muted">Author : {{article.userId.username}} </small></p>
                         </div>
                         <div class="col-6">
-                        <button class="btn button-like float-sm-right" @click="getUpdate(article._id, 'like')">
-                            <i class="fa fa-heart" style="color:#cc4b37" v-if="article.like.indexOf(userId) > -1"></i>
-                            <i class="fa fa-heart" v-else></i>
-                            <span>Like</span>
-                        </button>
+                            <button class="btn button-like float-sm-right" @click="getUpdate(article._id, 'like')">
+                                <i class="fa fa-heart" style="color:#cc4b37" v-if="article.like.indexOf(userId) > -1"></i>
+                                <i class="fa fa-heart" v-else></i>
+                                <span>Like</span>
+                            </button>
+                            <small>Last updated : ${moment('20190512','YYYYMMDD').fromNow()} </small>
                         </div>
-                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                    <i class="fas fa-tags"></i>
+                    <span class="badge badge-pill badge-light px-2" v-for="(tag, index) in article.tags">{{tag.tagName}}</span> 
                     </div>
                 </div>
             </div>
-        </div>
+        <slot></slot>
     </div>
+   
     `
 });

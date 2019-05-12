@@ -37,7 +37,7 @@ Vue.component("register", {
   template: `
     <div class="container py-5" style="width:500px;">
           <h1>Register</h1>
-          <form v-on:submit.prevent="register">
+          <form v-on:submit.prevent="register" class="mt-5">
             <div class="form-group">
               <label for="exampleInputPassword1">Username</label>
               <input
