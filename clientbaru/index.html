@@ -45,8 +45,8 @@
               :articles="articlelist"
               :author="user"
               v-on:toread="readone"
-              v-on:toupdate="readone"
-              v-on:todelete="readone"/>
+              v-on:toupdate="updateone"
+              v-on:todelete="deleteone"/>
           </div>
           <div class="ui container segment" v-show="articlelist.length == 0">
             NO ARTICLES FOUND
@@ -54,19 +54,22 @@
           <br><br><br>
         </div>
 
-        <!-- EDIT & VIEW ONE ARTICLES -->
-        <!-- <div class="ui container" id="update" v-show="page === 'updatearticle'">
-          <div class="ui container segment">
-            <form class="ui form center aligned">
-              <div id="editor2">
-
+        <!-- READ ONE ARTICLE -->
+        <div class="ui container" v-show="page === 'articledetail'">
+          <div class="ui container segments center aligned">
+            <div class="ui segment left aligned" style="display: flex; justify-content: space-between;">
+              <p><i class="ui user icon"></i> {{ user }}</p>
+              <p> <i class="ui pencil alternate icon"></i> Created at {{ article.createdAt}}</p> 
+              <p v-if="article.updatedAt != null"> <i class="ui pencil alternate icon"></i> Updated at {{ article.updatedAt}}</p> 
+              <p v-if="article.postedAt != null"> <i class="ui paper plane outline icon"></i> Posted At {{article.postedAt}}</p></div>
+            <div class="ui segment">
+              <h1> {{ article.title }} </h1>
+              <div class="ui segment" id="detailcontent">
+  
               </div>
-              <div class="ui container center aligned">
-                <button class="ui button center aligned teal huge">Update</button>
-              </div>
-            </form>
+            </div>
           </div>
-        </div> -->
+        </div>
 
         <!-- WRITE NEW ARTICLE // UPDATE ARTICLE -->
         <div class="ui container" v-show="page === 'writearticle' || page === 'updatearticle'">

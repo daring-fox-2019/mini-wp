@@ -36,7 +36,36 @@ let vue = new Vue({
   },
   methods : {
     readone(obj){
-      console.log(obj)
+      console.log("read", obj)
+      this.article = obj
+      if(obj.image != null || obj.image != ""){
+        document.getElementById('detailcontent').innerHTML = `<br><br><br><br><br><img class="ui huge centered image" src='${obj.image}'>`
+      }
+      document.getElementById('detailcontent').innerHTML = document.getElementById('detailcontent').innerHTML + `<br>${obj.content}`
+      this.page = "articledetail"
+    },
+    deleteone(obj){
+      console.log("delete", obj._id)
+      axios({
+        method : "delete",
+        url : `http://localhost:3000/articles/${obj._id}`,
+        headers : {
+          token : localStorage.getItem('token'),
+          id : localStorage.getItem('id')
+        }
+      })
+      .then(res=>{
+       swal("Deleted",`article with title ${obj.title} successfully deleted`,"success") 
+       this.checklogin()
+      })
+      .catch(error=>{
+         swal("Sorry", `Something bad happen in our server => ${error}`, "error");
+         console.log(error)
+      })
+    },
+    updateone(obj){
+      console.log("update", obj)
+      this.article = obj
     },
     previewFile(event){
       this.article.image = event.target.files[0]      
@@ -116,7 +145,7 @@ let vue = new Vue({
               localStorage.setItem('id', data.id)
               localStorage.setItem('user', data.name)
               this.checklogin()
-              swal("Success",`hello ${data.name}!`,"success")
+              swal("Main Page",`hello ${data.name}!`,"success")
             } else {
               console.log(data)
               swal("Info",`username / password incorrect`,"warning")
@@ -191,6 +220,16 @@ let vue = new Vue({
       this.page = "register"
     },
     viewwrite(){
+      this.article = {
+        _id : "",
+        title: "",
+        content:"",
+        status: "",
+        image : "",
+        createdAt: "",
+        updatedAt : "",
+        postedAt : "",
+      }
       this.page = "writearticle"    
     },
     savearticle(){

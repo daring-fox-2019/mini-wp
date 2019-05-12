@@ -22,14 +22,28 @@ Vue.component('articlefeed',{
     }, 
     updatethis(article){
       let thisArticle = {
-        _id : article._id,
+          _id : article._id,
+          title: article.title,
+          content: article.content,
+          status: article.status,
+          image : article.image,
+          createdAt: article.createdAt,
+          updatedAt : article.updatedAt,
+          postedAt : article.postedAt,
         }
       this.$emit('toupdate', thisArticle)
     },
     deletethis(article){
       let thisArticle = {
         _id : article._id,
-        }
+        title: article.title,
+        content: article.content,
+        status: article.status,
+        image : article.image,
+        createdAt: article.createdAt,
+        updatedAt : article.updatedAt,
+        postedAt : article.postedAt,
+      }
       this.$emit('todelete', thisArticle)
     },
   },
@@ -50,7 +64,9 @@ Vue.component('articlefeed',{
               {{a.snippet}}
             </div>
             <div class="extra">
-              <i class="ui users icon"></i>  {{author}}   <br>  
+              <i class="ui users icon"></i>  {{author}} &emsp;
+              <a @click="deletethis(a)" ><i class="ui trash alternate outline icon"></i> Delete</a> &emsp;
+              <a @click="updatethis(a)" ><i class="ui edit icon"></i> Edit</a> &emsp;
             </div>
           </div>
         </div>
