@@ -14,7 +14,7 @@ Vue.component('navbar', {
     })
   },
   methods: {
-    signOut() {
+    yosignOut() {
       console.log('hehe');
       this.$emit('sign-out')
     },
@@ -28,6 +28,9 @@ Vue.component('navbar', {
     home() {
       this.$emit('gethome')
     },
+    landing() {
+      this.$emit('landing')
+    },
     hitsearch() {
       this.$emit('search', this.searchInput)
     },
@@ -38,14 +41,20 @@ Vue.component('navbar', {
   },
   template: `<div>
       <nav class="shadow-sm navbar navbar-expand-lg navbar-light">
-            <a v-on:click.prevent="home" class="navbar-brand" href="#">Sprache</a>
+          <div v-if="isLogin">
+            <a style="font-weight:400; font-family: 'Abril Fatface', cursive; letter-spacing: 0.02em;"  v-on:click.prevent="home" class="navbar-brand" >Sprache</a>
+          </div>
+          <div v-else>
+             <a style="font-weight:400; font-family: 'Abril Fatface', cursive; letter-spacing: 0.02em;"  v-on:click.prevent="landing" class="navbar-brand" >Sprache</a>
+
+          </div>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
                 aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav mr-auto">
-            <form @submit="hitsearch" class=" ml-10 form-inline">
+            <form v-if="isLogin" @submit="hitsearch" class=" ml-10 form-inline">
                 <input class="mx-auto form-control mr-sm-2" type="search" placeholder="Search" v-model="searchInput"  aria-label="Search">
             </form>
                 </ul>
@@ -55,7 +64,7 @@ Vue.component('navbar', {
                 <span class="navbar-text">
                   <img data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="dropdownMenu2" v-if="isLogin" v-bind:src="userImage"
                   style="border-radius:50%; max-height:40px; max-width:40px;" class=" dropdown-toggle card-img-top"
-                  alt="foto user">
+                  alt="fotouser">
                 </span>
                 <button type="button" class="btn btn-sm  dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <span class="sr-only"Toggle</span>
@@ -72,15 +81,15 @@ Vue.component('navbar', {
 
 
 
-                <a class="nav-link" v-if="isLogin" v-on:click.prevent="signOut">Signout</a>
+                <a class="nav-link" v-if="isLogin" v-on:click.prevent="yosignOut">Signout</a>
             </div>
         </nav>
            
-            <nav class=" navbar navbar-expand-lg navbar-light white">
+            <nav v-if="isLogin" class=" navbar navbar-expand-lg navbar-light white">
                 
                 <div class="collapse active navbar-collapse" id="navbarNavAltMarkup">
                     <div class="mx-auto center navbar-nav">
-                        <a v-on:click.prevent="searchFilter('home')" name="home" style="text-transform: uppercase; font-family: 'Lato', sans-serif;"  class="nav-item nav-link ">Home </a>
+                        <a v-on:click.prevent="home" name="home" style="text-transform: uppercase; font-family: 'Lato', sans-serif;"  class="nav-item nav-link ">Home </a>
                         <a v-on:click.prevent="searchFilter('human')" name="human" style="text-transform: uppercase;font-family: 'Lato', sans-serif;"  class="nav-item nav-link">Human</a>
                         <a v-on:click.prevent="searchFilter('technology')" name="technology" style="text-transform: uppercase;font-family: 'Lato', sans-serif;"  class="nav-item nav-link">Technology</a>
                         <a v-on:click.prevent="searchFilter('politics')" name="politics" style="text-transform: uppercase;font-family: 'Lato', sans-serif;" class="nav-item nav-link">Politics</a>

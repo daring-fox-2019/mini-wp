@@ -57,13 +57,39 @@
 <body>
     <!-- START OF APP VUE -->
     <div id="app">
-
         <!-- NAVBAR STARTS HERE -->
-        <navbar v-on:sign-out="userSignOut" v-on:changestories="changestories" v-bind:is-login="isLogin"
+        <navbar  v-on:sign-out="signOut" v-on:changestories="changestories" v-bind:is-login="isLogin"
             v-on:gethome="gethome" v-on:searchtag="searchtag" v-bind:current-page="currentPage"
             v-bind:user-image="userImage" v-on:search="search" v-on:writestories="writestories">
         </navbar>
         <!-- NAVBAR ENDS HERE -->
+        
+        <!-- LANDING PAGE -->
+        <div v-show="currentPage == 'landing'" class="container">
+            <div class = "row">
+                <div class="col-2 pt-1 pl-4">
+                    <span style="font-weight:400; font-size:60px; font-family: 'Abril Fatface', cursive; letter-spacing: 0.02em;" >Sprache</span>
+                    <span style="font-weight:100; font-size:30px; font-family: 'Abril Fatface', cursive; letter-spacing: -0.02em; line-height: 25px !important;"> Your source of impetus to do more</span>
+                    <div class="dropdown-divider"></div>
+                     <span class="pb-2" style="font-size:20px; font-family: 'Abril Fatface', cursive; letter-spacing: 0.01em;">
+                            Thought-provoking; Aspirations;<br>
+                            Stories.<br>
+                            Made by you.<br>  
+                    </span>
+                    <div>
+                        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                    </div>
+
+                   
+                </div>
+                <div class="col-8 pt-5 pl-5" style="position: absoulte" >
+                    <img style="max-width:150vh;  z-index: -9999999; position:relative;" src="./assets/pablohome.png">
+
+                </div>
+            </div>
+        </div>
+
+        <!-- LANDING PAGE -->
 
         <!-- LOGIN FORM STARTS HERE -->
         <login v-if="currentPage == 'login'" v-on:sign-in="signIn" v-bind:is-login="isLogin" v-if="!isLogin"></login>

@@ -26,7 +26,7 @@ Vue.component('smallcard', {
           </div>
           <div style="line-height: 5pt !important; display:inline;" class="col-md-8">
             <div class="card-body">
-              <h6 v-on:click="getFullArticle(art_id)" style="font-weight:100; font-family: 'Abril Fatface', cursive; letter-spacing: 0.02em;" class="card-title">{{art.title}} </h6>
+              <h6 v-on:click="getFullArticle(art._id)" style="font-weight:100; font-family: 'Abril Fatface', cursive; letter-spacing: 0.02em;" class="card-title">{{art.title}} </h6>
               <p style="font-family: 'Habibi', serif;" class="text-muted">{{art.userId.name}} </p>
               <p style="font-family: 'Habibi', serif;" class="card-text">
               <div class="dropdown-divider"></div>

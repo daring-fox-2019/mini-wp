@@ -57,7 +57,7 @@ Vue.component('register', {
     },
     template : `
     
-    <div class="container">
+    <div class="container" style="background: url('./assets/coba.jpg'); padding:60px;">
   <div class="row">
     <div class="col"></div>
     <div class="col-6">
@@ -80,7 +80,7 @@ Vue.component('register', {
                 <input v-on:change="getImage" type="file" class="custom-file-input" id="customFile">
                 <label class="custom-file-label" for="customFile">Choose file</label>
             </div>
-         <button type="submit" class="mt-4 btn btn-primary">Submit</button>
+         <button type="submit" class="mt-4 btn btn-light">Submit</button>
         </form>
     </div>
     <div class="col"></div>

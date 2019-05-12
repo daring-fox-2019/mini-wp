@@ -37,7 +37,7 @@ Vue.component('mediumcard', {
       <div class="card-body">
         <h4 @click="getFullArticle(art._id)" style="font-weight:400; font-family: 'Abril Fatface', cursive; letter-spacing: 0.02em;" class="mousechange text-left card-title">{{art ? (art.title) : (null) }}</h4>
         <p style="max-width: 600px;" class="text-truncate card-text font-weight-light text-left text-muted" >{{art ? (art.content) : (null) }} </p>
-        <p style="margin:0 !important;padding-top:20px;" class="card-text text-left text-muted">Author : {{art.userId ? (art.userId.username) : (null) }} in {{art.tags ? (art.tags[getRandomInteger()].tagName) : (null) }} </p>
+        <p style="margin:0 !important;padding-top:20px;" class="card-text text-left text-muted">Author : {{art.userId ? (art.userId.username) : (null) }} in {{art.tags ? (art.tags[0].tagName) : (null) }} </p>
        
        
         <button v-if="art.userId" @click="likeThis(art._id)" class="btn button-like float-sm-left" >

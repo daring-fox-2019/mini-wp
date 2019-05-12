@@ -49,6 +49,8 @@ let app = new Vue({
             this.isLogin = true
             this.userImage = localStorage.getItem('userImage')
             this.getAllOverWebArticle()
+        } else {
+            this.currentPage = 'landing'
         }
 
         if (this.currentPage == "mystories") {
@@ -74,23 +76,28 @@ let app = new Vue({
             this.userImage = pp
             console.log('jadi true!');
         },
-        userSignOut() {
-            this.isLogin = false
-            localStorage.clear()
-            this.currentPage = 'home'
-            swal({
-                text: 'Logged Out',
-                icon: "success",
-                button: "OK",
+         signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut()
+            .then(function () {
+              console.log('User signed out.');
+                this.isLogin = false
+                localStorage.clear()
+                swal({
+                    text: 'Logged Out',
+                    icon: "success",
+                    button: "OK",
+                });
+                this.currentPage = 'landing'
             });
-
         },
+        
         changestories() {
             console.log('disini?');
             this.getUserArticlesAll()
         },
         gethome() {
-            this.currentPage = 'home'
+            this.getAllOverWebArticle()
         },
         showLogin() {
             console.log('masuk ga');
@@ -272,6 +279,7 @@ let app = new Vue({
             
             Axios.get(`/articles/all`)
             .then(({data}) => {
+                this.currentPage = 'home'
                 this.arrArticles = data
                 console.log(data);
             })
@@ -457,11 +465,15 @@ let app = new Vue({
 
 let serverURL = 'http://localhost:3000'
 
+
+
 function onSignIn(googleUser) {
+    console.log('apalu');
+    
   var profile = googleUser.getBasicProfile();
   var id_token = googleUser.getAuthResponse().id_token;
 
-  Axios.post(`${serverURL}/signin/google`, {
+  Axios.post(`${serverURL}/users/signin/google`, {
       id_token
     })
     .then((response) => {
@@ -471,10 +483,10 @@ function onSignIn(googleUser) {
       localStorage.setItem('userId', data.id)
       localStorage.setItem('username', data.username)
       localStorage.setItem('userImage', data.image)
-
-
+      
       app.isLogin = true
-      app.currentPage = 'mystories'
+      app.userImage = data.image
+      app.getAllOverWebArticle()
 
     })
     .catch((err, textStatus) => {

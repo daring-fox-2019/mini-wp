@@ -87,6 +87,7 @@ class UserController {
                 let obj = {
                     username: payload.name,
                     email: payload.email,
+                    image : payload.picture,
                     password: randomizer()
                 }
                 return User.create(obj)
@@ -95,7 +96,7 @@ class UserController {
                             id: newUser._id,
                             email: payload.email,
                             username: payload.name,
-                            image : payload.image
+                            image : payload.picture
                         }, process.env.JWT_SECRET)
 
                         let {username, id, image} = newUser 
@@ -110,7 +111,7 @@ class UserController {
                     process.env.JWT_SECRET,
                     { expiresIn: '24h' }
                 );
-                let {id, image, username} = user._id
+                let {id, image, username} = user
                 
                 res.status(200).json({ token, id, username, image })
             }
