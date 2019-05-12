@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="google-signin-client_id"
+    content="1093816831242-u1l833s28sgf982aonk1vusa1008jpag.apps.googleusercontent.com">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  <script src="https://cdn.ckeditor.com/ckeditor5/12.0.0/classic/ckeditor.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/vue/ dist/vue.js"></script> -->
+  <link rel="stylesheet" href="css/vueWysiwyg.css">
+  <script src="/vueWysiwyg.js"></script>
+
+  <title>Mini Wordpress</title>
+</head>
+
+<body>
+  <div id="body">
+
+    <!-- LOGIN -->
+    <div v-if="page === 'login'">
+      <div class="container my-4">
+        <div class="row justify-content-center">
+          <div class="col-4">
+            <div class="card mb-4">
+              <div class="card-header text-center">Login</div>
+
+              <div class="card-body">
+                <form method="post">
+                  <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input v-model="email" type="email" class="form-control" id="email" aria-describedby="emailHelp"
+                      placeholder="Enter email">
+                    <small id="emailHelp" class="form-text text-muted">
+                      We'll never share your email with anyone else.
+                    </small>
+                  </div>
+                  <div class="form-group">
+                    <label for="password">Password</label>
+                    <input v-model="password" type="password" class="form-control" id="password" placeholder="Password">
+                  </div>
+                  <div class="row p-3" style="justify-content: space-between;">
+                    <button v-on:click.prevent="userLogin" type="submit" class="btn btn-primary">Submit</button>
+                    <div class="g-signin2"id="google-button"></div>
+                  </div>
+                  <a @click.prevent="userRegister" href="">Create new account</a>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- END LOGIN -->
+
+
+    <!-- --------------------------------REGISTER  ------------------------------------------------------------------------------>
+    <div v-if=" page==='register'">
+      <div class="container my-4">
+        <div class="row justify-content-center">
+          <div class="col-4">
+            <div class="card mb-4">
+              <div class="card-header text-center">Register</div>
+
+              <div class="card-body">
+                <form method="post">
+                  <div class="form-group">
+                    <label for="email">Username</label>
+                    <input v-model="username" type="email" class="form-control" id="email" aria-describedby="emailHelp"
+                      placeholder="Username">
+                  </div>
+                  <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input v-model="email" type="email" class="form-control" id="email" aria-describedby="emailHelp"
+                      placeholder="Enter email">
+                    <small id="emailHelp" class="form-text text-muted">
+                      We'll never share your email with anyone else.
+                    </small>
+                  </div>
+                  <div class="form-group">
+                    <label for="password">Password</label>
+                    <input v-model="password" type="password" class="form-control" id="password" placeholder="Password">
+                  </div>
+                  <button v-on:click.prevent="newUserRegister" type="submit" class="btn btn-primary">Submit</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- -----------------------------END REGISTER ----------------------------------------------->
+
+
+
+    <div v-if="page==='web'">
+      <nav class="bg-primary">
+        <div style="display :flex; align-items: center">
+          <div id="logo">
+            <img
+              src="https://s3.amazonaws.com/peoplepng/wp-content/uploads/2018/12/22235003/WordPress-Logo-PNG-Image.png"
+              alt="">
+          </div>
+          <div>
+            Reader
+          </div>
+        </div>
+        <div class="nav-right" style="display:flex;">
+          <div class="nav-write">
+            write
+          </div>
+          <div @click="userLogout" class="links">
+            logout
+          </div>
+        </div>
+      </nav>
+
+      <!-- SIDEBAR -->
+      <div class="row">
+        <div class="col-md-2">
+          <div class="bg-light border-right" id="sidebar-wrapper">
+            <div class="sidebar-heading"> Nama User </div>
+            <div class="list-group list-group-flush">
+              <a href="#" class="list-group-item list-group-item-action bg-light" data-toggle="modal"
+                data-target=".bd-example-modal-lg"> Create An Article</a>
+              <a href="#" @click.prevent="allArticles" class="list-group-item list-group-item-action bg-light">All
+                Articles</a>
+              <a href="#" class="list-group-item list-group-item-action bg-light">My Articles</a>
+              <a href="#" @click="userLogout" class="list-group-item list-group-item-action bg-light">Logout</a>
+            </div>
+          </div>
+        </div>
+        <!-- END SIDEBAR -->
+
+        <!-- - ========================================== CREATE ARTICLE =============================================== -->
+        <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog modal-lg ">
+            <div class="modal-content">
+              <div class="font-weight-bold mb-3">
+                <p>Title :</p>
+                <input v-model="createTitle" type="text" class="form-control p-3" id="recipient-name">
+              </div>
+              <div>
+                <p>Image :</p>
+                <div class="input-group mb-3">
+                  <div class="custom-file">
+                    <input v-on:change="uploadImage" type="file" class="custom-file-input" id="inputGroupFile01">
+                    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <wysiwyg v-model="createContent"></wysiwyg>
+              </div>
+
+              <button @click='createArticle' class="btn btn-secondary" data-dismiss="modal">create</button>
+            </div>
+          </div>
+        </div>
+        <!-- -========================================== END CREATE ARTICLE =============================================== -->
+        <div class="col-md-10">
+          <!-- <div>
+              <textarea name="content" id="editor" style="display:flex">This is some sample content.</textarea>
+              <script>
+                ClassicEditor
+                  .create(document.querySelector('#editor'))
+                  .then(editor => {
+                    console.log(editor);
+                  })
+                  .catch(error => {
+                    console.error(error);
+                  });
+              </script>
+            </div> -->
+
+         
+
+          <!-- -SEACRH AND ADD -->
+          <form style="padding : 10px; display: flex; margin-left: 300px; margin-right: 300px" v-on:submit.prevent="filter" >
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
+              v-model="filterArticle">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          </form>
+
+          <!-- -SEACRH AND ADD -->
+
+
+          <div class="container-fluid">
+            <div class="row">
+
+              <div v-if="!all_articles" v-for="list in listArticles" class="p-3 col-3">
+                <!-- -component -->
+                <!-- <card-article v-on:edit-form="editArticle"  v-on:update-form="updateArticle" v-bind:list="list" /> -->
+                <!-- -component -->
+                <div class="card">
+                  <img class="card-img-top"
+                    src="https://s3.amazonaws.com/peoplepng/wp-content/uploads/2018/12/22235003/WordPress-Logo-PNG-Image.png"
+                    alt="Card image cap">
+                  <div class="card-body">
+                    <h5 class="card-title">{{list.title}}</h5>
+                    <p class="card-text" v-html="list.content"></p>
+                    <p class="card-text"><small class="text-muted">published : {{list.updated_at}}</small></p>
+                    <button @click='editArticle(list)' type="button" class="btn btn-secondary" data-toggle="modal"
+                      data-target=".bd-edit-modal-lg">Edit</button>
+
+                    <!-- -Edit From----------------------------------------------------------------------------- -->
+                    <div class="modal fade bd-edit-modal-lg" tabindex="-1" role="dialog"
+                      aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-lg ">
+                        <div class="modal-content">
+                          <div class="font-weight-bold mb-3">
+                            <p>Title :</p>
+                            <input v-model:value="editTitle" type="text" class="form-control p-3" id="recipient-name">
+                          </div>
+                          <div>
+                            <p>Image :</p>
+                            <div class="input-group mb-3">
+                              <div class="custom-file">
+                                <!-- <input v-model="editImage"  type="file" class="custom-file-input" id="inputGroupFile01"> -->
+                                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                              </div>
+                            </div>
+                          </div>
+                          <div>
+                            <wysiwyg v-model="editContent"></wysiwyg>
+                          </div>
+
+                          <button @click="updateArticle(list._id)" class="btn btn-secondary"
+                            data-dismiss="modal">Edit</button>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- -End Edit Form -------------------------------------------------------------------------------->
+
+                    <button @click="deleteArticle(list._id)" type="button" class="btn btn-secondary">Delete</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ------------------------------------ALL ARTICLES ------------------------------------------------------------->
+              <div v-if="all_articles" v-for="list in listArticles" class="p-3 col-3">
+                <!-- -component -->
+                <all-articles v-bind:list="list" />
+                <!-- -component -->
+                <!-- <div class="card">
+                  <img class="card-img-top"
+                    src="https://s3.amazonaws.com/peoplepng/wp-content/uploads/2018/12/22235003/WordPress-Logo-PNG-Image.png"
+                    alt="Card image cap">
+                  <div class="card-body">
+                    <h5 class="card-title">{{list.title}}</h5>
+                    <p class="card-text" v-html="list.content"></p>
+                    <p class="card-text"><small class="text-muted">published : {{list.updated_at}}</small></p>
+                  </div>
+                </div> -->
+              </div>
+              <!-- ------------------------------------END ALL ARTICLES ------------------------------------------------------------->
+
+            </div>
+          </div>
+        </div>
+        <!-- DIV COL -->
+
+
+        <!-- <div>
+              <wysiwyg v-model="text"></wysiwyg>
+              <button @click='create(text)'>create</button>
+            </div> -->
+
+        <!-- <script>
+                  const app = new Vue({
+                    data() {
+                      return {
+                        text: '',
+                      };
+                    },
+                    methods: {
+                      create(data) {
+                        console.log(data);
+                      }
+                    }
+                  });
+                </script> -->
+
+
+
+
+        <!-- <div>
+              <span v-bind:title="message">
+                <p>{{message}}</p>
+                Hover your mouse over me for a few seconds
+                to see my dynamically bound title!
+              </span>
+            </div> -->
+
+        <!-- end clo 3 -->
+      </div>
+
+
+
+    </div>
+  </div>
+
+
+
+
+  </div>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="https://apis.google.com/js/platform.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <!-- <script src="/javascript/component/card.js"></script> -->
+  <script src="/javascript/component/all-articles.js"></script>
+  <script src="/javascript/vue.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
