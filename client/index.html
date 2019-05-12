@@ -35,7 +35,7 @@
           class="hide-overflow"
           style="position:relative;"
         >
-          <dd-navbar @logout="logout" @drawer="drawer = !drawer"></dd-navbar>
+          <dd-navbar @search="search" @home="showMyArticles" @logout="logout" @drawer="drawer = !drawer"></dd-navbar>
           <dd-sidebar @show-my-articles="showMyArticles" @drawer="drawerchild = !drawerchild" :user="activeUser" :drawerparent="drawer"></dd-sidebar>
           <div
             id="scrolling-techniques"
@@ -44,8 +44,19 @@
           >
             <v-container justify-center style="padding-top:100px">
               <v-layout justify-center row>
+                <v-progress-circular
+                  v-if="loading"
+                  :size="70"
+                  :width="5"
+                  color="green"
+                  indeterminate
+                ></v-progress-circular>
+                <img v-if="filtered.length === 0" style="width:40%" src="./assets/noFound.png" alt="noFound">
+              </v-layout>
+              <v-layout justify-center row>
                 <v-flex xs8>
                   <v-btn
+                    v-if="isPrimaryFab"
                     @click="toggleApp"
                     fixed
                     dark
@@ -56,13 +67,25 @@
                   >
                     <v-icon>create</v-icon>
                   </v-btn>
+                  <v-btn
+                    v-else
+                    @click="toggleApp"
+                    fixed
+                    dark
+                    fab
+                    bottom
+                    right
+                    color="red"
+                  >
+                    <v-icon>close</v-icon>
+                  </v-btn>
                   <div v-if="isArticleForm">
                     <dd-article-form></dd-article-form>
                   </div>
 
                   <div v-else>
                     <div v-if="isGeneral">
-                      <dd-gen-article v-for="i in 3" :key="i"></dd-gen-article>
+                      <dd-gen-article v-for="(article, i) in filtered" :key="i"></dd-gen-article>
                     </div>
                     <div v-else>
                       <dd-my-article v-for="i in 3" :key="i"></dd-my-article>

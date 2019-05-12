@@ -4,6 +4,7 @@ new Vue ({
   el: '#app',
 
   data: {
+    loading: false,
     activeUser: '',
     isLogin: true,
     isRegister: false,
@@ -11,11 +12,15 @@ new Vue ({
 
     isWelcome: true,
 
+    isPrimaryFab: true,
     isArticleForm: false,
     isGeneral: true,
 
     drawer: null,
     drawerchild: null,
+
+    filtered: [],
+    articles: []
   },
 
   watch: {
@@ -31,10 +36,19 @@ new Vue ({
   },
 
   methods: {
+    search(keyword) {
+      if (!keyword) {
+        this.filtered = this.articles;
+      } else {
+        this.filtered = this.articles.filter(article => article.title === keyword);
+      }
+    },
+
     logCheck() {
       if (localStorage.token) {
         this.isWelcome = false;
         this.activeUser = localStorage.user;
+        this.fetchAll();
       }
     },
 
@@ -117,12 +131,39 @@ new Vue ({
       this.isWelcome = true;
     },
 
+    fetchAll() {
+      this.loading = true;
+      const { token } = localStorage;
+      axios({
+        method: 'get',
+        url: `${serverURL}/articles`,
+        headers: { token }
+      })
+        .then(({ data }) => {
+          const { articles } = data;
+          this.loading = false;
+          this.articles = articles;
+          this.filtered = this.articles;
+        })
+        .catch(err => {
+          this.loading = false;
+          const { message } = err.response.data;
+        })
+    },
+
+    fetchMine() {
+
+    },
+
     toggleApp() {
       this.isArticleForm = !this.isArticleForm;
+      this.isPrimaryFab = !this.isPrimaryFab;
     },
 
     showMyArticles(foo) {
-      this.drawer = !this.drawer;
+      if (this.drawer) {
+        this.drawer = !this.drawer;
+      }
       if(this.isArticleForm) {
         this.toggleApp();
       }

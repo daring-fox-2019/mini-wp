@@ -4,6 +4,12 @@ Vue.component('dd-navbar', {
       search: ''      
     };
   },
+
+  watch: {
+    search(val) {
+      this.$emit('search', val)
+    }
+  },
   
   template: `
   <div>
@@ -20,7 +26,7 @@ Vue.component('dd-navbar', {
         @click.stop="$emit('drawer')"
       >
       </v-toolbar-side-icon>
-      <v-toolbar-title>Ramini-WP</v-toolbar-title>
+      <v-toolbar-title @click="$emit('home', 0)"><a style="color:black">Ramini-WP</a></v-toolbar-title>
 
       <v-spacer></v-spacer>
       
