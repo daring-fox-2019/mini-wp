@@ -66,6 +66,115 @@ let vue = new Vue({
     updateone(obj){
       console.log("update", obj)
       this.article = obj
+      this.page="updatearticle"
+      var previous = document.getElementsByClassName("ql-editor");
+      if(this.article.image != "" && obj.content.indexOf(this.article.image) == -1){
+        previous[0].innerHTML = `<br><img src="${this.article.image}" alt="featured image" style="max-width:400px;"> ${obj.content}`
+      } else {
+        previous[0].innerHTML = `${obj.content}`
+      }
+    },
+    updatethearticle(type){
+      if(typeof this.article.image == "string" ){
+        console.log("disini")
+        let editor = document.getElementById('editor')
+          let htmlcontent = editor.firstChild.innerHTML
+          let newData = {
+            title: this.article.title,
+            snippet : quill.getText(0,100),
+            content: htmlcontent,
+            status: type,
+            image : this.article.image,
+            createdAt: this.article.createdAt,
+            updatedAt : new Date,
+            postedAt : "",
+            }
+            if(type == "posted"){
+              newData.postedAt = new Date
+            }
+            axios({
+              method : "put",
+              url : "http://localhost:3000/articles/"+this.article._id,
+              headers : {
+                token : localStorage.getItem('token'),
+                id : localStorage.getItem('id')
+              },
+              data : newData
+            })
+            .then(({data})=>{
+              console.log(data)
+              $('#createfeaturedimg').val('')
+              this.article.title = ""
+              quill.setText("\n\n\n")
+              swal("Article Updated!","successfully update your article","success")
+              this.checklogin()
+            })
+            .catch(error=>{
+              swal("Sorry", `Something bad happen in our server => ${error}`, "error");
+              console.log(error)
+            })
+      } else {
+        swal("Please wait while we do your request", {
+          buttons: false,
+          timer: 3500,
+        });
+        const blob = new Blob([this.article.image], {type : this.article.image.type});
+        console.log(blob)
+        const formdata = new FormData();
+        formdata.append("image", blob);
+        axios({
+          method : "post",
+          url : "http://localhost:3000/uploadimg",
+          data : formdata,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            token : localStorage.getItem('token'),
+            id : localStorage.getItem('id')
+          }
+        }).then(({data})=>{
+          this.article.image = ""
+          let gcloudURL = data
+          let editor = document.getElementById('editor')
+          let htmlcontent = editor.firstChild.innerHTML
+          let newData = {
+            title: this.article.title,
+            snippet : quill.getText(0,100),
+            content: htmlcontent,
+            status: type,
+            image : gcloudURL,
+            createdAt: "",
+            updatedAt : new Date,
+            postedAt : ""
+            }
+            if(type == "posted"){
+              newData.postedAt = new Date
+            }
+            axios({
+              method : "put",
+              url : "http://localhost:3000/articles/"+this.article._id,
+              headers : {
+                token : localStorage.getItem('token'),
+                id : localStorage.getItem('id')
+              },
+              data : newData
+            })
+            .then(({data})=>{
+              console.log(data)
+              $('#createfeaturedimg').val('')
+              this.article.title = ""
+              quill.setText("\n\n\n")
+              swal("Article Updated!","successfully update your article","success")
+              this.checklogin()
+            })
+            .catch(error=>{
+              swal("Sorry", `Something bad happen in our server => ${error}`, "error");
+              console.log(error)
+            })
+        }).catch(error=>{
+          swal("Sorry", `Something bad happen in our server => ${error}`, "error");
+          console.log(error)
+        })
+      }
     },
     previewFile(event){
       this.article.image = event.target.files[0]      
@@ -152,7 +261,7 @@ let vue = new Vue({
             }
           })
           .catch(error=>{
-            swal("Sorry", "Something bad happen in our server", "error");
+            swal("Sorry", `Something bad happen in our server => ${error}`, "error");
             console.log(error)
           })
       }
@@ -189,7 +298,7 @@ let vue = new Vue({
             }
           })
           .catch(error=>{
-            swal("Sorry", "Something bad happen :(", "error");
+            swal("Sorry", `Something bad happen in our server => ${error}`, "error");
             console.log(error)
           })
       }
@@ -288,9 +397,11 @@ let vue = new Vue({
               this.checklogin()
             })
             .catch(error=>{
+              swal("Sorry", `Something bad happen in our server => ${error}`, "error");
               console.log(error)
             })
         }).catch(error=>{
+          swal("Sorry", `Something bad happen in our server => ${error}`, "error");
           console.log(error)
         })
       }
@@ -352,20 +463,17 @@ let vue = new Vue({
             .catch(error=>{
               this.article.title = ""
               quill.setText("\n\n\n")
-              swal("Sorry","we couldn't process your request","error")
+              swal("Sorry", `Something bad happen in our server => ${error}`, "error");
               console.log(error)
             })
         }).catch(error=>{
           this.article.title = ""
           quill.setText("\n\n\n")
-          swal("Sorry","we couldn't process your request","error")
+          swal("Sorry", `Something bad happen in our server => ${error}`, "error");
           console.log(error)
         })
       }
     },
-    updatearticles(){
-      console.log("update article")
-    }
   }
 })
 

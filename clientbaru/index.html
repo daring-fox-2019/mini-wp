@@ -90,8 +90,7 @@
               </div>
               <div class="ui segment">
                 <div id="editor">
-                    <img v-if="article.image" v-bind:src="article.image" alt="featured image" height="400" width="400">
-                    <br><br><br><br><br><br><br><br><br><br><br><br><br><br> 
+                    <br><br><br> 
                 </div>
               </div>
             </div>
@@ -103,11 +102,11 @@
               </div>
               <div class="five wide column">
                 <button class="ui button fluid huge green" v-if="page === 'writearticle'" @click="savearticle">Save</button>
-                <button class="ui button fluid huge teal" v-if="page === 'updatearticle' && article.status === 'saved'">Post</button>
+                <button class="ui button fluid huge teal" v-if="page === 'updatearticle' && article.status === 'saved'" @click="updatethearticle('saved')">Post</button>
               </div>
               <div class="five wide column">
                 <button class="ui button fluid huge teal" v-if="page === 'writearticle'" @click="postarticle">Post</button>
-                <button class="ui button fluid huge green" v-if="page === 'updatearticle'">Update</button>
+                <button class="ui button fluid huge green" v-if="page === 'updatearticle'" @click="updatethearticle('posted')" >Update</button>
               </div>
             </div>
           </div><BR><BR><bR>
