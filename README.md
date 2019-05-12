@@ -17,31 +17,18 @@ Route | Method | Request(s) | Response(s) | Description
 `/users/:id` | PUT | **Headers**<br>token: `String`<br>**Body**<br>name: `String`<br>email: `String`<br>password: `String` | `200` OK<br>**Fail**<br>`401` Authorization Error<br>`500` Internal Server Error | Update one user
 `/users/:id` | DELETE | **Headers**<br>token: `String` | `200` OK<br>**Fail**<br>`401` Authorization Error<br>`500` Internal Server Error | Delete a user
 
-### Todo Router:
+### Article Router:
 
 Route | Method | Request(s) | Response(s) | Description
 ---|---|---|---|---
-`/todos` | POST | **Headers**<br>token: `String`<br>**Body**<br>name: `String`<br>description: `String`<br>dueDate: `Date` | **Success**<br>`201` Created<br>**Fail**<br>`401` Authorization Error<br>`500` Internal Server Error | Create a todo
-`/todos` | GET | **Headers**<br>token: `String` | `200` OK<br>**Fail**<br>`401` Authorization Error<br>`500` Internal Server Error | Get all todos
-`/todos/myTodo` | GET | **Headers**<br>token: `String`<br> | `200` OK<br>**Fail**<br>`401` Authorization Error<br>`500` Internal Server Error | Get all user's todos
-`/todos/:todoId` | GET | **Headers**<br>token: `String` | `200` OK<br>**Fail**<br>`401` Authorization Error<br>`500` Internal Server Error | Get one todo
-`/todos/:todoId` | PUT | **Headers**<br>token: `String`<br>**Body**<br>name: `String`<br>description: `String`<br>dueDate: `Date`<br>status: `Boolean` | `200` OK<br>**Fail**<br>`401` Authorization Error<br>`500` Internal Server Error | Update one todo
-`/todos/:todoId` | DELETE | **Headers**<br>token: `String` | `200` OK<br>**Fail**<br>`401` Authorization Error<br>`500` Internal Server Error | Delete a todo
+`/articles` | POST | **Headers**<br>token: `String`<br>**Body**<br>name: `String`<br>description: `String`<br>dueDate: `Date` | **Success**<br>`201` Created<br>**Fail**<br>`401` Authorization Error<br>`500` Internal Server Error | Create an article
+`/articles` | GET | **Headers**<br>token: `String` | `200` OK<br>**Fail**<br>`401` Authorization Error<br>`500` Internal Server Error | Get all articles
+`/articles/tag` | GET | **Headers**<br>token: `String`<br>**Query**<br>tag: `String` | `200` OK<br>**Fail**<br>`401` Authorization Error<br>`500` Internal Server Error | Get all articles with given tag
+`/articles/myArticle` | GET | **Headers**<br>token: `String`<br> | `200` OK<br>**Fail**<br>`401` Authorization Error<br>`500` Internal Server Error | Get all user's articles
+`/articles/:articleId` | GET | **Headers**<br>token: `String` | `200` OK<br>**Fail**<br>`401` Authorization Error<br>`500` Internal Server Error | Get one article
+`/articles/:articleId` | PUT | **Headers**<br>token: `String`<br>**Body**<br>name: `String`<br>description: `String`<br>dueDate: `Date`<br>status: `Boolean` | `200` OK<br>**Fail**<br>`401` Authorization Error<br>`500` Internal Server Error | Update one article
+`/articles/:articleId` | DELETE | **Headers**<br>token: `String` | `200` OK<br>**Fail**<br>`401` Authorization Error<br>`500` Internal Server Error | Delete an article
 
-### Project Router:
-
-Route | Method | Request(s) | Response(s) | Description
----|---|---|---|---
-`/projects` | POST | **Headers**<br>token: `String`<br>**Body**<br>name: `String`<br>user: `String` | **Success**<br>`201` Created<br>**Fail**<br>`401` Authorization Error<br>`500` Internal Server Error | Create a project
-`/projects` | GET | **Headers**<br>token: `String` | `200` OK<br>**Fail**<br>`401` Authorization Error<br>`500` Internal Server Error | Get all projects
-`/projects/myProjects` | GET | **Headers**<br>token: `String`<br> | `200` OK<br>**Fail**<br>`401` Authorization Error<br>`500` Internal Server Error | Get all user's projects
-`/projects/todos/:todoId` | PUT | **Headers**<br>token: `String`<br>**Body**<br>name: `String`<br>description: `String`<br>status: `Boolean`<br>dueDate: `String` | **Success**<br>`201` Created<br>**Fail**<br>`401` Authorization Error<br>`500` Internal Server Error | Update a Todo in specified project
-`/projects/todos/:todoId` | DELETE | **Headers**<br>token: `String` | **Success**<br>`200` Created<br>**Fail**<br>`401` Authorization Error<br>`500` Internal Server Error | Delete a Todo in specified project
-`/projects/todos/:projectId` | GET | **Headers**<br>token: `String` | `200` OK<br>**Fail**<br>`401` Authorization Error<br>`500` Internal Server Error | Get one todo in a specified project
-`/projects/:projectId` | POST | **Headers**<br>token: `String`<br>name: `String`<br>description: `String`<br>dueDate: `String` | `201` OK<br>**Fail**<br>`401` Authorization Error<br>`500` Internal Server Error | Create a project in specified project
-`/projects/:projectId` | GET | **Headers**<br>token: `String` | `200` OK<br>**Fail**<br>`401` Authorization Error<br>`500` Internal Server Error | Get one project
-`/projects/:projectId` | PUT | **Headers**<br>token: `String`<br>**Body**<br>name: `String`<br>description: `String`<br>dueDate: `Date`<br>status: `Boolean` | `200` OK<br>**Fail**<br>`401` Authorization Error<br>`500` Internal Server Error | Update one project
-`/projects/:projectId` | DELETE | **Headers**<br>token: `String` | `200` OK<br>**Fail**<br>`401` Authorization Error<br>`500` Internal Server Error | Delete a project
 
 ### Error Handling (Undefined Routes):
 
