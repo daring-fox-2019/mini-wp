@@ -6,6 +6,5 @@ routes.get('/', UserController.list)
 routes.post('/signin', UserController.signin)
 routes.post('/signinGoogle', UserController.signInGoogle)
 routes.post('/signup', UserController.signup)
-// routes.get('/users', UserController.list)
 
 module.exports = routes

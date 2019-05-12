@@ -5,7 +5,7 @@ const {Schema } = mongoose;
 const articleSchema = new Schema({
     title: {
         type: String,
-        required: true    
+        required: true
     },
     content: {
         type: String,
@@ -13,13 +13,12 @@ const articleSchema = new Schema({
     },
     featured_image: {
         type: String,
-        // required: true
     },
     created_at: {
         type: Date
     },
     tags : [String],
-    author : { type: Schema.Types.ObjectId, ref: 'Member' } 
+    author : { type: Schema.Types.ObjectId, ref: 'Member' }
 });
 
 articleSchema.pre('save', function() {
