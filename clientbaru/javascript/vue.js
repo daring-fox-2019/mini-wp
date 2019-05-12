@@ -134,6 +134,10 @@ let vue = new Vue({
       }
     },
     logout(){
+      var auth2 = gapi.auth2.getAuthInstance();
+      auth2.signOut().then(function () {
+        console.log('User signed out.');
+      });
       console.log("user telah logout")
       localStorage.removeItem('token')
       localStorage.removeItem('id')
@@ -141,6 +145,7 @@ let vue = new Vue({
       localStorage.removeItem('user')
       this.islogin = false
       this.viewlogin()
+      swal("Logged out", "user logged out", "success")
     },
     viewlogin(){
       this.page = "login"
