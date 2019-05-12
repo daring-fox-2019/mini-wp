@@ -29,7 +29,7 @@ class ControllerArticle {
     let condition = {
       userId : new ObjectID(req.headers.id)
     }
-    Article.find(condition)
+    Article.find(condition).sort({createdAt: -1})
     .then(articles=>{
       if(articles.length > 0){
         if(req.query.filter){
