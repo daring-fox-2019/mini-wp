@@ -1,8 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
  
-// data : title, snippet, content, createdAt, updatedAt, postedAt, userId, status, image
-
 const ArticleSchema = new Schema({
   userId : { type: Schema.Types.ObjectId, ref: 'User' },
   title : String,
