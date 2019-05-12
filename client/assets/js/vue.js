@@ -77,7 +77,6 @@ const app = new Vue({
         },
         googleSignIn: function(googleUser) {
             const token = googleUser.getAuthResponse().id_token;
-            // const profile = googleUser.getBasicProfile()
             
             let config = {
                 headers: {
@@ -89,6 +88,7 @@ const app = new Vue({
             .post(`${USER_PATH}/signinGoogle`, {}, config)
             .then( ({data}) => {
                 localStorage.token = data.token
+                localStorage.name = data.name
                 this.user.name=data.name
                 this.user.loggedIn=true
                 this.fetchMyArticles()
@@ -115,7 +115,6 @@ const app = new Vue({
             })
         },
         logout: function() {
-            logoutGoogle()
             this.articles=[]
             this.user.loggedIn=false
             
