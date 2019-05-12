@@ -6,7 +6,7 @@ const mongoose = require('mongoose')
 const cors = require("cors")
 const morgan = require('morgan')
 
-mongoose.connect(`mongodb+srv://admin:${process.env.ATLAS_PASSWORD}@cluster0-ayir7.gcp.mongodb.net/test?retryWrites=true`, { 
+mongoose.connect(process.env.DB_LOKAL, { 
     useNewUrlParser: true,
     useCreateIndex: true
     })

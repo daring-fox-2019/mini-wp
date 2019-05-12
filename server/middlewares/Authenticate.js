@@ -1,5 +1,5 @@
 const { decodeJWT } = require("../helpers/helper");
-const { User } = require("../models");
+const { User, Article } = require("../models");
 
 module.exports = {
   Authentication: function(req, res, next) {
@@ -22,9 +22,23 @@ module.exports = {
           });
         });
     } else {
+      console.log("haahhahh")
       res.status(400).json({
         msg: "Token is not valid"
       });
     }
+  },
+  Authorization: function(req,res,next){
+    let decode = decodeJWT(req.headers.token)
+    Article.findOne({_id: req.body.id})
+    .then(article=>{
+      if (article.author == decode.id){
+        next()
+      }else{
+        res.status(401).json({
+          msg: "Not authorized"
+        })
+      }
+    })
   }
 };

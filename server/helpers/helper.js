@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 
 module.exports = {
   hashPass(pass) {
-    return bcrypt.hashSync(pass, +process.env.SALT);
+    return bcrypt.hashSync(pass, 8);
   },
   generateJWT(obj) {
     console.log('generating JWT')
