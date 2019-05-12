@@ -27,7 +27,7 @@ Route | HTTP | Header(s) | Body | Description | Success Response | Failed Respon
  
  ## Client
  Here's an image of deployed app, showing which can be accessed and which can't.
-![client guide](https://storage.cloud.google.com/mini-wp.qfs-hacktiv8.com/mini-wp-client-guide-mini.png?_ga=2.183369699.-415458887.1554453586)
+![client guide](https://storage.cloud.google.com/mini-wp.qfs-hacktiv8.com/mini-wp-client-guide-mini.png)
  
  ## Usage
 Make sure you have node.js installed on your computer and then run these commands :
