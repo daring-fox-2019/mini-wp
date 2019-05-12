@@ -1,64 +1,107 @@
+const serverURL = 'http://localhost:3000';
+
 new Vue ({
   el: '#app',
-  components: {
-    wysiwyg: vueWysiwyg.default.component,
-  },
+
   data: {
-    search: '',
+    activeUser: '',
+    isLogin: true,
+    isRegister: false,
+    isOauth: false,
 
-    article: {
-      head: 'Create an article',
-      title: '',
-      text: '',
-      image: '',
-      tags: ''
-    },
-
-    showCard: false,
+    isWelcome: true,
 
     drawer: null,
-    items: [
-      { title: 'Home', icon: 'home' },
-      { title: 'My Articles', icon: 'short_text' },
-      { title: 'Edit Articles', icon: 'create' }
-    ],
-    clouds: [
-      { title: 'Storage', icon: 'storage' },
-      { title: 'Drive', icon: 'keyboard' }
-    ],
-    accounts: [
-      { title: 'Settings', icon: 'settings' },
-      { title: 'Privacy and Account', icon: 'security' }
-    ]
+
   },
-  watch: {
-    article: {
-      handler() {
-        console.log(this.article.text);
-      },
-      deep: true
-    }
+
+  created() {
+    this.logCheck();
   },
+
   methods: {
-    openFileDialog() {
-      document.getElementById('file-upload').click();
+    logCheck() {
+      if (localStorage.token) {
+        this.isWelcome = false;
+      }
     },
-    onFileChange(e) {
-        var self = this;
-        var files = e.target.files || e.dataTransfer.files;       
-        if(files.length > 0){
-            for(var i = 0; i< files.length; i++){
-                self.formData.append("file", files[i], files[i].name);
-            }
-        }   
+
+    toggleWelcome() {
+      this.isLogin = !this.isLogin;
+      this.isRegister = !this.isRegister;
     },
-    uploadFile() {
-        var self = this; 
-        axios.post('URL', self.formData).then(function (response) {
-            console.log(response);
-        }).catch(function (error) {
-            console.log(error);
-        });
+
+    login(data) {
+      axios({
+        method: 'post',
+        data,
+        url: `${serverURL}/login`
+      })
+        .then(({ data }) => {
+          const { token, user, message } = data;
+          Swal.fire({
+            position: 'center',
+            type: 'success',
+            title: message,
+            showConfirmButton: false,
+            timer: 1500
+          })
+          localStorage.setItem('token', token);
+          this.activeUser = user;
+          this.isWelcome = false;
+        })
+        .catch(err => {
+          const { message } = err.response.data;
+          Swal.fire({
+            position: 'center',
+            type: 'error',
+            title: message,
+            showConfirmButton: false,
+            timer: 1500
+          })
+        })
     },
+
+    register(data) {
+      axios({
+        method: 'post',
+        data,
+        url: `${serverURL}/register`
+      })
+        .then(({ data }) => {
+          const { message } = data;
+          Swal.fire({
+            position: 'center',
+            type: 'success',
+            title: message,
+            showConfirmButton: false,
+            timer: 1500
+          })
+          this.toggleWelcome();
+        })
+        .catch(err => {
+          const { message } = err.response.data;
+          Swal.fire({
+            position: 'center',
+            type: 'error',
+            title: message,
+            showConfirmButton: false,
+            timer: 1500
+          })
+        })
+    },
+
+    logout() {
+      Swal.fire({
+        position: 'center',
+        type: 'success',
+        title: 'logged out',
+        showConfirmButton: false,
+        timer: 1500
+      })
+      localStorage.removeItem('token');
+      this.activeUser = '';
+      this.isWelcome = true;
+    }
   }
 });

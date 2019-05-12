@@ -14,221 +14,63 @@
 <body>
   <div id="app">
     <v-app>
-      <div
-        class="hide-overflow"
-        style="position:relative;"
-      >
-        <v-toolbar
-          dense
-          floating
-          absolute
-          color="grey lighten-3"
-          scroll-off-screen
-          scroll-target="#scrolling-techniques"
-          style="border-radius:7px"
-        >
-          <v-toolbar-side-icon
-            @click.stop="drawer = !drawer"
-          >
-          </v-toolbar-side-icon>
-          <v-toolbar-title>Ramini-WP</v-toolbar-title>
-  
-          <v-spacer></v-spacer>
-          
-          <v-text-field
-            class="mx-3"
-            flat
-            label="Search"
-            hide-details
-            prepend-inner-icon="search"
-            solo-inverted
-          ></v-text-field>
-  
-          <v-spacer></v-spacer>
-  
-          <v-btn icon>
-            <v-icon color="green">notifications</v-icon>
-          </v-btn>
-  
-          <v-btn icon>
-            <v-icon color="blue">exit_to_app</v-icon>
-          </v-btn>
-        </v-toolbar>
-  
-        <v-navigation-drawer
-          v-model="drawer"
-          absolute
-          temporary
-        >
-          <v-list class="pa-1">
-            <v-list-tile avatar>
-              <v-list-tile-avatar>
-                <img src="./assets/avatar.png">
-              </v-list-tile-avatar>
-    
-              <v-list-tile-content>
-                <v-list-tile-title>Muhammad Ramadhoni</v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </v-list>
-    
-          <v-list class="pt-0" dense>
-            <v-divider></v-divider>
-    
-            <v-list-tile
-              v-for="item in items"
-              :key="item.title"
-              @click=""
-            >
-              <v-list-tile-action>
-                <v-icon>{{ item.icon }}</v-icon>
-              </v-list-tile-action>
-    
-              <v-list-tile-content>
-                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-  
-            <v-divider></v-divider>
-  
-            <v-list-tile
-              v-for="cloud in clouds"
-              :key="cloud.title"
-              @click=""
-            >
-              <v-list-tile-action>
-                <v-icon>{{ cloud.icon }}</v-icon>
-              </v-list-tile-action>
-    
-              <v-list-tile-content>
-                <v-list-tile-title>{{ cloud.title }}</v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-  
-            <v-divider></v-divider>
-  
-            <v-list-tile
-              v-for="account in accounts"
-              :key="account.title"
-              @click=""
-            >
-              <v-list-tile-action>
-                <v-icon>{{ account.icon }}</v-icon>
-              </v-list-tile-action>
-    
-              <v-list-tile-content>
-                <v-list-tile-title>{{ account.title }}</v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </v-list>
-        </v-navigation-drawer>
+      <div v-if="isWelcome">
+        <v-container class="pa-0">
+          <v-layout style="height:100vh;"row align-center justify-center>
+            <v-flex xs4>
+              <hr>
+              <div class="my-5">
+                <dd-register v-if="isRegister" @register="register" @login="toggleWelcome"></dd-register>
+                <dd-login v-if="isLogin" @login="login" @register="toggleWelcome"></dd-login>
+                <dd-oauth v-if="isOauth"></dd-oauth>
+              </div>
+              <hr>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </div>
+      
+      <div v-else>
         <div
-          id="scrolling-techniques"
-          class="scroll-y"
-          style="height:100vh;background:rgb(250, 250, 250)"
+          class="hide-overflow"
+          style="position:relative;"
         >
-          <v-container justify-center style="padding-top:100px;height:1000px">
-            <v-layout justify-center row>
-              <v-flex xs8>
-                <v-btn
-                  fixed
-                  dark
-                  fab
-                  bottom
-                  right
-                  color="green"
-                >
-                  <v-icon>create</v-icon>
-                </v-btn>
-                <span class="display-1">{{ article.head }}</span>
-                <v-form class="mb-3">
-                  <v-layout row class="mt-3">
-                    <v-text-field
-                      v-model="article.title"
-                      label="Title"
-                      outline
-                    ></v-text-field>
-                  </v-layout>
-                  <v-layout row>
-                    <wysiwyg v-model="article.text" />
-                  </v-layout>
-                  <v-btn color="grey" class="black--text" @click.native="openFileDialog">
-                    Upload
-                    <v-icon right dark> cloud_upload</v-icon>
+          <dd-navbar @logout="logout" @drawer="drawer = !drawer"></dd-navbar>
+          <dd-sidebar :drawer="drawer"></dd-sidebar>
+          <div
+            id="scrolling-techniques"
+            class="scroll-y"
+            style="height:100vh;background:rgb(250, 250, 250)"
+          >
+            <v-container justify-center style="padding-top:100px;height:1000px">
+              <v-layout justify-center row>
+                <v-flex xs8>
+                  <v-btn
+                    fixed
+                    dark
+                    fab
+                    bottom
+                    right
+                    color="green"
+                  >
+                    <v-icon>create</v-icon>
                   </v-btn>
-                  <input type="file" id="file-upload" style="display:none" @change="onFileChange">
-                  <v-layout row class="mt-4">
-                    <v-text-field
-                      v-model="article.tags"
-                      label="Tags"
-                      outline
-                    ></v-text-field>
-                  </v-layout>
-                  <v-layout justify-end row>
-                    <v-btn type="submit" flat color="green">Submit <v-icon>send</v-icon></v-btn>
-                  </v-layout>
-                </v-form>
-                
-                <div>
-                  <v-card class="mb-3" v-for="i in 3" :key="i">
-                    <v-img
-                      src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-                      height="200px"
-                    >
-                    </v-img>
-            
-                    <v-card-title primary-title>
-                      <div>
-                        <div class="headline">Top western road trips</div>
-                        <span class="grey--text">Date Published</span>
-                      </div>
-                    </v-card-title>
-            
-                    <v-card-actions>
-                      <v-btn flat color="blue"><v-icon>edit</v-icon>Edit</v-btn>
-                      <v-btn flat color="red"><v-icon>delete</v-icon>Delete</v-btn>
-                      <v-spacer></v-spacer>
-                      <v-btn icon @click="showCard = !showCard">
-                        <v-icon>{{ showCard ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</v-icon>
-                      </v-btn>
-                    </v-card-actions>
-            
-                    <v-slide-y-transition>
-                      <v-card-text v-show="showCard">
-                        <span class="grey--text">Author Name</span>
-                        <p>
-                          I'm a thing. But, like most politicians, he promised more than he could deliver. You won't have time for sleeping, soldier, not with all the bed making you'll be doing. Then we'll go with that data file! Hey, you add a one and two zeros to that or we walk! You're going to do his laundry? I've got to find a way to escape.
-                        </p>
-                      </v-card-text>
-                    </v-slide-y-transition>
-                  </v-card>
-                </div>
-                
-                <div>
-                  <v-card class="mb-3" v-for="i in 3" :key="i">
-                    <v-img
-                      src="https://cdn.vuetifyjs.com/images/cards/desert.jpg"
-                      aspect-ratio="2.75"
-                    ></v-img>
-            
-                    <v-card-title primary-title>
-                      <div>
-                        <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
-                        <span class="grey--text">Author Name | Date Published</span>
-                        <p> Lorem ipsum dolor sit amet, brute iriure accusata ne mea. Eos suavitate referrentur ad, te duo agam libris qualisque, utroque quaestio accommodare no qui. Et percipit laboramus usu, no invidunt verterem nominati mel. Dolorem ancillae an mei, ut putant invenire splendide mel, ea nec propriae adipisci. Ignota salutandi accusamus in sed, et per malis fuisset, qui id ludus appareat. </p>
-                      </div>
-                    </v-card-title>
-            
-                    <v-card-actions>
-                      <v-btn flat color="orange">Share</v-btn>
-                      <v-btn flat color="orange">Explore</v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </div>
-                
-              </v-flex>
-            </v-layout>
-          </v-container>
+                  <div>
+                    <dd-article-form></dd-article-form>
+                  </div>
+                  
+                  <div>
+                    <dd-my-article v-for="i in 3" :key="i"></dd-my-article>
+                  </div>
+                  
+                  <div>
+                    <dd-gen-article v-for="i in 3" :key="i"></dd-gen-article>
+                  </div>
+                  
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </div>
         </div>
       </div>
     </v-app>
@@ -237,12 +79,20 @@
   <script
 			  src="https://code.jquery.com/jquery-3.4.1.min.js"
 			  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-			  crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
   <script src="./js/vueWysiwyg.js"></script>
-  <!-- <script src="./js/navbar.js"></script> -->
-  <!-- <script src="./js/sidebar.js"></script> -->
+  <script src="./js/components/register.js"></script>
+  <script src="./js/components/login.js"></script>
+  <script src="./js/components/oauth.js"></script>
+  <script src="./js/components/navbar.js"></script>
+  <script src="./js/components/sidebar.js"></script>
+  <script src="./js/components/myArticle.js"></script>
+  <script src="./js/components/genArticle.js"></script>
+  <script src="./js/components/articleForm.js"></script>
   <script src="./js/index.js"></script>
 </body>
 </html>
