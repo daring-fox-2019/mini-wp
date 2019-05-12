@@ -56,6 +56,9 @@ let app = new Vue({
     created: function () {
         if (localStorage.token) {
             this.isLogin = true
+            this.show = "allArticle"
+            this.getArticles()
+            this.getAllArticles()
         } else {
             this.showLogin()
         }
