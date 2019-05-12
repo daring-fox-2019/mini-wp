@@ -94,7 +94,7 @@ let vue = new Vue({
             }
           })
           .catch(error=>{
-            swal("Sorry", "Something bad happen :(", "error");
+            swal("Sorry", "Something bad happen in our server", "error");
             console.log(error)
           })
       }
@@ -150,19 +150,45 @@ let vue = new Vue({
     },
     savearticle(){
       console.log("save article")
-      let editor = document.getElementById('editor')
-      let htmlcontent = editor.firstChild.innerHTML
-      let data = {
-        title: this.title,
-        snippet : quill.getText(0,100),
-        content: htmlcontent,
-        createdAt: new Date,
-        postedAt: null,
-        userId: localStorage.getItem('id'),
-        status: "saved",
-        image : this.image
-      }
-      
+      console.log(this.image)
+      const blob = new Blob([this.image], {type : this.image.type});
+      console.log(blob)
+      const formdata = new FormData();
+      formdata.append("image", blob);
+      axios({
+        method : "post",
+        url : "http://localhost:3000/uploadimg",
+        data : formdata,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          token : localStorage.getItem('token'),
+          id : localStorage.getItem('id')
+        }
+      }).then(response=>{
+        console.log(response)
+      }).catch(error=>{
+        console.log(error)
+      })
+      // var form = new FormData();
+      // let blobIMG = new Blob()
+      // form.append("featuredimg", this.image)
+      // console.log(data)
+      // axios({
+      //   method : "post",
+      //   url : "",
+      // })
+      // let editor = document.getElementById('editor')
+      // let htmlcontent = editor.firstChild.innerHTML
+      // let data = {
+      //   title: this.title,
+      //   snippet : quill.getText(0,100),
+      //   content: htmlcontent,
+      //   createdAt: new Date,
+      //   postedAt: null,
+      //   status: "saved",
+      //   image : this.image
+      // }
+      // console.log(data)
     },
     saveandpostarticles(){
       console.log("post article")

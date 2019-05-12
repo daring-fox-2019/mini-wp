@@ -43,7 +43,6 @@ class ControllerArticle {
           }
           res.status(201).json(articles)
         } else {
-          console.log("gapake filter query")
           res.status(201).json(articles)
         }
       } else {

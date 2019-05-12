@@ -20,7 +20,7 @@ router.delete("/articles/:id", authorization, cArticle.deleteArticle) // headers
 // response on success { _id }
 
 router.post("/uploadimg", multer.single('image'), sendUploadToGCS,
-   function(res,req,next){
+   function(req,res,next){
       if (req.file) { 
         res.status(200).json(req.file.cloudStoragePublicUrl);
         // balikin ke client
