@@ -3,16 +3,17 @@ Vue.component('formadd', {
     components: {
         wysiwyg: vueWysiwyg.default.component
     },
-    data(){
+    data() {
         return {
             listBlogg: "",
             blog_title: "",
             text: "",
             createdAt: "",
             file: "",
-            author: "",
+            author: localStorage.name,
             tag: '',
-            tags: []
+            tags: [],
+            disable: true
         }
     },
     template: `
@@ -36,8 +37,9 @@ Vue.component('formadd', {
         </div>
     </div>
     <div class="col-6">
-        <input type="text" v-model="author" placeholder="Author of this article.."
-            id="author-input">
+        <input type="text" v-model="author"
+            id="author-input" :disabled="disable" style="margin-right:0;margin-bottom:0">
+            <small style="color:red;cursor:pointer" @click="editdisable"><i>Change Author</i></small>
     </div>
     <br>
     </div>
@@ -52,8 +54,12 @@ Vue.component('formadd', {
     <button class="btn btn-dark" v-on:click.prevent="addBlogg">Add</button>
     </form>
     `,
-    
+
     methods: {
+        editdisable(){
+            this.disable = !this.disable
+            this.author = localStorage.name
+        },
         addBlogg() {
             if (this.blog_title === "") {
                 swal("A great article always started by a title isn't it?")
@@ -98,7 +104,7 @@ Vue.component('formadd', {
             file = e.target.files[0]
             this.file = file
         },
-        
+
     }
 })
 
@@ -113,4 +119,5 @@ function getBase64(file) {
     })
 }
 
-{/* <input type="file" style="opacity:1; position:relative; left:0px;" v-on:change="onChangeUpload" required> */}
+{
+    /* <input type="file" style="opacity:1; position:relative; left:0px;" v-on:change="onChangeUpload" required> */ }

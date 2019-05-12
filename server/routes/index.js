@@ -11,6 +11,7 @@ router.post('/', controller.create)
 router.patch('/:id', auth.authorUpdate, controller.updateOne)
 router.put('/:id', auth.authorUpdate, controller.update)
 router.delete('/:id', auth.authorDelete,controller.delete)
+router.get('/tags', controller.getAllTags)
 router.get('/:tag',controller.findAllbyTag)
 
 module.exports = router

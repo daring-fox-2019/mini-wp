@@ -1,13 +1,12 @@
 Vue.component('tag', {
-    props: ['tagz'],
+    props: ['tagz','size'],
     template: `
     <span>
-        <button style="margin-left:3px; margin-right:3px" class="badge badge-pill badge-success" @click="getTaggedArticle">{{ this.tagz }}</button>         
+        <button :style="{'height':'auto', 'fontSize': this.size+'px'||auto,'marginLeft':'3px', 'marginRight':'3px'}" class="badge badge-pill badge-secondary" @click="getTaggedArticle">{{ this.tagz }}</button>         
     </span>
     `,
     methods: {
         getTaggedArticle(){
-            console.log(this.tagz)
             axios
             .get(serverUrl+"/"+this.tagz,{
                 headers: {auth:localStorage.jwtoken}

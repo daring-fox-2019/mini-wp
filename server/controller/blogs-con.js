@@ -210,6 +210,18 @@ module.exports = {
             .catch(err => {
                 res.status(500).json(err)
             })
+    },
+    getAllTags(req,res){
+        Blog.distinct('tags', function(err,tags){
+            if(err){
+                console.log('aaa')
+                console.log(err)
+                res.status(500).json(err)
+            } else {
+                console.log(tags)
+                res.status(200).json(tags)
+            }
+        })
     }
 
     // function methods for users

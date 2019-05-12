@@ -20,6 +20,7 @@ function onSignIn(googleUser) {
                 localStorage.setItem('pp', data.data.pp)
                 localStorage.setItem('id', data.data.id)
                 app.isLoggedIn = true
+                app.onstart()
             })
             .catch(err => {
                 console.log(err.message)
@@ -50,6 +51,8 @@ var app = new Vue({
     },
     data: {
         userId: localStorage.id,
+        pp: localStorage.pp,
+        username: localStorage.name,
         id: "",
         listBlogg: "",
         listAllBlog: "",
@@ -62,12 +65,19 @@ var app = new Vue({
         file: "",
         isLoggedIn: false,
         author: "",
-        tags: ""
+        tags: "",
+        taglist: []
         // blog_content: "",
     },
     watch: {
         userId: function () {
             this.userId = localStorage.id
+        },
+        pp : function(){
+            this.pp= localStorage.pp
+        },
+        username: function(){
+            this.username =  localStorage.name
         }
     },
     methods: {
@@ -80,7 +90,7 @@ var app = new Vue({
             this.text = content
             this.id = id
             this.createdAt = createdAt,
-            this.tags = tags
+                this.tags = tags
             // document.getElementById('editor2').innerHTML = this.blog_content
         },
         deleteBlog_btn(id) {
@@ -132,8 +142,8 @@ var app = new Vue({
         },
         searchBlog(all) {
             let url
-            if(all){
-                url = serverUrl+'/all'
+            if (all) {
+                url = serverUrl + '/all'
             } else {
                 url = serverUrl
             }
@@ -147,7 +157,7 @@ var app = new Vue({
                     data
                 }) => {
                     let x = new RegExp(this.value, "i")
-                    if(all){
+                    if (all) {
                         console.log('aaa')
                         this.listAllBlog = data.filter(blog => x.test(blog.title))
                         if (!this.listAllBlog && !this.listAllBlogg[0]) {
@@ -286,6 +296,7 @@ var app = new Vue({
                                     text: 'You have succesfully logged in',
                                     confirmButtonText: 'Lovely!'
                                 })
+                                this.onstart()
                             }
                         })
                         .catch(err => {
@@ -328,12 +339,28 @@ var app = new Vue({
                     console.log(err)
                 })
         },
+        getTags() {
+            axios.get(serverUrl + "/tags", {
+                    headers: {
+                        auth: localStorage.jwtoken
+                    }
+                })
+                .then(({
+                    data
+                }) => {
+                    this.taglist = data.sort()
+                    this.page = 'tags-list'
+                })
+        },
 
         // onstart function
 
         onstart() {
             if (localStorage.jwtoken) {
                 this.isLoggedIn = true
+                this.userId = localStorage.id
+                this.pp= localStorage.pp
+                this.username =  localStorage.name    
             }
         }
     },

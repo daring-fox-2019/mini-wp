@@ -37,7 +37,7 @@ ul.navbar-list li, div#left-bar ul{
 }
 .navbar-list#most-left {
     background-color: #112547;
-    padding: 19px;
+    padding: 19px 19px 15px 19px;
 }
 .navbar-list#most-right{
     margin: auto;

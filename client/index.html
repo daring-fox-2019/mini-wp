@@ -38,14 +38,16 @@
         <!-- beforelogin -->
         <div v-show="!isLoggedIn">
             <div>
-                <button class="btn btn-outline-primary btn-lg" id="login-f-btn" v-on:click="regularLogin()">Login</button>
+                <button class="btn btn-outline-primary btn-lg" id="login-f-btn"
+                    v-on:click="regularLogin()">Login</button>
             </div>
             <div>
-                    <!-- Ini Google Sign In -->
-                <div class="g-signin2" data-onsuccess="onSignIn"></div> 
+                <!-- Ini Google Sign In -->
+                <div class="g-signin2" data-onsuccess="onSignIn"></div>
             </div>
             <div>
-                <button class="btn btn-outline-primary btn-lg" id="register-f-btn" v-on:click="register()">Register</button>
+                <button class="btn btn-outline-primary btn-lg" id="register-f-btn"
+                    v-on:click="register()">Register</button>
             </div>
         </div>
 
@@ -61,7 +63,8 @@
                                     class="fab fa-wordpress-simple"></i></span></li>
                         <li>MiniWP</li>
                     </ul>
-                    <button class="navbar-list" id="readermenu" @click="showallblogs" style="background-color: transparent;color:white">
+                    <button class="navbar-list" id="readermenu" @click="showallblogs"
+                        style="background-color: transparent;color:white">
                         <span><span class="nav-icon" style="font-size: 30px; color: white;"><i
                                     class="far fa-newspaper"></i></span></span>
                         <span>Reader</span>
@@ -69,13 +72,17 @@
                 </div>
                 <div>
                     <ul class="navbar-list" id="most-right">
-                        <li><button v-on:click="addBlogPageFunc" class="btn btn-light" id="write-btn"><span
+                        <!-- <li><button v-on:click="addBlogPageFunc" class="btn btn-light" id="write-btn"><span
                                     id="edit-ico"><i class="far fa-edit"></i></span>
-                                Write</button></li>
-                        <li><span class="nav-icon" style="font-size: 30px; color: white;"><i
-                                    class="fas fa-user-circle"></i></span></li>
+                                Write</button></li> -->
+                        <li><span class="nav-icon" style="font-size: 30px; color: white;"><img :src="pp" alt="prof pict"
+                                    style="width:35px;height:35px;overflow:hidden; border-radius:15px; margin-bottom:3px"><i
+                                    v-if="!pp" class="fas fa-user-circle"></i>
+                            </span><span> Hello, {{username}}</span></li>
+                            
                         <li><span class="nav-icon" style="font-size: 30px; color: white;"><i
                                     class="fas fa-bell"></i></span>
+
                         </li>
                         <li>
                             <span id="signout-btn">
@@ -95,7 +102,8 @@
 
                 <div class="navmenu col-sm-4 col-xl-2">
                     <ul>
-                        <li class="nav-menu-item" id="first-menu"><i class="fas fa-desktop"></i> View Site</li>
+                        <li @click="getTags" style="cursor: pointer;" class="nav-menu-item" id="first-menu"><i
+                                class="fas fa-tags"></i> Tags List</li>
                         <li class="nav-menu-item"><i class="far fa-chart-bar"></i> Stats</li>
                         <li class="nav-menu-item"><i class="fas fa-hiking"></i> Activity</li>
                         <li class="nav-menu-item"><i class="fas fa-ruler-combined"></i> Plan</li>
@@ -126,6 +134,16 @@
                 <!-- CONTENT DYNAMIC -->
 
                 <div class="articles-list content col-sm-8 col-xl-10">
+
+                    <div v-if="page == 'tags-list'" style="margin: 60px 80px 40px 80px">
+                        <h2 style="margin-bottom:50px">Here are the list of all the tags we have so far</h2>
+                        <div class="row d-flex justify-content-start" style="margin-left:0">
+                            <div class="" v-for="(tag,index) in taglist" :key="index"
+                                style="margin-bottom:20px;margin-right:10px">
+                                <tag @foundbytag=showbytag :tagz=tag :size=20></tag>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- LIST BLOG SUB-PAGE -->
 
@@ -172,44 +190,44 @@
                     <!-- List All Blog -->
 
                     <div class="lb" v-if="page === 'allblog-list'">
-                            <div class="menubar-articles-list d-flex">
-                                <ul class="sub-menubar-articles-list p-2"><strong>
+                        <div class="menubar-articles-list d-flex">
+                            <ul class="sub-menubar-articles-list p-2"><strong>
                                     on Reading List </strong> ({{listAllBlog.length}} article(s))
-                                </ul>
-    
-                                <ul class="sub-menubar-articles-list ml-auto p-2">
-                                    <li>
-                                        <form class="form-inline md-form form-sm active-pink active-pink-2 mt-2"
-                                            v-on:submit.prevent="searchBlog(true)">
-                                            <i class="fas fa-search" aria-hidden="true"></i>
-                                            <input class="form-control form-control-sm ml-3 w-75" size="30" type="text"
-                                                placeholder="Search" aria-label="Search" v-model="value">
-                                        </form>
-                                    </li>
-                                </ul>
-    
-                            </div>
-                            <div class="listBlog-detail">
-                                <ul>
-                                    <li v-if="listAllBlog[0].title" v-for="(blog,index) in listAllBlog">
-                                        <div id="per-blog">
-                                            <blog :blog="blog" @foundbytag=showbytag></blog>
-                                            <br>
-                                            <p v-if="blog.user == userId"><button
-                                                    v-on:click="editBlog_btn(blog._id,blog.title,blog.content,blog.createdAt)"
-                                                    class="btn btn-dark">Edit</button> || <button
-                                                    v-on:click="deleteBlog_btn(blog._id)"
-                                                    class="btn btn-dark">Delete</button></p>
-                                        </div>
-                                        <br>
-    
-                                    </li>
-                                    <li v-else>
-                                        <h6>{{ listAllBlogg[0] }}</h6>
-                                    </li>
-                                </ul>
-                            </div>
+                            </ul>
+
+                            <ul class="sub-menubar-articles-list ml-auto p-2">
+                                <li>
+                                    <form class="form-inline md-form form-sm active-pink active-pink-2 mt-2"
+                                        v-on:submit.prevent="searchBlog(true)">
+                                        <i class="fas fa-search" aria-hidden="true"></i>
+                                        <input class="form-control form-control-sm ml-3 w-75" size="30" type="text"
+                                            placeholder="Search" aria-label="Search" v-model="value">
+                                    </form>
+                                </li>
+                            </ul>
+
                         </div>
+                        <div class="listBlog-detail">
+                            <ul>
+                                <li v-if="listAllBlog[0].title" v-for="(blog,index) in listAllBlog">
+                                    <div id="per-blog">
+                                        <blog :blog="blog" @foundbytag=showbytag></blog>
+                                        <br>
+                                        <p v-if="blog.user == userId"><button
+                                                v-on:click="editBlog_btn(blog._id,blog.title,blog.content,blog.createdAt,blog.tags)"
+                                                class="btn btn-dark">Edit</button> || <button
+                                                v-on:click="deleteBlog_btn(blog._id)"
+                                                class="btn btn-dark">Delete</button></p>
+                                    </div>
+                                    <br>
+
+                                </li>
+                                <li v-else>
+                                    <h6>{{ listAllBlogg[0] }}</h6>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
 
                     <!-- ADD BLOG SUB-PAGE -->
 

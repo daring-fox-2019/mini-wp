@@ -2,15 +2,13 @@ Vue.component('blog', {
     props: ['blog'],
     template: `
     <div>
-        <div>
-            <div>
-                <h2><strong>{{ blog.title }}</strong></h2><br>
+    <h2><strong>{{ blog.title }}</strong></h2>
+        <div class="d-flex flex-wrap">
+            <div class="mb-auto p-4">
+                <img v-bind:src="blog.img" style="margin:auto; max-height:300px; width: 500px; overflow:hidden">
             </div>
-            <div>
-                <img v-bind:src="blog.img" style="margin:auto" width="70%">
-            </div><br>
+            <h6 v-html="blog.content"></h6>
         </div>
-        <h6 v-html="blog.content"></h6>
         <h6><small>Created At: {{blog.createdAt}}</small></h6>
         <h6><small>By: {{blog.author}}</small></h6>
         <span><small>Tags: </small></span>
