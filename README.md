@@ -1,4 +1,4 @@
-## TYPRO - MiniWP
+## SPRACHE - MiniWP
 
 API Documentation
 
