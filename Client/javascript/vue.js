@@ -228,7 +228,8 @@ let app = new Vue({
                     this.newArticle = {
                         title: "",
                         content: "",
-                        image: ""
+                        image: null,
+                        tags: []
                     }
                 })
                 .catch(err => {
