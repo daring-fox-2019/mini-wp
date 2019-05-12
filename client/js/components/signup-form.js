@@ -10,7 +10,7 @@ Vue.component('signup-form', {
         register() {
             axios({
                 method: 'post',
-                url: 'http://localhost:3000/register',
+                url: baseUrl + '/register',
                 data: {
                     name: this.nameRegister,
                     email: this.emailRegister,

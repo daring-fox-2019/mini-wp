@@ -1,4 +1,4 @@
-const baseUrl = 'http://localhost:3000'
+const baseUrl = 'http://mini-wp-server.emrido.site'
 
 let App = new Vue({
     el: '#app',

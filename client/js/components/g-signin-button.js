@@ -8,7 +8,7 @@ Vue.component('g-signin-button', {
     mounted() {
       window.gapi.load('auth2', () => {
         const auth2 = window.gapi.auth2.init({
-          client_id: '563252494522-hccd5ve2teth35uns0s1hckah9dqr0nb.apps.googleusercontent.com'
+          client_id: '28515749953-lpsctiktdeudjgpt9k0afp8n6rs0eetk.apps.googleusercontent.com'
         })
         auth2.attachClickHandler(this.$refs.signinBtn, {}, googleUser => {
           this.$emit('google', googleUser)

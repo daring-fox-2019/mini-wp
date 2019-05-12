@@ -7,7 +7,7 @@ const morgan   = require('morgan');
 const PORT     = process.env.PORT || 3000;
 const routes   = require('./routes');
 const mongoose = require('mongoose');
-const DB       = process.DB_URI
+const DB       = process.env.DB_URI
 
 mongoose.connect(DB, { useNewUrlParser: true });
 
