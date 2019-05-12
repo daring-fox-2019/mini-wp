@@ -11,8 +11,14 @@ let vue = new Vue({
     articlelist : [],
     date : new Date ().toDateString(),
     article : {
-      title : "",
-      image : ""
+      _id : "",
+      title: "",
+      content:"",
+      status: "",
+      image : "",
+      createdAt: "",
+      updatedAt : "",
+      postedAt : "",
     }
   },
   created(){
@@ -29,6 +35,9 @@ let vue = new Vue({
     }
   },
   methods : {
+    readone(obj){
+      console.log(obj)
+    },
     previewFile(event){
       this.article.image = event.target.files[0]      
     },
@@ -53,13 +62,36 @@ let vue = new Vue({
         this.islogin = true
         this.footer = true
         this.navigation = true
+        this.viewarticles()
         this.page = "articles"
         this.user = localStorage.getItem('user')
-        this.viewarticles()
+        this.article = {
+          _id : "",
+          title: "",
+          content:"",
+          status: "",
+          image : "",
+          createdAt: "",
+          updatedAt : "",
+          postedAt : "",
+        }
+        $('#createfeaturedimg').val('')
+        this.article.title = ""
+        quill.setText("\n\n\n")
 
       } else {
         this.islogin = false
         this.page = "login"
+        this.article = {
+          _id : "",
+          title: "",
+          content:"",
+          status: "",
+          image : "",
+          createdAt: "",
+          updatedAt : "",
+          postedAt : "",
+        }
       }
     },
     login(){
@@ -149,8 +181,13 @@ let vue = new Vue({
     },
     viewlogin(){
       this.page = "login"
+      this.name = ""
+      this.email = "",
+      this.password = ""
     },
     viewregister(){
+      this.password = ""
+      this.email = ""
       this.page = "register"
     },
     viewwrite(){
@@ -164,7 +201,7 @@ let vue = new Vue({
       } else {
         swal("Please wait while we do your request", {
           buttons: false,
-          timer: 3000,
+          timer: 3500,
         });
         const blob = new Blob([this.article.image], {type : this.article.image.type});
         console.log(blob)
@@ -209,6 +246,7 @@ let vue = new Vue({
               this.article.title = ""
               quill.setText("\n\n\n")
               swal("Article Created!","successfully saved your article","success")
+              this.checklogin()
             })
             .catch(error=>{
               console.log(error)
@@ -218,13 +256,16 @@ let vue = new Vue({
         })
       }
     },
-    saveandpostarticles(){
+    postarticle(){
       console.log("post article")
-      console.log("save article")
       console.log(this.article.image)
       if(this.article.image == ""){
         swal("Required an Image","please upload your image first","info")
       } else {
+        swal("Please wait while we do your request", {
+          buttons: false,
+          timer: 3500,
+        });
         const blob = new Blob([this.article.image], {type : this.article.image.type});
         console.log(blob)
         const formdata = new FormData();
@@ -267,11 +308,18 @@ let vue = new Vue({
               this.article.title = ""
               quill.setText("\n\n\n")
               swal("Article Posted!","successfully posted your article","success")
+              this.checklogin()
             })
             .catch(error=>{
+              this.article.title = ""
+              quill.setText("\n\n\n")
+              swal("Sorry","we couldn't process your request","error")
               console.log(error)
             })
         }).catch(error=>{
+          this.article.title = ""
+          quill.setText("\n\n\n")
+          swal("Sorry","we couldn't process your request","error")
           console.log(error)
         })
       }

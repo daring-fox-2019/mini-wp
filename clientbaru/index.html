@@ -41,7 +41,12 @@
         <div class="ui container" v-show="page === 'articles'">
           <br>
           <div class="ui container segment" v-show="articlelist.length != 0">
-            <articlefeed :articles="articlelist" :author="user"/>
+            <articlefeed
+              :articles="articlelist"
+              :author="user"
+              v-on:toread="readone"
+              v-on:toupdate="readone"
+              v-on:todelete="readone"/>
           </div>
           <div class="ui container segment" v-show="articlelist.length == 0">
             NO ARTICLES FOUND
@@ -50,7 +55,7 @@
         </div>
 
         <!-- EDIT & VIEW ONE ARTICLES -->
-        <div class="ui container" id="update" v-show="page === 'updatearticle'">
+        <!-- <div class="ui container" id="update" v-show="page === 'updatearticle'">
           <div class="ui container segment">
             <form class="ui form center aligned">
               <div id="editor2">
@@ -61,14 +66,15 @@
               </div>
             </form>
           </div>
-        </div>
+        </div> -->
 
-        <!-- WRITE NEW ARTICLE -->
-        <div class="ui container" v-show="page === 'writearticle'">
+        <!-- WRITE NEW ARTICLE // UPDATE ARTICLE -->
+        <div class="ui container" v-show="page === 'writearticle' || page === 'updatearticle'">
           <div class="ui segments center aligned">
             <div class="ui segment grid right aligned" style="background-color: #DADADA">
                 <div class="ui ten wide column left aligned">
-                    <h4>Write New Article</h4>
+                    <h4 v-if="page === 'writearticle'">Write New Article</h4>
+                    <h4 v-if="page === 'updatearticle'">Update This Article</h4>
                 </div>
                 <div class="ui six wide column">
                     Today : {{ date }}
@@ -87,12 +93,20 @@
               </div>
             </div>
           </div>
-          <div class="ui container left aligned">
-              <input type="file" @change="previewFile" class="ui input" id="createfeaturedimg">
-              <button class="ui button teal" @click="savearticle">Save this article</button>
-              <button class="ui button teal" @click="savearticle">Save & Post this article</button>
-          </div>
-          <div class="ui container center aligned">
+          <div class="ui container">
+            <div class="ui grid"><br>
+              <div class="five wide column">
+                <input type="file" @change="previewFile" class="ui input" id="createfeaturedimg">
+              </div>
+              <div class="five wide column">
+                <button class="ui button fluid huge green" v-if="page === 'writearticle'" @click="savearticle">Save</button>
+                <button class="ui button fluid huge teal" v-if="page === 'updatearticle' && article.status === 'saved'">Post</button>
+              </div>
+              <div class="five wide column">
+                <button class="ui button fluid huge teal" v-if="page === 'writearticle'" @click="postarticle">Post</button>
+                <button class="ui button fluid huge green" v-if="page === 'updatearticle'">Update</button>
+              </div>
+            </div>
           </div>
               <BR><BR><bR>
         </div>

@@ -1,6 +1,6 @@
 # Mini Wordpress
 ---
------
+---
 ### Installation
   1. Clone this repository
   2. There are 2 main folder `/server` and `/clientbaru`, open the `/server` folder first to set up the server side

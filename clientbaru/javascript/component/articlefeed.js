@@ -8,8 +8,30 @@ Vue.component('articlefeed',{
   },
   methods : {
     readarticle(article){
-      console.log(article)
-    }
+      let thisArticle = {
+        _id : article._id,
+        title: article.title,
+        content: article.content,
+        status: article.status,
+        image : article.image,
+        createdAt: article.createdAt,
+        updatedAt : article.updatedAt,
+        postedAt : article.postedAt,
+        }
+      this.$emit('toread', thisArticle)
+    }, 
+    updatethis(article){
+      let thisArticle = {
+        _id : article._id,
+        }
+      this.$emit('toupdate', thisArticle)
+    },
+    deletethis(article){
+      let thisArticle = {
+        _id : article._id,
+        }
+      this.$emit('todelete', thisArticle)
+    },
   },
   template : `
   <div class="ui container">
