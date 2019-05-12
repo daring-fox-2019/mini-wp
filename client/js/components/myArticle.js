@@ -21,15 +21,15 @@ Vue.component('dd-my-article', {
   <div>
     <v-card class="mb-3">
       <v-img
-        src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-        height="200px"
+        v-if="article.imageURL"
+        :src="article.imageURL"
       >
       </v-img>
 
       <v-card-title primary-title>
         <div>
           <div class="headline">{{ article.title }}</div>
-          <span class="grey--text">{{ article.updated }}</span>
+          <span class="grey--text">{{ (new Date(article.updated)).toString() }}</span>
         </div>
       </v-card-title>
 
@@ -44,7 +44,7 @@ Vue.component('dd-my-article', {
 
       <v-slide-y-transition>
         <v-card-text v-show="showCard">
-          <span class="grey--text">{{ article.creator }}</span>
+          <span class="grey--text">{{ article.creator.name }}</span>
           <p>
             <span v-html="article.text"></span>
           </p>

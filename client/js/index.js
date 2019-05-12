@@ -47,9 +47,9 @@ new Vue ({
   methods: {
     search(keyword) {
       if (!keyword) {
-        this.filtered = isGeneral ? this.articles : this.myArticles;
+        this.filtered = this.isGeneral ? this.articles : this.myArticles;
       } else {
-        this.filtered = (isGeneral ? this.articles : this.myArticles).filter(article => article.title === keyword);
+        this.filtered = (this.isGeneral ? this.articles : this.myArticles).filter(article => article.title.toLowerCase().match(keyword.toLowerCase()));
       }
     },
 
@@ -85,6 +85,8 @@ new Vue ({
           localStorage.setItem('user', user);
           this.activeUser = user;
           this.isWelcome = false;
+          this.fetchAll();
+          this.showMyArticles(0);
         })
         .catch(err => {
           const { message } = err.response.data;
@@ -143,6 +145,7 @@ new Vue ({
     fetchAll() {
       this.loading = true;
       const { token } = localStorage;
+      
       axios({
         method: 'get',
         url: `${serverURL}/articles`,
@@ -167,12 +170,15 @@ new Vue ({
               timer: 1500
             })
           }
+          this.articles = [];
+          this.filtered = [];
         })
     },
 
     fetchMine() {
       this.loading = true;
       const { token } = localStorage;
+
       axios({
         method: 'get',
         url: `${serverURL}/user/articles`,
@@ -181,8 +187,8 @@ new Vue ({
         .then(({ data }) => {
           const { articles } = data;
           this.loading = false;
-          this.articles = articles;
-          this.filtered = this.articles;
+          this.myArticles = articles;
+          this.filtered = this.myArticles;
         })
         .catch(err => {
           this.loading = false;
@@ -197,6 +203,44 @@ new Vue ({
               timer: 1500
             })
           }
+          this.myArticles = [];
+          this.filtered = [];
+        })
+    },
+
+    uploadArticle(data) {
+      this.loading = true;
+      const { token } = localStorage;
+
+      axios({
+        method: 'post',
+        data,
+        headers: { token },
+        url: `${serverURL}/articles`
+      })
+        .then(({ data }) => {
+          this.loading = false;
+          const { newArticle, message } = data;
+          Swal.fire({
+            position: 'center',
+            type: 'success',
+            title: message,
+            showConfirmButton: false,
+            timer: 1500
+          })
+          this.articles.unshift(newArticle);
+          this.myArticles.unshift(newArticle);
+          this.toggleApp();
+        })
+        .catch(err => {
+          const { message } = err.response.data;
+          Swal.fire({
+            position: 'center',
+            type: 'error',
+            title: message,
+            showConfirmButton: false,
+            timer: 1500
+          })
         })
     },
 
@@ -211,6 +255,11 @@ new Vue ({
       }
       if(this.isArticleForm) {
         this.toggleApp();
+      }
+      if (!foo) {
+        this.fetchAll();
+      } else {
+        this.fetchMine();
       }
       this.isGeneral = !foo;
     },

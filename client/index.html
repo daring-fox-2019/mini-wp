@@ -45,6 +45,15 @@
             <v-container justify-center style="padding-top:100px">
               <v-layout justify-center row>
                 <v-flex xs8>
+                  <v-layout justify-center row>
+                    <v-progress-circular
+                      v-if="loading"
+                      :size="70"
+                      :width="5"
+                      color="green"
+                      indeterminate
+                    ></v-progress-circular>
+                  </v-layout>
                   <v-btn
                     v-if="isPrimaryFab"
                     @click="toggleApp"
@@ -70,24 +79,15 @@
                     <v-icon>close</v-icon>
                   </v-btn>
                   <div v-if="isArticleForm">
-                    <dd-article-form></dd-article-form>
+                    <dd-article-form @upload="uploadArticle"></dd-article-form>
                   </div>
 
                   <div v-else>
                     <v-layout justify-center row>
-                      <v-progress-circular
-                        v-if="loading"
-                        :size="70"
-                        :width="5"
-                        color="green"
-                        indeterminate
-                      ></v-progress-circular>
-                    </v-layout>
-                    <v-layout justify-center row>
                       <img v-if="filtered.length === 0" style="width:70%" src="./assets/noFound.png" alt="noFound">
                     </v-layout>
                     <div v-if="isGeneral">
-                      <dd-gen-article v-for="(article, i) in 1" :article="article" :key="i"></dd-gen-article>
+                      <dd-gen-article v-for="(article, i) in filtered" :article="article" :key="i"></dd-gen-article>
                     </div>
                     <div v-else>
                       <dd-my-article v-for="(article, i) in filtered" :article="article" :key="i"></dd-my-article>

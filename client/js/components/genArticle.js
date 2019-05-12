@@ -13,13 +13,12 @@ Vue.component('dd-gen-article', {
       <v-img
         v-if="article.imageURL"
         :src="article.imageURL"
-        aspect-ratio="2.75"
       ></v-img>
 
       <v-card-title primary-title>
         <div>
           <h3 class="headline mb-0">{{ article.title }}</h3>
-          <span class="grey--text">{{ article.creator }} | {{ (new Date(article.updated)).toString() }}</span>
+          <span class="grey--text">{{ article.creator.name }} | {{ (new Date(article.updated)).toString() }}</span>
           <p><span v-html="article.text"></span></p>
         </div>
       </v-card-title>
