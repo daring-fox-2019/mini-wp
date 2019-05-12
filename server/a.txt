@@ -1,1 +1,0 @@
-export JWT_SALT=shhhhh&&export PORT=3000&&export AUDIENCE_GOOGLE=542800123011-8mnmmf47fhbjo0v28ijvv6occajn0qvr.apps.googleusercontent.com&&export MONGO_DB=mongodb+srv://admin:admin@hakctiv8-qfs-3mdc3.gcp.mongodb.net/mini-wp?retryWrites=true&&export CLOUD_KEYFILE=./keyfile.json&&export PROJECT_ID=mini-wp-wfs
