@@ -67,7 +67,7 @@ const app = new Vue({
                 localStorage.name = user.data.name
                 this.user.name=localStorage.name
                 this.user.loggedIn=true
-                this.fetchMyArticles()
+                this.fetchArticles()
                 this.goToHomePage()
             })
             .catch(err => {
@@ -91,8 +91,7 @@ const app = new Vue({
                 localStorage.name = data.name
                 this.user.name=data.name
                 this.user.loggedIn=true
-                this.fetchMyArticles()
-                this.goToHomePage()
+                this.fetchArticles()
             })
             .catch(err => {
                 console.log(err);
