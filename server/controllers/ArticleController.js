@@ -34,16 +34,18 @@ class ArticleController {
     }
 
     static create(req, res) {
-        const { title, content,tags } = req.body        
+        const { title, content, tags } = req.body        
         const featured_image = req.file.cloudStoragePublicUrl
 
         let author = req.headers.id
 
         let parseTags = []
+        if(tags.length>0) {
+            JSON.parse(tags).forEach(e=> {
+                parseTags.push(e)
+            })
 
-        JSON.parse(tags).forEach(e=> {
-            parseTags.push(e)
-        })
+        }
 
         Article.create({
             title,
@@ -64,12 +66,21 @@ class ArticleController {
     static update(req,res) {
         let obj = {}
         for(let key in req.body) {
-            obj[key] = req.body[key]
+            if(key==='tags') {
+                obj.tags=[]
+                JSON.parse(req.body[key]).forEach(e=> {
+                    obj.tags.push(e)
+                })
+            }else {
+                obj[key] = req.body[key]
+            }
         }
+
 
         if(req.file) {
             obj.featured_image=req.file.cloudStoragePublicUrl
         }
+        
         
         Article.findOneAndUpdate({_id: req.params.id}, obj, {new:true})
         .then(article => {

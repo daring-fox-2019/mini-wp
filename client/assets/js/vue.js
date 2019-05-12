@@ -163,7 +163,7 @@ const app = new Vue({
                 console.log(err);
             })
         },
-        createArticle: function(tags) {
+        createArticle: function() {
             let formData = new FormData()
             formData.append('title', this.newArticle.title)
             formData.append('content', this.newArticle.content)
@@ -172,8 +172,8 @@ const app = new Vue({
                 formData.append('featured_image', this.newArticle.featured_image)
             }
 
-            if(tags.length>0) {
-                formData.append('tags', JSON.stringify(tags))
+            if(this.newArticle.tags.length>0) {
+                formData.append('tags', JSON.stringify(this.newArticle.tags))
             }
             
             let config = {
@@ -204,6 +204,9 @@ const app = new Vue({
                 formData.append('featured_image', this.newArticle.featured_image)
             }
 
+            if(this.newArticle.tags.length>0) {
+                formData.append('tags', JSON.stringify(this.newArticle.tags))
+            }
 
             let config = {
                 headers: {
@@ -217,10 +220,12 @@ const app = new Vue({
             axios
             .patch(`${ARTICLE_PATH}/${id}`, formData, config)
             .then( ({data}) => {
+                console.log('cient data edit', data);
                 this.articles=this.articles.map(e=> {
                     if(e._id===this.newArticle.id) {
                         e.title=data.title
                         e.content=data.content
+                        e.tags=data.tags
                         e.featured_image=data.featured_image
                     }
 
@@ -250,6 +255,7 @@ const app = new Vue({
                 this.newArticle.title=data.title
                 this.newArticle.content=data.content
                 this.newArticle.id=data._id
+                this.newArticle.tags=data.tags
 
                 this.createPage=false
             })

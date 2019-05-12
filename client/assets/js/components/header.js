@@ -66,8 +66,6 @@ Vue.component('myheader', {
                     {{user.name ? user.name : 'User'}}
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Edit Profile</a>
-                    <div class="dropdown-divider"></div>
                     <a 
                         class="dropdown-item" 
                         @click="clickLogout"  

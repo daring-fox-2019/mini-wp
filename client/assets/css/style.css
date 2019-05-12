@@ -180,6 +180,19 @@
   margin-left: 0;
 }
 
+.tag {
+  background-color: #616161;
+  color: #fff;
+  border-radius: 4px;
+  display: inline-block;
+  margin-top: 5px;
+  padding: 2px 12px;
+  margin-right: 8px;
+}
+.tag > .remove-tag {
+  cursor: pointer;
+}
+
 body {
   overflow-x: hidden;
 }

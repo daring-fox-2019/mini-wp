@@ -26,9 +26,15 @@ Vue.component('mycard',{
                     </div>
                     <div class="my-card-content" v-html="article.content">
                     </div>
-                </div>
-                <div v-if="menus.home">
-                    by {{article.author.name}}
+                    <div v-if="menus.home">
+                        by {{article.author.name}}
+                    </div>
+                    <div v-if="article.tags">
+                        <div 
+                            v-for="tag in article.tags"
+                            class="tag"                
+                        ># {{tag}}</div>
+                    </div>
                 </div>
             </div>
         </div>
