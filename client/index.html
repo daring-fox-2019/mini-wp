@@ -43,6 +43,10 @@
                     <login id="loginPage" v-show="page === 'login' && !loading" @success="loginSuccess"></login>
                     <register id="registerPage" v-if="page === 'register' && !loading"></register>
     
+                    <div id="explore" v-if="page === 'explore' && !loading" class="container">
+                        <explore></explore>
+                    </div>
+
                     <div id="index" v-if="page === 'index' && !loading && isLogin" class="container">
                         <index></index>
                     </div>
@@ -99,6 +103,7 @@
     <!-- Views -->
     <script src="js/views/searchResult.js"></script>
     <script src="js/views/login.js"></script>
+    <script src="js/views/explore.js"></script>
     <script src="js/views/register.js"></script>
     <script src="js/views/detailPage.js"></script>
     <script src="js/views/updatePost.js"></script>

@@ -146,7 +146,7 @@ var app = new Vue({
     }
     else {
       this.isLogin = false;
-      this.page = 'login'
+      this.page = 'explore'
     }
   }
 })

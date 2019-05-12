@@ -27,7 +27,7 @@ Vue.component('navigation', {
         <div class="collapse navbar-collapse navbar-toggleable-lg" id="navbarTogglerDemo02">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#" @click="$root.showIndex()">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="#" @click="$root.page = 'explore'">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#" onclick="app.page = 'explore'">Explore</a>

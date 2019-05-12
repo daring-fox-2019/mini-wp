@@ -11,6 +11,7 @@ route.use('/articles', authenticate, articleRoute)
 route.use('/auth', authRoute)
 route.use('/user', authenticate, userRoute)
 route.use('/tags', tagRoute)
+
 route.get('/tag/:tagText', (req, res) => {
     Tag.findOne({text: req.params.tagText})
         .then(tag => {
@@ -32,6 +33,7 @@ route.get('/tag/:tagText', (req, res) => {
             }
         })
 })
+
 route.get('/', (req, res) => {
     res.send('Welcome to Mini WP. Please register/sign in to access the service')
 })
