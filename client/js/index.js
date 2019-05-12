@@ -42,6 +42,7 @@ let app = new Vue({
     contentRules: [
       v => !!v || 'Content is required'
     ],
+    imageTag: [],
 
     // for display
     displayContent: '0',  // main content
@@ -110,7 +111,11 @@ let app = new Vue({
           }
         }
       })
-    }
+    },
+    imageTag: function(val){
+      this.form.tags = val
+    },
+
   },
 
   methods: {
@@ -145,7 +150,7 @@ let app = new Vue({
       data.append("tags", this.form.tags)
 
 
-      axios.put(`http://localhost:3000/articles/${this.idArticleSelected}`, data, {
+      axios.put(`http://35.198.215.132/articles/${this.idArticleSelected}`, data, {
         headers: {
           token: localStorage.token
         }
@@ -173,7 +178,7 @@ let app = new Vue({
     },
 
     loadData() {
-      axios.get('http://localhost:3000/articles', {
+      axios.get('http://35.198.215.132/articles', {
         headers: {
           token: localStorage.token
         }
@@ -195,7 +200,7 @@ let app = new Vue({
     },
 
     signUp() {
-      axios.post('http://localhost:3000/users/signup', this.signup)
+      axios.post('http://35.198.215.132/users/signup', this.signup)
         .then(({ data }) => {
           swal(`Register Success!`, {
             icon: "success",
@@ -212,7 +217,7 @@ let app = new Vue({
     },
 
     signIn() {
-      axios.post('http://localhost:3000/users/signin', this.signin)
+      axios.post('http://35.198.215.132/users/signin', this.signin)
         .then(({ data }) => {
           this.signin.email = ''
           this.signin.password = ''
@@ -251,7 +256,7 @@ let app = new Vue({
       })
         .then((willDelete) => {
           if (willDelete) {
-            axios.delete(`http://localhost:3000/articles/${id}`, {
+            axios.delete(`http://35.198.215.132/articles/${id}`, {
               headers: {
                 token: localStorage.token
               }
@@ -291,7 +296,7 @@ let app = new Vue({
       }
       data.append("tags", this.form.tags)
 
-      axios.post('http://localhost:3000/articles', data, { headers: { token: localStorage.token } })
+      axios.post('http://35.198.215.132/articles', data, { headers: { token: localStorage.token } })
         .then(({ data }) => {
           swal(`Create article Success!`, {
             icon: "success",
@@ -327,6 +332,18 @@ let app = new Vue({
         fr.addEventListener('load', () => {
           this.form.imageUrl = fr.result
           this.form.imageFile = files[0] // this is an image file that can be sent to server...
+
+          let datas = new FormData()
+          datas.append('image', this.form.imageFile, this.form.imageName)
+          axios.post('http://35.198.215.132/vision', datas )
+          .then(({data})=>{
+            console.log(data);
+            this.imageTag = data
+          })
+          .catch(err=>{
+            console.log(err);
+          })
+
         })
       } else {
         this.form.imageFile = ''
@@ -401,7 +418,7 @@ let app = new Vue({
 function onSignIn(googleUser) {
   let id_token = googleUser.getAuthResponse().id_token;
 
-  axios.post('http://localhost:3000/users/signinGoogle', {
+  axios.post('http://35.198.215.132/users/signinGoogle', {
     token: id_token
   })
     .then(({ data }) => {
