@@ -8,7 +8,14 @@ const tagsRoutes = require('./routes/tag-routes')
 const cors = require('cors')
 const mongoose = require('mongoose')
 
-mongoose.connect(`${process.env.MONGO_DB}`, { useNewUrlParser: true })
+mongoose.connect(`${process.env.ATLAS_DB}`, { useNewUrlParser: true })
+.then(()=> {
+    console.log('successfully connected online!');
+})
+.catch((err)=> {
+    console.log(err);
+})
+
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 app.use(cors())
