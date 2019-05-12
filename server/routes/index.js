@@ -9,7 +9,7 @@ router.post("/googleLogin", cUser.signInGoogle)
 router.post("/register", cUser.createNewUser) // request data { name, email, password } // response on success {id, name, email, password}
 router.post("/login", cUser.signInUser) // request data : {email, password} // response on success {id, name, email, token}
 
-router.use(authentication)
+// router.use(authentication)
 router.get("/articles", cArticle.seeArticles) // request headers : token // response on success [{},{}]
 
 router.post("/articles", cArticle.newArticle) // request headers : token, id data : title, snippet, content, createdAt, updatedAt, postedAt, userId, status, image

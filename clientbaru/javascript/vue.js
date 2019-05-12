@@ -1,3 +1,4 @@
+
 let vue = new Vue({
   el : "#thepage",
   data : {
@@ -95,6 +96,11 @@ let vue = new Vue({
           })
       }
     },
+    googleLogin(){
+        setTimeout(
+          this.checklogin()
+        , 3000)
+    },
     register(){
       if(this.name == "" || this.email == "" || this.password == ""){
         swal("Attention", "Complete the form below to make an account")
@@ -132,6 +138,7 @@ let vue = new Vue({
       localStorage.removeItem('token')
       localStorage.removeItem('id')
       localStorage.removeItem('email')
+      localStorage.removeItem('user')
       this.islogin = false
       this.viewlogin()
     },
@@ -284,3 +291,4 @@ template : `
 {{content}}
 `
 })
+

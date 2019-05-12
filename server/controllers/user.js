@@ -58,21 +58,24 @@ class ControllerUser{
   }
 
   static signInGoogle(req, res) {
+    console.log("disini")
     var newEmail = ''
     client.verifyIdToken({
             idToken: req.headers.token,
             audience: process.env.CLIENT_ID
         })
         .then(function(ticket) {
-            theUser = ticket.getPayload()
-            console.log(newEmail, "11111111")
-            User.findOne({
+            let theUser = ticket.getPayload()
+            console.log(theUser)
+            console.log("disini 2")
+            return User.findOne({
                 email: theUser.email
             })
             .then(userfound=>{
-              let thepassword = encrypt(process.env.PASSWORD)
-              
-              if(userfound){
+              let thepassword = process.env.PASSWORD
+              console.log(thepassword,"+")
+              console.log(theUser,"+=")
+              if(!userfound){
                 return User.create({
                   name : theUser.name,
                   email: theUser.email,
@@ -80,7 +83,7 @@ class ControllerUser{
                 })
               } else {
                 console.log(userfound, "==============")
-                return userofound
+                return userfound
               }
             })
         })

@@ -17,14 +17,23 @@
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <!-- SWEET ALERT 1 -->
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="https://apis.google.com/js/platform.js"></script>
+  <meta name="google-signin-client_id" content="589644078787-pq6rea343jfpi0egujjj4lf7mncok941.apps.googleusercontent.com">
   <title>Mini WP</title>
 </head>
 <body>
 <div id="thepage">
     <div v-show="islogin">
       <!-- NAVIGATION -->
-      <navigationbar v-on:movetopage="navigation"/>
-        
+      <nav class="ui teal inverted labeled icon menu">
+        <p class="header item"><i class="user icon"></i>Helo, {{user}}!</p>
+        <a class="item" @click="checklogin"><i class=" newspaper outline icon" ></i>My Articles</a>
+        <div class="right menu">
+          <a class="item" @click="viewwrite" ><i class="edit outline icon"></i>Write</a>
+          <a class="item" @click="logout" ><i class="sign-out icon"></i>Log Out</a>
+        </div>
+      </nav>
+      
       <!-- CONTENT -->
       <div class="ui container">
       
@@ -79,7 +88,7 @@
             </div>
           </div>
           <div class="ui container left aligned">
-              <input type="file" @change="previewFile" class="ui input" id="createfeaturedimg"> <button class="ui button mini teal">Attach Image</button>
+              <input type="file" @change="previewFile" class="ui input" id="createfeaturedimg">
               <button class="ui button teal" @click="savearticle">Save this article</button>
               <button class="ui button teal" @click="savearticle">Save & Post this article</button>
           </div>
@@ -124,7 +133,8 @@
                   </div>
                   <div class="ui fluid large teal button" @click="login"><i class="sign-in icon"></i>Login</div>
                   <br>
-                  <div class="ui fluid large teal button">Login by Google</div>
+                  <!-- <g-signin-button :params="googleSignInParams" @success="onSignInSuccess" @error="onSignInError"> Sign in with Google </g-signin-button> -->
+                  <div class="ui fluid teal button g-signin2" data-onsuccess="googleLogin"> Login with Google</div>
                 </div>
                 <div class="ui message">
                   New to us?
@@ -179,9 +189,14 @@
       
 </div>
 <!-- VUE -->
-<script src="javascript/component/navigationbar.js"></script>
+<script>
+import GSignInButton from 'vue-google-signin-button'
+Vue.use(GSignInButton)
+</script>
+
 <script src="javascript/component/articlefeed.js"></script>
 <script src="javascript/vue.js"></script>
+<script src="javascript/googlelogin.js"></script>
 <!-- QUILL EDITOR -->
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
