@@ -31,3 +31,11 @@ live-server --host=localhost
 | `/articles/:id` |     GET     | token: String |                                                   none                                                   | Success: { object },<br /> Error: Internal server error   | Get a user's article    |
 | `/articles/:id` |    DELETE   | token: String |                                                   none                                                   | Success: { object },<br /> Error: Internal server error   | Delete an article       |
 | `/articles/:id` |     PUT     | token: String | title: String,<br /> content: String ,<br /> image: File,<br /> status : Boolean, <br />tags : [String]  | Success: { object },<br /> Error: Internal server error   | Update an article       |
+
+
+
+
+## Link Deploy
+```
+http://mini-wp.mprasetiodc.com/
+```
