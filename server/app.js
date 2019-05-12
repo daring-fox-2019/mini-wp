@@ -6,7 +6,7 @@ const route = require('./routes')
 const cors = require('cors')
 const mongoose = require('mongoose')
 const error = require('./middlewares/error.js')
-mongoose.connect('mongodb://localhost:27017/mini-wp',{ useNewUrlParser : true, useFindAndModify: false })
+mongoose.connect(process.env.MONGODB_LINK,{ useNewUrlParser : true, useFindAndModify: false })
 
 app.use(cors())
 app.use(express.urlencoded({extended : false}))
