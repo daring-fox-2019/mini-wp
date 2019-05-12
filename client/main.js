@@ -71,12 +71,18 @@ let app = new Vue({
             return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
         },
         signIn(pp) {
+            this.getAllOverWebArticle()
             this.isLogin = true
-            this.currentPage = 'home'
             this.userImage = pp
+            this.currentPage = 'home'
             console.log('jadi true!');
+
         },
          signOut() {
+            this.currentPage = 'landing'
+            this.isLogin = false
+            localStorage.clear()
+
             var auth2 = gapi.auth2.getAuthInstance();
             auth2.signOut()
             .then(function () {
@@ -277,7 +283,7 @@ let app = new Vue({
         getAllOverWebArticle() {
             console.log('nyari smuaaaaa');
             
-            Axios.get(`/articles/all`)
+            Axios.get(`/articles/all`, {headers : {'token' : localStorage.getItem('token')}})
             .then(({data}) => {
                 this.currentPage = 'home'
                 this.arrArticles = data
@@ -459,7 +465,7 @@ let app = new Vue({
                 })
             }
             
-        }
+        },
     }
 })
 

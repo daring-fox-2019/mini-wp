@@ -13,7 +13,5 @@ router.post('/signin/local',  UserController.signInLocal)
 router.post('/signin/google',  UserController.signInGoogle)
 // ==============
 
-router.get('/', authenticate, UserController.getAllUser)
-router.get('/:username', authenticate, UserController.getOneUser)
 
 module.exports = router

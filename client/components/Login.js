@@ -42,7 +42,7 @@ Vue.component('login', {
       })
     }
   }, template: `
-    <div class="container" style="background: url('./assets/coba.jpg'); padding:60px;">
+    <div class="container mt-5" style="background: url('./assets/coba.jpg'); padding:60px;">
   <div class="row">
     <div class="col"></div>
     <div class="col-6">
