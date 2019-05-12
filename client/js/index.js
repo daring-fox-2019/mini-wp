@@ -1,4 +1,4 @@
-const url = `http://localhost:3000`;
+const url = `http://server-miniwp.sutansyah.co/`;
 let app = new Vue({
   el: "#app",
   data: {
