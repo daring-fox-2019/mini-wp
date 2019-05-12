@@ -6,7 +6,7 @@ const cors = require('cors')
 const routes = require('./routes/index')
 
 const mongoose = require('mongoose')
-mongoose.connect('mongodb://localhost/mini-wp', {useNewUrlParser: true})
+mongoose.connect(process.env.MONGO_DB, {useNewUrlParser: true})
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {

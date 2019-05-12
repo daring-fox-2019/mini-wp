@@ -1,6 +1,5 @@
 const Blog = require('../model/blogs-mod')
 const imgSavetoLocale = require('../helper/imgSavetoLocale')
-const authorize = require('../helper/authorize')
 
 module.exports = {
     // function methods for blogs
