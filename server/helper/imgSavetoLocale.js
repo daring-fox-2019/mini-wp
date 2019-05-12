@@ -2,11 +2,11 @@ const fs = require('fs')
 const googleStorage = require('@google-cloud/storage')
 // const gcsHelpers = require('../helpers/google-cloud-storage')
 
-const GOOGLE_CLOUD_PROJECT_ID = "mini-wp-qfs"
-const GOOGLE_CLOUD_KEYFILE = "/home/qoyyima/Documents/Hacktiv8/phase2ke2/week2/day1/mini-wp-1/server/mini-wp-qfs-c352353740cc.json"
+const GOOGLE_CLOUD_PROJECT_ID = process.env.PROJECT_ID
+const GOOGLE_CLOUD_KEYFILE = process.env.CLOUD_KEYFILE
 
 const storage = new googleStorage.Storage({
-    projectId: "mini-wp-qfs",
+    projectId: GOOGLE_CLOUD_PROJECT_ID,
     keyFilename: GOOGLE_CLOUD_KEYFILE
 })
 
