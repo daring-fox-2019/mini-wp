@@ -3,11 +3,14 @@ const ObjectId = require('mongodb').ObjectId
 
 class ArticleController{
     static getAll(req,res){
+        // console.log('masuk aa');
         Article.find({})
         .then(value =>{
+            // console.log(value,'------------');
             res.status(200).json(value)
         })
         .catch(err =>{
+            console.log('kok kesini');
             console.log(err);
             res.status(500).json({
                 msg: `internal server error`
@@ -30,15 +33,24 @@ class ArticleController{
     }
 
     static create(req,res){
+        console.log(req.loggedUser,'ini logged user XXXX');
+        
+        let date = new Date()
+        let dateFix = `${date.getFullYear()}-${date.getDate()}-${date.getMonth()}` 
         Article.create({
             title: req.body.title,
             description: req.body.description,
+            author: req.body.author,
             content: req.body.content,
-            created_at: new Date(),
-            image : req.body.image
+            created_at: dateFix,
+            image : req.file.cloudStoragePublicUrl,
+            userId : req.loggedUser.id
         })
-        .then(value =>{
-            res.status(200).json(value)
+        .then(newArt =>{
+            res.status(200).json({
+                msg : `successfully created article`,
+                newArt
+            })
         })
         .catch(err =>{
             console.log(err);
@@ -49,23 +61,49 @@ class ArticleController{
     }
 
     static replace(req,res){
-        let option = {_id : ObjectId(req.params.id)}
+        console.log('masuk ke replace');
+        console.log(req.file);
+        let option = {_id : ObjectId(req.params.id)} 
+        console.log(option,'ini id update serverd');
+        
         // let input = req.body
-        Article.findOneAndUpdate(option,{$set : {
-            title : req.body.title,
-            description: req.body.description,
-            content : req.body.content,
-            image : req.body.image
-        }},{new: true})
-        .then(article =>{
-            res.status(201).json(article)
-        })
-        .catch(err =>{
-            console.log(err);
-            res.status(501).json({
-                msg: `internal server error`
+        if(req.file != undefined){
+            Article.findOneAndUpdate(option,{$set : {
+                title : req.body.title,
+                description: req.body.description,
+                author: req.body.author,
+                content : req.body.content,
+                image : req.file.cloudStoragePublicUrl
+            }},{new: true})
+            .then(article =>{
+                console.log(article,'ada gambar');
+                res.status(201).json(article)
             })
-        })
+            .catch(err =>{
+                console.log(err);
+                res.status(501).json({
+                    msg: `internal server error`
+                })
+            })
+        }else{
+            Article.findOneAndUpdate(option,{$set : {
+                title : req.body.title,
+                description: req.body.description,
+                author: req.body.author,
+                content : req.body.content,
+            }},{new: true})
+            .then(article =>{
+                console.log(article,'ga ada gambar');
+                
+                res.status(201).json(article)
+            })
+            .catch(err =>{
+                console.log(err);
+                res.status(501).json({
+                    msg: `internal server error`
+                })
+            })
+        }
     }
 
     static delete(req,res){
@@ -91,7 +129,19 @@ class ArticleController{
         })
     }
 
+    static getMyArticles(req,res){
+        Article.find({userId : req.loggedUser.id})
+        .then(articles =>{
+            res.status(200).json(articles)
+        })
+        .catch(err =>{
+            console.log(err);
+            res.status(500).json(err)
+        })
+    }
+
 
 }
 
 module.exports = ArticleController
+

@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "mini-wp-240008",
+  "private_key_id": "a2e78d45e6a29500720b6ed0c90f0da7aa042a04",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC7jI+LBSOIcIs0\nwCvxE63e+O9BWg6COtJjw1HQotbJpQfAizT5e2z7kFeOLNhiqNaxZV/5zU6+pfbJ\ney7lOO13v8lkipo0xqp/Fe/l22r5zlhkth1IU3UTLncfbd7+kPaeUczveDamy+N7\n1GUKu5ouHVV2L1VZnn/1y/jyL2IwFD7siZeGKMHvNdPo2PKnyqJFSqoQ1a4jdYEU\nPbxZUfbsZegdRkDSyhF4xhplD/wcJm46rHG18ZLaOHUZPmttJxFSesys7KlCnwju\nAe4DL0dyw4kYvaRWMKt5Ifrau4bnA70gLd7SG3NhBwadWD6wsS1W5sZ57zA3TP4V\nOpXQRg0dAgMBAAECggEACN7iWDE3R8gI8YcIXQfxAJuWF2l2x7aYBmNx3nQhRBrT\n5cm/yPALTM+8MGuTFYGGXBAfLL3G9HH9nPSAWJOrea8+y4xZtFbUMBwdw2mwIt4d\nZLAPbQETh8N6G2izNCevnnfggVAWh6ebnBsE52/NoFI/XU5qU0mRpFLQNMZEduEd\nXkTYH0mlJlJM6PiMdPDrE5X64CGJMl4pVNVfncjdVWvVuDFUVCkp6hPyL1X3xtRc\nPwtW6tAAXsSLvfp5vRsQ92y63NXBEfPsTBXLdqpvgTv0TKsOYhQPryCYWZv8+tHN\nLQCXHmYbk6iPE+vLmlGXesYhVIwE0yFul3qBfKGhWQKBgQD46sddutpo4Gsh3Sog\n/HpjECgnKTLNUqbU/ZOhJg68+9Rg8rh0ZS/515kzXHL4wd728Fyt+QeDZuAsgp89\nEYe9Xs+JEdPDH+MFOw6zBY5A3rKQ2NTPm+JTwKCmH5XY04HEBOaUBnZHUMjs/nRm\nCcG/EkHgFiU10if5uy+yEt8GtQKBgQDA4sARG+jqSlIZUb2w0ikUE3SGE0Uydg46\nM3h0bDqQxv4Tz2TlOcy2TRen5J0A+W8p31/kmFsBCZlHaNRulV30QSk05mL3i2TN\nYGWBsFCiLfNRbw7g+xmxNYo7TEQ1k5kZEDspmKZEtuR+dh9+NaaVsavESYnmpPag\nONWaXs9FyQKBgGj+v3Gt64rpfscd/zNCzG0U15sNKbyp7G1TOP50iyr0HrV2LJAM\nTpxYcOrVSDndrSsEYFOSA7VNo6miv4CG8HbUkz4CIwzfWmdObfjdkw+R4Ehw7fNU\nkbc6PYlVMWPwc4A3gPtXbnTOgrJU8sxHuU3baaYYMUHuj6Yrawb2JtUxAoGAPgqx\nbM9lY7b0IWDBexaeT+7SFC4um8SNXvsfS5NkYx0erJCRC4pD5n91lHNcbOvObdGD\nrquy2eqUevulGMzCo8Yx0uon+yfDDKxs+gIUbZYKJa9rQcKCyRVHmTs21WTcYctu\nvDp1gLSzWln0V0w6gPvdHA3rZVy6V17wle7ZDMECgYEAmtiDr4/OTEuqlbg6GAmb\n+vTshs81R4s6gQ7DNxPjmNc+LDYybBtZtkAwcAQlQRaxKbDC4LZzt01IvW4oCJmi\nZLdb/MYm+BwQWFFmCxdlaHgaQ+jpDIsXY7OCniBimHo7ipkQyl9geeyDm7eSZk3m\nsl6kFda9SJHeE+49EHtHVmU=\n-----END PRIVATE KEY-----\n",
+  "client_email": "bucketwp@mini-wp-240008.iam.gserviceaccount.com",
+  "client_id": "112178197114512464912",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/bucketwp%40mini-wp-240008.iam.gserviceaccount.com"
+}
