@@ -134,10 +134,13 @@
                   <div class="ui fluid large teal button" @click="login"><i class="sign-in icon"></i>Login</div>
                   <br>
                   <!-- <g-signin-button :params="googleSignInParams" @success="onSignInSuccess" @error="onSignInError"> Sign in with Google </g-signin-button> -->
-                  <div class="ui fluid teal button g-signin2" data-onsuccess="googleLogin"> Login with Google</div>
+                  <div class="ui fluid container" style="display:flex; justify-content: center; align-items: center;">
+                    Have google account? continue with  
+                    &emsp;<div class="g-signin2" data-onsuccess="googleLogin" style="width: auto; "></div>
+                  </div>
                 </div>
-                <div class="ui message">
-                  New to us?
+                <div class="ui message ">
+                  <p>New to us?</p>
                   <div class="ui fluid large teal button" @click="viewregister" >Register</div>
                 </div>
               </form>
@@ -176,7 +179,7 @@
                   <div class="ui fluid large teal button" @click="register"><i class="sign-in icon"></i>Register</div>
                 </div>
                 <div class="ui message">
-                  Already have an account?
+                  <p>Already have an account?</p>
                   <div class="ui fluid large teal button" @click="viewlogin">Login</div>
                 </div>
                 <div>
