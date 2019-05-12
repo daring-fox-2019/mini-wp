@@ -1,13 +1,13 @@
 Vue.component('dd-my-article', {
   data() {
     return {
-      showCard: false,      
+      showCard: false
     };
   },
   
   template: `
   <div>
-    <v-card class="mb-3" v-for="i in 3" :key="i">
+    <v-card class="mb-3">
       <v-img
         src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
         height="200px"

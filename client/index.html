@@ -36,16 +36,17 @@
           style="position:relative;"
         >
           <dd-navbar @logout="logout" @drawer="drawer = !drawer"></dd-navbar>
-          <dd-sidebar :drawer="drawer"></dd-sidebar>
+          <dd-sidebar @show-my-articles="showMyArticles" @drawer="drawerchild = !drawerchild" :user="activeUser" :drawerparent="drawer"></dd-sidebar>
           <div
             id="scrolling-techniques"
             class="scroll-y"
             style="height:100vh;background:rgb(250, 250, 250)"
           >
-            <v-container justify-center style="padding-top:100px;height:1000px">
+            <v-container justify-center style="padding-top:100px">
               <v-layout justify-center row>
                 <v-flex xs8>
                   <v-btn
+                    @click="toggleApp"
                     fixed
                     dark
                     fab
@@ -55,16 +56,17 @@
                   >
                     <v-icon>create</v-icon>
                   </v-btn>
-                  <div>
+                  <div v-if="isArticleForm">
                     <dd-article-form></dd-article-form>
                   </div>
-                  
-                  <div>
-                    <dd-my-article v-for="i in 3" :key="i"></dd-my-article>
-                  </div>
-                  
-                  <div>
-                    <dd-gen-article v-for="i in 3" :key="i"></dd-gen-article>
+
+                  <div v-else>
+                    <div v-if="isGeneral">
+                      <dd-gen-article v-for="i in 3" :key="i"></dd-gen-article>
+                    </div>
+                    <div v-else>
+                      <dd-my-article v-for="i in 3" :key="i"></dd-my-article>
+                    </div>
                   </div>
                   
                 </v-flex>

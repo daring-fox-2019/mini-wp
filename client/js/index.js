@@ -11,8 +11,19 @@ new Vue ({
 
     isWelcome: true,
 
-    drawer: null,
+    isArticleForm: false,
+    isGeneral: true,
 
+    drawer: null,
+    drawerchild: null,
+  },
+
+  watch: {
+    drawerchild() {
+      if (this.drawerchild !== this.drawer) {
+        this.drawer = this.drawerchild;
+      }
+    }
   },
 
   created() {
@@ -23,6 +34,7 @@ new Vue ({
     logCheck() {
       if (localStorage.token) {
         this.isWelcome = false;
+        this.activeUser = localStorage.user;
       }
     },
 
@@ -47,6 +59,7 @@ new Vue ({
             timer: 1500
           })
           localStorage.setItem('token', token);
+          localStorage.setItem('user', user);
           this.activeUser = user;
           this.isWelcome = false;
         })
@@ -102,6 +115,18 @@ new Vue ({
       localStorage.removeItem('token');
       this.activeUser = '';
       this.isWelcome = true;
-    }
+    },
+
+    toggleApp() {
+      this.isArticleForm = !this.isArticleForm;
+    },
+
+    showMyArticles(foo) {
+      this.drawer = !this.drawer;
+      if(this.isArticleForm) {
+        this.toggleApp();
+      }
+      this.isGeneral = !foo;
+    },
   }
 });

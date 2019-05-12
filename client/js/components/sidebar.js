@@ -1,11 +1,12 @@
 Vue.component('dd-sidebar', {
-  props: ['drawer'],
+  props: ['drawerparent', 'user'],
+
   data() {
     return {
+      drawer: this.drawerparent,
       items: [
         { title: 'Home', icon: 'home' },
         { title: 'My Articles', icon: 'short_text' },
-        { title: 'Edit Articles', icon: 'create' }
       ],
       clouds: [
         { title: 'Storage', icon: 'storage' },
@@ -16,6 +17,21 @@ Vue.component('dd-sidebar', {
         { title: 'Privacy and Account', icon: 'security' }
       ]
     };
+  },
+
+  watch: {
+    drawerparent() {
+      this.drawer = this.drawerparent;
+    },
+    drawer() {
+      this.$emit('drawer');
+    }
+  },
+
+  methods: {
+    showMyArticles(foo) {
+      this.$emit('show-my-articles', foo)
+    }
   },
   
   template: `
@@ -32,7 +48,7 @@ Vue.component('dd-sidebar', {
           </v-list-tile-avatar>
 
           <v-list-tile-content>
-            <v-list-tile-title>Muhammad Ramadhoni</v-list-tile-title>
+            <v-list-tile-title>{{ user }}</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
@@ -41,9 +57,9 @@ Vue.component('dd-sidebar', {
         <v-divider></v-divider>
 
         <v-list-tile
-          v-for="item in items"
+          v-for="(item, i) in items"
           :key="item.title"
-          @click=""
+          @click="showMyArticles(i)"
         >
           <v-list-tile-action>
             <v-icon>{{ item.icon }}</v-icon>
