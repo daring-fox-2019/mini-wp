@@ -54,32 +54,49 @@
                       indeterminate
                     ></v-progress-circular>
                   </v-layout>
-                  <v-btn
-                    v-if="isPrimaryFab"
-                    @click="toggleApp"
-                    fixed
-                    dark
-                    fab
-                    bottom
-                    right
-                    color="green"
-                  >
-                    <v-icon>create</v-icon>
-                  </v-btn>
-                  <v-btn
-                    v-else
-                    @click="toggleApp"
-                    fixed
-                    dark
-                    fab
-                    bottom
-                    right
-                    color="red"
-                  >
-                    <v-icon>close</v-icon>
-                  </v-btn>
+                  <div v-if="isCreating">
+                    <v-btn
+                      v-if="isPrimaryFab"
+                      @click="toggleApp"
+                      fixed
+                      dark
+                      fab
+                      bottom
+                      right
+                      color="green"
+                    >
+                      <v-icon>create</v-icon>
+                    </v-btn>
+                    <v-btn
+                      v-else
+                      @click="toggleApp"
+                      fixed
+                      dark
+                      fab
+                      bottom
+                      right
+                      color="red"
+                    >
+                      <v-icon>close</v-icon>
+                    </v-btn>
+                  </div>
+                  <div v-else>
+                    <v-btn
+                      @click="closeEditing"
+                      fixed
+                      dark
+                      fab
+                      bottom
+                      right
+                      color="red"
+                    >
+                      <v-icon>close</v-icon>
+                    </v-btn>
+                  </div>
+                  
                   <div v-if="isArticleForm">
-                    <dd-article-form @upload="uploadArticle"></dd-article-form>
+                    <dd-article-form v-if="isCreating" @upload="uploadArticle"></dd-article-form>
+                    <dd-editing-form :editing-article="article" v-else @edit="editArticle"></dd-editing-form>
                   </div>
 
                   <div v-else>
@@ -90,7 +107,7 @@
                       <dd-gen-article v-for="(article, i) in filtered" :article="article" :key="i"></dd-gen-article>
                     </div>
                     <div v-else>
-                      <dd-my-article v-for="(article, i) in filtered" :article="article" :key="i"></dd-my-article>
+                      <dd-my-article @edit-article="fetchOne" v-for="(article, i) in filtered" :article="article" :key="i"></dd-my-article>
                     </div>
                   </div>
                   
@@ -120,6 +137,7 @@
   <script src="./js/components/myArticle.js"></script>
   <script src="./js/components/genArticle.js"></script>
   <script src="./js/components/articleForm.js"></script>
+  <script src="./js/components/editingForm.js"></script>
   <script src="./js/index.js"></script>
 </body>
 </html>

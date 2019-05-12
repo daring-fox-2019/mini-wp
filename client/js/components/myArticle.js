@@ -9,7 +9,7 @@ Vue.component('dd-my-article', {
 
   methods: {
     editArticle() {
-      
+      this.$emit('edit-article', this.article._id);
     },
 
     deleteArticle() {

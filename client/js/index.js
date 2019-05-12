@@ -15,10 +15,12 @@ new Vue ({
     isPrimaryFab: true,
     isArticleForm: false,
     isGeneral: true,
+    isCreating: true,
 
     drawer: null,
     drawerchild: null,
 
+    article: null,
     filtered: [],
     articles: [],
     myArticles: [],
@@ -233,6 +235,58 @@ new Vue ({
           this.toggleApp();
         })
         .catch(err => {
+          const { message } = err.response.data;
+          Swal.fire({
+            position: 'center',
+            type: 'error',
+            title: message,
+            showConfirmButton: false,
+            timer: 1500
+          })
+        })
+    },
+
+    fetchOne(id) {
+      this.toggleApp();
+      this.article = this.myArticles.find(article => article._id === id);
+      this.isCreating = false;
+    },
+
+    closeEditing() {
+      this.toggleApp();
+      this.isCreating = true;
+    },
+
+    editArticle(detail) {
+      const { id, data } = detail;
+      this.loading = true;
+      const { token } = localStorage;
+
+      axios({
+        method: 'patch',
+        data,
+        headers: { token },
+        url: `${serverURL}/articles/${id}`
+      })
+        .then(({ data }) => {
+          this.loading = false;
+          const { updatedArticle, message } = data;
+          Swal.fire({
+            position: 'center',
+            type: 'success',
+            title: message,
+            showConfirmButton: false,
+            timer: 1500
+          })
+          this.articles = this.articles.filter(article => article._id !== updatedArticle._id);
+          this.articles.unshift(updatedArticle);
+          this.myArticles = this.myArticles.filter(article => article._id !== updatedArticle._id)
+          this.myArticles.unshift(updatedArticle);
+          this.filtered = this.myArticles;
+          this.closeEditing();
+        })
+        .catch(err => {
+          console.log(err);
           const { message } = err.response.data;
           Swal.fire({
             position: 'center',
