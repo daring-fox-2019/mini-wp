@@ -9,8 +9,8 @@
   <meta name="author" content="">
   <meta name="google-signin-client_id" content="274958665765-khhnbmeuhs41ttp4ftmgnfbvpte095cd.apps.googleusercontent.com">
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
   <script src="https://apis.google.com/js/platform.js" async defer></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
@@ -64,12 +64,12 @@
         <section id="home" v-if="menus.home && user.loggedIn===true">
           <div class="container">
             <div class="row">
-              <h4 class="text-center">Your Article</h5>
+              <h4 class="text-center">Welcome to MiniWp</h5>
               <div class="input-group mb-3">
                   <input 
                     type="search" 
                     class="form-control" 
-                    placeholder="Search your article"
+                    placeholder="Search by article or tag"
                     aria-describedby="button-addon2" 
                     v-model.trim="searchValue"
                   >
@@ -100,13 +100,10 @@
             <div class="row">
               <h4 class="text-center">Your Article</h5>
               <div class="input-group mb-3">
-                <!-- <searchbar
-                  v-on:searchvalue="searchValue"
-                ></searchbar> -->
                   <input 
                     type="search" 
                     class="form-control" 
-                    placeholder="Search your article"
+                    placeholder="Search by article or tag"
                     aria-label="Recipient's username" 
                     aria-describedby="button-addon2" 
                     v-model.trim="searchValue"

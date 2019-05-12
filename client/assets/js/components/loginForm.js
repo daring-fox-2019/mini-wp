@@ -79,7 +79,6 @@ Vue.component('login-form', {
                         id="google-signin-button"
                         class="g-signin2"
                     ></div>
-                    <a href="#" @click="clickSignOut">Sign out</a>
                 </div>
                 </form>
             </div>

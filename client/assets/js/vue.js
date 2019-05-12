@@ -34,7 +34,8 @@ const app = new Vue({
             list: false,
             article: false
         },
-        toggled: false
+        toggled: false,
+        auth2: ''
     },
     created() {
         if(localStorage.token) {
@@ -47,7 +48,11 @@ const app = new Vue({
     mounted() {
         gapi.signin2.render('google-signin-button', {
             onsuccess: this.googleSignIn
-        })
+        });
+
+        gapi.load('auth2', function() {
+            gapi.auth2.init();
+        });
     },
     methods: {
         login: function(userForm) {
@@ -84,11 +89,10 @@ const app = new Vue({
             .post(`${USER_PATH}/signinGoogle`, {}, config)
             .then( ({data}) => {
                 localStorage.token = data.token
-                app.user.name=data.name
-                app.user.loggedIn=true
-                app.fetchMyArticles()
-                app.goToHomePage()
-                console.log(app.user);
+                this.user.name=data.name
+                this.user.loggedIn=true
+                this.fetchMyArticles()
+                this.goToHomePage()
             })
             .catch(err => {
                 console.log(err);
@@ -111,13 +115,12 @@ const app = new Vue({
             })
         },
         logout: function() {
-            // logoutGoogle()
+            logoutGoogle()
             this.articles=[]
             this.user.loggedIn=false
             
-            // GoogleAuth.signOut()
-            // var auth2 = gapi.auth2.getAuthInstance();
-            // auth2.logout().then(function () {});
+            let auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {});
             
             localStorage.clear()
             
@@ -368,35 +371,3 @@ const app = new Vue({
         }
     }
 })
-
-// function googleSignIn(googleUser) {
-//     const token = googleUser.getAuthResponse().id_token;
-    
-//     let config = {
-//         headers: {
-//           token
-//         }
-//     }
-
-//     axios
-//     .post(`${USER_PATH}/signinGoogle`, {}, config)
-//     .then( ({data}) => {
-//         localStorage.token = data.token
-//         app.user.name=data.name
-//         app.user.loggedIn=true
-//         app.fetchMyArticles()
-//         app.goToListPage()
-//         console.log(app.user);
-//     })
-//     .catch(err => {
-//         console.log(err);
-//     })
-// }
-
-// function logoutGoogle() {
-//     var auth2 = gapi.auth2.getAuthInstance();
-//     localStorage.clear()
-
-    // auth2.logout().then(function () {});
-// }
-

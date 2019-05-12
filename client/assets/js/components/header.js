@@ -54,22 +54,30 @@ Vue.component('myheader', {
             class="d-flex" 
             v-if="user.loggedIn"
             style="width: 26em;
-                justify-content: flex-end;
-        "
+                justify-content: flex-end;"
         >
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
-                <i class="far fa-user-circle color-grey4" style="margin-right:5px;"></i>
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                style="display:inline-block"
-                    aria-haspopup="true" aria-expanded="false">
-                    {{user.name ? user.name : 'User'}}
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                    <a 
-                        class="dropdown-item" 
-                        @click="clickLogout"  
-                    >Logout</a>
+                
+                <span 
+                    id="navbarDropdown" 
+                    class="nav-link dropdown-toggle color-grey4 cursor-pointer" 
+                    style="display:inline-block"
+                    role="button" 
+                    data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false"
+                ><i class="far fa-user-circle color-grey4" style="margin-right:5px;"></i>{{user.name ? user.name : 'User'}}</span>
+
+                <div 
+                    class="dropdown-menu 
+                        dropdown-menu-right" 
+                    aria-labelledby="navbarDropdown"
+                >
+                    <span
+                        class="dropdown-item 
+                            cursor-pointer"
+                        @click="clickLogout"
+                    >Logout</span>
                 </div>
                 </li>
             </ul>
