@@ -6,7 +6,7 @@ Vue.component('dd-login', {
         email: '',
         emailRules: [
           v => !!v || 'E-mail is required',
-          v => /.+@.+/.test(v) || 'E-mail must be valid'
+          v => /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'E-mail must be valid'
         ],
         password: '',
         passwordRules: [
@@ -51,6 +51,7 @@ Vue.component('dd-login', {
       ></v-text-field>
       <a @click="$emit('register')">Don't have an account? Register here</a>
       <v-layout class="mt-3" justify-end row>
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
         <v-btn type="submit" flat color="green">Submit <v-icon>send</v-icon></v-btn>
       </v-layout>
     </v-form>

@@ -1,7 +1,7 @@
 Vue.component('dd-oauth', {
   data() {
     return {
-      oauth: {
+      oauthForm: {
         valid: false,
         password: '',
         passwordRules: [
@@ -11,14 +11,29 @@ Vue.component('dd-oauth', {
       },
     };
   },
+
+  methods: {
+    resetForm() {
+      this.oauthForm.password = '';
+    },
+
+    registerOauth() {
+      const { password } = this.oauthForm;
+      const formData = {
+        password
+      }
+      this.resetForm();
+      this.$emit('register-oauth', formData);
+    }
+  },
   
   template: `
   <div>
     <span class="title">Last step, enter password...</span>
-    <v-form v-model="oauth.valid">
+    <v-form @submit.prevent="registerOauth" v-model="oauthForm.valid">
       <v-text-field
-        v-model="oauth.password"
-        :rules="oauth.passwordRules"
+        v-model="oauthForm.password"
+        :rules="oauthForm.passwordRules"
         label="Password"
         type="password"
         required

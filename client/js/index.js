@@ -1,6 +1,6 @@
 const serverURL = 'http://localhost:3000';
 
-new Vue ({
+let app = new Vue ({
   el: '#app',
 
   data: {
@@ -68,6 +68,25 @@ new Vue ({
       this.isRegister = !this.isRegister;
     },
 
+    afterLogin(data) {
+      const { token, user, message } = data;
+      if (!localStorage.token) {
+        Swal.fire({
+          position: 'center',
+          type: 'success',
+          title: message,
+          showConfirmButton: false,
+          timer: 1500
+        })
+      }
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', user);
+      this.activeUser = user;
+      this.isWelcome = false;
+      this.fetchAll();
+      this.showMyArticles(0);
+    },
+
     login(data) {
       axios({
         method: 'post',
@@ -75,20 +94,7 @@ new Vue ({
         url: `${serverURL}/login`
       })
         .then(({ data }) => {
-          const { token, user, message } = data;
-          Swal.fire({
-            position: 'center',
-            type: 'success',
-            title: message,
-            showConfirmButton: false,
-            timer: 1500
-          })
-          localStorage.setItem('token', token);
-          localStorage.setItem('user', user);
-          this.activeUser = user;
-          this.isWelcome = false;
-          this.fetchAll();
-          this.showMyArticles(0);
+          this.afterLogin(data);
         })
         .catch(err => {
           const { message } = err.response.data;
@@ -131,17 +137,49 @@ new Vue ({
         })
     },
 
-    logout() {
-      Swal.fire({
-        position: 'center',
-        type: 'success',
-        title: 'logged out',
-        showConfirmButton: false,
-        timer: 1500
+    registerOauth(data) {
+      const { register_token } = localStorage;
+      localStorage.removeItem('register_token');
+      axios({
+        method: 'post',
+        data,
+        headers: {
+          register_token
+        },
+        url: `${serverURL}/oauth/google/register`
       })
-      localStorage.removeItem('token');
-      this.activeUser = '';
-      this.isWelcome = true;
+        .then(({ data }) => {
+          this.afterLogin(data);
+          this.isOauth = false;
+          this.isLogin = true;
+        })
+        .catch(err => {
+          const { message } = err.response.data;
+          Swal.fire({
+            position: 'center',
+            type: 'error',
+            title: message,
+            showConfirmButton: false,
+            timer: 1500
+          })
+        })
+    },
+
+    logout() {
+      var auth2 = gapi.auth2.getAuthInstance();
+      auth2.signOut().then(() => {
+        Swal.fire({
+          position: 'center',
+          type: 'success',
+          title: 'logged out',
+          showConfirmButton: false,
+          timer: 1500
+        })
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        this.activeUser = '';
+        this.isWelcome = true;
+      });
     },
 
     fetchAll() {
@@ -366,3 +404,42 @@ new Vue ({
     },
   }
 });
+
+function onSignIn(googleUser) {
+  var { id_token } = googleUser.getAuthResponse();
+  // var profile = googleUser.getBasicProfile();
+  // console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+  // console.log('Name: ' + profile.getName());
+  // console.log('Image URL: ' + profile.getImageUrl());
+  // console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+  // console.log(`Token: ${id_token}`);
+  axios({
+    method: 'post',
+    url: `${serverURL}/oauth/google/login`,
+    headers: {
+      id_token,
+    },
+  })
+    .then(({ data }) => {
+      app.afterLogin(data);
+    })
+    .catch(err => {
+      const { status } = err.response;
+      const { message, register_token } = err.response.data;
+      if (status === 404) {
+        app.isLogin = false;
+        app.isRegister = false;
+        app.isOauth = true;
+        localStorage.setItem('register_token', register_token);
+      } else {
+        Swal.fire({
+          position: 'center',
+          type: 'error',
+          title: message,
+          showConfirmButton: false,
+          timer: 1500
+        })
+      }
+    })
+}
+

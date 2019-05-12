@@ -4,12 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="google-signin-client_id"
+    content="721214027769-9nkf9lnt121m8bqne51rmn56klrj14nm.apps.googleusercontent.com">
   <title>Ramini WordPress</title>
 
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
 
   <link rel="stylesheet" href="./css/vueWysiwyg.css">
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
 </head>
 <body>
   <div id="app">
@@ -21,8 +24,8 @@
               <hr>
               <div class="my-5">
                 <dd-register v-if="isRegister" @register="register" @login="toggleWelcome"></dd-register>
-                <dd-login v-if="isLogin" @login="login" @register="toggleWelcome"></dd-login>
-                <dd-oauth v-if="isOauth"></dd-oauth>
+                <dd-login @logout="logout" v-if="isLogin" @login="login" @register="toggleWelcome"></dd-login>
+                <dd-oauth @register-oauth="registerOauth" v-if="isOauth"></dd-oauth>
               </div>
               <hr>
             </v-flex>

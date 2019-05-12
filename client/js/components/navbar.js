@@ -42,10 +42,6 @@ Vue.component('dd-navbar', {
 
       <v-spacer></v-spacer>
 
-      <v-btn icon>
-        <v-icon color="green">notifications</v-icon>
-      </v-btn>
-
       <v-btn @click="$emit('logout')" icon>
         <v-icon color="blue">exit_to_app</v-icon>
       </v-btn>
