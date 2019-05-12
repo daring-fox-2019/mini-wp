@@ -3,10 +3,10 @@ const mongoose = require('mongoose')
 let Schema = mongoose.Schema
 
 let article = new Schema({
-    // user: {
-    //   type: Schema.Types.ObjectId, 
-    //   ref: 'User'
-    // },
+    author: {
+      type: Schema.Types.ObjectId, 
+      ref: 'User'
+    },
     title: {
         type: String,
         required: true
@@ -19,10 +19,10 @@ let article = new Schema({
       type: Date,
       require: true
     },
-    // img: {
-    //     type: String,
-    //     required: true
-    //   }
+    img: {
+        type: String,
+        required: true
+      }
 })
 
 let Articles = mongoose.model('Articles', article)

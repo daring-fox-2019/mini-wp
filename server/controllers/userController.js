@@ -1,4 +1,6 @@
 const User = require('../models/user')
+const {sign} = require('../helpers/jwt')
+const {decrypt} = require('../helpers/bcrypt')
 
 class ConttrollerUser{
     static Register(req, res){
@@ -27,10 +29,24 @@ class ConttrollerUser{
         })
         .then(response => {
             if(response){
-                res.status(200).json(response)
+                if (decrypt(req.body.password, response.password)){
+                    let payload = {
+                        id : response._id,
+                        userName : response.userName,
+                        email : response.email
+                    }
+                    let token = sign(payload)
+                    res.status(200).json({
+                        access_token : token
+                    })
+                }else{
+                    res.status(401).json({
+                        msg: "Email/Password Wrong, Try Again"
+                    })
+                }
             }else{
                 res.status(404).json({
-                    msg: "Not Found"
+                    msg: "User Not Found"
                 })
             }
         })

@@ -54,6 +54,7 @@ class ControllerArticles{
     static addArticle(req, res){
         Articles
         .create({
+            author: req.decoded.id,
             title: req.body.title,
             content: req.body.content,
             created_at: new Date()
