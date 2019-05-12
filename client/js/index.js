@@ -8,7 +8,7 @@ function onSignIn(googleUser) {
         var profile = googleUser.getBasicProfile();
         var id_token = googleUser.getAuthResponse().id_token
         axios
-            .post("http://localhost:3000/user/login", {
+            .post(serverUrl+"/user/login", {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },

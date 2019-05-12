@@ -11,13 +11,14 @@
     <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
     <!-- fontAwesome CSS -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <!-- wysiwyg CSS -->
     <link rel="stylesheet" type="text/css" href="./wysiwyg/style.css">
     <!-- my CSS -->
     <link rel="stylesheet" type="text/css" media="screen" href="./css/style.css">
     <!-- bootstrapVue JS -->
     <link href="https://fonts.googleapis.com/css?family=Baloo+Bhai" rel="stylesheet">
+    <link rel="shortcut icon" href="./src/favicon.ico">
     <title>MiniWP | QFS</title>
     <script src="//unpkg.com/@babel/polyfill@latest/dist/polyfill.min.js"></script>
     <script src="//unpkg.com/vue@latest/dist/vue.min.js"></script>
@@ -40,21 +41,20 @@
     <div id="app">
         <!-- beforelogin -->
         <div v-show="!isLoggedIn" style="background-color: #0d3d69;">
-            <h1 style="font-family:'Baloo Bhai', cursive; font-size:20em; color:rgb(214, 214, 214);text-align: center; padding-top:15%; padding-bottom:14.7%"><i
-                class="fab fa-wordpress-simple"></i> Mini-WP</h1>
+            <h1
+                style="font-family:'Baloo Bhai', cursive; font-size:20em; color:rgb(214, 214, 214);text-align: center; padding-top:15%; padding-bottom:14.7%">
+                <i class="fab fa-wordpress-simple"></i> Mini-WP</h1>
             <!-- <h1 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji', cursive; font-size:25em; color:rgba(255, 255, 255, 1);text-align: center; padding-top:10%; padding-bottom:14.5%">Mini-WP</h1> -->
 
             <div>
-                <button class="btn btn-primary btn-lg" id="login-f-btn"
-                    v-on:click="regularLogin()">Login</button>
+                <button class="btn btn-primary btn-lg" id="login-f-btn" v-on:click="regularLogin()">Login</button>
             </div>
             <div>
                 <!-- Ini Google Sign In -->
                 <div class="g-signin2" data-onsuccess="onSignIn"></div>
             </div>
             <div>
-                <button class="btn btn-primary btn-lg" id="register-f-btn"
-                    v-on:click="register()">Register</button>
+                <button class="btn btn-primary btn-lg" id="register-f-btn" v-on:click="register()">Register</button>
             </div>
         </div>
 
@@ -141,7 +141,7 @@
                 <!-- </div> -->
 
                 <div class="articles-list content col-sm-8 col-xl-10">
-                    
+
                     <activity v-show="page == 'activity'" :list="listBlogg"></activity>
 
                     <div v-if="page == 'tags-list'" style="margin: 60px 80px 40px 80px">

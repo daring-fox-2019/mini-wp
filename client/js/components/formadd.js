@@ -108,6 +108,15 @@ Vue.component('formadd', {
                                             }
                                         })
                                         .then(() => {
+                                            this.listBlogg= ""
+                                            this.blog_title= ""
+                                            this.text= ""
+                                            this.createdAt= ""
+                                            this.file= ""
+                                            this.tag= ''
+                                            this.tags= []
+                                            this.disable= true
+                                
                                             this.$emit('addsuccess')
                                             Swal.fire(
                                               'Added!',

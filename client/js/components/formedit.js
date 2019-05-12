@@ -8,7 +8,6 @@ Vue.component('editform', {
             listBlogg: "",
             title: this.blog_title,
             content: "",
-            // createdAt: "",
             file: "",
             author: "",
             tags: [],
@@ -94,6 +93,9 @@ Vue.component('editform', {
                                     }
                                 })
                                 .then((data) => {
+                                    this.title = this.blog_title
+                                    this.content = ""
+                                    this.tags = []
                                     Swal.fire(
                                         'Updated!',
                                         'Your article has been updated.',
@@ -123,46 +125,49 @@ Vue.component('editform', {
                     swal('Valid extensions: .png, .jpeg, or .jpg')
                 } else {
                     Swal.fire({
-                        title: 'Are you sure?',
-                        text: "You are going to update this article!",
-                        type: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#0d3d69',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, update it!'
-                    }).then((result) => {
-                        if (result.value) {
-                            return getBase64(file)
-                                .then((image) => {
-                                   return axios
-                                        .put(serverUrl + '/' + this.id, {
-                                            id: this.id,
-                                            title: this.title,
-                                            content: this.content,
-                                            createdAt: this.createdAt,
-                                            img: image,
-                                            extension: extension,
-                                            tags: this.tags
-                                        }, {
-                                            headers: {
-                                                auth: localStorage.jwtoken
-                                            }
-                                        })
-                                        .then((data) => {
-                                            Swal.fire(
-                                                'Updated!',
-                                                'Your file has been updated.',
-                                                'success'
-                                            )
-                                            this.$emit('editsuccess')
-                                        })
-                                        
-                                })
-                        }
-                    })
-                    .catch((err) => {
-                        console.log(err.message)
-                    })
+                            title: 'Are you sure?',
+                            text: "You are going to update this article!",
+                            type: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#0d3d69',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, update it!'
+                        }).then((result) => {
+                            if (result.value) {
+                                return getBase64(file)
+                                    .then((image) => {
+                                        return axios
+                                            .put(serverUrl + '/' + this.id, {
+                                                id: this.id,
+                                                title: this.title,
+                                                content: this.content,
+                                                createdAt: this.createdAt,
+                                                img: image,
+                                                extension: extension,
+                                                tags: this.tags
+                                            }, {
+                                                headers: {
+                                                    auth: localStorage.jwtoken
+                                                }
+                                            })
+                                            .then((data) => {
+                                                this.title = this.blog_title
+                                                this.content = ""
+                                                this.tags = []
+                                                Swal.fire(
+                                                    'Updated!',
+                                                    'Your file has been updated.',
+                                                    'success'
+                                                )
+                                                this.$emit('editsuccess')
+                                            })
+
+                                    })
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err.message)
+                        })
                 }
             }
         },
