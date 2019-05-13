@@ -8,146 +8,217 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>MiniWP</title>
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="./vueWysiwyg.css">
+    <link rel="stylesheet" href="style.css">
+
 </head>
 
-<body style="height: 100%; overflow: hidden;" class="pb-5">
-    <div id="app" class="container-fluid" style="height: 100%">
-        <div id="banner" class="row bg-dark text-light sticky-top">
-            <div class="col-sm d-flex justify-content-start">
-                <div id="Logo" class="py-3 px-3 text-light" style="font-size:20px">
-                    My Word press
+<body style="height: 100%; overflow: hidden;" >
+    <div id="app" style="height: 100%">
+        <div v-show='islogin === false' style='background-image:url(https://cdn.pixabay.com/photo/2017/08/30/01/05/milky-way-2695569_960_720.jpg); background-repeat: no-repeat; background-size: contain;height:100%' >
+            <div class='row justify-content-center'>
+                <h1 style='color:white' class='mt-5'>MiniWP</h1>
+                <div class='col-sm-12 row justify-content-center mt-5' v-if='loginPage'>
+                    <form class="form-group" style='color:white'>
+                        login
+                        <label for="exampleInputEmail1">
+                            email
+                        </label>
+                        <input type='text' v-model='email' id="exampleInputEmail1" class="form-control" >
+                        <label>
+                            password
+                        </label>
+                        <input class="form-control" type='password' v-model='password'>
+                        <button class="btn btn-primary" v-on:click.prevent="login">login</button>
+                        <button class="btn btn-primary" v-on:click.prevent="registerPage=true;loginPage=false">dont have any account yet</button>
+                    </form>
                 </div>
-            </div>
-
-            <div class="col-sm d-flex justify-content-end">
-                <a href="#" id="profile" class="py-3 px-3 text-light">
-                    <i class="far fa-user-circle"></i>
-                </a>
+                <div class=' col-sm-12 row justify-content-center mt-5' v-if='registerPage'>
+                    <form class="form-group" style='color:white'>
+                        register
+                        <label>
+                            name
+                        </label>
+                        <input class="form-control" type='text' v-model='name'>
+                        <label>
+                            email
+                        </label>
+                        <input class="form-control" type='text' v-model='email'>
+                        <label>
+                            password
+                        </label>
+                        <input  class="form-control" type='password' v-model='password'>
+                        <button class="btn btn-primary" v-on:click.prevent="registerPage=false;loginPage=true">already have an account</button>
+                        <button class="btn btn-primary" v-on:click.prevent="register">register</button>
+                    </form>
+                    {{name}}
+                    {{email}}
+                    {{password}}
+                </div>
             </div>
         </div>
-        <div id="body" class="row" style="height: 100%; ">
-            <div id="nav" class="col-sm-2  px-0" style="background-color:rgb(248, 248, 248) ">
-                <div class="card" style="border:none; background-color: white;border-radius: 0">
-                    <button aria-expanded="true" class="card-header btn btn-link text-body" type="button"
-                        id="add_post_button" style="text-align:left; height: 3rem;"
-                        v-on:click.prevent="toShowAndHide('addArticle')">
-                        Add Post
-                    </button>
-
-                </div>
-                <div class="card" style="border:none; background-color: white;border-radius: 0">
-                    <button aria-expanded="true" class="card-header btn btn-link text-body" type="button"
-                        id="add_post_button" style="text-align:left; height: 3rem;"
-                        v-on:click.prevent="toShowAndHide('allArticles')">
-                        Read
-                    </button>
-
-                </div>
-
-                <div class="accordion" id="accordionExample">
-                    <div class="card" style="border:none; background-color: white; border-radius: 0">
-
-                        <button data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"
-                            class="card-header btn btn-link text-body" type="button" data-toggle="collapse"
-                            id="headingOne" style="text-align:left; height: 3rem;">
-                            Posts
-                        </button>
-                        <div id="collapseOne" class="collapse show " aria-labelledby="headingOne"
-                            data-parent="#accordionExample">
-                            <div class="card-body p-0" style="background-color:#e7e5e5;">
-                                <div class="card" style="border:none; background-color: #e7e5e5;border-radius: 0">
-                                    <button style="font-size: small; text-align: left" aria-expanded="true"
-                                        class="card-header btn btn-link text-body" type="button" id="add_post_button"
-                                        style="text-align:left; height: 3rem;" v-for="article in articles"
-                                        v-on:click.prevent="read(article.id)">
-                                        {{article.title}}
-                                    </button>
-                                </div>
-
-                            </div>
-                        </div>
+        <div>
+        </div>
+        <div v-if='islogin' style="height:100%">
+            <div id="banner" class="row bg-dark text-light sticky-top">
+                <div class="col-sm d-flex justify-content-start">
+                    <div id="Logo" class="py-3 px-3 text-light" style="font-size:20px">
+                        My Word press
                     </div>
-
                 </div>
-                <div class="py-5 mt-3" style="text-align: center; color: #c2c1c1">
-                    <i class="fas fa-quote-left"></i> always be happy <i class="fas fa-quote-right"></i>
+
+                <div class="col-sm d-flex justify-content-end">
+                    <a href="#" id="profile" class="py-3 px-3 text-light" @click='signout'>
+                        <i class="far fa-user-circle"></i>
+                    </a>
                 </div>
             </div>
-            <div id="content" class="pt-3 col-sm row justify-content-center" style="height: 100%;">
-                <div id="allArticles" class="row justify-content-center" style="height: 100%; padding-bottom: 100px;"
-                    v-show="showHide.allArticles">
-                    <div class='col-sm-5'>
-                        <form class="mb-3">
-                            <input type='text' v-model='search' style='width:100%; height:3rem'
-                                placeholder="search by title">
-                        </form>
+            <div id="body" class="row" style="height: 100%; ">
+
+                <div id="nav" class="col-sm-2  px-0" style="background-color:rgb(248, 248, 248) ">
+                    <div class="card" style="border:none; background-color: white;border-radius: 0">
+                        <button aria-expanded="true" class="card-header btn btn-link text-body" type="button"
+                            id="add_post_button" style="text-align:left; height: 3rem;"
+                            v-on:click.prevent="toShowAndHide('addArticle')">
+                            Add Post
+                        </button>
+
                     </div>
-                    <div class="d-flex justify-content-center" style="height: 100%; overflow-y:scroll">
-                        <div id="listArticle" class="col-sm-9" style="height: 100%;">
-                            <div class="row" v-for="article in filtered">
-                                <div class="col-sm-12">
-                                    <div class="card my-4">
-                                        <div class="card-body pb-1">
-                                            <div id="article heading" class='d-flex flex-wrap justify-content-between'>
-                                                <h5 class="card-title">{{article.title}}</h5>
-                                                <h5 style="font-size:medium" class="text-muted">{{article.created_at}}</h5>
-                                            </div>
-                                            <div class="dropdown-divider"></div>
+                    <div class="card" style="border:none; background-color: white;border-radius: 0">
+                        <button aria-expanded="true" class="card-header btn btn-link text-body" type="button"
+                            id="add_post_button" style="text-align:left; height: 3rem;"
+                            v-on:click.prevent="toShowAndHide('allArticles')">
+                            All Articles
+                        </button>
 
-                                            <p class="card-text">{{article.content}}</p>
-                                            <div class='d-flex flex-row-reverse'>
-                                                <a href="#" style="font-size:medium" class="text-muted"
-                                                    v-on:click.prevent="read(article._id)">read</a>
-                                                <p class="text-muted"> | </p>
-                                                <a href="#" style="font-size:medium" class="text-muted">edit</a>
-                                            </div>
+                    </div>
 
+                    <div class="accordion" id="accordionExample">
+                        <div class="card" style="border:none; background-color: white; border-radius: 0">
+
+                            <button data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"
+                                class="card-header btn btn-link text-body" type="button" data-toggle="collapse"
+                                id="headingOne" style="text-align:left; height: 3rem;">
+                                Posts
+                            </button>
+                            <div id="collapseOne" class="collapse show " aria-labelledby="headingOne"
+                                data-parent="#accordionExample">
+                                <div class="card-body p-0" style="background-color:#e7e5e5;">
+                                    <div class="card" style="border:none; background-color: #e7e5e5;border-radius: 0">
+                                        <button style="font-size: small; text-align: left" aria-expanded="true"
+                                            class="card-header btn btn-link text-body" type="button"
+                                            id="add_post_button" style="text-align:left; height: 3rem;"
+                                            v-for="article in articles" v-on:click.prevent="read(article._id)">
+                                            {{article.title}}
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="py-5 mt-3" style="text-align: center; color: #c2c1c1">
+                        <i class="fas fa-quote-left"></i> always be happy <i class="fas fa-quote-right"></i>
+                    </div>
+                </div>
+                <div id="content" class="pt-3 col-sm row justify-content-center" style="height: 100%;">
+                    <div id="allArticles" class="row justify-content-center"
+                        style="height: 100%; padding-bottom: 100px;" v-show="showHide.allArticles">
+                        <div class='col-sm-5'>
+                            <form class="mb-3">
+                                <input type='text' v-model='search' style='width:100%; height:3rem'
+                                    placeholder="search by title">
+                            </form>
+                        </div>
+                        <div class="d-flex justify-content-center" style="height: 100%; overflow-y:scroll">
+                            <div id="listArticle" class="col-sm-9" style="height: 100%;">
+                                <div class="row" v-for="article in filtered">
+                                    <div class="col-sm-12">
+                                        <div class="card my-4">
+                                            <div class="card-body pb-1">
+                                                <div id="article heading"
+                                                    class='d-flex flex-wrap justify-content-between'>
+                                                    <h5 class="card-title">{{article.title}}</h5>
+                                                    <h5 style="font-size:medium" class="text-muted">
+                                                        {{article.created_at}}</h5>
+                                                </div>
+                                                <div class="dropdown-divider"></div>
+
+                                                <p class="card-text">{{article.content}}</p>
+                                                <div class='d-flex flex-row-reverse'>
+                                                    <a href="#" style="font-size:medium" class="text-muted"
+                                                        v-on:click.prevent="read(article._id)">read</a>
+                                                    <p class="text-muted"> | </p>
+                                                    <a href="#" style="font-size:medium" class="text-muted" v-on:click.prevent='updatePage(article._id)'>edit</a>
+                                                    <p class="text-muted"> | </p>
+                                                    <a href="#" style="font-size:medium" class="text-muted" v-on:click.prevent='deleteArticle(article._id)'>delete</a>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div id="addArticle" class="col-sm-8" style="display: none" v-show="showHide.addArticle">
-                    <div class="d-flex flex-column">
-                        <form>
-                            <div class="py-3">
-                            </div>
-                            <div class='mb-4'>
-                                <input id='title' name="title" placeholder="Title" style="width: 50%; height: 3rem" autocomplete="off" v-model='newArticleTitle'>
-                            </div>
-                            <input type="file" onchange="previewFile()"><br>
-                            <textarea name="editor1" v-html='newArticleContent'></textarea>
-                            <button type="submit" v-on:click.prevent="addNewArticle">
-                                Submit
-                            </button>
-                        </form>
+                    <div id="addArticle" class="col-sm-12 p-5" style="display: none" v-show="showHide.addArticle" style='overflow-y: scroll'>
+                        <div class="d-flex flex-column">
+                            <h5>Create New Post</h5>
+                            <form>
+                                <div class="py-3">
+                                </div>
+                                <div class='mb-4'>
+                                    <input id='title' name="title" placeholder="Title" style="width: 50%; height: 3rem"
+                                        autocomplete="off" v-model='newArticle.title'>
+                                </div>
+                                <input id='imageInput' type="file" v-on:change="uploadImage($event)"><br>
+                                <wysiwyg v-model='newArticle.text'></wysiwyg>
+                                <button type="submit" v-on:click.prevent="addNewArticle">
+                                    Submit
+                                </button>
+                            </form>
+                        </div>
                     </div>
-                </div>
-                <div id="eachArticle" class="col-sm-10 justify-content-center"
-                    style="height: 100%; padding-bottom:100px" v-show="showHide.eachArticle">
-                    <div class="pt-4">
-                        <h1>{{selectedArticle.title}}</h1>
+                    <div id="updateArticlePage" class="col-sm-12 p-5" style="display: none" v-if="showHide.updateArticlePage" style='overflow-y: scroll'>
+                        <div class="d-flex flex-column">
+                            <h5>Edit Your Article</h5>
+                            <form>
+                                <div class="py-3">
+                                </div>
+                                <div class='mb-4'>
+                                    <input id='titleUpdate' name="title" placeholder="Title" style="width: 50%; height: 3rem"
+                                        autocomplete="off" v-model='updateArticle.title'>
+                                </div>
+                                <input id='imageInputUpdate' type="file" v-on:change="uploadImage($event)"><br>
+                                <wysiwyg v-model='updateArticle.text'></wysiwyg>
+                                <button type="submit" v-on:click.prevent="update(updateArticle._id)">
+                                    Submit
+                                </button>
+                            </form>
+                        </div>
                     </div>
-                    <div class="dropdown-divider"></div>
-                    <!-- if there is image -->
-                    <div class="text-center"  v-if="selectedArticle.image">
-                        <img style="width:70%" class="my-3"
-                            :src="selectedArticle.image"
-                            class="rounded" alt="...">
-                    </div>
-                    <!-- end of conditional -->
-                    <div class='pt-3'>
-                        {{selectedArticle.content}}
-                    </div>
+                    <div id="eachArticle" class="col-sm-12 p-3 justify-content-center"
+                        style="height: 100%; padding-bottom:100px; overflow-y:scroll" v-show="showHide.eachArticle">
+                        <div class="pt-4">
+                            <h1>{{selectedArticle.title}}</h1>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <!-- if there is image -->
+                        <div class="text-center" v-if="selectedArticle.image">
+                            <img style="width:70%" class="my-3" :src="selectedArticle.image" class="rounded" alt="...">
+                        </div>
+                        <!-- end of conditional -->
+                        <div class='pt-3'>
+                            <span v-html="selectedArticle.content"></span>
+                        </div>
 
+                    </div>
                 </div>
+
+
             </div>
-
         </div>
 
     </div>
@@ -165,12 +236,14 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="vue.js"></script>
-    <script src="https://cdn.ckeditor.com/4.11.4/standard/ckeditor.js"></script>
+    <script src="./vueWysiwyg.js"></script>
+    <script src="./vue.js"></script>
+    <!-- 
     <script>
         CKEDITOR.replace('editor1');
-    </script>
+    </script> -->
 
 
 

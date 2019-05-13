@@ -1,87 +1,273 @@
+const baseURL = 'http://localhost:3000'
 const app = new Vue({
     el: '#app',
-    data:{
-        articles:[],
-        search:'',
-        selectedArticle:{
-            title:'hello',
-            article:null,
+    data: {
+        loginPage:true,
+        registerPage:false,
+        articles: [],
+        search: '',
+        selectedArticle: {
+            title: 'hello',
+            text: null,
         },
-        showHide:{
+        updateArticle:{
+            text:'mama'      
+        },
+        showHide: {
             eachArticle: false,
             allArticles: true,
-            addArticle: false
+            addArticle: false,
+            updateArticlePage: false
         },
-        newArticleTitle:"",
-        newArticleContent:""
+        islogin: false,
+        password: '',
+        email: '',
+        name: '',
+        newArticle:{
+            text: '',
+            title: '',
+            image: ''
+        },
+        editArticle:{
+            text:'',
+            title:'',
+            image:''
+        },
+        file: ''
     },
-    
-    methods:{
-        addNewArticle(){
-
-            console.log(this.newArticleTitle)
-            console.log(this.newArticleContent)
+    components: {
+        wysiwyg: vueWysiwyg.default.component
+    },
+    methods: {
+        deleteArticle:function(id){
+            console.log(this.articles)
+            axios({
+                method:'DELETE',
+                url:`${baseURL}/articles/${id}`,
+                headers:{
+                    token:localStorage.getItem('token')
+                }
+            })
+            .then(({data})=>{
+                let id = data._id
+                console.log(data._id)
+                this.articles = this.articles.filter(item =>{
+                    return (item._id !== id)
+                })
+                console.log(this.articles)
+                console.log(data)
+            })
+            .catch(({error})=>{
+                console.log(error)
+            })
         },
-        read(id){
-            let selectedArticle = this.articles.filter((item)=>{
-                console.log(item,"ini item")
+        tes:function(){
+            console.log('testing button')
+        },
+        login:function() {
+            console.log('hai')
+            axios({
+                method: 'POST',
+                url: `${baseURL}/login`,
+                data: {
+                    email: this.email,
+                    password: this.password
+                }
+            })
+                .then(({ data }) => {
+                    console.log(data)
+
+                    let token = data.token
+                    localStorage.setItem('token', token)
+                    if (localStorage.getItem('token')) {
+                        this.islogin = true
+                    }else{
+                        this.islogin = false
+                    }
+                })
+                .catch(({ error }) => {
+                    console.log(error)
+                })
+        },
+        register:function(){
+            console.log('hello register')
+            axios({
+                method:'POST',
+                url:`${baseURL}/register`,
+                data:{
+                    name: this.name,
+                    email: this.email,
+                    password: this.password
+                }
+            })
+            .then(({data})=>{
+                console.log(data)
+            })
+            .catch(({error})=>{
+                console.log(error)
+            })
+        },
+        uploadImage:function(){
+            this.file= ''
+            this.file=event.target.files[0]
+        },
+        addNewArticle:function() {
+            this.newArticle.image = this.file
+            this.file = ''
+            console.log('vue add new article')
+            let formData = new FormData()
+            formData.append('file', this.newArticle.image)
+            formData.append('title', this.newArticle.title)
+            formData.append('content', this.newArticle.text)
+            axios({
+                method:'POST',
+                url:`${baseURL}/articles`,
+                // formData,
+                data:formData,
+                headers:{
+                    token : localStorage.getItem('token'),
+                    'Content-Type': 'multipart/form-data'//; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW'
+                },
+                // data:{
+                //     title:this.newArticle.title,
+                //     content:this.newArticle.text,
+                //     image:formData
+                // }
+            })
+            .then(({data})=>{
+                this.articles.push(data)
+                console.log(data)
+            })
+            .catch(({error})=>{
+                console.log(error)
+            })
+        },
+        read:function(id) {
+            let selectedArticle = this.articles.filter((item) => {
+                console.log(item, "ini item")
                 return (item._id === id)
             })
-            console.log(selectedArticle)
             this.toShowAndHide("eachArticle")
             this.selectedArticle = selectedArticle[0]
             console.log(this.selectedArticle, "this")
         },
-        toShowAndHide(whichOne){
-            for( let i = 0; i < Object.keys(this.showHide).length; i++){
+        signout:function(){
+            localStorage.removeItem('token')
+            if (localStorage.getItem('token')) {
+                this.islogin = true
+            }else{
+                this.islogin = false
+            }
+        },
+        updatePage:function(id){
+            //masih error kalau #updateArticlePage dengan v-if. kalau dengan v-show, updateArticle nya nggk ke render dalam page
+            console.log('hai')
+            axios({
+                method:'GET',
+                url:`${baseURL}/articles/${id}`,
+                headers:{
+                    token:localStorage.getItem('token')
+                }
+            })
+            .then(({data})=>{
+                updateArticle.title = data.title
+                updateArticle.text = data. text
+                console.log(data)
+                console.log(updateArticle.title)
+            })
+            .then(()=>{
+                console.log('hai')
+                this.toShowAndHide("updateArticle")
+            })
+            .catch(({error})=>{
+                console.log('masuk error')
+                console.log(error)
+            })
+        },
+        update:function(id){
+            let formData = new FormData()
+            this.editArticle.image = this.file
+            formData.append('file', this.editArticle.image)
+            formData.append('title', this.editArticle.title)
+            formData.append('content', this.editArticle.text)
+            axios({
+                method:'PATCH',
+                url:`${baseURL}/articles/${id}`,
+                headers:{
+                    token:localStorage.getItem('token')
+                },
+                data:formData
+            })
+            .then(({data})=>{
+                console.log(data)
+            })
+            .catch(({error})=>{
+                console.log(error)
+            })
+        },
+        toShowAndHide:function(whichOne) {
+            for (let i = 0; i < Object.keys(this.showHide).length; i++) {
                 var currentKey = Object.keys(this.showHide)[i]
-                if(currentKey === whichOne){
+                if (currentKey === whichOne) {
                     this.showHide[currentKey] = true
-                }else{
+                } else {
                     this.showHide[currentKey] = false
                 }
             }
         }
     },
-    computed:{
-        
-        filtered(){
-            // let articleNotFound=[{
-            //     title: "Article Not Found",
-            //     content : "",
-            //     createdAt : ""
-            // }]
-            if(this.search){
+    computed: {
+        dateFormating(date){
+            let dateArray = date.
+            return(`${dateArray[2]}/${dateArray[1]}/${dateArray[0]}`)
+        },
+        filtered() {
+            if (this.search) {
                 let result = []
-                result = this.articles.filter((item)=>{
-                    return item.title.toLowerCase().includes(this.search.toLowerCase()) 
+                result = this.articles.filter((item) => {
+                    return item.title.toLowerCase().includes(this.search.toLowerCase())
                 })
-                if(result.length === 0){
+                if (result.length === 0) {
                     return this.articles
-                } else{
+                } else {
                     return result
                 }
-            }else{
+            } else {
                 return this.articles
             }
         }
     },
-    watch:{
-        
+    watch: {
+
+
     },
-    created(){
-        axios({
-            method:'GET',
-            url:'http://localhost:3000/articles'
-        })
-        .then((response)=>{
-            for(let i = 0; i<response.data.length; i++){
-                this.articles.push(response.data[i])
-            }
-            console.log(response)
-        })
-        .catch((err)=>{
-            console.log(err)
-        })
+    created() {
+        if (localStorage.getItem('token')) {
+            this.islogin = true
+        }else{
+            this.islogin = false
+        }
+
+        if (this.islogin) {
+            axios({
+                method: 'GET',
+                url: 'http://localhost:3000/articles',
+                headers:{
+                    token : localStorage.getItem('token')
+                }
+            })
+                .then((response) => {
+                    for (let i = 0; i < response.data.length; i++) {
+                        let dateArray = response.data[i].created_at.slice(0,10).split('-')
+                        response.data[i].created_at = `${dateArray[2]}/${dateArray[1]}/${dateArray[0]}`
+                        this.articles.push(response.data[i])
+                    }
+                    console.log(response)
+                    console.log()
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        }
     }
 })
