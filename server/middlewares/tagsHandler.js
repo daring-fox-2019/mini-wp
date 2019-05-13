@@ -3,9 +3,10 @@ const Tag = require('../models/tag');
 module.exports = {
   async generate(req, res, next) {
     let promises = [];
-    const { tags } = req.body;
+    let { tags } = req.body;
     let foundTag = null;
-  
+    
+    tags = tags.split(',');
     req.tags = [];
   
     for (let tag of tags) {

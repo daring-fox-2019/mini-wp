@@ -127,6 +127,7 @@ class Controller {
 
   static updatePut(req, res, next) {
     const { title, text, status } = req.body
+    const { tags } = req;
     let updatedArticle = req.article;
     let imageURL = null;
     
@@ -137,9 +138,10 @@ class Controller {
     updatedArticle.text = text;
     updatedArticle.imageURL = imageURL;
     updatedArticle.status = status;
+    updatedArticle.tags = tags
     updatedArticle.updated = new Date();
     updatedArticle.updateOne({
-      title, text, status, imageURL, updated: updatedArticle.updated
+      title, text, status, imageURL, tags, updated: updatedArticle.updated
     })
       .then(info => {
         res.status(201).json({ message: 'data updated', updatedArticle, info });
@@ -151,7 +153,7 @@ class Controller {
 
   static updatePatch(req, res, next) {
     const { title, text, status } = req.body
-    let { article } = req;
+    let { article, tags } = req;
     let imageURL = null;
     
     if (req.file) {
@@ -161,6 +163,7 @@ class Controller {
     article.text = text || article.text;
     article.imageURL = imageURL || article.imageURL;
     article.status = status || article.status;
+    article.tags = tags || article.tags;
     article.updated = new Date();
     article.save()
       .then(updatedArticle => {

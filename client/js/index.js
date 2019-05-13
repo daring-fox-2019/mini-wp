@@ -166,20 +166,23 @@ let app = new Vue ({
     },
 
     logout() {
-      var auth2 = gapi.auth2.getAuthInstance();
-      auth2.signOut().then(() => {
-        Swal.fire({
-          position: 'center',
-          type: 'success',
-          title: 'logged out',
-          showConfirmButton: false,
-          timer: 1500
-        })
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        this.activeUser = '';
-        this.isWelcome = true;
-      });
+      Swal.fire({
+        position: 'center',
+        type: 'success',
+        title: 'logged out',
+        showConfirmButton: false,
+        timer: 1500
+      })
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      this.activeUser = '';
+      this.isWelcome = true;
+      let auth2 = null;
+      if (gapi.auth2) {
+        auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(() => {
+        });
+      } 
     },
 
     fetchAll() {

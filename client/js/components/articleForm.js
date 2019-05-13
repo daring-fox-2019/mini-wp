@@ -10,17 +10,49 @@ Vue.component('dd-article-form', {
         title: '',
         text: '',
         image: null,
-        tags: []
+        tags: [],
       },
+      items: []
     };
   },
 
+  mounted() {
+    axios({
+      method: 'get',
+      url: `${serverURL}/tags`
+    })
+      .then(({ data }) => {
+        this.items = data.tags;
+        this.items = this.items.map(item => item.title);
+      })
+      .catch(err => {
+        const { status } = err.response;
+        const { message } = err.response.data;
+        if (status === 404 ) {
+          this.items = [];
+        } else {
+          Swal.fire({
+            position: 'center',
+            type: 'error',
+            title: message,
+            showConfirmButton: false,
+            timer: 1500
+          })
+        }
+      })
+  },
+
   methods:{
+    remove (item) {
+      this.article.tags.splice(this.article.tags.indexOf(item), 1)
+      this.article.tags = [...this.article.tags]
+    },
+
     resetForm() {
       this.article.title = '';
       this.article.text = '';
       this.article.image = null;
-      this.tags = [];
+      this.article.tags = [];
     },
 
     openFileDialog() {
@@ -45,11 +77,12 @@ Vue.component('dd-article-form', {
       // }).catch(function (error) {
       //     console.log(error);
       // });
-      const { title, text, image } = this.article;
+      const { title, text, image, tags } = this.article;
       let formData = new FormData();
         formData.append('title', title);
         formData.append('text', text);
         formData.append('image', image);
+        formData.append('tags', tags);
         this.resetForm();
         this.$emit('upload', formData);
     },
@@ -76,11 +109,26 @@ Vue.component('dd-article-form', {
       {{ article.image ? article.image.name : '' }}
       <input type="file" id="file-upload" style="display:none" @change="onFileChange">
       <v-layout row class="mt-4">
-        <v-text-field
+        <v-combobox
           v-model="article.tags"
-          label="Tags"
-          outline
-        ></v-text-field>
+          :items="items"
+          label="Enter your tags"
+          chips
+          clearable
+          prepend-icon="tags"
+          solo
+          multiple
+        >
+          <template v-slot:selection="data">
+            <v-chip
+              :selected="data.selected"
+              close
+              @input="remove(data.item)"
+            >
+              <strong>{{ data.item }}</strong>&nbsp;
+            </v-chip>
+          </template>
+        </v-combobox>
       </v-layout>
       <v-layout justify-end row>
         <v-btn type="submit" flat color="green">Submit <v-icon>send</v-icon></v-btn>

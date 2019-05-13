@@ -12,8 +12,8 @@ router.get('/:id', ArticleController.findOne);
 
 router.use(Authenticate);
 router.post('/', upload.multer.single('image'), upload.sendUploadToGCS, tags.generate, ArticleController.create);
-router.put('/:id', AuthorizeAuthUser, upload.multer.single('image'), upload.sendUploadToGCS, ArticleController.updatePut);
-router.patch('/:id', AuthorizeAuthUser, upload.multer.single('image'), upload.sendUploadToGCS, ArticleController.updatePatch);
+router.put('/:id', AuthorizeAuthUser, upload.multer.single('image'), upload.sendUploadToGCS, tags.generate, ArticleController.updatePut);
+router.patch('/:id', AuthorizeAuthUser, upload.multer.single('image'), upload.sendUploadToGCS, tags.generate, ArticleController.updatePatch);
 router.delete('/:id', AuthorizeAuthUser, ArticleController.delete);
 
 
