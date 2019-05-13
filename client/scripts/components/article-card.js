@@ -2,7 +2,7 @@ Vue.component('article-card', {
     props: ['article'],
     data() {
         return {
-            diff: moment(this.article.createdAt).fromNow()
+            diff: moment(this.article.lastUpdate).fromNow()
         }
     },
     computed: {
@@ -22,18 +22,18 @@ Vue.component('article-card', {
             <b-row class="font-serif">
                 <a href="#" @click="showViewer"><h2 class="mb-0">{{article.title}}</h2></a>
             </b-row>
-            <b-row style="color:grey;font-size: 15px;">
+            <b-row style="color:grey;font-size: 20px;">
                 {{article.subtitle}}
             </b-row>
             <b-row class="mt-3">
                 <div class="col">
                     <b-row class="font-15 mt-1">
-                        {{article.user.name}}
+                        By: {{article.user.name}}
                     </b-row>
-                    <b-row class="font-10">
+                    <b-row class="font-15" style="color:grey;">
                         Published: {{diff}}
                     </b-row>
-                    <b-row class="d-flex align-items-center mt-3" style="max-height:23px;overflow:hidden;">
+                    <b-row class="d-flex align-items-center" style="max-height:23px;overflow:hidden;">
                          <div style="font-size:13px;">Tags:</div>
                         <b-badge href="#" class="px-1" 
                             variant="light" 

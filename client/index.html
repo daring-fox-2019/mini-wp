@@ -35,7 +35,7 @@
     <div id="app">
         <!-- nav -->
         <b-container fluid>
-            <b-container class="d-flex justify-content-between align-items-center p-1">
+            <b-container class="d-flex justify-content-between align-items-center p-1 border-bottom">
                 <b-nav class="mt-2 d-flex align-items-center">
                     <b-nav-item disabled><i class="fab fa-wordpress"></i>&nbsp;Mini WP</b-nav-item>
                     <b-nav-item @click="showHome">Home</b-nav-item>
@@ -132,8 +132,8 @@
         <b-container class="border" v-if="show.page == 'viewer'">
             <b-row class="d-flex justify-content-center">
                 <b-col cols="7">
-                    <b-row class="font-serif">
-                        <h2>{{onViewer.title}}</h2>
+                    <b-row class="font-serif mt-3">
+                        <h1>{{onViewer.title}}</h1>
                     </b-row>
                     <b-row>
                         {{onViewer.subtitle}}
@@ -141,15 +141,32 @@
                     <b-row>
                         <b-col>
                             <b-row>
-                                <div style="width:50px; height:50px; border-radius:50%;" class="border mr-3">
-
+                                <div style="width:50px; height:50px; border-radius:50%;"
+                                     class="border mr-3 d-flex justify-content-center align-items-center">
+                                     <i class="fab fa-wordpress fa-2x"></i>
                                 </div>
                                 <div class="col">
                                     <b-row class="font-15 mt-1">
-                                        {{onViewer.user.name}}
+                                        <b-col>
+                                            By: {{onViewer.user.name}}
+                                        </b-col>
                                     </b-row>
                                     <b-row class="font-10">
-                                        {{onViewer.createdAt}}
+                                        <b-col>
+                                            Published: {{onViewer.diff}}
+                                        </b-col>
+                                    </b-row>
+                                    <b-row>
+                                        <b-col cols=1>
+                                            <div style="font-size:13px; margin-top:2px;">Tags:</div>
+                                        </b-col>
+                                        <b-col style="font-size: 15px;">
+                                            <b-badge href="#" class="px-2" 
+                                                variant="light" 
+                                                v-for="(tag,index) in onViewer.tags"
+                                                @click="searchByTag({tag: tag.text})"
+                                                :key="index">{{tag.text}}</b-badge>
+                                        </b-col>
                                     </b-row>
                                 </div>
                             </b-row>

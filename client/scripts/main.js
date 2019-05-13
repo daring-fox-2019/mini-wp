@@ -180,6 +180,7 @@ var app = new Vue({
             .get(`${serverUrl}/articles/${article_id}`, {headers:{token:localStorage.token}})
             .then(({ data }) => {
                 this.onEditor = data
+                
                 this.tags = data.tags
             })
             .catch(err => {
@@ -203,6 +204,7 @@ var app = new Vue({
             .then(({ data }) => {
                 // console.log(data)
                 this.onViewer = data
+                this.onViewer.diff =  moment(data.lastUpdate).fromNow()
             })
             .catch(err => {
                 console.log(err)
