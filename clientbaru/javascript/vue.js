@@ -38,10 +38,11 @@ let vue = new Vue({
     readone(obj){
       console.log("read", obj)
       this.article = obj
-      if(obj.image != null || obj.image != ""){
-        document.getElementById('detailcontent').innerHTML = `<br><br><br><br><br><img class="ui huge centered image" src='${obj.image}'>`
+      if(obj.content.indexOf(obj.image) == -1){
+        document.getElementById('detailcontent').innerHTML = `<br><br><br><br><br><img class="ui huge centered image" style="max-width:400px;" src='${obj.image}'> <br>${obj.content}`
+      } else {
+        document.getElementById('detailcontent').innerHTML = document.getElementById('detailcontent').innerHTML + `<br>${obj.content}`
       }
-      document.getElementById('detailcontent').innerHTML = document.getElementById('detailcontent').innerHTML + `<br>${obj.content}`
       this.page = "articledetail"
     },
     deleteone(obj){
@@ -81,7 +82,7 @@ let vue = new Vue({
           let htmlcontent = editor.firstChild.innerHTML
           let newData = {
             title: this.article.title,
-            snippet : quill.getText(0,100),
+            snippet : quill.getText(0,200),
             content: htmlcontent,
             status: type,
             image : this.article.image,
@@ -138,7 +139,7 @@ let vue = new Vue({
           let htmlcontent = editor.firstChild.innerHTML
           let newData = {
             title: this.article.title,
-            snippet : quill.getText(0,100),
+            snippet : quill.getText(0,200),
             content: htmlcontent,
             status: type,
             image : gcloudURL,
@@ -213,6 +214,7 @@ let vue = new Vue({
           updatedAt : "",
           postedAt : "",
         }
+        document.getElementById('detailcontent').innerHTML = ""
         $('#createfeaturedimg').val('')
         this.article.title = ""
         quill.setText("\n\n\n")
@@ -339,6 +341,7 @@ let vue = new Vue({
         updatedAt : "",
         postedAt : "",
       }
+      document.getElementById('detailcontent').innerHTML = ""
       this.page = "writearticle"    
     },
     savearticle(){
@@ -371,7 +374,7 @@ let vue = new Vue({
           let htmlcontent = editor.firstChild.innerHTML
           let newArticle = {
             title: this.article.title,
-            snippet : quill.getText(0,100),
+            snippet : quill.getText(0,200),
             content: htmlcontent,
             status: "saved",
             image : gcloudURL,
@@ -436,7 +439,7 @@ let vue = new Vue({
           let htmlcontent = editor.firstChild.innerHTML
           let newArticle = {
             title: this.article.title,
-            snippet : quill.getText(0,100),
+            snippet : quill.getText(0,200),
             content: htmlcontent,
             status: "posted",
             image : gcloudURL,

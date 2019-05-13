@@ -52,7 +52,7 @@ Vue.component('articlefeed',{
     <div class="ui segment" v-for="a in articles">
       <div class="ui items">
         <div class="item">
-          <div class="ui small image" v-if="a.image !== ''">
+          <div class="ui small image" style="display:flex; align-items:center;" v-if="a.image !== ''">
             <img v-bind:src="a.image">
           </div>
           <div class="content">
@@ -65,8 +65,8 @@ Vue.component('articlefeed',{
             </div>
             <div class="extra">
               <i class="ui users icon"></i>  {{author}} &emsp;
-              <a @click="deletethis(a)" ><i class="ui trash alternate outline icon"></i> Delete</a> &emsp;
-              <a @click="updatethis(a)" ><i class="ui edit icon"></i> Edit</a> &emsp;
+              <a @click="deletethis(a)" class="ui red label" ><i class="ui trash alternate outline icon"></i> Delete</a> &emsp;
+              <a @click="updatethis(a)" class="ui teal label"><i class="ui edit icon"></i> Edit</a> &emsp;
             </div>
           </div>
         </div>
