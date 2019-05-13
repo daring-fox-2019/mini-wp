@@ -44,15 +44,17 @@ function signOut() {
             var auth2 = gapi.auth2.getAuthInstance();
             auth2.signOut().then(function () {
                 console.log('User signed out.');
-                localStorage.clear()
-                app.show.page = 'home'
-                Swal.fire(
-                    'Logged out!',
-                    'See you again.',
-                    'success'
-                )
+                
                 app.show.login = false;
             });
+            localStorage.clear()
+            app.show.page = 'home'
+            app.show.login = false
+            Swal.fire(
+                'Logged out!',
+                'See you again.',
+                'success'
+            )
           
     }})
 }

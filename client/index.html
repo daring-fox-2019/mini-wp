@@ -93,15 +93,15 @@
                             <article-card v-for="article in filteredArticleCards" :article="article" :key="article._id"
                                 @search-by-tag="searchByTag" @show-viewer="showViewer"></article-card>
 
-                            <b-row class="p-3 border-top d-flex justify-content-between">
+                            <b-row class="p-3 border-top d-flex justify-content-between" >
                                 <div>
-                                    <a href="#" @click="getPreviousPage"><i class="fas fa-angle-double-left"></i>
+                                    <a href="#" @click="getPreviousPage" v-show="show.currentPage != 1"><i class="fas fa-angle-double-left"></i>
                                         Previous Page
                                     </a>
                                 </div>
                                 <div>
-                                    <a href="#" @click="getNextPage">Next Page <i
-                                            class="fas fa-angle-double-right"></i></a>
+                                    <a href="#" @click="getNextPage" v-show="filteredArticleCards.length >= 5">Next Page <i
+                                    class="fas fa-angle-double-right"></i></a>
                                 </div>
                             </b-row>
 
@@ -216,7 +216,7 @@
             <b-row class="d-flex justify-content-center">
                 <b-col cols=9>
                     <b-row>
-                        <b-col class="d-flex justify-content-between">
+                        <b-col class="d-flex justify-content-between mt-3">
                             <div>
                                 <a href="#" @click="showMyStories"><i class="fas fa-angle-double-left"></i> Go back to
                                     My Stories</a>
@@ -276,7 +276,7 @@
                             </b-row>
                             <b-row>
                                 <b-col>
-                                    <div class="input-group mb-3">
+                                    <div class="input-group mb-3 mt-3">
                                         <div class="custom-file">
                                             <input type="file" class="custom-file-input" id="inputGroupFile02"
                                                 @change="uploadPicture">

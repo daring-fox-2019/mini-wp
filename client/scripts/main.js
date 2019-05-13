@@ -1,10 +1,12 @@
-const serverUrl = 'http://localhost:3000'
+// const serverUrl = 'http://localhost:3000'
+const serverUrl = 'http://mini-wordpress-server.michaelryans.club'
 // console.log('masuk function main')
 
 
 var app = new Vue({
     el: '#app',
     data: {
+        serverUrl: 'http://mini-wordpress-server.michaelryans.club',
         serverUrl: 'http://localhost:3000',
         //wysiwyg
         text: '',
@@ -69,7 +71,7 @@ var app = new Vue({
             //     console.log(err.response.data)
             // })
             axios
-            .get(`${this.serverUrl}/articles?page=${this.show.currentPage+1}`, {params:{status:'published'}})
+            .get(`${serverUrl}/articles?page=${this.show.currentPage+1}`, {params:{status:'published'}})
             .then(({ data }) => {
                 // console.log(data)
                 this.articleCards = data
@@ -84,7 +86,7 @@ var app = new Vue({
         getPreviousPage() {
             if(this.show.currentPage > 1) {
                 axios
-                .get(`${this.serverUrl}/articles?page=${this.show.currentPage-1}`, {params:{status:'published'}})
+                .get(`${serverUrl}/articles?page=${this.show.currentPage-1}`, {params:{status:'published'}})
                 .then(({ data }) => {
                     // console.log(data)
                     this.articleCards = data
@@ -105,7 +107,7 @@ var app = new Vue({
             this.filteredArticleCards = []
 
             axios
-            .get(`${this.serverUrl}/articles`, {params:{status:'published'}})
+            .get(`${serverUrl}/articles`, {params:{status:'published'}})
             .then(({ data }) => {
                 // console.log(data)
                 this.articleCards = data
@@ -133,7 +135,7 @@ var app = new Vue({
                 })
             } else {
                 axios
-                .get(`${this.serverUrl}/articles/user`, {headers: {token:localStorage.token}})
+                .get(`${serverUrl}/articles/user`, {headers: {token:localStorage.token}})
                 .then(({ data }) => {
                     // console.log(data)
                     // console.log("----------------------- else")
@@ -172,6 +174,7 @@ var app = new Vue({
         },
         showHome() {
             this.show.page = 'home'
+            this.getAllPublishedArticle()
         },
         showEditor(article_id) {
             this.show.page = 'editor'

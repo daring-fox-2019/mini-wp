@@ -1,5 +1,9 @@
 # mini-wp
 
+### Link deploy
+client: http://mini-wordpress.michaelryans.club
+server: http://mini-wordpress-server.michaelryans.club
+
 ## User route
 ### User Register
 ```sh
