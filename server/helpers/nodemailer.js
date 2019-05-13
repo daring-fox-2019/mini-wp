@@ -7,13 +7,13 @@ module.exports = {
         let transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'tinywp.team@gmail.com',
-                pass: 'percayalahinipassword'
+                user: process.env.EMAIL_NODEMAILER,
+                pass: process.env.PASSWORD_NODEMAILER
             }
         })
 
         let mailOption = {
-            from: 'tinywp.team@gmail.com',
+            from:  process.env.EMAIL_NODEMAILER,
             to: Email.penerima,
             subject: Email.judul,
             text: Email.text
