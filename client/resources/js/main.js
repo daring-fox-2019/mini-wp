@@ -1,4 +1,4 @@
-const serverUrl = 'http://localhost:3000'
+const serverUrl = 'http://35.187.224.202'
 
 alertify.success('main.js loaded!')
 let vue = new Vue({
@@ -210,7 +210,7 @@ let vue = new Vue({
     getAllArticles() {
       axios({
         method: 'get',
-        url: 'http://localhost:3000/articles',
+        url: 'http://35.187.224.202/articles',
         headers: {
           token: localStorage.token
         }
@@ -378,7 +378,7 @@ let vue = new Vue({
 function onSignIn(googleUser) {
   let { id_token } = googleUser.getAuthResponse()
   axios({
-    url: 'http://localhost:3000/auth/google',
+    url: 'http://35.187.224.202/auth/google',
     method: 'post',
     headers: {
       token: id_token
