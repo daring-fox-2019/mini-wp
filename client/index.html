@@ -17,6 +17,8 @@
     <!-- The vue framework -->
     <script src="./vue/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="734679191889-5n326apqi4e4mqt5q286066gvcnk8nhe.apps.googleusercontent.com">
     <title>Mini WP</title>
 </head>
 
@@ -87,10 +89,15 @@
                         </div>
                         <button type="submit" class="btn btn-primary">Login</button>
                         <br><br>
+                        
                         <div class="alert alert-primary" role="alert" v-show="alert">
                             {{alert}}
                         </div>
                     </form>
+                    <div v-show="showForm === 2">
+                        Or sign in with Google:<br>
+                    <div style="margin-top: 0.7rem" class="g-signin2" data-onsuccess="onSignIn"></div>
+                    </div>
                     <br>
                     <br>
 
@@ -155,8 +162,8 @@
                                         <h5 class="mt-0">{{article.title}}<!-- {{article._id}} --></h5>
                                         <span v-html="article.content"></span>
                                     </div>
-                                    <div class="featured-image-preview">
-                                        image
+                                    <div style="align-self: center" class="featured-image-frame">
+                                        <img class="featured-image" v-bind:src="article.imageUrl" alt="">
                                     </div>
                                 </div>
                             <br>

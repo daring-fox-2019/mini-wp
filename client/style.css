@@ -118,7 +118,7 @@ body {
 #titleinput {
     background: transparent;
     border: none;
-    width: 100%;
+    width: 80%;
     font-size: 1.8rem;
     margin-left: 0.3rem;
     margin-bottom: 0.6rem;
@@ -165,18 +165,25 @@ body {
 #article-card {
     min-width: 350px;
     max-width: 900px;
-    height: 7.6rem;
+    height: 8.8rem;
     margin-left: auto;
     margin-right: auto;
-    padding: 0.8rem;
+    padding: 0.6rem;
     background-color: #fff;
     overflow: hidden;
 }
 
-.featured-image-preview {
-    background-color: black;
-    width: 8rem;
-    height: 6rem;
+.featured-image-frame {
+    background-color: transparent;
+    width: 9rem;
+    height: 7.4rem;
+    align-self: center;
+    margin-left: 0.8rem;
+}
+
+.featured-image {
+    width: 100%;
+    height: 100%;
 }
 
 #popup {

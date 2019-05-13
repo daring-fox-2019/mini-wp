@@ -1,14 +1,5 @@
 const Article = require("../models/articlemodel.js")
 let objectId = require("mongodb").ObjectID;
-const format = require('util').format;
-
-const { Storage } = require('@google-cloud/storage'); // Imports the Google Cloud client library
-const storage = new Storage({
-    keyFilename: '../serviceaccount.json'
-}); // Creates a client
-
-const bucketName = 'miniwp-m43';
-const bucket = storage.bucket(bucketName);
 
 class Controller {
     static readAll (req, res) { //Shows all articles belonging to user
@@ -35,15 +26,23 @@ class Controller {
     }
 
     static create (req, res) {
-        console.log("Saving article for user:")
+        let imageName = null;
+        let imageUrl = null;
+        if(req.file) {
+            imageName = req.file.cloudStorageObject
+            imageUrl = req.file.cloudStoragePublicUrl
+        }
+        
+        console.log("Saving article")
         let newArticle = new Article({
             title: req.body.title,
             content: req.body.content,
             created_at: req.body.created_at,
             author: req.userData.email, //From previous middleware
+            imageName: imageName,
+            imageUrl: imageUrl,
         })
 
-        console.log(req.file)
         newArticle.save((err, article) => {
             if (err) {
                 console.log(err)

@@ -148,24 +148,22 @@ let app = new Vue({
             console.log(this.editorData)
             console.log(this.selectedFile)
 
-            // let formData = new FormData()
-            // formData.append("file", this.selectedFile)
-            axios({
-                method: 'post',
-                url: serverAddress + "articles",
+            let formData = new FormData()
+            formData.append("title", this.editorTitle);
+            formData.append("content", this.editorTitle);
+            formData.append("created_at", new Date());
+            formData.append("image", this.selectedFile)
+
+            axios.post(serverAddress + "articles", formData, {
                 headers: {
                     "Authorization": localStorage.getItem("token")
-                },
-                data: {
-                    title: this.editorTitle,
-                    content: this.editorData,
-                    created_at: new Date(),
-                    image: this.selectedFile,
                 }
             })
             .then(({ data }) => {
                 console.log(data)
                 this.alert = "Article saved"
+                this.editorTitle = ""
+                this.editorData = ""
                 clearAlert(this)
             })
             .catch((err) => {

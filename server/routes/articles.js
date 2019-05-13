@@ -1,6 +1,7 @@
 const router = require("express").Router()
 const Controller = require("../controllers/articlecontroller.js")
 const checkAuthentication = require("../middleware/checkAuthentication.js")
+const upload = require("../middleware/uploadToGCS.js")
 const Multer = require('multer');
 
 const multer = Multer({
@@ -12,7 +13,7 @@ const multer = Multer({
 
 router.get("/", checkAuthentication, Controller.readAll)
 router.get("/:articleId", checkAuthentication, Controller.readOne)
-router.post("/", checkAuthentication, multer.single('image'), Controller.create)
+router.post("/", checkAuthentication, multer.single('image'), upload, Controller.create)
 router.delete("/:articleId", checkAuthentication, Controller.delete)
 router.put("/:articleId", checkAuthentication, Controller.update)
 

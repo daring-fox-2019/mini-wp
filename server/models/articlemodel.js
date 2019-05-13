@@ -9,7 +9,9 @@ const articleSchema = new mongoose.Schema({
   created_at: Date,
   author: {
     type: String
-  }, 
+  },
+  imageName: String,
+  imageUrl: String,
 });
 
 module.exports = mongoose.model('article', articleSchema); // the model
