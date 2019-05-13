@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title> MiniWp</title>
+
+    <!-- Load required Bootstrap and BootstrapVue CSS -->
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css"/>
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css"/>
+
+    <!-- Load polyfills to support older browsers -->
+    <script src="//polyfill.io/v3/polyfill.min.js?features=es2015%2CMutationObserver" crossorigin="anonymous"></script>
+
+    <!-- vue -->
+    <script src="./asset/js/vue.js"></script>
+    
+    <!-- Load Vue followed by BootstrapVue -->
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+
+    <!-- font-awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+    <!-- css -->
+    <link rel="stylesheet" href="./asset/css/index.css">
+
+    <!-- google-font -->
+    <link href="https://fonts.googleapis.com/css?family=Mallanna" rel="stylesheet"> 
+
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <!-- vue-tags -->
+    <script src="https://unpkg.com/@johmun/vue-tags-input/dist/vue-tags-input.js"></script>
+
+    <!-- editor -->
+    <script src="./asset/js/vueWysiwyg.js"></script>
+    <link rel="stylesheet" href="./asset/css/vueWysiwyg.css">
+
+    <!-- sweet-alert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+
+    <!-- moment -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+
+    <!-- google-sign-in -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+    <!-- animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.css" integrity="sha256-gVCm5mRCmW9kVgsSjQ7/5TLtXqvfCoxhdsjE6O1QLm8=" crossorigin="anonymous" />
+
+  </head>
+  <body>
+    <!--Navbar-->
+    <div id="app">
+        
+        <!-- login -->
+        <login-form v-if="!is.Login && !is.Register && !is.mainPage && !is.Read" @login="login" @to-register="toRegister"></login-form>
+
+        <!-- register -->
+        <register v-if="is.Register && !is.mainPager && !is.mainPage && !is.Read" @to-register="toRegister"></register>
+
+        <!-- header -->
+        <header-component @to-home="toHome" @logout="logout" :status="is" v-if="is.Login || is.mainPage || is.Read" @set-search="setSearch"></header-component>
+        
+        <!-- main-content -->
+        <div class="container animated fadeIn" v-if="is.Login && is.Home && !is.Read && !is.Register"  style="padding-top:140px;padding-bottom:100px">
+            <div>
+                <b-nav>
+                    <b-nav-item :class="`border published ${is.Publish ? 'draft-published-active' : ''}`" @click="changePublished(true)">PUBLISHED</b-nav-item>
+                    <b-nav-item :class="`border ml-3 published ${is.Publish == false ? 'draft-published-active' : ''}`"  @click="changePublished(false)">DRAFT</b-nav-item>
+                </b-nav>
+                <hr>
+            </div> 
+
+            <!-- published -->
+            <div v-if="is.Publish">
+                <div style="background-color: #f9f9f9; box-shadow: 0 1px 1px rgba(0,0,0,.125);width: 100%;" class="my-3" v-for="(article, key) in publishedList"> 
+                    <published :article="article" :iterate="key" :status="is" @set-tag-search="setTagSearch"></published>
+                </div>
+                 <pagination :total="total.published" :page="pagePublished" :pos="'publish'" @change-page-publish="changePagePublish"></pagination>
+            </div>
+            
+            <!-- draft  -->
+            <div v-if="!is.Publish">
+                <div style="background-color: #f9f9f9; box-shadow: 0 1px 1px rgba(0,0,0,.125);width: 100%;" class="my-3" v-for="(article, key) in draftList"> 
+                    <published :article="article" :iterate="key" :status="is" @set-tag-search="setTagSearch"></published>
+                </div>
+                <pagination :total="total.draft" :page="pageDraft" :pos="'draft'" @change-page-draft="changePageDraft" ></pagination>
+            </div>
+        </div>
+
+        <!-- main-page -->
+        <div class="container animated fadeIn" style="margin-top:150px;margin-bottom:150px" v-if="is.Publish && is.mainPage && !is.Login">
+            <div style="background-color: #f9f9f9; box-shadow: 0 1px 1px rgba(0,0,0,.125);width: 100%;" class="my-3" v-for="(article, key) in publishedList"> 
+                <published :article="article" :iterate="key" :status="is" @set-tag-search="setTagSearch"></published>
+            </div>
+            <pagination :total="total.published" :page="pageMain" :pos="'main'" @change-page-main="changePageMain" ></pagination>
+        </div>
+
+        <!-- input -->
+       <input-content :data-article="dataArticle" :status="is" :articles="articles" @set-articles="setArticles"  @edit-mode="editMode"></input-content>
+
+        <!-- read -->
+        <read-content :data-article="dataArticle" v-if="is.Read && !is.Register"></read-content>
+
+        <footer-component></footer-component>
+
+      </div>
+  </body>
+
+<script src="./asset/components/google-sign-in.js"></script>
+<script src="./asset/components/pagination.js"></script>
+<script src="./asset/components/read-content.js"></script>
+<script src="./asset/components/published.js"></script>
+<script src="./asset/components/input-content.js"></script>
+<script src="./asset/components/save-button.js"></script>
+<script src="./asset/components/footer-component.js"></script>
+<script src="./asset/components/register.js"></script>
+<script src="./asset/components/header.js"> </script>
+<script src="./asset/components/login.js"></script>
+<script src="./asset/js/index.js"></script>
+</html>

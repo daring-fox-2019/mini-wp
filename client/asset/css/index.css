@@ -1,0 +1,17 @@
+.published:hover {
+    background-color: #e5e5e5;
+}
+
+body{
+    font-family: 'Mallanna', sans-serif;
+}
+
+.draft-published-active{
+    background-color: #e5e5e5;
+}
+
+.vue-tags-input .ti-tag {
+    position: relative;
+    background: #b4e9e2;
+    color: #283944;
+}
