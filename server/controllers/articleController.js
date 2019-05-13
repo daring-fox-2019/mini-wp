@@ -42,7 +42,7 @@ class ArticleController{
             description: req.body.description,
             author: req.body.author,
             content: req.body.content,
-            created_at: dateFix,
+            created_at: new Date(),
             image : req.file.cloudStoragePublicUrl,
             userId : req.loggedUser.id
         })
