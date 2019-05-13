@@ -10,11 +10,16 @@ const app = new Vue({
         adminArea: false,
         username: "",
         nav: true,
-        formPost:false,
-        contentAdmin:false,
-        sidebarAdmin:false,
-        post:{
-            
+        formPost: false,
+        contentAdmin: false,
+        sidebarAdmin: false,
+        formEditPost: false,
+        showOne:false,
+        showAllArticle:false,
+        searchResult:false,
+        searchResultValue:'',
+        post: {
+
         }
     },
     mounted() {
@@ -23,9 +28,21 @@ const app = new Vue({
 
         })
 
-        gapi.load('auth2', function() {
+        gapi.load('auth2', function () {
             gapi.auth2.init();
-          });
+        });
+    },
+    created() {
+        if (localStorage.access_token) {
+            this.login = true
+            axios.defaults.headers.common['access_token'] = localStorage.access_token
+            this.username = localStorage.name
+            this.showAdminArea()
+        } else {
+            this.login = false
+
+        }
+
     },
     methods: {
         whereWego(value) {
@@ -33,16 +50,18 @@ const app = new Vue({
             if (value == "login") {
                 console.log('berhasil')
                 this.showFormLogin()
-            } else if (value == "register") {
+            } else if (value == "register") {showAll
                 console.log('register')
                 this.showFormRegister()
             } else if (value == "adminarea") {
                 console.log('admin area')
                 this.showAdminArea()
-            } else if (value =="formpost"){
+            } else if (value == "formpost") {
                 console.log('masuk formpost');
-                
+
                 this.showFormPost()
+            } else if (value=="showall"){
+                this.showGetAll()
             }
 
         },
@@ -52,9 +71,13 @@ const app = new Vue({
             this.formRegister = false,
             this.formLogin = false,
             this.adminArea = false
-            this.formPost=false,
-            this.contentAdmin=false,
-            this.sidebarAdmin=false
+            this.formPost = false,
+            this.contentAdmin = false,
+            this.sidebarAdmin = false,
+            this.formUpdate = false,
+            this.showOne = false,
+            this.showAllArticle=false
+            this.searchResult = false
         },
         lagiLogin(value) {
             this.login = value
@@ -70,16 +93,43 @@ const app = new Vue({
         },
         showAdminArea() {
             this.clear()
+            console.log('admin area');
+            this.contentAdmin = true
+            this.sidebarAdmin = true
+
+            this.username = localStorage.name
             this.adminArea = true
         },
-        showFormPost(){
-            console.log('lalala eyyeey')
+        showFormPost() {
             this.clear()
             this.adminArea = true
-            this.formPost=true
-            this.sidebarAdmin=true
+            this.formPost = true
+            this.sidebarAdmin = true
         },
+        showFormUpdate(item) {
+            console.log('lalala eyyeey', item)
+            this.clear()
+            this.adminArea = true
+            this.formUpdate = true
+            this.sidebarAdmin = true
+            this.post = item
+        }, showGetOne(item) {
+            this.clear()
+            this.showOne = true
+            this.post = item
+        },
+        searchResultAction(value){
+            this.clear()
+            this.searchResult = true
+            this.searchResultValue=value
+            console.log(value,'ini search result')
 
+        },
+        showGetAll() {
+            this.clear()
+            this.showAllArticle = true
+            console.log('masuk')
+        },
         googleLogin(googleUser) {
             console.log('masuk')
             const idToken = googleUser.getAuthResponse().id_token
@@ -98,24 +148,29 @@ const app = new Vue({
                     console.log(err)
                 })
         },
-        logout(){
-            var auth2 =gapi.auth2.getAuthInstance();
+        logout() {
+            var auth2 = gapi.auth2.getAuthInstance();
             auth2.signOut().then(function () {
-                console.log('User signed out.');            
+                console.log('User signed out.');
             });
             localStorage.clear()
             this.login = false
             this.whereWego('login')
-        }
+            Swal.fire({
+                type: 'success',
+                title: 'Success logout',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        },
+        dateformat: function (date) {
+            return moment(date).format('llll')
+        },
 
     }
 })
 
-if (localStorage.access_token) {
-    app.login = true
-    axios.defaults.headers.common['access_token'] = localStorage.access_token
-    app.username = localStorage.name
-}
+
 
 
 

@@ -8,6 +8,7 @@ module.exports = function (req, res, next) {
             console.log('auth')
             next()
         } catch(err) {
+            console.log('masuk auth err')
             res.status(400).json({
                 message: 'Bad request'
             })

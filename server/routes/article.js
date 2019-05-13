@@ -27,6 +27,7 @@ const multer = Multer({
 
 router.get('/', Article.listAll)
 router.get('/:id', Article.findOne)
+router.get('/search/:tagName', Article.getByTag)
 router.use(authenticate)
 router.post('/', multer.single('file'), gcsMiddleware.sendUploadToGCS, Article.create)
 router.get('/user/list', Article.myList)

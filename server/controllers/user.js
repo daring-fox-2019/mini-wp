@@ -2,6 +2,7 @@ const { User, Article } = require('../models')
 const { bcrypt, jwt } = require('../helpers')
 const { OAuth2Client } = require('google-auth-library')
 const client = new OAuth2Client(process.env.CLIENT_ID)
+const {Mailer} = require('../helpers/nodemailer')
 class userController {
     static register(req, res) {
         console.log('masuk register')
@@ -10,12 +11,31 @@ class userController {
             name, email, password
         })
             .then(success => {
+                let email = {
+                    receiver : success.email,
+                    subject:`selamat datang di TinyWp`,
+                    text:`halo ${success.name} Selamat datang di TinyWP,
+                    Selamat bergabung bersama kami, mari menulis dan berbagi informasi!`
+                }
                 res.status(201).json(success)
+                return Mailer(email)          
             })
             .catch(err => {
-                res.status(500).json({
-                    err: err.message
-                })
+                if (err.errors.name) {
+                    res.status(400).json({
+                        message: err.errors.name.message
+                    })
+                } else if (err.errors.email) {
+                    res.status(400).json({
+                        message: err.errors.email.message
+                    })
+                } else if (err.errors.password) {
+                    res.status(400).json({
+                        message: err.errors.password.message
+                    })
+                } else {
+                    res.status(500).json(err)
+                }
             })
     }
 

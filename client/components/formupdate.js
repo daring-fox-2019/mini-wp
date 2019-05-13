@@ -1,5 +1,5 @@
-Vue.component('form-post', {
-    props: ['islogin'],
+Vue.component('form-update', {
+    props: ['islogin', 'valuepost'],
     components: {
         wysiwyg: vueWysiwyg.default.component,
         "tags-input": VoerroTagsInput,
@@ -9,7 +9,7 @@ Vue.component('form-post', {
     <div class="col-10 align-center">
         <div class="card my-15">
         <div class="mx-auto">
-        <h2>New Article</h2>
+        <h2 >Update Article</h2>
         </div>      
         <div class="card-body">
         <form method="POST">             
@@ -17,7 +17,9 @@ Vue.component('form-post', {
                 placeholder="text your Title Here" autocomplete="off" autofocus>
             <wysiwyg v-model="content" class="mb-4"></wysiwyg>
             <div class="d-flex justify-content-between">
-           <div class="col-4"><picture-input
+           <div class="col-4">
+           <b-img thumbnail fluid :src="valuepost.featured_image" alt="Image 1" style="height:150px;"></b-img>
+           <picture-input
            ref="pictureInput"
            @change="onChanged"
            :width="500"
@@ -42,10 +44,8 @@ Vue.component('form-post', {
 
             </div>
             <div class="d-flex flex-row justify-content-end">
-            <button  class="btn btn-danger mx-2"  @click.prevent="$parent.showAdminArea()">cancel</button>          
-                
-                <button  type="submit" class="btn btn-success " @click.prevent="postArticle">posting</button>
-
+                <button  class="btn btn-danger mx-2" @click.prevent="$parent.showAdminArea()">cancel</button>            
+                <button  type="submit" class="btn btn-info" @click.prevent="updateArticle(valuepost._id)">update</button></div>
         </form>
 
     </div>
@@ -60,13 +60,18 @@ Vue.component('form-post', {
             existTag: {},
             selectedTags: [],
             background: ''
-
-
-
-
+        
         }
     },
-    created() {
+    mounted() {
+       if(this.valuepost){
+           console.log(this.valuepost,'ini valuepost')
+        this.title = this.valuepost.title
+        this.content = this.valuepost.content
+        this.selectedTags = this.valuepost.tags
+        this.background = this.valuepost.featured_image
+    
+       }
     
     },
     methods: {
@@ -80,16 +85,17 @@ Vue.component('form-post', {
                 .then(({ data }) => {
 
                     console.log(data)
-                    this.selectedTags= data.tags.map(a=>a.toLowerCase()) 
+                    this.selectedTags = data.tags
                     console.log(this.existTag)
 
                 })
                 .catch(function (err) {
                     console.log(err)
+
                 })
 
         },
-        postArticle() {
+        updateArticle(id){
             let formData = new FormData()
             formData.append('file', this.file)
             formData.append('title', this.title)
@@ -97,19 +103,12 @@ Vue.component('form-post', {
             formData.append('tags', this.selectedTags)
             console.log(formData)
             axios
-                .post(serverUrl + '/article/', formData, {
+                .put(serverUrl + `/article/${id}`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
-                    },
+                    }
                 })
                 .then(({ data }) => {
-                    console.log(data)
-                    Swal.fire({
-                        type: 'success',
-                        title: 'Success login',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
                     this.$parent.whereWego('adminarea')
                     this.content = ""
                     this.title = ""
@@ -121,7 +120,7 @@ Vue.component('form-post', {
                     console.log(err)
                 })
 
-        },
+        }
 
     }
 

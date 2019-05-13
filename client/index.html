@@ -10,47 +10,71 @@
         content="635172851409-vajcs75tcdm40pli59r4jnqnnlfv3gnj.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <!-- Load required Bootstrap and BootstrapVue CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
     <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
     <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
         integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="./components/vuewswyg/vueWysiwyg.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@voerro/vue-tagsinput@1.11.2/dist/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+
+
+
     <link rel="stylesheet" href="./css/style.css">
     <title>TinyWP </title>
 </head>
 
 <body>
     <div id="app">
-         
-        <nav-bar v-if="nav" :username="username" @islogin="lagiLogin" :islogin="login" @click="whereWego"></nav-bar>
-       
+
+        <nav-bar v-if="nav" :username="username" @islogin="lagiLogin" :islogin="login" @usernamenya="username" @click="whereWego" @formpost="showFormPost"></nav-bar>
+
         <div class="row">
-            <form-register v-if="formRegister" ></form-register>
+            <form-register v-if="formRegister"></form-register>
             <form-login v-if="formLogin" @click="whereWego" @islogin="lagiLogin" :islogin="login"></form-login>
+            <show-one v-if="showOne" :article="post"></show-one>
+            <show-all v-if="showAllArticle"></show-all>
+            <search-result v-if="searchResult" :result="searchResultValue"></search-result>
         </div>
+     
         <div class="row" v-if="adminArea">
-            <sidebar-admin v-if="sidebarAdmin"></sidebar-admin>
-            <content-admin v-if="contentAdmin"></content-admin>
+                <br>
+                <br>
+            <sidebar-admin v-if="sidebarAdmin" ></sidebar-admin>
+            <content-admin @editform="showFormUpdate" @showonearticle="showGetOne" v-if="contentAdmin"></content-admin>
             <form-post v-if="formPost"></form-post>
+            <form-update v-if="formUpdate" :valuepost="post"></form-update>
         </div>
     </div>
 
-  
+
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <!-- Load polyfills to support older browsers -->
     <script src="//polyfill.io/v3/polyfill.min.js?features=es2015%2CMutationObserver" crossorigin="anonymous"></script>
     <!-- Load Vue followed by BootstrapVue -->
+
     <script src="//unpkg.com/vue@latest/dist/vue.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@voerro/vue-tagsinput@1.8.0/dist/voerro-vue-tagsinput.js"></script>
+    <script src="https://unpkg.com/vue-picture-input"></script>
     <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="./components/navbar.js"></script>
     <script src="./components/sidebar-admin.js"></script>
     <script src="./components//content-admin.js"></script>
+    <script src="./components/vuewswyg/vueWysiwyg.js"></script>
     <script src="./components/register.js"></script>
     <script src="./components/login.js"></script>
     <script src="./components/formpost.js"></script>
+    <script src="./components/formupdate.js"></script>
+    <script src="./components/search-result.js"></script>
+    <script src="./components//showone.js"></script>
+    <script src="./components/showall.js"></script>
     <script src="./js/main.js"></script>
+
 
 </body>
 

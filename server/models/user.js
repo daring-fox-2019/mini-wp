@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-const {bcrypt} = require('../helpers/')
-
+const { bcrypt } = require('../helpers')
 const UserSchema = new Schema({
     name: {
         type: String,
@@ -41,7 +40,7 @@ const UserSchema = new Schema({
     password: {
         type: String,
         required: [true, 'pasword tidak boleh kosong'],
-        minlength: [6, 'password harus lebih dari 6 char']
+        minlength: [6, 'password harus lebih dari 6 char'],
     }
 })
 UserSchema.pre('save', function (next) {

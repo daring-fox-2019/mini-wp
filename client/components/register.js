@@ -51,13 +51,27 @@ Vue.component('form-register', {
                     this.$refs.name = ""
                     this.$refs.email = ""
                     this.$refs.password = ""
+                    Swal.fire({
+                        type: 'success',
+                        title: 'Successfully registered',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
                     this.$parent.whereWego('login')
+
                 })
                 .catch(err => {
                     this.errorMsg = 'Wrong email/password'
                     this.$refs.email.value = ""
                     this.$refs.password.value = ""
                     console.log(err.message)
+                    Swal.fire({
+                        title: err.response.data.message,
+                        animation: false,
+                        customClass: {
+                            popup: 'animated swing'
+                        }
+                    })
                 })
         },
         

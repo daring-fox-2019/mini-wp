@@ -23,12 +23,14 @@ const storage = new GoogleCloudStorage.Storage({
 
 exports.sendUploadToGCS = (req, res, next) => {
     if (!req.file) {
+      
         return next();
     }
 
 
     const bucketName = req.body.bucketName || DEFAULT_BUCKET_NAME
     const bucket = storage.bucket(bucketName)
+    console.log(req.file,'ini di gcs upload req file')
     const gcsFileName = `${Date.now()}-${req.file.originalname}`
     const file = bucket.file(gcsFileName)
 

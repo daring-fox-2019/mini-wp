@@ -16,6 +16,10 @@ const ArticleSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
+    tags: [{
+        type:String,
+       
+    }],
     featured_image:String
 })
 

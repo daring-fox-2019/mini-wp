@@ -40,16 +40,33 @@ Vue.component('form-login', {
             })
                 .then(({ data }) => {
                     console.log(data.name)
+                    
                     localStorage.setItem('access_token', data.access_token)
                     localStorage.setItem('name', data.name)
                     axios.defaults.headers.common['access_token'] = localStorage.access_token
                     this.$emit('islogin', true)
+                    this.$emit('usernamenya',localStorage.name)
+                    Swal.fire({
+                        type: 'success',
+                        title: 'Success login',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
                     this.$parent.whereWego('adminarea')
+                    
                 })
                 .catch(err => {
                     this.$refs.email.value = ""
                     this.$refs.password.value = ""
                     console.log(err.message)
+                    Swal.fire({
+                        title: err.response.data.message,
+                        animation: false,
+                        customClass: {
+                            popup: 'animated swing'
+                        }
+                    })
+                    
 
                 })
         },
