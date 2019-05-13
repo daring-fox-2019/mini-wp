@@ -5,8 +5,8 @@ const article = require('../controller/article')
 const auth = require('../controller/auth')
 
 router.use('/auth',authRouter)
-router.get('/post-home',article.GetHomeArticles)
+router.get('/article-home',article.GetHomeArticles)
 router.use(auth.authorize)
-router.use('/post',articleRouter)
+router.use('/article',articleRouter)
 
 module.exports = router

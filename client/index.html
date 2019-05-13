@@ -68,21 +68,24 @@
                         logout
                     </button>
                 </div>
-                <div class="form-inline" v-if="!token">
-                    <div class="g-signin2" data-onsuccess="onGoogleSignIn" data-theme="dark"></div>
-                </div>
+                <!-- <div class="form-inline" v-if="!token"> -->
+                <div class="g-signin2" data-onsuccess="onGoogleSignIn" data-theme="dark"></div>
+                <!-- </div> -->
             </div>
         </nav>
         <div class="container-fluid">
             <div class="row">
+                <div class=" col-md-12 alert-danger" v-if="alert">
+                    {{alert}}
+                </div>
                 <div class="col-md-10 p-2 " v-if="(mainPage === 'home')">
-                    <Posttile @edit="setEdit" @read="setRead" @remove="setRemove" v-for="article in articles"
+                    <Posttile @edit="setEdit" @read="setRead" @remove="remove" v-for="article in articles"
                         :article="article" :key="article._id"></Posttile>
                 </div>
                 <div class="col-md-2 p-2" v-if="(mainPage === 'home')">
                     <div class="p-2" v-if="token">
-                        <button type="button" class="btn btn-primary" @click="setAdd">add article</button>                        
-                    </div>                    
+                        <button type="button" class="btn btn-primary" @click="setAdd">add article</button>
+                    </div>
                 </div>
                 <Editor @patch="addArticle" :article="newArticle" v-if="(mainPage==='create')"></Editor>
                 <Editor @patch="patchArticle" :article="editArticle" v-if="(mainPage==='edit')"></Editor>

@@ -11,12 +11,13 @@ var app = new Vue({
     reg: {},
     cred: {},
     user_id: null,
-    user_name:null,
-    user_email:null,
+    user_name: null,
+    user_email: null,
     mainPage: "home",
     readArticle: "",
     editArticle: "",
-    newArticle: ""
+    newArticle: "",
+    alert: null
   },
 
   mounted() {
@@ -30,13 +31,30 @@ var app = new Vue({
   },
   computed: {},
   methods: {
+    setAlert(message) {
+      this.alert = message
+      let self = this
+      setTimeout(() => { self.alert = null }, 2000)
+    },
     setRead(_id) {
       this.mainPage = "read"
       this.readArticle = this.articles.find(ar => ar._id == _id)
       console.log(`reading this article:`, _id)
     },
-    setRemove(_id) {
-      // this.readArticle = this.articles.find(ar=>ar._id==_id)
+    remove(_id) {
+      axios({
+        method: 'delete',
+        url: `${BACKEND}/article/${_id}`,
+        headers: { token: this.token },
+      })
+        .then(({ data }) => {
+          this.fetchHomeArticles()
+          this.mainPage = 'home';
+        })
+        .catch(err => {
+          this.setAlert(err.response.data.message)
+          console.log(err)
+        })
     },
     setEdit(_id) {
       console.log(`editting this article:`, _id)
@@ -61,22 +79,36 @@ var app = new Vue({
 
     },
     addArticle(article) {
-
+      axios({
+        method: 'post',
+        url: `${BACKEND}/article`,
+        data: article,
+        headers: { token: this.token },
+      })
+        .then(({ data }) => {
+          this.fetchHomeArticles()
+          this.mainPage = 'home';
+        })
+        .catch(err => {
+          this.setAlert(err.response.data.message)
+          console.log(err)
+        })
     },
     fetchHomeArticles() {
       axios
-        .get('http://localhost:3000/post-home')
+        .get('http://localhost:3000/article-home')
         .then(response => (this.articles = response.data))
         .catch(err => console.log(err))
     },
     logout() {
-      if (localStorage.getItem('login-method') === 'google') {
+      if(gapi.auth2.getAuthInstance().isSignedIn.get()){
+      // if (localStorage.getItem('login-method') === 'google') {
         const auth2 = gapi.auth2.getAuthInstance();
         auth2.signOut().then(function () {
-          console.log('User signed out.');
+          console.log('Google User signed out.');
         });
       }
-      
+
       localStorage.removeItem('mwp-token')
       localStorage.removeItem('user_id')
       localStorage.removeItem('user_email')
@@ -93,9 +125,8 @@ var app = new Vue({
       this.mainPage = 'home'
       // console.log(Object.keys(loginData))      
       axios.post(`${BACKEND}/auth/login`, loginData)
-        .then(({
-          data
-        }) => {
+        .then(({ data }) => {
+          this.logout()
           localStorage.setItem('mwp-token', data.token)
           localStorage.setItem('user_id', data.user._id)
           localStorage.setItem('user_email', data.user.email)
@@ -107,18 +138,17 @@ var app = new Vue({
           console.log(data)
         })
         .catch(err => {
+          this.setAlert(err.response.data.message)          
           console.log(err)
         })
     },
     regularRegister(registerData) {
       this.mainPage = 'home'
       axios.post(`${BACKEND}/auth/register`, registerData)
-        .then(({
-          data
-        }) => {
+        .then(({ data }) => {
           console.log(data)
-        })
-        .catch(err => {
+        }).catch(err => {
+          this.setAlert(err.response.data.message)          
           console.log(err)
         })
     }
@@ -136,9 +166,32 @@ function onGoogleSignIn() {
   console.log("Image URL: " + profile.getImageUrl());
   console.log("Email: " + profile.getEmail());
 
-  // The ID token you need to pass to your backend:
   let id_token = googleUser.getAuthResponse().id_token;
-  // app.token = id_token
-  // localStorage.setItem('mwp-token', id_token)
+  localStorage.setItem('login-method', 'google')
+  
+  axios({
+    method: 'post',
+    url: `${BACKEND}/auth/google-login`,
+    data: { token: id_token }
+  })
+    .then(({ data }) => {
+      console.log(data.user._id)
+      console.log(data.user.email)
+      console.log(data.user.name)
+      console.log(data.token)
+      app.token = data.token
+      app.user_id = data.user._id
+      app.user_email = data.user.email
+      app.user_name = data.user.name
+      app.mainPage = 'home';
+    })
+    .catch(err => {
+      app.logout()
+      app.setAlert(err.response.data.message)
+      console.log(err)
+    })
+
+
+
   localStorage.setItem('login-method', 'google')
 }

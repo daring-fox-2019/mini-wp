@@ -20,7 +20,7 @@ const functions = {
         // console.log(user.toObject())
         if (user && user.comparePassword(req.body.password)) {
             user = user.toObject()
-            delete user.password;            
+            delete user.password;
             let token = jwtGiveToken(user)
             console.log(token)
             res.status(201).json({ user, token })
@@ -34,21 +34,26 @@ const functions = {
             idToken: req.body.token,
             audience: process.env.GOOGLE_CLIENT_ID || 'none'
         })
+
         if (ticket) {
             let { email, name } = ticket.getPayload()
             let user = await User.findOne({ email })
             if (!user) { user = User.create({ password: generateStringOfNumber(8), email, name, image: ticket.picture }) }
             let jwt_token = jwtGiveToken(user)
-            res.status(201).json({
+            let response = {
                 user: { _id: user._id, name: user.name, email: user.email, },
                 token: jwt_token
-            })
+            }
+            console.log(`~~~~~~~~~~~~`)
+            console.log(response)
+            console.log(`~~~~~~~~~~~~`)
+            res.status(201).json(response)
         } else throw givesError(404, 'have you supplied the right google credentials')
     }),
 
     authorize: wrapAsync(async (req, res, next) => {
         let token = jwtVerifyToken(req.headers.token)
-        let user = User.findOne({ _id: token._id })
+        let user = await User.findOne({ _id: token._id })
         if (user) {
             req.user = user
             next()

@@ -5,6 +5,11 @@ Vue.component('Posttile', {
         }
     },
     props: ['article'],
+    computed:{
+        isAuthor:function(){
+            return this.$parent.user_id === this.article.author
+        }
+    },
     methods: {
         edit() {
             this.$emit('edit', this.article._id)
@@ -28,8 +33,10 @@ Vue.component('Posttile', {
                 </div>-->
             <div class= "p-2">
             <button class="btn btn-primary " @click="read">read more</button> 
+            <div v-if="isAuthor">
             <button class="btn btn-secondary" @click="edit">edit</button> 
-            <button class="btn btn-danger" @click="remove" >delete</button>                                                 
+            <button class="btn btn-danger" @click="remove" >delete</button>                                               
+            </div>  
             </div>
         </div>
      </div>
