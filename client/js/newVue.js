@@ -136,11 +136,12 @@ var app = new Vue({
         method: "GET",
         url: "/posts/read",
         headers: {
-          token: localStorage.getItem('token')
-        }
+        token: localStorage.getItem('token')
+      }
       })
         .then(response => {
           this.posts = [...response.data]
+          // console.log(this.posts[0].created_at.slice(0, 10))
           this.posts.forEach((obj, i) => {
             this.posts[i].created_at = new Date(this.posts[i].created_at.slice(0, 10)).toLocaleDateString("id-ID", { day: 'numeric', month: 'long', year: 'numeric' })
           })
@@ -150,15 +151,19 @@ var app = new Vue({
         })
     },
     createPost() {
-      // console.log(this.inputNewPost.image)
+      let formData = new FormData();
+      formData.append("title", this.inputNewPost.title)
+      formData.append("content", this.inputNewPost.content)
+      formData.append("image_url", this.inputNewPost.image)
       axios({
         method: "POST",
         url: "/posts/create",
-        data: {
-          title: this.inputNewPost.title,
-          content: this.inputNewPost.content,
-          // image: this.inputNewPost.image
-        },
+        data: formData,
+        // {
+        //   title: this.inputNewPost.title,
+        //   content: this.inputNewPost.content,
+        //   image: this.inputNewPost.image
+        // },
         headers: {
           token: localStorage.getItem('token')
         }
@@ -178,14 +183,14 @@ var app = new Vue({
         })
     },
     updatePost(id) {
+      let formData = new FormData();
+      formData.append("title", this.inputNewPost.title)
+      formData.append("content", this.inputNewPost.content)
+      formData.append("image_url", this.inputNewPost.image)
       axios({
         method: "PUT",
         url: `/posts/update/${id}`,
-        data: {
-          title: this.inputNewPost.title,
-          content: this.inputNewPost.content,
-          // image: this.inputNewPost.image
-        },
+        data: formData,
         headers: {
           token: localStorage.getItem('token')
         }
@@ -212,7 +217,7 @@ var app = new Vue({
       this.inputNewPost._id = post._id
       this.inputNewPost.title = post.title
       this.inputNewPost.content = post.content
-      this.inputNewPost.image = post.image
+      this.inputNewPost.imagePreview = post.image_url
     },
     deletePost(idPost) {
       Swal.fire({

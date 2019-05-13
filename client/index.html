@@ -176,7 +176,7 @@
 
     <div class="container mt-4" id="newpost-page" v-show="showNewPostPage">
       <h1>{{ formPostHeading }}</h1>
-      <form @submit.prevent="EditOrNew" method="post" enctype="multipart/form-data">
+      <form @submit.prevent="EditOrNew" enctype="multipart/form-data">
         <div class="form-group">
           <label for="title">Title</label>
           <input v-model="inputNewPost.title" type="text" class="form-control" name="title" id="title">

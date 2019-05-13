@@ -9,7 +9,7 @@ class PostController {
       user: req.decoded._id,
       title: req.body.title,
       content: req.body.content,
-      // image: req.body.image,
+      image_url: req.file.cloudStoragePublicUrl,
     })
     .then(result=>{
       res.status(201).json(result)
@@ -85,7 +85,7 @@ class PostController {
       title: req.body.title,
       content: req.body.content,
       created_at: req.body.created_at,
-      // image: req.body.image,
+      image_url: req.file.cloudStoragePublicUrl,
     })
     .then(result=>{
       res.status(200).json(result)

@@ -18,7 +18,7 @@ let postSchema = new Schema({
     type: Date,
     default: new Date()
   },
-  // image: String
+  image_url: String
 })
 
 let Post = mongoose.model('Posts', postSchema)
