@@ -165,7 +165,7 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
 
 - **GET LIST OF AUTH USER'S ARTICLES**
   - URL:
-    - **`GET`** *`<SERVER_URL>/user/todos`*
+    - **`GET`** *`<SERVER_URL>/user/articles`*
   - URL (filtered):
     - **`GET`** *`<SERVER_URL>/user/articles?search=<KEYWORD>`*
   - Header(s):
@@ -257,7 +257,7 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
     
 - **GET ARTICLE BY ID**
   - URL:
-    - **`GET`** *`<SERVER_URL>/todos/:id`*
+    - **`GET`** *`<SERVER_URL>/articles/:id`*
   - Expected response (status: `200`):
     ```json
       {
@@ -348,7 +348,7 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
   - Notes:
     - Authorization: only authenticated user's article can be accessed
   - URL(s):
-    - **`DELETE`** *`<SERVER_URL>/article/:id`*
+    - **`DELETE`** *`<SERVER_URL>/articles/:id`*
   - Header(s):
     - `token`: `String`
   - Expected response (status: `200`):
