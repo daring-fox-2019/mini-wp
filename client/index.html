@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Load required Bootstrap and BootstrapVue CSS -->
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
+    <link rel="stylesheet" href="./styles/vueWysiwyg.css">
+
+
+    <!-- google sign -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+    <meta name="google-signin-client_id"
+        content="456064564364-4uqf7d3f1b0av1rb0tt977atuss4l87v.apps.googleusercontent.com">
+
+
+    <!-- fontawesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+        integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <!-- css -->
+    <link rel="stylesheet" href="./styles/main.css">
+
+    <title>Mini WP</title>
+</head>
+
+<body>
+    <!-- check toasts -->
+    <!-- check tabs -->
+
+
+    <div id="app">
+        <!-- nav -->
+        <b-container fluid>
+            <b-container class="d-flex justify-content-between align-items-center p-1 border-bottom">
+                <b-nav class="mt-2 d-flex align-items-center">
+                    <b-nav-item disabled><i class="fab fa-wordpress"></i>&nbsp;Mini WP</b-nav-item>
+                    <b-nav-item @click="showHome">Home</b-nav-item>
+                    <!-- <b-nav-item active>Active</b-nav-item> -->
+                </b-nav>
+                <b-nav>
+                    <b-form inline>
+                        <label class="sr-only" for="inline-form-input-username">Username</label>
+                        <b-input-group append="Search" class="mb-2 mr-sm-2 mb-sm-0"
+                            v-show="show.page != 'editor' && show.page != 'editor2'">
+                            <b-input id="inline-form-input-username" placeholder="Search tags or title"
+                                v-model="searchbar"></b-input>
+                        </b-input-group>
+                    </b-form>
+                    <register-modal v-show="!show.login"></register-modal>
+                    <login-modal v-show="!show.login" @login-success="show.login = true"></login-modal>
+                    <b-nav-item-dropdown id="my-nav-dropdown" text="User Menu" extra-toggle-classes="nav-link-custom"
+                        v-show="show.login" right>
+                        <b-dropdown-item @click="showMyStories">My Stories</b-dropdown-item>
+                        <b-dropdown-divider></b-dropdown-divider>
+                        <b-dropdown-item>
+                            <a href="#" onclick="signOut();">Sign out</a>
+                        </b-dropdown-item>
+                    </b-nav-item-dropdown>
+                </b-nav>
+            </b-container>
+        </b-container>
+
+        <!-- modals starts here -->
+        <!-- login modal -->
+
+        <!-- register modal -->
+
+
+
+        <b-container v-show="show.page == 'home'">
+            <b-row id="wrapper">
+                <b-col cols=8>
+                    <b-row>
+                        <b-col>
+                            <a href="#" @click="showAllPublishedArticleAgain" v-show="show.onSearchResult"><i
+                                    class="fas fa-angle-double-left"></i> Back </a>
+                        </b-col>
+                    </b-row>
+
+                    <!-- article card -->
+                    <b-row class="article-card-container p-3">
+                        <b-col>
+                            <b-row class="p-3 border-bottom">
+                                <h2>Article Feed</h2>
+                            </b-row>
+
+
+                            <!-- article card viewer -->
+                            <article-card v-for="article in filteredArticleCards" :article="article" :key="article._id"
+                                @search-by-tag="searchByTag" @show-viewer="showViewer"></article-card>
+
+                            <b-row class="p-3 border-top d-flex justify-content-between" >
+                                <div>
+                                    <a href="#" @click="getPreviousPage" v-show="show.currentPage != 1"><i class="fas fa-angle-double-left"></i>
+                                        Previous Page
+                                    </a>
+                                </div>
+                                <div>
+                                    <a href="#" @click="getNextPage" v-show="filteredArticleCards.length >= 5">Next Page <i
+                                    class="fas fa-angle-double-right"></i></a>
+                                </div>
+                            </b-row>
+
+
+                        </b-col>
+
+                    </b-row>
+                </b-col>
+                <b-col cols=3 class="ml-5">
+                    <div class="live-clock border" style="margin-top: 70px;">
+                        <div style="text-align:center;padding:1em 0;">
+                            <h4><a style="text-decoration:none;"
+                                    href="https://www.zeitverschiebung.net/en/city/1642911"><span
+                                        style="color:gray;">Current local time in</span><br />Jakarta, Indonesia</a>
+                            </h4> <iframe
+                                src="https://www.zeitverschiebung.net/clock-widget-iframe-v2?language=en&size=small&timezone=Asia%2FJakarta"
+                                width="100%" height="90" frameborder="0" seamless></iframe>
+                        </div>
+                    </div>
+                </b-col>
+            </b-row>
+        </b-container>
+
+
+
+
+        <!-- main-body viewer -->
+        <b-container class="border" v-if="show.page == 'viewer'">
+            <b-row class="d-flex justify-content-center">
+                <b-col cols="7">
+                    <b-row class="font-serif mt-3">
+                        <h1>{{onViewer.title}}</h1>
+                    </b-row>
+                    <b-row>
+                        {{onViewer.subtitle}}
+                    </b-row>
+                    <b-row>
+                        <b-col>
+                            <b-row>
+                                <div style="width:50px; height:50px; border-radius:50%;"
+                                     class="border mr-3 d-flex justify-content-center align-items-center">
+                                     <i class="fab fa-wordpress fa-2x"></i>
+                                </div>
+                                <div class="col">
+                                    <b-row class="font-15 mt-1">
+                                        <b-col>
+                                            By: {{onViewer.user.name}}
+                                        </b-col>
+                                    </b-row>
+                                    <b-row class="font-10">
+                                        <b-col>
+                                            Published: {{onViewer.diff}}
+                                        </b-col>
+                                    </b-row>
+                                    <b-row>
+                                        <b-col cols=1>
+                                            <div style="font-size:13px; margin-top:2px;">Tags:</div>
+                                        </b-col>
+                                        <b-col style="font-size: 15px;">
+                                            <b-badge href="#" class="px-2" 
+                                                variant="light" 
+                                                v-for="(tag,index) in onViewer.tags"
+                                                @click="searchByTag({tag: tag.text})"
+                                                :key="index">{{tag.text}}</b-badge>
+                                        </b-col>
+                                    </b-row>
+                                </div>
+                            </b-row>
+                        </b-col>
+                    </b-row>
+                </b-col>
+            </b-row>
+
+
+            <!-- image in article -->
+            <b-row class="d-flex justify-content-center pt-3 pb-2">
+                <b-col cols="7" class="px-0" style="overflow:hidden; background:cover; width: 100%;">
+                    <img :src="onViewer.image" alt="" style="width:100%;">
+                    <!-- <b-row class="picture-detail d-flex justify-content-center pt-1 pb-4">
+                        Picture Detail
+                    </b-row> -->
+                </b-col>
+            </b-row>
+
+            <!-- comparison pics -->
+            <!-- <b-row class="d-flex justify-content-center pt-3 pb-2">
+                <b-col cols="7">
+                    <b-row class="px-0" style="overflow:hidden;  background:cover; width: 100%;">
+                        <img src="./assets/test-pic.jpg" alt="" style="background:cover;">
+                    </b-row>
+                    <b-row class="picture-detail d-flex justify-content-center pt-1 pb-4">
+                        Picture Detail
+                    </b-row>
+                </b-col>
+            </b-row> -->
+
+            <!-- article is here -->
+            <b-row class="d-flex justify-content-center font-serif font-20">
+                <b-col cols="7">
+                    <b-row class="px-0 ">
+                        <p v-html="onViewer.body">
+
+                        </p>
+                    </b-row>
+                </b-col>
+            </b-row>
+        </b-container>
+
+        <!-- editor  -->
+        <!-- submit -->
+        <b-container v-show="show.page == 'editor'">
+            <b-row class="d-flex justify-content-center">
+                <b-col cols=9>
+                    <b-row>
+                        <b-col class="d-flex justify-content-between mt-3">
+                            <div>
+                                <a href="#" @click="showMyStories"><i class="fas fa-angle-double-left"></i> Go back to
+                                    My Stories</a>
+                            </div>
+                            <b-button variant="outline-success" @click="goToEditor2">Ready to publish?</b-button>
+                        </b-col>
+                    </b-row>
+                    <b-form-group id="input-editor-title" label="Article Title:" label-for="editor-title">
+                        <b-form-input type="text" id="editor-title" required placeholder="Article Title here~"
+                            v-model="onEditor.title"></b-form-input>
+                    </b-form-group>
+                    <b-row>
+                        <b-col class="mb-1">
+                            Article Body:
+                        </b-col>
+                    </b-row>
+                    <!-- <wysiwyg v-model="text" :options="{image: {uploadURL: 'http://localhost:3000/images', dropzoneOptions: {} }}" /> -->
+                    <wysiwyg v-model=onEditor.body style="height: 634px;" :options="{ image: { uploadURL: serverUrl + '/images/wysiwyg'}, 
+                            dropzoneOptions: {headers:{'token': '12387518736286738476286374'}}, 
+                            maxHeight: '600px'}">
+                    </wysiwyg>
+                    <!-- <b-row>
+                        <b-col class="d-flex justify-content-end">
+                            <b-button variant="outline-success" @click="goToEditor2">Next</b-button>
+                        </b-col>
+                    </b-row> -->
+                </b-col>
+            </b-row>
+        </b-container>
+        <b-container v-show="show.page == 'editor2'">
+            <b-row class="d-flex justify-content-center">
+                <!-- <publish-form></publish-form> -->
+                <b-col>
+                    <b-row class="mt-5 row d-flex justify-content-center">
+                        <b-col cols=10>
+                            <a href="#" @click="getPreviousPage"><i class="fas fa-angle-double-left"></i> Back to
+                                Edit</a>
+
+                        </b-col>
+                    </b-row>
+                    <div class="row d-flex justify-content-center" style="width:100%;">
+                        <!-- submit form here -->
+                        <b-col cols="5" class="border-right pb-4">
+                            <b-row class="pt-4">
+                                <b-col>
+                                    <h3>Story Preview</h3>
+                                </b-col>
+                            </b-row style="width:100%;">
+                            <b-row style="height: 300px;overflow:hidden;" class="p-3">
+                                <b-col style="background-color:lightgrey;overflow:hidden;"
+                                    class="px-0 d-flex justify-content-center align-items-center">
+                                    <!-- <b-spinner variant="primary" label="Spinning"></b-spinner> -->
+                                    <img src="https://www.growtoretire.com/wp-content/themes/nucleare-pro/images/no-image-box.png"
+                                        alt="" style="width:inherit;" v-if="!onEditor.image">
+                                    <img :src="onEditor.image" alt="" style="width:inherit;" v-else>
+                                </b-col>
+                            </b-row>
+                            <b-row>
+                                <b-col>
+                                    <div class="input-group mb-3 mt-3">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="inputGroupFile02"
+                                                @change="uploadPicture">
+                                            <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" id="">Upload</span>
+                                        </div>
+                                    </div>
+                                    <!-- <b-form-file
+                                                v-model="file"
+                                                @change="uploadPicture"
+                                                :state="Boolean(file)"
+                                                placeholder="Choose a file..."
+                                                drop-placeholder="Drop file here..."
+                                            ></b-form-file> -->
+                                </b-col>
+                            </b-row>
+                        </b-col>
+                        <b-col cols="5" class="border-left pb-4">
+                            <b-row class="pt-4">
+                                <b-col>
+                                    <b-form style="width:100%;" class="mt-4">
+                                        <b-form-group id="input-group-4" label="Title:" label-for="title">
+                                            <b-form-input type="text" id="title" required placeholder="Input Title"
+                                                v-model="onEditor.title"></b-form-input>
+                                        </b-form-group>
+
+                                        <b-form-group id="input-group-4" label="Subtitle:" label-for="subtitle"
+                                            description="Subtitle will be shown under the title.">
+                                            <b-form-input type="text" id="subtitle" required
+                                                placeholder="Input Subtitle" v-model="onEditor.subtitle"></b-form-input>
+                                        </b-form-group>
+
+                                        <b-form-group id="tag-label" label="Tags" label-for="input-tags"
+                                            description="Tap enter after typing a tag.">
+                                            <div>
+                                                <vue-tags-input v-model="tag" :tags="tags"
+                                                    @tags-changed="newTags => tags = newTags" />
+                                            </div>
+                                            </b-form-input>
+                                        </b-form-group>
+                                    </b-form>
+                                </b-col>
+                            </b-row>
+                            <b-row>
+                                <b-col>
+                                    <b-button variant="outline-success" @click="saveThisDraft">Save draft</b-button>
+                                    <b-button variant="outline-success" @click="publishStory">Publish now</b-button>
+                                    <b-button variant="outline-dark">Publish for later</b-button>
+                                </b-col>
+                            </b-row>
+                            <!--<b-card class="mt-3" header="Form Data Result">
+                                        <pre class="m-0">test dimasukin { form } nanti</pre>
+                                    </b-card>-->
+                        </b-col>
+                    </div>
+                </b-col>
+            </b-row>
+        </b-container>
+
+
+
+        <!-- my stories list -->
+        <b-container v-show="show.page == 'my-stories'">
+            <b-row>
+                <b-col>
+                    <b-row class="d-flex justify-content-between px-4 py-4">
+                        <div class="font-verdana bold pt-4 pr-4">
+                            <h1>Your Stories</h1>
+                        </div>
+                        <div class="d-flex align-items-end">
+                            <b-button variant="outline-primary" @click="writeNewStory">Write a story</b-button>
+                        </div>
+                    </b-row>
+                    <b-row>
+                        <div style="width: 100%; border-bottom: 1px solid lightgrey;" class=" mx-4">
+                            <b-tabs class="nav-published-drafts">
+                                <!-- Add your b-tab components here -->
+                                <b-tab title="Drafts" active>
+                                    <b-container fluid>
+                                        <draft-published-card v-for="article in userDraftArticles" :key="article._id"
+                                            :article="article" @success-delete-article="getAllUserArticles"
+                                            @show-editor="showEditor"></draft-published-card>
+                                    </b-container>
+                                </b-tab>
+                                <b-tab title="Published">
+                                    <b-container fluid>
+                                        <draft-published-card v-for="article in userPublishedArticles"
+                                            :key="article._id" :article="article"
+                                            @show-published-in-editor="showPublishedInEditor"></draft-published-card>
+                                    </b-container>
+                                </b-tab>
+                            </b-tabs>
+                        </div>
+                    </b-row>
+                </b-col>
+            </b-row>
+        </b-container>
+
+
+
+        <!-- app ends here -->
+
+    </div>
+
+
+    <!-- lodash -->
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js"></script>
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- Load polyfills to support older browsers -->
+    <script src="//polyfill.io/v3/polyfill.min.js?features=es2015%2CMutationObserver" crossorigin="anonymous"></script>
+    <!-- vue script local -->
+    <script src="./scripts/vue.js"></script>
+    <!-- bootstrap vue script -->
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+    <!-- wysiwyg -->
+    <script src="./scripts/vueWysiwyg.js"></script>
+    <!-- swal -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <!-- moment js -->
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.24.0/moment.min.js"></script>
+
+    <!-- vue-tags -->
+    <script src="https://unpkg.com/@johmun/vue-tags-input/dist/vue-tags-input.js"></script>
+
+    <!-- components -->
+    <script src="./scripts/components/vue-tags.js"></script>
+    <script src="./scripts/components/register-modal.js"></script>
+    <script src="./scripts/components/login-modal.js"></script>
+    <script src="./scripts/components/publish-form.js"></script>
+    <script src="./scripts/components/article-card.js"></script>
+    <script src="./scripts/components/draft-published-card.js"></script>
+
+
+    <script src="./scripts/google-sign.js"></script>
+    <script src="./scripts/main.js"></script>
+
+    <script src="./scripts/components/login-modal.js"></script>
+
+</body>
+
+</html>
