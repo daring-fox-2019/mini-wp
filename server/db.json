@@ -1,0 +1,11 @@
+{
+  "articles": [
+    {
+      "title": "article 1",
+      "content": "ini article 1",
+      "created_at": "2019-05-08T05:16:36.770Z",
+      "img": "https://scontent-sea1-1.cdninstagram.com/vp/9fb6549e2c697cdca87489f05ea0a1dd/5D705334/t51.2885-19/s150x150/55778917_621877284951923_2049740062177886208_n.jpg?_nc_ht=scontent-sea1-1.cdninstagram.com",
+      "id": 1
+    }
+  ]
+}

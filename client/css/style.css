@@ -1,0 +1,53 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+body{
+    font-family: sans-serif;
+}
+nav{
+    color: darkblue;
+    background-color: #7EC4E2;
+    font-size: 30px;
+}
+#form-register, #form-login, #awal{
+    background-image: url('../assets/bg.png');
+    height: 100vh;
+}
+#sidebar{
+    background-color:rgb(99, 173, 204);
+    position: fixed;
+    height: 100%;
+}
+#liSidebar{
+    list-style: none;
+}
+#navUser{
+    margin-top: 15px;
+}
+#userIcon{
+    margin-left: 20px;
+    font-size: 35px
+}
+#logo img{
+    height: 80px;
+}
+#editor{
+    padding: 20px;
+}
+#sidebarList{
+    list-style: none;
+    text-align: center
+}
+.card-body{
+    background-color: rgb(113, 213, 255)
+}
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #77C1E3;
+    color: white;
+    text-align: center;
+  }
