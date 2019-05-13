@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Neuton" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    
+    <title>Mini-WP</title>
+</head>
+<body>
+    <div id="app">
+        <nav class="sticky-top">
+            <div id="search-form">
+                <form class="form-inline">
+                    <input class="form-control mr-sm-2" v-model="searchQuery" type="text" placeholder="Search">
+                    <!-- <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> -->
+                </form>
+            </div>
+            <div class="logo">
+                <div id="logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Wordpress_Blue_logo.png"
+                    alt="wordpress logo">
+                    my Wordpress
+                </div>
+            </div>
+            <div class="acc-notif" >
+                    <button v-on:click="articlePage = false" id="new-article" style="margin-right:20px; margin-bottom: 2px" type="button" class="btn btn-success btn-sm"><i class="fas fa-feather-alt" style="margin-right: 10px"></i>New Article</button>
+                <button class="btn"><i  class="icon-right fas fa-user-circle fa-lg" style="margin-right: 10px"></i></button><button class="btn"><i class="icon-right fas fa-bell fa-lg" style="margin-right: 10px"></i></button>
+            </div>
+        </nav>
+        <div id="container" class="container-fluid">
+            <div class="row">
+                <nav id="sidebar" class="sidebar col-md-2 d-none d-md-block">
+                    <div class="sidebar">
+                        <h4 class="sidebar-heading d-flex justify-content-center ">Navigation Head</h4>
+                        <div>
+                           <h5>Article List</h5> 
+                            <div class="nav flex-column" id="articles" v-for="article in articles" >
+                                <li class="nav-item "><button class="btn">{{article.title}}</button></li>
+                            </div>   
+                        </div>
+                    </div>
+                </nav>    
+                <div id="content" class="col-10 offset-2" style="overflow:scroll; height: 900px">
+                    <br><br>
+                    <div v-show="detail" id="detailed-article">
+                        <div class="card col-10 offset-1">
+                            <h4 class="card-header">{{articleDetail.title}}</h4>
+                            <p>{{articleDetail.content}}</p>
+                            <button id="back-to-list" type="button" class="btn btn-primary" v-on:click="articlePage = true; detail = false">back</button>
+                        </div>
+                    </div>
+                    <div v-show="!detail && articlePage" id="content-list" class="card text-center col-8 offset-2">
+                        <div class="card-header">
+                            <ul class="nav nav-pills card-header-pills">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Published</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#">Draft</a>
+                            </li>
+                            </ul>
+                        </div>
+                        <div class="card-body row d-flex justify-content-center" v-if="articlePage">
+                            <!-- <li v-for="article in articles" :key="article.id">
+                                {{article}}
+                            </li> -->
+                            <div class="card col-5 mb-2 mr-2 d-flex " v-for="article in filteredResources" :key="article._id">
+                                <div v-show="article.showStatus = true" class="card">
+                                    <img class="img-thumbnail" :src=article.image alt="">
+                                    <div class="card-body d-flex justify-content-between">
+                                    </div>
+                                    <span><b>{{article.title}}</b></span>
+                                    <span>{{article.created_at.substring(0,10)}}</span>
+                                    <span>{{article.description}}</span>
+                                </div>
+                                <span class="card-content text-truncate">{{article.content}}</span>
+                                <div>
+                                    <a class="col-sm-6" v-on:click="showArticle(article)" href="#">detail</a><a class="col-sm-6" @click.prevent="article.showStatus=false;deleteArticle(article._id)" href="#">delete</a><a class="col-sm-6" @click.prevent="editArticle(article._id)" href="#">edit</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div v-show="!articlePage && !editPage">
+                        <div>
+                        <form id="create-form" class="col-10 offset-1">
+                            <div class="form-group">
+                                <input v-model="newArticle.title" type="text" class="form-control" id="title" placeholder="Title">
+                                <input v-model="newArticle.description" type="text" class="form-control" id="description" placeholder="Description">
+                                <input v-model="newArticle.image" type="text" class="form-control" id="image-url" placeholder="url-img">
+                                
+                            </div>
+                            <div id="editor1" >
+                                <textarea id="body" cols="60" rows="10" v-model="newArticle.content"></textarea>                                                                
+                                <br><button id="create-article" type="button" class="btn btn-success" v-on:click="articlePage = true; createArticle()">create article</button>
+                            </div>
+                        </form>
+                        </div>
+                    </div>
+                    <div v-show="editPage === true">
+                        <div>
+                        <form id="edit-form" class="col-10 offset-1">
+                            <div class="form-group">
+                                <input v-model="newArticle.title" type="text" class="form-control" id="title" placeholder="Title">
+                                <input v-model="newArticle.description" type="text" class="form-control" id="description" placeholder="Description">
+                            </div>
+                            <div id="editor2" class="col-12">
+                                <textarea id="body" cols="60" rows="10" v-model="newArticle.content"></textarea>                                
+                                <!-- <textarea id="body" class="ckeditor" cols="80" rows="10" v-model="newArticle.content" name="editor1"></textarea> -->
+                                <br><button id="create-article" type="button" class="btn btn-success" v-on:click="articlePage = true; editArticleDb(newArticle.id)">edit article</button>
+                            </div>
+                        </form>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <p>footer</p>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="javascript/vue.js"></script>
+    <!-- <script src="https://cdn.ckeditor.com/4.11.4/standard/ckeditor.js"></script>
+    <script>CKEDITOR.replace( 'editor1' ) -->
+    </script>
+    <!-- <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script>
+        var quill = new Quill('#editor1', {
+          theme: 'snow',
+          color: 'white'
+        });
+    </script>
+    <script>
+        var quill = new Quill('#editor2', {
+          theme: 'snow',
+          color: 'white'
+        });
+    </script> -->
+</body>
+</html>
