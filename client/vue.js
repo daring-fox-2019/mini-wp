@@ -161,7 +161,6 @@ const app = new Vue({
         },
         updatePage:function(id){
             //masih error kalau #updateArticlePage dengan v-if. kalau dengan v-show, updateArticle nya nggk ke render dalam page
-            console.log('hai')
             axios({
                 method:'GET',
                 url:`${baseURL}/articles/${id}`,
@@ -170,16 +169,13 @@ const app = new Vue({
                 }
             })
             .then(({data})=>{
-                updateArticle.title = data.title
-                updateArticle.text = data. text
+                this.updateArticle.title = data.title
+                this.updateArticle.text = data.content
                 console.log(data)
-                console.log(updateArticle.title)
+                console.log(this.updateArticle.title)
+                this.toShowAndHide("updateArticlePage")
             })
-            .then(()=>{
-                console.log('hai')
-                this.toShowAndHide("updateArticle")
-            })
-            .catch(({error})=>{
+            .catch((error)=>{
                 console.log('masuk error')
                 console.log(error)
             })
