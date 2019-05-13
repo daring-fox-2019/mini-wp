@@ -22,8 +22,7 @@ Vue.component('dd-article-form', {
       url: `${serverURL}/tags`
     })
       .then(({ data }) => {
-        this.items = data.tags;
-        this.items = this.items.map(item => item.title);
+        this.items = data.tags.map(item => item.title);
       })
       .catch(err => {
         const { status } = err.response;

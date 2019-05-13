@@ -24,8 +24,7 @@ Vue.component('dd-editing-form', {
       url: `${serverURL}/tags`
     })
       .then(({ data }) => {
-        this.items = data.tags;
-        this.items = this.items.map(item => item.title);
+        this.items = data.tags.map(item => item.title);
       })
       .catch(err => {
         const { status } = err.response;
@@ -42,12 +41,18 @@ Vue.component('dd-editing-form', {
           })
         }
       })
-    const { title, text } = this.editingArticle;
+    const { title, text, tags } = this.editingArticle;
     this.article.title = title;
     this.article.text = text;
+    this.article.tags = tags.map(tag => tag.title);
   },
 
   methods:{
+    remove (item) {
+      this.article.tags.splice(this.article.tags.indexOf(item), 1)
+      this.article.tags = [...this.article.tags]
+    },
+    
     resetForm() {
       this.article.title = '';
       this.article.text = '';

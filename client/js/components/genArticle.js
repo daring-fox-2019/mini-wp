@@ -24,8 +24,9 @@ Vue.component('dd-gen-article', {
       </v-card-title>
 
       <v-card-actions>
-        <v-btn flat color="orange">Share</v-btn>
-        <v-btn flat color="orange">Explore</v-btn>
+        <v-layout row wrap justify-center>
+          <dd-tag @search="$emit('search', tag.title)" v-for="(tag, i) in article.tags" :key="i" :tag="tag.title"></dd-tag>
+        </v-layout>
       </v-card-actions>
     </v-card>
   </div>

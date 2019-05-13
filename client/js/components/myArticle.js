@@ -48,6 +48,9 @@ Vue.component('dd-my-article', {
           <p>
             <span v-html="article.text"></span>
           </p>
+          <v-layout row wrap justify-center>
+            <dd-tag @search="$emit('search', tag.title)" v-for="(tag, i) in article.tags" :key="i" :tag="tag.title"></dd-tag>
+          </v-layout>
         </v-card-text>
       </v-slide-y-transition>
       </v-card>

@@ -107,10 +107,10 @@
                       <img v-if="filtered.length === 0" style="width:70%" src="./assets/noFound.png" alt="noFound">
                     </v-layout>
                     <div v-if="isGeneral">
-                      <dd-gen-article v-for="(article, i) in filtered" :article="article" :key="i"></dd-gen-article>
+                      <dd-gen-article @search="search" v-for="(article, i) in filtered" :article="article" :key="i"></dd-gen-article>
                     </div>
                     <div v-else>
-                      <dd-my-article @delete-article="deleteArticle" @edit-article="fetchOne" v-for="(article, i) in filtered" :article="article" :key="i"></dd-my-article>
+                      <dd-my-article @search="search" @delete-article="deleteArticle" @edit-article="fetchOne" v-for="(article, i) in filtered" :article="article" :key="i"></dd-my-article>
                     </div>
                   </div>
                   
@@ -141,6 +141,7 @@
   <script src="./js/components/genArticle.js"></script>
   <script src="./js/components/articleForm.js"></script>
   <script src="./js/components/editingForm.js"></script>
+  <script src="./js/components/tag.js"></script>
   <script src="./js/index.js"></script>
 </body>
 </html>

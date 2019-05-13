@@ -48,10 +48,14 @@ let app = new Vue ({
 
   methods: {
     search(keyword) {
+      console.log(keyword);
       if (!keyword) {
         this.filtered = this.isGeneral ? this.articles : this.myArticles;
       } else {
-        this.filtered = (this.isGeneral ? this.articles : this.myArticles).filter(article => article.title.toLowerCase().match(keyword.toLowerCase()));
+        this.filtered = (this.isGeneral ? this.articles : this.myArticles).filter(article => {
+          const founds = article.tags.filter(tag => tag.title.toLowerCase().match(keyword.toLowerCase()))
+          return article.title.toLowerCase().match(keyword.toLowerCase()) || founds.length;
+        });
       }
     },
 
