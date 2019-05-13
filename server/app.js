@@ -7,8 +7,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const cors = require('cors');
 const mongoose = require('mongoose');
-const DATABASE = 'mini-wp-1'
-mongoose.connect(`mongodb://localhost/${DATABASE}`, { useNewUrlParser: true })
+mongoose.connect(process.env.MONGOOSE_CONNECTION, { useNewUrlParser: true })
   .then(connection => {
     console.log('database connected');
   })

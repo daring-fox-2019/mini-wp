@@ -17,7 +17,7 @@
 <body>
   <div id="app">
     <v-app>
-      <div v-if="isWelcome">
+      <div v-show="isWelcome">
         <v-container class="pa-0">
           <v-layout style="height:100vh;"row align-center justify-center>
             <v-flex xs4>
@@ -33,7 +33,7 @@
         </v-container>
       </div>
       
-      <div v-else>
+      <div v-show="!isWelcome">
         <div
           class="hide-overflow"
           style="position:relative;"
