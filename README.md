@@ -1,5 +1,10 @@
 # Mini Wordpress
 
+## Link Deploy
+Server: `http://mini-wp-server.emrido.site/`
+
+Client: `http://mini-wp.emrido.site/`
+
 ## Basic Routes
 | Route | HTTP | Request | Response |
 |--|--|--|--|
