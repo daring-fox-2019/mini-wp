@@ -57,7 +57,8 @@ class ControllerArticles{
             author: req.decoded.id,
             title: req.body.title,
             content: req.body.content,
-            created_at: new Date()
+            created_at: new Date(),
+            img: req.body.img
         })
         .then(response => {
             res.status(201).json({
@@ -66,6 +67,7 @@ class ControllerArticles{
             })
         })
         .catch(err => {
+            console.log(err,'-------')
             res.status(500).json({
                 msg : "Internal Server Error"
             })
@@ -78,7 +80,8 @@ class ControllerArticles{
         }, {
             title: req.body.title,
             content: req.body.content,
-            created_at: new Date()
+            created_at: new Date(),
+            img: req.body.img
         })
         .then(response => {
             if(response){
@@ -104,6 +107,7 @@ class ControllerArticles{
             _id : req.params.id
         })
         .then(response => {
+            console.log(req.params)
             if (response.deletedCount == 0){
                 res.status(404).json({
                     msg: "Data Not Found, Failed Delete Data"

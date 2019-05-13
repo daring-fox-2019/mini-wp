@@ -1,10 +1,12 @@
 const Article = require('../models/article')
 
 module.exports = function(req, res, next){
+    console.log(req.params)
     Article.findById({
         _id: req.params.id
     })
     .then(response => {
+        console.log(response, 'author')
         if(response){
             if(req.decoded.id == response.author){
                 next()
@@ -21,7 +23,7 @@ module.exports = function(req, res, next){
     })
     .catch(err => {
         res.status(500).json({
-            msg: "Internal Server Error"
+            msg: "Internal Server Error author"
         })
     })
 }
