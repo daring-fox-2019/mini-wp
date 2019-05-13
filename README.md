@@ -1,4 +1,31 @@
 # mini-wp
+## routes
+
+**POST baseurl /auth/login**
+to get a token, to authorize some further access of API
+
+**POST baseurl /auth/register**
+to register a credential, to access the api later
+
+**POST baseurl /auth/google-login**
+to generate api token, using google oAuth2 token
+
+**GET baseurl /article-home**
+to get articles shown at home page
+
+**GET baseurl /article/:id**
+to get an article
+
+**POST baseurl /article**
+to create an article, require api token
+
+**PATCH baseurl /article/:id**
+to update an article, require api token
+
+**DELETE baseurl /article/:id**
+to delete an article, require api token
+
+
 
 ### Authentication
 
@@ -54,9 +81,9 @@
 
 **Method**: `POST`
 
-**URL**: `/auth/login`
+*URL*: `/auth/login`
 
-**Request Body**:
+*Request Body*:
 
 ```javascript
 {
@@ -125,8 +152,9 @@
 ```
 
 #### Delete Article
+
 **method** POST
-**url** /article
+**url** /article/:id
 **header**
 
 ```javascript
@@ -136,7 +164,7 @@
 ```
 
 **response success** 
-**status** 201
+**status** 204
 **body** 
 
 ```javascript
