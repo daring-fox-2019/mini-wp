@@ -4,79 +4,176 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Mini-Wp</title>
-    <link rel="stylesheet" type="text/css" href="./css/style.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-    <script src="https://cdn.ckeditor.com/4.11.4/standard/ckeditor.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/style.css">
+    <meta name="google-signin-client_id" content="649351451430-1jhrtp6ai8glv97gm4ci7u2vm04r1jio.apps.googleusercontent.com">
+    <title>Vue Demo</title>
+</head>
 <body>
-    <nav class="navbar navbar-dark bg-dark">
-            <a class="navbar-brand" href="#">
-                <i class="fab fa-pied-piper mr-4"></i>
-                Piedpiper
-            </a>
-    </nav>
-    <div class="container">
-        <div class="row">
-            <div id='sidebar' class='col-sm-4 ml-4'>
-                    <div class="sidenav">
-                        <ul>
-                            <li>
-                                <a href="#">About</a>
-                            </li>
-                            <li>
-                                <a href="#">Services</a>
-                            </li>
-                            <li>
-                                <a href="#">Clients</a>
-                            </li>
-                            <li>
-                                <a href="#">Contact</a>
-                            </li>
-                        </ul>                        
+    <div id='app'>
+      <div class="container" v-show="condition == 'notlogin'">
+        <div class="row mt-5 pt-5 pb-5" style="justify-content:center;">
+          <div class="col-md-4">
+            <div id="login" v-show="loginForm == 'login'">
+                <h3>Login</h3>
+                <form v-on:submit.prevent="loginUser">
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Email address</label>
+                      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" v-model="email">
                     </div>
-            </div>
-            <div class='col-sm-8'>
-                    <div class="main">
-                            <div id="content">
-                                    <h1>Mini-Wp</h1>
-                                    <br>
-                                    <textarea name="editor1"></textarea>
-                                    <script>
-                                            CKEDITOR.replace( 'editor1' );
-                                    </script>
-                                    <button type="button" class="btn btn-dark">POST</button>
-                                    <h2>Collapsible Sidebar Using Bootstrap 4</h2>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                        
-                                    <div class="line"></div>
-                        
-                                    <h2>Lorem Ipsum Dolor</h2>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                        
-                                    <div class="line"></div>
-                        
-                                    <h2>Lorem Ipsum Dolor</h2>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                        
-                                    <div class="line"></div>
-                        
-                                    <h3>Lorem Ipsum Dolor</h3>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                                </div>
-                                <footer class="container">
-                                        <p class="float-right"><a href="#">Back to top</a></p>
-                                        <p>© Piedpiper Inc. <a href="#">Privacy</a> · <a href="#">Terms</a></p>
-                                </footer>
-                            </div>
+                    <div class="form-group">
+                      <label for="exampleInputPassword1">Password</label>
+                      <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" v-model="password">
                     </div>
+                    <div id="localsign">
+                        <button type="submit" class="btn btn-dark btn-sm">login</button>
+                        <a href="#" style="text-decoration:none;margin-left:50%;" @click="showregister">already register?</a>
+                    </div>
+                    <br>
+                    <div id="googleSign">
+                        <h6 style="text-align:center;"><i>or login with your google account</i></h6>
+                        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                    </div>
+                </form>
             </div>
+            <div id="register" v-show="loginForm == 'register'">
+                <h3>Register</h3>
+                <form v-on:submit.prevent="registerUser">
+                    <div class="form-group">
+                      <label for="exampleInputEmail">Email address</label>
+                      <input type="email" class="form-control" id="exampleInputEmail2" aria-describedby="emailHelp" placeholder="Enter email" v-model="email">
+                      <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputPassword1">Password</label>
+                      <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password" v-model="password">
+                    </div>
+                    <button type="submit" class="btn btn-dark btn-sm">Register</button>
+                    <a href="#" style="text-decoration:none;margin-left:50%;" @click="showlogin"> <-- go to login</a>
+                </form>
+            </div>
+          </div>
         </div>
+      </div>
+      <div v-show="condition == 'login'">
+          <aside class="sidebar">
+              <nav id="sidebar" class="nav">
+                  <img class="ml-3 mt-5" v-bind:src="imageProfile" width="100" height="100" alt="">
+                <ul class="ml-4 mt-4">
+                  <li class="active"><a href="#">Welcome</a></li>
+                  <br>
+                  <li><a href="#" @click="uncheck" onclick="signOut()">logout</a></li>
+                </ul>
+              </nav>
+            </aside>
+          <nav class="topnav" id="navigation" class="navbar navbar-light bg-light">
+              <!-- <a class="navbar-brand" href="#">
+                <img src="https://fossies.org/linux/www/bootstrap-4.3.1.tar.gz/bootstrap-4.3.1/site/docs/4.3/assets/img/favicons/mstile-310x310.png" width="30" height="30" class="d-inline-block align-top" alt="">
+                Bootstrap
+              </a> -->
+              <form class="form-inline">
+                  <input class="form-control mr-sm-2 form-control-sm" type="search" placeholder="Search" aria-label="Search" v-model="searchField">
+                  <button class="btn btn-dark my-2 my-sm-0 btn-sm" type="submit">Search</button>
+              </form>
+            </nav>
+            <div id="create-article">
+                <a class="navbar-brand pt-5" href="#">
+                    <img src="https://fossies.org/linux/www/bootstrap-4.3.1.tar.gz/bootstrap-4.3.1/site/docs/4.3/assets/img/favicons/mstile-310x310.png" width="30" height="30" class="d-inline-block align-top" alt="">
+                    Bootstrap
+                  </a>
+                <br>
+                <br>
+                <button type="button" class="btn btn-dark mt-4 btn-sm" v-on:click="displayCreate">add new article</button>
+                <br>
+                <br>
+                <div id='submit-form' v-if="showCreate" class="container border">
+                    <button type="button" class="close" aria-label="Close" @click="closeArticle">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <form style="margin:5%" v-on:submit.prevent="createArticle">
+                        <div class="form-group">
+                            <label for="exampleFormControlInput1">Title</label>
+                            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="title..." v-model="title">
+                        </div>
+                        <div class="input-group mb-3">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">Upload</span>
+                          </div>
+                          <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="inputGroupFile01" @change="onFileSelected">
+                            <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="exampleFormControlInput2">Author</label>
+                          <input type="text" class="form-control" id="exampleFormControlInput2" placeholder="Author" v-model="author">
+                      </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlTextarea1">Content</label>
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="8" placeholder="put your text..." v-model="content"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-dark btn-sm">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div id="read-article" v-show="read">
+              <div class="container">
+                <div class="row" style="justify-content:center;">
+                  <div class="col-8">
+                      <div class="blog-post">
+                          <button type="button" class="close" aria-label="Close" @click="close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                          <h2 class="blog-post-title">{{readArticle.title}}</h2>
+                          <img v-bind:src="readArticle.image" alt="Smiley face" height="250" width="400">
+                          <p class="blog-post-meta">{{readArticle.createdAt}} by <a href="#">{{readArticle.author}}</a></p>
+                          <p>
+                              {{readArticle.content}}
+                          </p>
+                        </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="articles" class="container">
+                <div class="row">
+                          <div id="sub-article" class="col-md-4 mb-2 ml-5" v-for="(article,index) in filterArticles">
+                              <div class="card mb-5" style="max-width: 600px;">
+                                  <div class="row no-gutters">
+                                    <div class="col-md-4 mt-4">
+                                      <img v-bind:src="article.image" class="card-img" alt="..." width="160" height="160">
+                                    </div>
+                                    <div class="col-md-8">
+                                      <div class="card-body">
+                                        <h5 class="card-title">{{article.title}}</h5>
+                                        <p id='content-post' class="card-text">{{article.content}}</p>
+                                        <p class="card-text"><small class="text-muted">{{article.author}}</small></p>
+                                        <p class="card-text"><small class="text-muted">{{article.createdAt}}</small></p>
+                                        <br>
+                                            <button class="btn btn-danger btn-sm" v-on:click.stop.prevent="deleteArticle(index)" style="font-size:10px;">Delete</button>
+                                            <button type="button" class="btn btn-warning btn-sm" v-on:click="updateArticle(index)" style="font-size:10px;">Update</button>
+                                            <a href="#" style="text-decoration:none;font-size:10px;margin-left:11%;" @click.prevent="fullread(index)">read more...</a>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+                      </div>
+
+              </div>
+          </div>
+      </div>  
     </div>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="main.js"></script>
+    <script src="./js/gsign.js"></script>
 </body>
 </html>
