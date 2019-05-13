@@ -218,7 +218,7 @@ let app = new Vue({
             this.articleBody = ''
             this.articleTitle = ''
             this.currentTags = []
-
+            this.editor = false
             this.currentPage = "writePage"
         },
         editarticle(id) {
@@ -248,8 +248,8 @@ let app = new Vue({
             let idnya = this.currentArticle._id
 
             let formData = new FormData()
-            formData.append('title', this.currentArticle.title)
-            formData.append('content', this.currentArticle.content)
+            formData.append('title', this.articleTitle)
+            formData.append('content', this.articleBody)
             formData.append('image', this.image)
             formData.append('tags',this.currentTags)
             
