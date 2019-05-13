@@ -8,8 +8,12 @@ Vue.component('dd-editing-form', {
   data() {
     return {
       article: {
+        valid: false,
         head: 'Edit article',
         title: '',
+        titleRules: [
+          v => !!v || 'Title is required',
+        ],
         text: '',
         image: null,
         tags: []
@@ -96,12 +100,14 @@ Vue.component('dd-editing-form', {
   template: `
   <div>
     <span class="display-1">{{ article.head }}</span>
-    <v-form @submit.prevent="uploadFile" class="mb-3">
+    <v-form @submit.prevent="uploadFile" v-model="article.valid" class="mb-3">
       <v-layout row class="mt-3">
         <v-text-field
           v-model="article.title"
+          :rules="article.titleRules"
           label="Title"
           outline
+          required
         ></v-text-field>
       </v-layout>
       <v-layout row>
