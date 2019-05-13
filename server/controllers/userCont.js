@@ -45,7 +45,7 @@ class UserController {
               }
               let token = jwt.sign(payload, process.env.KUNCI)
               console.log('token --->', token, '<---token')
-              res.status(200).json({ token, name, passRandom })
+              res.status(201).json({ token, name, passRandom })
             })
             .catch((err) => {
               res.status(500).json(err)
@@ -66,8 +66,8 @@ class UserController {
         password: req.body.password
       })
       .then(user => {
-        res.status(200).json({
-          message: "login success"
+        res.status(201).json({
+          message: "register success"
         })
       })
       .catch(err => {
