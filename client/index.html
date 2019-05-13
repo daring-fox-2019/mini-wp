@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="google-signin-client_id"
+    content="1060952704466-ijc0pb0vk81ukmg2hk21de0sc6e0kf15.apps.googleusercontent.com">
+  <title>Mini WP</title>
+
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.11.2/build/css/alertify.min.css" />
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.11.2/build/css/themes/default.min.css" />
+
+  <link rel="stylesheet" href="/resources/wysiwyg/vueWysiwyg.css">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+    integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="/resources/css/style.css">
+</head>
+
+<body>
+
+  <div id="app" class="">
+
+    <!-- - ============================================== NAVBAR ============================================== -->
+    <nav class="navbar navbar-primary bg-primary text-light">
+      <a class="navbar-brand">Mini WP</a>
+      <div class=col-3>
+        <div class="input-group" v-show="page === 'home'">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="addon-wrapping"><i class="fas fa-search"></i></span>
+          </div>
+          <input type="text" class="form-control" placeholder="Search Article, tag, or content part" aria-label="Search Article"
+            aria-describedby="addon-wrapping" v-model="searchBox">
+        </div>
+      </div>
+      <div>
+        <button class="btn btn-light" type="button" data-toggle="collapse" data-target="#new-post" aria-expanded="false"
+          aria-controls="new-post" v-show="page === 'home'">
+          New Article
+        </button>
+      </div>
+    </nav>
+    <div v-show="page === 'login'">
+      <div class="container my-4">
+        <div class="row justify-content-center">
+          <div class="col-4">
+            <div class="card mb-4">
+              <div class="card-header text-center">Login</div>
+              <div class="card-body">
+                <form method="post" @submit.prevent="login">
+                  <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input type="email" class="form-control" id="email" aria-describedby="emailHelp"
+                      placeholder="Enter email" v-model="loginUser.email">
+                    <small id="emailHelp" class="form-text text-muted">
+                      We'll never share your email with anyone else.
+                    </small>
+                  </div>
+                  <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" placeholder="Password"
+                      v-model="loginUser.password">
+                  </div>
+                  <div class="form-group">
+                    <label for="password" style="margin-top: 20px;">Or sign in using google below</label>
+                    <div class="g-signin2" data-onsuccess="onSignIn" style="display: flex; justify-content: center">
+                    </div>
+                    <!-- <a href="#" onclick="signOut()">Sign out</a> -->
+                  </div>
+                  <div style="display: flex; justify-content: space-between;">
+                    <button type="submit" class="btn btn-primary">Login</bi>
+                      <button type="submit" class="btn btn-secondary" @click.prevent="page = 'register'">Register</bi>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-show="page === 'register'">
+      <div class="container my-4">
+        <div class="row justify-content-center">
+          <div class="col-4">
+            <div class="card mb-4">
+              <div class="card-header text-center">Register</div>
+              <div class="card-body">
+                <form method="post" @submit.prevent="register">
+                  <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="name" class="form-control" aria-describedby="nameHelp" placeholder="Enter name"
+                      v-model="loginUser.name">
+                  </div>
+                  <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input type="email" class="form-control" aria-describedby="emailHelp" placeholder="Enter email"
+                      v-model="loginUser.email">
+                    <small id="emailHelp" class="form-text text-muted">
+                      We'll never share your email with anyone else.
+                    </small>
+                  </div>
+                  <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" placeholder="Password" v-model="loginUser.password">
+                  </div>
+                  <div class="form-group">
+                    <label for="password" style="margin-top: 20px;">Or sign in using google below</label>
+                    <div class="g-signin2" data-onsuccess="onSignIn" style="display: flex; justify-content: center">
+                    </div>
+                    <!-- <a href="#" onclick="signOut()">Sign out</a> -->
+                  </div>
+                  <div style="display: flex; justify-content: space-between;">
+                    <button type="submit" class="btn btn-primary">Resgister</bi>
+                      <button type="submit" class="btn btn-secondary" @click.prevent="page = 'login'">Login</bi>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-if="page === 'home'">
+      <!-- - =========================================== NEW ARTICLE =========================================== -->
+      <div class="collapse" id="new-post">
+        <div class="jumbotron">
+          <div class="container">
+            <div class="card card-body justify-content-center">
+              <form method="post" class="p-2" @submit.prevent="createArticle">
+                <h3>Create an Article</h3>
+                <div class="form-group col-6">
+                  <label for="title">Title</label>
+                  <input type="text" name="title" class="form-control" v-model="createContent.title">
+                </div>
+                <div class="form-group">
+                  <wysiwyg label="content" style="overflow: auto; height: 300px;" v-model="createContent.content">
+                  </wysiwyg>
+                </div>
+                <div class="input-group mb-3">
+                  <input type="text" class="form-control" placeholder="Berita, cerita, derita..."
+                    aria-label="Berita, cerita, derita..." aria-describedby="button-addon2" ref="tag"
+                    v-model="createContent.tagInput">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="button-addon2"
+                      @click.prevent="prepareTag">Add tag</button>
+                  </div>
+                </div>
+                <div class="input-group mb-3">
+                  <span class="badge badge-primary mr-1 mb-1" v-for="(item, index) in createContent.tags">{{item}} <a
+                      @click="removeTag(item)" style="cursor: pointer">&times;</a></span>
+                </div>
+                <div class="custom-file form-group" lang="en">
+                  <input type="file" class="custom-file-input" id="customFile" @change="prepareFile(this)">
+                  <label class="custom-file-label" for="customFile">{{createContent.fileName}}</label>
+                </div>
+                <div class="form-group" style="margin-top: 10px;">
+                  <button class="btn btn-primary" v-show="!isLoading">
+                    Create
+                  </button>
+                  <button class="btn btn-primary" type="button" disabled v-show="isLoading">
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Loading...
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- - ============================================== BODY ============================================== -->
+      <div class="d-flex" id="wrapper">
+
+        <!-- Sidebar -->
+        <div class="bg-light border-right" id="sidebar-wrapper">
+          <div class="sidebar-heading">{{ username }}</div>
+          <div class="list-group list-group-flush">
+            <a href="#" class="list-group-item list-group-item-action bg-light" data-toggle="collapse"
+              data-target="#new-post">Create An Article</a>
+            <a @click.prevent="getAllArticles" style="cursor: pointer"
+              class="list-group-item list-group-item-action bg-light">All Articles</a>
+            <a @click.prevent="getMyArticles" style="cursor: pointer"
+              class="list-group-item list-group-item-action bg-light">My Articles</a>
+            <a href="#" class="list-group-item list-group-item-action bg-light" @click.prevent="logout">Logout</a>
+          </div>
+        </div>
+        <!-- Page Content -->
+        <!-- - ===================================== ISI (Dalem wrapper) ===================================== -->
+        <div id="page-content-wrapper">
+          <div class="container-fluid">
+            <div class="row d-flex justify-content-center">
+              <div v-if="(items.length < 1)">
+                <img src="./resources/img/empty.png">
+              </div>
+              <article-card :filtered-items="filteredItems" @change-id="changeId" @view-tag="viewTag">
+              </article-card>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Button trigger modal -->
+      <!-- - ========================================== MODAL VIEW ========================================== -->
+      <div class="modal fade" id="modalView" tabindex="-1" role="dialog" aria-labelledby="modalViewLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalViewLabel">{{ currentContent.title }}</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              {{ currentContent.content }}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-dismiss="modal"
+                @click.prevent="changeId(currentContent.id)" data-toggle="modal" data-target="#modalEdit"
+                v-show="currentContent.author._id == userId">Edit</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- - ========================================== MODAL EDIT ========================================== -->
+      <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="modalEditLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalEditLabel">Edit Article</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form method="post" class="p-2">
+                <div class="form-group col-6">
+                  <label for="title">Title</label>
+                  <input type="text" name="title" class="form-control" v-model="currentContent.title">
+                </div>
+                <div class="form-group">
+                  <wysiwyg label="content" style="overflow: auto; height: 300px;" v-model="currentContent.content">
+                  </wysiwyg>
+                </div>
+                <div class="input-group mb-3">
+                  <input type="text" class="form-control" placeholder="Berita, cerita, derita..."
+                    aria-label="Berita, cerita, derita..." aria-describedby="button-addon3" ref="tag2"
+                    v-model="currentContent.tagInput">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="button-addon3"
+                      @click.prevent="prepareTagEdit">Add tag</button>
+                  </div>
+                </div>
+                <div class="input-group mb-3">
+                  <span class="badge badge-primary mr-1 mb-1" v-for="(item, index) in currentContent.tags">{{item}} <a
+                      @click="removeTagEdit(item)" style="cursor: pointer">&times;</a></span>
+                </div>
+
+                <div class="custom-file form-group" lang="en">
+                  <input type="file" class="custom-file-input" id="customFile2" @change="prepareFileEdit(this)">
+                  <label class="custom-file-label" for="customFile2">{{currentContent.fileName}}</label>
+                </div>
+              </form>
+
+            </div>
+            <div class="modal-footer d-flex justify-content-between">
+              <div>
+                <button class="btn btn-danger" @click.prevent="deleteArticle(currentContent.id)">Delete</button>
+              </div>
+              <div>
+                <button type="button" class="btn btn-primary" @click.prevent="editArticle(currentContent.id)"
+                  v-show="!isLoading">
+                  Edit
+                </button>
+                <button class="btn btn-primary" type="button" disabled v-show="isLoading">
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  Loading...
+                </button>
+
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- - ========================================== MODAL VIEW IMAGE ========================================== -->
+      <div class="modal fade" id="modal-view-img" tabindex="-1" role="dialog" aria-labelledby="modal-view-imgLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modal-view-imgLabel">{{currentContent.title}}</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <img class="img-fluid mx-auto d-block" :src="currentContent.url">
+            </div>
+            <div class="modal-footer">
+              <div>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  <script src="/resources/wysiwyg/vueWysiwyg.js"></script>
+
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+  <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.11.2/build/alertify.min.js"></script>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+  <script src="./resources/js/components/cards.js"></script>
+  <script src="./resources/js/main.js"></script>
+</body>
+
+</html>

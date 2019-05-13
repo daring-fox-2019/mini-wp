@@ -1,0 +1,7 @@
+node_modules
+.env
+test
+backup bootstrap
+backup vuetify
+checklist.md
+keyfile.json
