@@ -172,6 +172,7 @@ var app = new Vue({
           this.getAllPosts()
           this.showMainPage = true
           this.showNewPostPage = false
+          this.emptyPostForm()
           Swal.fire(
             'Created New Post!',
             'New Post have been created',
@@ -199,6 +200,7 @@ var app = new Vue({
           this.getAllPosts()
           this.showMainPage = true
           this.showNewPostPage = false
+          this.emptyPostForm()
           Swal.fire(
             'Updated New Post!',
             'Post have been updated',
