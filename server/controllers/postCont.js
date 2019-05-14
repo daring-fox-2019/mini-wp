@@ -21,7 +21,6 @@ class PostController {
     })
   }
   static read(req,res){
-    // console.log("READ",req.decoded)
     Post.find({user: req.decoded._id})
     .then(posts =>{
       res.status(200).json(posts)
@@ -34,7 +33,6 @@ class PostController {
     })
   }
   static search(req,res){
-    // console.log("SEARCH",req.decoded)
     let obj = {user: req.decoded._id}
     if(req.query.title) obj.title = { '$regex' : req.query.title, '$options' : 'i' }
     Post.find(obj)
@@ -49,9 +47,6 @@ class PostController {
     })
   }
   static readOne(req,res){
-    // let obj = {}
-    // if(req.query.bookId) obj.booklist = req.query.bookId
-
     Post.findOne({
       user: req.decoded._id,
       _id: req.params._id
