@@ -16,7 +16,7 @@ let userSchema = new Schema({
         var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/
         return emailRegex.test(email)
       },
-      message: `Email gak valid`
+      message: `Not a valid email address`
     }],
     unique: true
   },

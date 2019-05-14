@@ -9,10 +9,12 @@ module.exports = (req, res, next) => {
     User.findOne({_id:req.decoded._id})
     .then(user =>{
       // console.log(user)
-      if(user) next()
-      else res.status(403).json({
-        message: 'User not found'
-      })
+      if(user) 
+        next()
+      else 
+        res.status(403).json({
+          message: 'User not found'
+        })
     })
     .catch(err =>{
       res.status(403).json({

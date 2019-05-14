@@ -4,7 +4,7 @@ Vue.component('list-post', {
       count: 0
     }
   },
-  props: ['post','idpost'],
+  props: ['post'],
   methods:{
     // editPost(post){
     //   // console.log(post)

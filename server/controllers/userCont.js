@@ -73,7 +73,7 @@ class UserController {
       .catch(err => {
         if (err.message) {
           res.status(406).json({
-            message: err.message
+            message: `Register failed : ${err.message}`
           })
         }
         else res.status(500).json({
@@ -118,7 +118,7 @@ class UserController {
       .catch(err => {
         if (err.message) {
           res.status(406).json({
-            message: err.message
+            message: `Login failed : ${err.message}`
           })
         }
         else res.status(500).json({

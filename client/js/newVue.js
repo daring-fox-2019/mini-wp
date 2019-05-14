@@ -1,3 +1,4 @@
+// axios.defaults.baseURL = "http://localhost:3000"
 axios.defaults.baseURL = "http://35.198.248.18"
 // var userName = ""
 Vue.use(CKEditor);
@@ -322,6 +323,44 @@ var app = new Vue({
         })
       }
     },
+    onSignIn(googleUser) {
+      // let profile = googleUser.getBasicProfile();
+      // console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+      // console.log('Name: ' + profile.getName());
+      // console.log('Image URL: ' + profile.getImageUrl());
+      // console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+      if (!localStorage.hasOwnProperty('signedInVia')) {
+        let id_token = googleUser.getAuthResponse().id_token;
+        axios({
+          method: 'POST',
+          url: `/users/signinGoogle`,
+          data: {
+            id_token
+          }
+        })
+          .then(({ data }) => {
+            // console.log(data) 
+            let msg = ''
+            if (data.passRandom) {
+              msg = ` Hurry up change your password now, your password is ${data.passRandom}`
+            }
+            Swal.fire(
+              'Signed In via Google!',
+              `You Have Been Logged In Successfully.${msg}`,
+              'success'
+            )
+            localStorage.setItem('signedInVia', true)
+            localStorage.setItem('token', data.token)
+            this.getAllPosts()
+            this.emptyLogRegForm()
+            this.showLogRegPage = false
+            this.showMainPage = true
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      }
+    },
     logout() {
       localStorage.removeItem('token')
       if (localStorage.hasOwnProperty('signedInVia')) {
@@ -341,42 +380,3 @@ var app = new Vue({
     }
   }
 })
-
-function onSignIn(googleUser) {
-  // let profile = googleUser.getBasicProfile();
-  // console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-  // console.log('Name: ' + profile.getName());
-  // console.log('Image URL: ' + profile.getImageUrl());
-  // console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-  if (!localStorage.hasOwnProperty('signedInVia')) {
-    let id_token = googleUser.getAuthResponse().id_token;
-    axios({
-      method: 'POST',
-      url: `/users/signinGoogle`,
-      data: {
-        id_token
-      }
-    })
-      .then(({ data }) => {
-        // console.log(data) 
-        let msg = ''
-        if (data.passRandom) {
-          msg = ` Hurry up change your password now, your password is ${data.passRandom}`
-        }
-        Swal.fire(
-          'Signed In via Google!',
-          `You Have Been Logged In Successfully.${msg}`,
-          'success'
-        )
-        localStorage.setItem('signedInVia', true)
-        localStorage.setItem('token', data.token)
-        app.getAllPosts()
-        app.emptyLogRegForm()
-        app.showLogRegPage = false
-        app.showMainPage = true
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }
-}
