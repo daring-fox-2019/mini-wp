@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- My CSS -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="vueWysiwyg.css">
+
+    <!-- Font Awesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+
+    <!-- Vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <!-- Axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <!-- Google script -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <!-- Google client id -->
+    <meta name="google-signin-client_id"
+        content="380277231718-hm7v49bp3i4gub5l3b8e4guin615sp7j.apps.googleusercontent.com">
+
+    <!-- SWAL -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+
+
+    <title>My Mini Wordpress</title>
+</head>
+
+<div id="app">
+
+    <body style="overflow-x:hidden;">
+
+        <!-- Header / Navbar -->
+        <header class="navbar">
+            <ul>
+                <li><img src="./resources/dog.gif"></li>
+                <li style="font-weight: bold; font-size: 20px">Mongrel Express</li>
+            </ul>
+
+            <ul>
+                <li id="logout"><a href="#"><i v-if="isLogin" @click="signOut" class="fas fa-sign-out-alt"></i></a></li>
+            </ul>
+        </header>
+        <!-- Header / Navbar-->
+
+        <!-- <div class="myPage"> -->
+        <div class="row">
+            <!-- Side Bar -->
+            <div class="mySidebar col-md-2">
+                <ul v-if="isLogin">
+                    <li><i class="fas fa-newspaper"></i> <a href="#" @click="showAllArticle">Home</a></li>
+                    <li><i class="fas fa-feather-alt"></i> <a href="#" @click="showPostArticle">Post an article</a></li>
+                    <li><i class="fas fa-user"></i> <a href="#" @click="showListArticle">Your articles</a></li>
+                </ul>
+            </div>
+            <!-- Side Bar -->
+
+            <div class="col-md-10">
+
+                <div class="d-flex justify-content-center" style="padding-top: 15em;" v-if="loading">
+                    <img src="https://thumbs.gfycat.com/FirstHairyAnole-size_restricted.gif" v-if="loading">
+                </div>
+
+
+                <div style="padding-top: 5em;">
+
+                    <!-- Login / Register Form -->
+                    <div class="container" v-if="show === 'loginForm'">
+                        <form @submit.prevent="submitLogin">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Email address</label>
+                                <input v-model="loginInput.email" type="email" class="form-control"
+                                    placeholder="Your email address">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Password</label>
+                                <input v-model="loginInput.password" type="password" class="form-control"
+                                    placeholder="Password">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form><br>
+                        <h6>Or sign in using: </h6>
+                        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+
+                        <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%">
+                            Don't have an account?
+                            <a href="#" @click.prevent="showRegister">
+                                Register here!
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="container" v-if="show === 'registerForm'">
+                        <form @submit.prevent="submitRegister">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Full name</label>
+                                <input v-model="registerInput.name" type="text" class="form-control"
+                                    placeholder="Your full name">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Email address</label>
+                                <input v-model="registerInput.email" type="email" class="form-control"
+                                    placeholder="Your email address">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Password</label>
+                                <input v-model="registerInput.password" type="password" class="form-control"
+                                    placeholder="Password">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+
+                        <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%">
+                            Already have an account?
+                            <a href="#" @click.prevent="showLogin">
+                                Login here!
+                            </a>
+                        </div>
+                    </div>
+
+                    <div id="signupbox" style="display:none; margin-top:50px"
+                        class="mainbox col-md-12 col-md-offset-3 col-sm-8 col-sm-offset-2">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <div style="background-color: #99EADF;border-radius: 2em;max-width: 125px;text-align: center;"
+                                    class="panel-title">
+                                    <h3>Register</h3>
+                                </div><br>
+                                <div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="#"></a>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <form @submit.prevent="submitRegister" id="registerForm" class="form-horizontal"
+                                    role="form">
+                                    <div id="signupalert" style="display:none" class="alert alert-danger">
+                                        <p>Error:</p>
+                                        <span></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="firstname" class="col-md-3 control-label">Full Name</label>
+                                        <div class="col-md-9">
+                                            <input v-model="registerInput.name" id="register-name" type="text"
+                                                class="form-control" name="name" placeholder="Full Name">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email" class="col-md-3 control-label">Email</label>
+                                        <div class="col-md-9">
+                                            <input v-model="registerInput.email" id="register-email" type="email"
+                                                class="form-control" name="email" placeholder="Email Address">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="password" class="col-md-3 control-label">Password</label>
+                                        <div class="col-md-9">
+                                            <input v-model="registerInput.password" id="register-password"
+                                                type="password" class="form-control" name="password"
+                                                placeholder="Password">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-offset-3 col-md-9">
+                                            <button id="register-button" type="submit" class="btn btn-info"><i
+                                                    class="icon-hand-right"></i>Sign Up</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12 control">
+                                            <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%">
+                                                Already have an account?
+                                                <a id="signinlink" href="#"
+                                                    onclick="$('#signupbox').hide(); $('#loginbox').show()">Sign in
+                                                    here!</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Login / Register Form -->
+
+                <!-- Post an article -->
+                <div v-if="show === 'postArticle'">
+                    <div>
+                        <h1>Write your article here!</h1>
+                        <form @submit.prevent="createArticle">
+                            Title: <br>
+                            <input type="text" v-model="newArticle.title"><br>
+                            Description: <br>
+                            <wysiwyg v-model="newArticle.content"></wysiwyg>
+                            Image:<br>
+                            <input type="file" class="form-control-file" v-on:change="uploadImage"><br>
+                            Add tags:<br>
+                            <div class="input-group mb-3">
+                                <input v-model="currentTag" type="text" class="form-control"
+                                    placeholder="Insert tag here">
+                                <div class="input-group-append">
+                                    <button @click.prevent="addTag" class="btn btn-outline-secondary"
+                                        type="button">Button</button>
+                                </div>
+                            </div><br>
+                            <h6>Tags:</h6>
+                            <ul v-for="tag in newArticle.tags">
+                                <li>{{ tag }}</li>
+                                <button type="submit" class="btn btn-danger"
+                                    @click.prevent="removeTag(tag)">Delete</button>
+                            </ul>
+
+                            <button type="submit">Confirm</button>
+                        </form>
+                    </div>
+                </div>
+                <!-- Post an article -->
+
+                <!-- Edit an article-->
+                <div v-if="show === 'editArticlePage'">
+                    <div>
+                        <h1>Edit here!</h1>
+                        <form @submit.prevent="editArticle(editedArticle._id)">
+                            Title: <br>
+                            <input type="text" v-model="editedArticle.title"><br>
+                            Description: <br>
+                            <wysiwyg v-model="editedArticle.content">{{editedArticle.content}}</wysiwyg>
+                            Image<br>
+                            <input type="file" class="form-control-file" v-on:change="changeImage">
+                            Add tags:<br>
+                            <div class="input-group mb-3">
+                                <input v-model="currentTagEdit" type="text" class="form-control"
+                                    placeholder="Insert tag here">
+                                <div class="input-group-append">
+                                    <button @click.prevent="addTagEdit" class="btn btn-outline-secondary"
+                                        type="button">Button</button>
+                                </div>
+                            </div><br>
+                            Tags:<br>
+                            <ul v-for="tag in editedArticle.tags">
+                                <li>{{ tag }}</li>
+                                <button type="submit" class="btn btn-danger"
+                                    @click.prevent="removeTagEdit(tag)">Delete</button>
+                            </ul>
+                            <button type="submit">Confirm</button>
+                        </form>
+                    </div>
+                </div>
+                <!-- Edit an article-->
+
+                <!--  All Articles -->
+                <div v-if="show === 'allArticle'">
+                    <div class="container">
+                        <div class="accordion" id="accordionExample">
+                            <div class="card">
+                                <div class="card-header" id="headingOne">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link" type="button" data-toggle="collapse"
+                                            data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            Search by Title
+                                        </button>
+                                    </h5>
+                                </div>
+
+                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                    data-parent="#accordionExample">
+                                    <input class="input-group" type="text" v-model="searchAllArticle"
+                                        placeholder="You can search here">
+
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header" id="headingTwo">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                            data-target="#collapseTwo" aria-expanded="false"
+                                            aria-controls="collapseTwo">
+                                            Search by Tag
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                                    data-parent="#accordionExample">
+                                    <input class="input-group" type="text" v-model="searchAllTag"
+                                        placeholder="You can search here">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row d-flex justify-content-between">
+                        <div class="col-md-4" v-for="article in filteredAllArticles" style="padding: 50px;">
+                            <!-- Loop articles (article.js component)-->
+                            <all-article-card v-bind:articlecomponent="article">
+                            </all-article-card>
+                            <!-- Loop articles (article.js component)-->
+                        </div>
+                    </div>
+                </div>
+                <!-- All articles-->
+
+                <!-- Your articles-->
+                <div v-if="show === 'listArticle'">
+
+                    <div class="container">
+                        <div class="accordion" id="accordionExample">
+                            <div class="card">
+                                <div class="card-header" id="headingOne">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link" type="button" data-toggle="collapse"
+                                            data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            Search by Title
+                                        </button>
+                                    </h5>
+                                </div>
+
+                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                    data-parent="#accordionExample">
+                                    <input class="input-group" type="text" v-model="search"
+                                        placeholder="Search by title">
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header" id="headingTwo">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                            data-target="#collapseTwo" aria-expanded="false"
+                                            aria-controls="collapseTwo">
+                                            Search by Tag
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                                    data-parent="#accordionExample">
+                                    <input class="input-group" type="text" v-model="searchTag"
+                                        placeholder="Search by tag">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row d-flex justify-content-between">
+                        <div class="col-md-4" v-for="article in filtered" style="padding: 50px;">
+                            <!-- Loop articles (article.js component)-->
+                            <article-card v-bind:articlecomponent="article" v-on:toeditpage="toEditPage"
+                                v-on:deletearticle="deleteArticle">
+                            </article-card>
+                            <!-- Loop articles (article.js component)-->
+                        </div>
+                    </div>
+                    <!-- Your articles -->
+                </div>
+            </div>
+        </div>
+</div>
+
+<!-- My Scripts -->
+<script src="./javascript/vueWysiwyg.js"></script>
+<script src="./javascript/vue.js"></script>
+<script src="./javascript/components/articles.js"></script>
+<script src="./javascript/components/allArticles.js"></script>
+<!-- My Scripts -->
+</body>
+
+</html>
