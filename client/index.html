@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/regular.css"
+        integrity="sha384-FKw7x8fCxuvzBwOJmhTJJsKzBl8dnN9e2R4+pXRfYoHivikuHkzWyhKWDSMcGNK8" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/fontawesome.css"
+        integrity="sha384-vd1e11sR28tEK9YANUtpIOdjGW14pS87bUBuOIoBILVWLFnS+MCX9T6MMf0VdPGq" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <script src="./@ckeditor/ckeditor5-build-classic/build/ckeditor.js"></script>
+    <script src="./@ckeditor/ckeditor5-vue/dist/ckeditor.js"></script>
+    <!-- The vue framework -->
+    <script src="./vue/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="734679191889-5n326apqi4e4mqt5q286066gvcnk8nhe.apps.googleusercontent.com">
+    <title>Mini WP</title>
+</head>
+
+<body>
+    <div id="mini-wp">
+        <nav id="topbar" style="width: 100%; position: fixed;" class="navbar navbar-expand navbar-dark bg-dark">
+            <a id="homebutton" class="navbar-brand" href="" v-on:click.prevent="home">
+                Mini WP
+            </a>
+            <div class="collapse navbar-collapse navbar-nav d-flex justify-content-end">
+                <a id="registerbutton" class="nav-item nav-link" href="" v-if="!loggedIn"
+                    v-on:click.prevent="register">Register</a>
+                <a id="writebutton" class="nav-item nav-link btn btn-light" href="#" v-if="loggedIn"
+                    v-on:click.prevent="zone = 1">
+                    <i class="far fa-edit"></i>&nbsp;&nbsp;Write
+                </a>
+                <a class="nav-item nav-link" href="#" v-if="loggedIn" v-on:click.prevent="goToAccount">
+                    <img class="user-photo" src="./icons/avatar.png" alt="user-photo">
+                </a>
+                <a id="signinbutton" class="nav-item nav-link" href="" v-on:click.prevent="sign()">{{ text }}</a>
+            </div>
+        </nav>
+        <div class="container-fluid" style>
+            <div id="outside" class="row d-flex justify-content-center" v-if="!loggedIn">
+                <div id="outside" class="col-4">
+                    <div id="frontpage-message" v-show="!showForm">
+                        Please register or sign in.<br><br>
+                        <div class="alert alert-primary" style="font-size: 1.2rem;" role="alert" v-show="alert">
+                            {{alert}}
+                        </div>
+                        <br><br><br><br><br>
+                    </div>
+                    <form id="register-form" v-on:submit.prevent="sendRegister" v-if="showForm === 1">
+                        <div class="form-group">
+                            <p style="font-size: 1.8rem;">Create a new account</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Email address</label>
+                            <input type="email" class="form-control" id="exampleInputEmail1"
+                                aria-describedby="emailHelp" placeholder="Enter email" v-model="registerEmail">
+                            <small id="emailHelp" class="form-text text-muted"></small>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Password</label>
+                            <input type="password" class="form-control" id="exampleInputPassword1"
+                                placeholder="Password" v-model="password">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Register</button>
+                        <br><br>
+                        <div class="alert alert-primary" role="alert" v-show="alert">
+                            {{alert}}
+                        </div>
+                    </form>
+                    <form id="login-form" v-on:submit.prevent="sendLogin" v-if="showForm === 2">
+                        <div class="form-group">
+                            <p style="font-size: 1.8rem;">Sign in</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Email address</label>
+                            <input type="email" class="form-control" id="exampleInputEmail1"
+                                aria-describedby="emailHelp" placeholder="Enter email" v-model="loginEmail">
+                            <small id="emailHelp" class="form-text text-muted"></small>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Password</label>
+                            <input type="password" class="form-control" id="exampleInputPassword1"
+                                placeholder="Password" v-model="password">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                        <br><br>
+                        
+                        <div class="alert alert-primary" role="alert" v-show="alert">
+                            {{alert}}
+                        </div>
+                    </form>
+                    <div v-show="showForm === 2">
+                        Or sign in with Google:<br>
+                    <div style="margin-top: 0.7rem" class="g-signin2" data-onsuccess="onSignIn"></div>
+                    </div>
+                    <br>
+                    <br>
+
+                </div>
+            </div>
+
+            <div id="inside" class="row" v-if="loggedIn">
+                <nav id="sidenav">
+                    <ul id="navcol" class="nav flex-column">
+                        <li class="nav-item sidebar-item" v-on:click.prevent="zone = 1">
+                            <a class="sidebar-link">Write Article</a>
+                        </li>
+                        <li class="nav-item sidebar-item" v-on:click.prevent="fetchArticles">
+                            <a class="sidebar-link">My Articles</a>
+                        </li>
+                        <li class="nav-item sidebar-item" v-on:click.prevent="goToAccount">
+                            <a class="sidebar-link">Account</a>
+                        </li>
+                    </ul>
+                </nav>
+                <div id="main">
+                    <!-- Home area -->
+                    <div id="entrance-message" v-if="zone === 0">
+                        Welcome, {{loginEmail}}<br><br>
+                        <span style="font-size: 1.3rem;">
+                            {{sayDate}}<br>
+                            Article count: {{articleCount}}<br>
+                        </span>
+                    </div>
+                    <!-- Write area -->
+                    <div id="editor-area" v-if="zone === 1">
+
+
+                        <form method="POST" enctype="multipart/form-data" v-on:submit.prevent="saveArticle">
+                            <input id="titleinput" type="text" v-model="editorTitle" placeholder="Title">
+                            <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
+
+                            <div style="margin-top: 0.5rem;" class="">
+                                <p style="font-size: 0.85rem; margin-bottom: 0.5rem;">Upload a featured image:</p>
+                                <input type="file" id="imageupload" name="file" accept="image/*" v-on:change="onFileSelect">
+                            </div>
+
+                            <p><input type="submit" value="Save" style="margin-top: 1.1rem;"
+                                    class="btn btn-outline-primary"></p>
+                        </form>
+                        <div class="alert alert-primary" role="alert" v-show="alert">
+                            {{alert}}
+                        </div>
+
+                    </div>
+                    <!-- List of written articles area -->
+                    <div id="my-articles" v-if="zone === 2">
+                        <div id="article-search-container">
+                            <input id="article-search" class="form-control" v-model="articleSearch"
+                                placeholder="search articles">
+                        </div>
+
+                        <div v-for="article in filteredArticles">
+
+                                <div style="display: flex;" id="article-card" class="media">
+                                    <div class="media-body">
+                                        <h5 class="mt-0">{{article.title}}<!-- {{article._id}} --></h5>
+                                        <span v-html="article.content"></span>
+                                    </div>
+                                    <div style="align-self: center" class="featured-image-frame">
+                                        <img class="featured-image" v-bind:src="article.imageUrl" alt="">
+                                    </div>
+                                </div>
+                            <br>
+                        </div>
+                    </div>
+                    <!-- Account settings area -->
+                    <div id="account-page" v-if="zone === 3">
+                        <a class="btn btn-secondary" href="#" v-on:click.prevent="toggleCPP">Change profile picture</a>
+                        <br>
+                        <div v-show="accountzone === 1">
+                            <div style="display: flex;">
+                                <div v-for="file in avatarIcons">
+                                    <img class="user-change-photo" v-bind:src="file" alt="user-photo">
+                                </div>
+                            </div>
+                            <a class="btn btn-primary" href="#">Confirm</a><br>
+                        </div>
+                        <br>
+
+                        <a class="btn btn-secondary" href="#" v-on:click.prevent="toggleCPass">Change password</a>
+                        <form id="change-pass-form" v-on:submit.prevent="sendChangePass" v-show="accountzone === 2">
+                            <br>
+                            <div class="form-group">
+                                <label for="exampleInputPassword2">Enter Old Password</label>
+                                <input type="password" class="form-control" id="exampleInputPassword2"
+                                    placeholder="Old password" v-model="changePassword.old">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword3">Enter New Password</label>
+                                <input type="password" class="form-control" id="exampleInputPassword3"
+                                    placeholder="New password" v-model="changePassword.new">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Change</button>
+                            <br>
+                            <div style="margin-top: 0.9rem;" class="alert alert-primary" role="alert" v-show="alert">
+                                {{alert}}
+                            </div>
+                        </form>
+                        <br><br>
+                            <a class="btn btn-danger" href="#" v-on:click.prevent="deleteAccount">Delete account</a><br>
+                            <p style="margin-top: 0.3rem; font-size: 0.9rem;">
+                                Warning! Clicking this button once
+                                will delete your account forever.
+                            </p>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="./index.js"></script>
+</body>
+
+</html>
