@@ -26,7 +26,7 @@ class UserController {
             name: user.name,
             email: user.email
           }
-          let token = jwt.sign(payload, process.env.KUNCI,{expiresIn:"7d"})
+          let token = jwt.sign(payload, process.env.KUNCI, { expiresIn: "7d" })
           console.log('token --->', token, '<---token')
           res.status(200).json({ token, name })
         } else {
@@ -97,7 +97,7 @@ class UserController {
               name: user.name,
               email: user.email
             }
-            let token = jwt.sign(payload, process.env.KUNCI,{expiresIn:"7d"})
+            let token = jwt.sign(payload, process.env.KUNCI, { expiresIn: "7d" })
             console.log('token login -->', token)
             res.status(200).json({
               token, name
