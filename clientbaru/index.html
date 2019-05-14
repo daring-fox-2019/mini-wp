@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,42 +12,41 @@
   <!-- VUE -->
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
   <!-- SEMANTIC UI -->
-  <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha2 56-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+    integrity="sha2 56-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.js"></script>
   <!-- AXIOS -->
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <!-- SWEET ALERT 1 -->
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
   <script src="https://apis.google.com/js/platform.js"></script>
-  <meta name="google-signin-client_id" content="589644078787-pq6rea343jfpi0egujjj4lf7mncok941.apps.googleusercontent.com">
+  <meta name="google-signin-client_id"
+    content="589644078787-pq6rea343jfpi0egujjj4lf7mncok941.apps.googleusercontent.com">
   <title>Mini WP</title>
 </head>
+
 <body>
-<div id="thepage">
+  <div id="thepage">
     <div v-show="islogin">
       <!-- NAVIGATION -->
       <nav class="ui teal inverted labeled icon menu">
         <p class="header item"><i class="user icon"></i>Helo, {{user}}!</p>
-        <a class="item" @click="checklogin"><i class=" newspaper outline icon" ></i>My Articles</a>
+        <a class="item" @click="checklogin"><i class=" newspaper outline icon"></i>My Articles</a>
         <div class="right menu">
-          <a class="item" @click="viewwrite" ><i class="edit outline icon"></i>Write</a>
-          <a class="item" @click="logout" ><i class="sign-out icon"></i>Log Out</a>
+          <a class="item" @click="viewwrite"><i class="edit outline icon"></i>Write</a>
+          <a class="item" @click="logout"><i class="sign-out icon"></i>Log Out</a>
         </div>
       </nav>
-      
+
       <!-- CONTENT -->
       <div class="ui container">
-      
+
         <!-- ALL ARTICLES -->
         <div class="ui container" v-show="page === 'articles'">
           <br>
           <div class="ui container segment" v-show="articlelist.length != 0">
-            <articlefeed
-              :articles="articlelist"
-              :author="user"
-              v-on:toread="readone"
-              v-on:toupdate="updateone"
-              v-on:todelete="deleteone"/>
+            <articlefeed :articles="articlelist" :author="user" v-on:toread="readone" v-on:toupdate="updateone"
+              v-on:todelete="deleteone" />
           </div>
           <div class="ui container segment" v-show="articlelist.length == 0">
             NO ARTICLES FOUND
@@ -59,13 +59,16 @@
           <div class="ui container segments center aligned">
             <div class="ui segment left aligned" style="display: flex; justify-content: space-between;">
               <p><i class="ui user icon"></i> {{ user }}</p>
-              <p> <i class="ui pencil alternate icon"></i> Created at {{ article.createdAt}}</p> 
-              <p v-if="article.updatedAt != null"> <i class="ui pencil alternate icon"></i> Updated at {{ article.updatedAt}}</p> 
-              <p v-if="article.postedAt != null"> <i class="ui paper plane outline icon"></i> Posted At {{article.postedAt}}</p></div>
+              <p> <i class="ui pencil alternate icon"></i> Created at {{ article.createdAt}}</p>
+              <p v-if="article.updatedAt != null"> <i class="ui pencil alternate icon"></i> Updated at
+                {{ article.updatedAt}}</p>
+              <p v-if="article.postedAt != null"> <i class="ui paper plane outline icon"></i> Posted At
+                {{article.postedAt}}</p>
+            </div>
             <div class="ui segment">
               <h1> {{ article.title }} </h1>
               <div class="ui segment" id="detailcontent">
-  
+
               </div>
             </div>
           </div>
@@ -75,22 +78,23 @@
         <div class="ui container" v-show="page === 'writearticle' || page === 'updatearticle'">
           <div class="ui segments center aligned">
             <div class="ui segment grid right aligned" style="background-color: #DADADA">
-                <div class="ui ten wide column left aligned">
-                    <h4 v-if="page === 'writearticle'">Write New Article</h4>
-                    <h4 v-if="page === 'updatearticle'">Update This Article</h4>
-                </div>
-                <div class="ui six wide column">
-                    Today : {{ date }}
-                </div>
+              <div class="ui ten wide column left aligned">
+                <h4 v-if="page === 'writearticle'">Write New Article</h4>
+                <h4 v-if="page === 'updatearticle'">Update This Article</h4>
+              </div>
+              <div class="ui six wide column">
+                Today : {{ date }}
+              </div>
             </div>
             <div>
               <div class="ui fluid icon input">
-                <input type="text" class="header" v-model="article.title" class="ui fluid input" placeholder="Article's Title">
+                <input type="text" class="header" v-model="article.title" class="ui fluid input"
+                  placeholder="Article's Title">
                 <i class="bookmark icon"></i>
               </div>
               <div class="ui segment">
                 <div id="editor">
-                    <br><br><br> 
+                  <br><br><br>
                 </div>
               </div>
             </div>
@@ -101,126 +105,131 @@
                 <input type="file" @change="previewFile" class="ui input" id="createfeaturedimg">
               </div>
               <div class="five wide column">
-                <button class="ui button fluid huge green" v-if="page === 'writearticle'" @click="savearticle">Save</button>
-                <button class="ui button fluid huge teal" v-if="page === 'updatearticle' && article.status === 'saved'" @click="updatethearticle('saved')">Post</button>
+                <button class="ui button fluid huge green" v-if="page === 'writearticle'"
+                  @click="savearticle">Save</button>
+                <button class="ui button fluid huge teal" v-if="page === 'updatearticle' && article.status === 'saved'"
+                  @click="updatethearticle('saved')">Post</button>
               </div>
               <div class="five wide column">
-                <button class="ui button fluid huge teal" v-if="page === 'writearticle'" @click="postarticle">Post</button>
-                <button class="ui button fluid huge green" v-if="page === 'updatearticle'" @click="updatethearticle('posted')" >Update</button>
+                <button class="ui button fluid huge teal" v-if="page === 'writearticle'"
+                  @click="postarticle">Post</button>
+                <button class="ui button fluid huge green" v-if="page === 'updatearticle'"
+                  @click="updatethearticle('posted')">Update</button>
               </div>
             </div>
           </div><BR><BR><bR>
         </div>
       </div>
       <!-- FOOTER -->
-      <footer >
+      <footer>
         <div class="ui inverted teal footer segment">
-            <div class="ui container center aligned">
-              <i class="pencil alternate icon"></i> Mini Wordpress
-            </div>
+          <div class="ui container center aligned">
+            <i class="pencil alternate icon"></i> Mini Wordpress
+          </div>
         </div>
       </footer>
-    </div> 
-      
-    <div v-show="!islogin">
-        <!-- LOGIN -->
-        <div class="ui container" v-show="page === 'login'">
-          <div class="ui middle aligned center aligned grid">
-            <div class="column">
-              <h1 class="ui center aligned icon header">
-                <i class="massive circular inverted teal pencil icon"></i>
-                Mini Wordpress
-              </h1>
-              <h4>Sign in to proceed</h4>
-              <form class="ui large form">
-                <div class="ui stacked segment">
-                  <div class="field">
-                    <div class="ui left icon input">
-                      <i class="user icon"></i>
-                      <input type="text" placeholder="E-mail address" v-model="email">
-                    </div>
-                  </div>
-                  <div class="field">
-                    <div class="ui left icon input">
-                      <i class="lock icon"></i>
-                      <input type="password" placeholder="Password" v-model="password">
-                    </div>
-                  </div>
-                  <div class="ui fluid large teal button" @click="login"><i class="sign-in icon"></i>Login</div>
-                  <br>
-                  <!-- <g-signin-button :params="googleSignInParams" @success="onSignInSuccess" @error="onSignInError"> Sign in with Google </g-signin-button> -->
-                  <div class="ui fluid container" style="display:flex; justify-content: center; align-items: center;">
-                    Have google account? continue with  
-                    &emsp;<div class="g-signin2" data-onsuccess="googleLogin" style="width: auto; "></div>
-                  </div>
-                </div>
-                <div class="ui message ">
-                  <p>New to us?</p>
-                  <div class="ui fluid large teal button" @click="viewregister" >Register</div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-        <!-- REGISTER -->
-        <div class="ui container" id="signup-page" v-show="page == 'register'">
-          <div class="ui middle aligned center aligned grid">
-            <div class="column">
-              <h1 class="ui center aligned icon header">
-                <i class="massive circular inverted teal pencil icon"></i>
-                Mini Wordpress
-              </h1>
-              <h4>Hello, fill form below to create new Account! </h4>
-              <form class="ui large form">
-                <div class="ui stacked segment">
-                  <div class="field">
-                    <div class="ui left icon input">
-                      <i class="user icon"></i>
-                      <input type="text" placeholder="Name" v-model="name">
-                    </div>
-                  </div>
-                  <div class="field">
-                    <div class="ui left icon input">
-                      <i class="envelope outline icon"></i>
-                      <input type="text" placeholder="E-mail address" v-model="email">
-                    </div>
-                  </div>
-                  <div class="field">
-                    <div class="ui left icon input">
-                      <i class="lock icon"></i>
-                      <input type="password" placeholder="Password" v-model="password">
-                    </div>
-                  </div>
-                  <div class="ui fluid large teal button" @click="register"><i class="sign-in icon"></i>Register</div>
-                </div>
-                <div class="ui message">
-                  <p>Already have an account?</p>
-                  <div class="ui fluid large teal button" @click="viewlogin">Login</div>
-                </div>
-                <div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
     </div>
-      
-</div>
-<!-- VUE -->
-<script>
-// import GSignInButton from 'vue-google-signin-button'
-// Vue.use(GSignInButton)
-</script>
 
-<script src="javascript/component/articlefeed.js"></script>
-<script src="javascript/vue.js"></script>
-<script src="javascript/googlelogin.js"></script>
-<!-- QUILL EDITOR -->
-<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-<script>
-  var quill = new Quill('#editor', {
-    theme: 'snow'
-  });
-</script>
+    <div v-show="!islogin">
+      <!-- LOGIN -->
+      <div class="ui container" v-show="page === 'login'">
+        <div class="ui middle aligned center aligned grid">
+          <div class="column">
+            <h1 class="ui center aligned icon header">
+              <i class="massive circular inverted teal pencil icon"></i>
+              Mini Wordpress
+            </h1>
+            <h4>Sign in to proceed</h4>
+            <form class="ui large form">
+              <div class="ui stacked segment">
+                <div class="field">
+                  <div class="ui left icon input">
+                    <i class="user icon"></i>
+                    <input type="text" placeholder="E-mail address" v-model="email">
+                  </div>
+                </div>
+                <div class="field">
+                  <div class="ui left icon input">
+                    <i class="lock icon"></i>
+                    <input type="password" placeholder="Password" v-model="password">
+                  </div>
+                </div>
+                <div class="ui fluid large teal button" @click="login"><i class="sign-in icon"></i>Login</div>
+                <br>
+                <!-- <g-signin-button :params="googleSignInParams" @success="onSignInSuccess" @error="onSignInError"> Sign in with Google </g-signin-button> -->
+                <div class="ui fluid container" style="display:flex; justify-content: center; align-items: center;">
+                  Have google account? continue with
+                  &emsp;<div class="g-signin2" data-onsuccess="googleLogin" style="width: auto; "></div>
+                </div>
+              </div>
+              <div class="ui message ">
+                <p>New to us?</p>
+                <div class="ui fluid large teal button" @click="viewregister">Register</div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!-- REGISTER -->
+      <div class="ui container" id="signup-page" v-show="page == 'register'">
+        <div class="ui middle aligned center aligned grid">
+          <div class="column">
+            <h1 class="ui center aligned icon header">
+              <i class="massive circular inverted teal pencil icon"></i>
+              Mini Wordpress
+            </h1>
+            <h4>Hello, fill form below to create new Account! </h4>
+            <form class="ui large form">
+              <div class="ui stacked segment">
+                <div class="field">
+                  <div class="ui left icon input">
+                    <i class="user icon"></i>
+                    <input type="text" placeholder="Name" v-model="name">
+                  </div>
+                </div>
+                <div class="field">
+                  <div class="ui left icon input">
+                    <i class="envelope outline icon"></i>
+                    <input type="text" placeholder="E-mail address" v-model="email">
+                  </div>
+                </div>
+                <div class="field">
+                  <div class="ui left icon input">
+                    <i class="lock icon"></i>
+                    <input type="password" placeholder="Password" v-model="password">
+                  </div>
+                </div>
+                <div class="ui fluid large teal button" @click="register"><i class="sign-in icon"></i>Register</div>
+              </div>
+              <div class="ui message">
+                <p>Already have an account?</p>
+                <div class="ui fluid large teal button" @click="viewlogin">Login</div>
+              </div>
+              <div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- VUE -->
+  <script>
+    // import GSignInButton from 'vue-google-signin-button'
+    // Vue.use(GSignInButton)
+  </script>
+
+  <script src="javascript/component/articlefeed.js"></script>
+  <script src="javascript/vue.js"></script>
+  <script src="javascript/googlelogin.js"></script>
+  <!-- QUILL EDITOR -->
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+  <script>
+    var quill = new Quill( '#editor', {
+      theme: 'snow'
+    } );
+  </script>
 </body>
+
 </html>

@@ -1,12 +1,12 @@
-const bcrypt = require('bcrypt')
+const bcrypt = require( 'bcrypt' )
 
-function encrypt(str){
-  let enc = bcrypt.hashSync(str, 5)
+function encrypt( str ) {
+  let enc = bcrypt.hashSync( str, 5 )
   return enc
 }
 
-function decrypt(pass, hash){
-  let dec = bcrypt.compareSync(pass, hash)
+function decrypt( pass, hash ) {
+  let dec = bcrypt.compareSync( pass, hash )
   return dec
 }
 

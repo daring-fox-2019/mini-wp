@@ -1,53 +1,52 @@
-
-Vue.component('articlefeed',{
-  props : ['articles', "author"],
-  data (){
+Vue.component( 'articlefeed', {
+  props: [ 'articles', "author" ],
+  data() {
     return {
 
     }
   },
-  methods : {
-    readarticle(article){
+  methods: {
+    readarticle( article ) {
       let thisArticle = {
-        _id : article._id,
+        _id: article._id,
         title: article.title,
         content: article.content,
         status: article.status,
-        image : article.image,
+        image: article.image,
         createdAt: article.createdAt,
-        updatedAt : article.updatedAt,
-        postedAt : article.postedAt,
-        }
-      this.$emit('toread', thisArticle)
-    }, 
-    updatethis(article){
-      let thisArticle = {
-          _id : article._id,
-          title: article.title,
-          content: article.content,
-          status: article.status,
-          image : article.image,
-          createdAt: article.createdAt,
-          updatedAt : article.updatedAt,
-          postedAt : article.postedAt,
-        }
-      this.$emit('toupdate', thisArticle)
-    },
-    deletethis(article){
-      let thisArticle = {
-        _id : article._id,
-        title: article.title,
-        content: article.content,
-        status: article.status,
-        image : article.image,
-        createdAt: article.createdAt,
-        updatedAt : article.updatedAt,
-        postedAt : article.postedAt,
+        updatedAt: article.updatedAt,
+        postedAt: article.postedAt,
       }
-      this.$emit('todelete', thisArticle)
+      this.$emit( 'toread', thisArticle )
+    },
+    updatethis( article ) {
+      let thisArticle = {
+        _id: article._id,
+        title: article.title,
+        content: article.content,
+        status: article.status,
+        image: article.image,
+        createdAt: article.createdAt,
+        updatedAt: article.updatedAt,
+        postedAt: article.postedAt,
+      }
+      this.$emit( 'toupdate', thisArticle )
+    },
+    deletethis( article ) {
+      let thisArticle = {
+        _id: article._id,
+        title: article.title,
+        content: article.content,
+        status: article.status,
+        image: article.image,
+        createdAt: article.createdAt,
+        updatedAt: article.updatedAt,
+        postedAt: article.postedAt,
+      }
+      this.$emit( 'todelete', thisArticle )
     },
   },
-  template : `
+  template: `
   <div class="ui container">
     <div class="ui segment" v-for="a in articles">
       <div class="ui items">
@@ -75,4 +74,4 @@ Vue.component('articlefeed',{
   </div>
 
   `
-})
+} )
