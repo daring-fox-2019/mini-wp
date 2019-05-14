@@ -1,6 +1,4 @@
-// const mongoose = require('mongoose')
 const Post = require('../models/post')
-// const ObjectId = mongoose.mongo.ObjectId
 
 class PostController {
   static create(req,res){
