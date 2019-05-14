@@ -26,7 +26,7 @@ const app = new Vue({
         auth2: '',
         searchValue: '',
         createPage: true,
-        menus: 
+        menus:
         {
             login: true,
             register: false,
@@ -77,13 +77,13 @@ const app = new Vue({
         },
         googleSignIn: function(googleUser) {
             const token = googleUser.getAuthResponse().id_token;
-            
+
             let config = {
                 headers: {
                   token
                 }
             }
-        
+
             axios
             .post(`${USER_PATH}/signinGoogle`, {}, config)
             .then( ({data}) => {
@@ -92,6 +92,7 @@ const app = new Vue({
                 this.user.name=data.name
                 this.user.loggedIn=true
                 this.fetchArticles()
+                this.goToHomePage()
             })
             .catch(err => {
                 console.log(err);
@@ -116,12 +117,12 @@ const app = new Vue({
         logout: function() {
             this.articles=[]
             this.user.loggedIn=false
-            
+
             let auth2 = gapi.auth2.getAuthInstance();
             auth2.signOut().then(function () {});
-            
+
             localStorage.clear()
-            
+
             this.goToRegisterPage()
         },
         fetchArticles: function() {
@@ -172,7 +173,7 @@ const app = new Vue({
             if(this.newArticle.tags.length>0) {
                 formData.append('tags', JSON.stringify(this.newArticle.tags))
             }
-            
+
             let config = {
                 headers: {
                   token: localStorage.token,
@@ -230,7 +231,7 @@ const app = new Vue({
                 })
 
                 this.newArticle={}
-                
+
                 this.goToListPage()
             })
             .catch(err => {
@@ -277,11 +278,11 @@ const app = new Vue({
                           id: localStorage.id
                         }
                     }
-                    
+
                     axios
                     .delete(`${ARTICLE_PATH}/${id}`, config)
                     .then((deleted) => {
-        
+
                         this.articles = this.articles.filter(article => {
                             if(article._id!==id) {
                                 return article
@@ -291,7 +292,7 @@ const app = new Vue({
                     .catch(err => {
                         console.log(err);
                     })
-                  
+
                 Swal.fire(
                     'Deleted!',
                     'Your article has been deleted.',
@@ -306,6 +307,7 @@ const app = new Vue({
             this.menus.home=false
             this.menus.list=false
             this.menus.article=false
+            this.generateGoogle()
         },
         goToRegisterPage: function() {
             this.menus.login=false

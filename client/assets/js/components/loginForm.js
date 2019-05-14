@@ -25,6 +25,15 @@ Vue.component('login-form', {
         },
         
     },
+    mounted() {
+        gapi.signin2.render('google-signin-button', {
+            onsuccess: this.googleSignIn
+        });
+
+        gapi.load('auth2', function() {
+            gapi.auth2.init();
+        });
+    },
     template: 
     `<div>
         <section 
