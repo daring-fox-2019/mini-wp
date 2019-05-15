@@ -48,7 +48,7 @@ let vue = new Vue( {
       console.log( "delete", obj._id )
       axios( {
           method: "delete",
-          url: `http://localhost:3000/articles/${obj._id}`,
+          url: `http://35.240.148.150/articles/${obj._id}`,
           headers: {
             token: localStorage.getItem( 'token' ),
             id: localStorage.getItem( 'id' )
@@ -94,7 +94,7 @@ let vue = new Vue( {
         }
         axios( {
             method: "put",
-            url: "http://localhost:3000/articles/" + this.article._id,
+            url: "http://35.240.148.150/articles/" + this.article._id,
             headers: {
               token: localStorage.getItem( 'token' ),
               id: localStorage.getItem( 'id' )
@@ -128,7 +128,7 @@ let vue = new Vue( {
         formdata.append( "image", blob );
         axios( {
           method: "post",
-          url: "http://localhost:3000/uploadimg",
+          url: "http://35.240.148.150/uploadimg",
           data: formdata,
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -157,7 +157,7 @@ let vue = new Vue( {
           }
           axios( {
               method: "put",
-              url: "http://localhost:3000/articles/" + this.article._id,
+              url: "http://35.240.148.150/articles/" + this.article._id,
               headers: {
                 token: localStorage.getItem( 'token' ),
                 id: localStorage.getItem( 'id' )
@@ -190,7 +190,7 @@ let vue = new Vue( {
     viewarticles() {
       axios( {
           method: "get",
-          url: "http://localhost:3000/articles",
+          url: "http://35.240.148.150/articles",
           headers: {
             token: localStorage.getItem( 'token' ),
             id: localStorage.getItem( 'id' )
@@ -250,7 +250,7 @@ let vue = new Vue( {
       } else {
         axios( {
             method: "post",
-            url: "http://localhost:3000/login",
+            url: "http://35.240.148.150/login",
             data: {
               email: this.email,
               password: this.password
@@ -290,7 +290,7 @@ let vue = new Vue( {
         console.log( "register mulai" )
         axios( {
             method: "post",
-            url: "http://localhost:3000/register",
+            url: "http://35.240.148.150/register",
             data: {
               name: this.name,
               email: this.email,
@@ -374,7 +374,7 @@ let vue = new Vue( {
         formdata.append( "image", blob );
         axios( {
           method: "post",
-          url: "http://localhost:3000/uploadimg",
+          url: "http://35.240.148.150/uploadimg",
           data: formdata,
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -400,7 +400,7 @@ let vue = new Vue( {
           }
           axios( {
               method: "post",
-              url: "http://localhost:3000/articles",
+              url: "http://35.240.148.150/articles",
               headers: {
                 token: localStorage.getItem( 'token' ),
                 id: localStorage.getItem( 'id' )
@@ -445,7 +445,7 @@ let vue = new Vue( {
         formdata.append( "image", blob );
         axios( {
           method: "post",
-          url: "http://localhost:3000/uploadimg",
+          url: "http://35.240.148.150/uploadimg",
           data: formdata,
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -471,7 +471,7 @@ let vue = new Vue( {
           }
           axios( {
               method: "post",
-              url: "http://localhost:3000/articles",
+              url: "http://35.240.148.150/articles",
               headers: {
                 token: localStorage.getItem( 'token' ),
                 id: localStorage.getItem( 'id' )

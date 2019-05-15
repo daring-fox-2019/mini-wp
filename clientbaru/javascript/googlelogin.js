@@ -3,7 +3,7 @@ function googleLogin( googleUser ) {
   const idToken = googleUser.getAuthResponse().id_token;
   axios( {
       method: "post",
-      url: "http://localhost:3000/googleLogin",
+      url: "http://35.240.148.150/googleLogin",
       headers: {
         token: idToken
       }
