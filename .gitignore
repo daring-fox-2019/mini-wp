@@ -1,0 +1,4 @@
+node_modules
+.env
+gcloudstoragekey.json
+mydb.json
