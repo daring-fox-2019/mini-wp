@@ -16,7 +16,7 @@ $ npm run dev
 Make sure you have set all required your .env parameters
 <br>(key reference: .env.example)
 
-Access the REST API via SERVER_URL = `http://localhost:3000/`
+Access the REST API via SERVER_URL = `http://api.raminiwp.ramdhon.net`
 
 ## REST API Routes:
 
@@ -50,7 +50,7 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
       }
       ```
       Notes:
-      - ERROR `400` is caused by entering *empty name* or *empty email* or *duplicated email* or *email not valid format* or *empty password*
+      - ERROR `400` is also Validation Error caused by entering *empty name* or *empty email* or *duplicated email* or *email not valid format* or *empty password*
 
 - **Login**
   - URL:
@@ -117,7 +117,7 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
     - status: `400`:
       ```json
       {
-        "message": "<errorMessage>",
+        "message": "<errorMessage>"
       }
       ```
       Notes:
@@ -159,7 +159,7 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
     - status: `404`:
       ```json
         {
-          "message": "data empty",
+          "message": "data empty"
         }
       ```
 
@@ -197,7 +197,7 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
     - status: `400`:
       ```json
         {
-          "message": "<authentication message>",
+          "message": "<authentication message>"
         }
       ```
       Notes:
@@ -209,7 +209,7 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
     - status: `404`:
       ```json
         {
-          "message": "data empty",
+          "message": "data empty"
         }
       ```
   
@@ -245,7 +245,7 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
     - status: `400`:
       ```json
       {
-        "message": "<authentication message>",
+        "message": "<authentication message>"
       }
       ```
       Notes:
@@ -253,7 +253,7 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
         - no token assigned
         - not allowed to access
         - not recognized input data
-      - ERROR `400` is caused by entering *empty title*
+      - ERROR `400` is also Validation Error caused by entering *empty title*
     
 - **GET ARTICLE BY ID**
   - URL:
@@ -280,7 +280,7 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
     - status: `404`:
       ```json
         {
-          "message": "data not found",
+          "message": "data not found"
         }
       ```
 
@@ -323,7 +323,7 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
     - status: `400`:
       ```json
       {
-        "message": "<authentication message>",
+        "message": "<authentication message>"
       }
       ```
       Notes:
@@ -331,16 +331,17 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
         - no token assigned
         - not allowed to access
         - not recognized input data
+      - ERROR `400` is also Validation Error caused by entering *empty title*
     - status: `401`:
       ```json
       {
-        "message": "unauthorized to access",
+        "message": "unauthorized to access"
       }
       ```
     - status: `404`:
       ```json
         {
-          "message": "data not found",
+          "message": "data not found"
         }
       ```
 
@@ -373,7 +374,7 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
     - status: `400`:
       ```json
       {
-        "message": "<authentication message>",
+        "message": "<authentication message>"
       }
       ```
       Notes:
@@ -381,16 +382,17 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
         - no token assigned
         - not allowed to access
         - not recognized input data
+      - ERROR `400` is also Validation Error caused by entering *empty title*
     - status: `401`:
       ```json
       {
-        "message": "unauthorized to access",
+        "message": "unauthorized to access"
       }
       ```
     - status: `404`:
       ```json
         {
-          "message": "data not found",
+          "message": "data not found"
         }
       ```
 
@@ -420,6 +422,6 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
     - status: `404`:
       ```json
         {
-          "message": "data empty",
+          "message": "data empty"
         }
       ```
