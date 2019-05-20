@@ -355,6 +355,7 @@ function onSignIn(googleUser) {
   if (!localStorage.hasOwnProperty('signedInVia')) {
   console.log('onSignIn masuk')
     let id_token = googleUser.getAuthResponse().id_token;
+    console.log(id_token) 
     axios({
       method: 'POST',
       url: `/users/signingoogle`,
@@ -363,7 +364,6 @@ function onSignIn(googleUser) {
       }
     })
       .then(({ data }) => {
-        console.log('halo') 
         let msg = ''
         if (data.passRandom) {
           msg = ` Hurry up change your password now, your password is ${data.passRandom}`
