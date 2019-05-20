@@ -181,7 +181,7 @@ var app = new Vue({
           )
         })
         .catch(err => {
-          console.log(err)
+          console.log(JSON.stringify(err))
         })
     },
     updatePost(id) {

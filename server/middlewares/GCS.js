@@ -19,9 +19,9 @@ const sendUploadToGCS = (req, res, next) => {
     return next()
   }
 
-  const gcsname = 'uploads/images/' + Date.now() + req.file.originalname 
+  const gcsname = 'uploads/images/' + Date.now() + req.file.originalname
   const file = bucket.file(gcsname)
-
+  console.log(file)
   const stream = file.createWriteStream({
     metadata: {
       contentType: req.file.mimetype
