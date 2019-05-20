@@ -4,6 +4,7 @@ const { comparePass } = require('../helpers/bcrypt')
 const randomPass = require('../helpers/randomPass')
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const fs = require('fs')
 
 class UserController {
   static GoogleSignIn(req, res) {
@@ -52,13 +53,13 @@ class UserController {
               res.status(201).json({ token, name, passRandom })
             })
             .catch((err) => {
-              console.log('catch 1')
+              fs.writeFileSync('./log.txt','catch 1: '+JSON.stringify(err),'utf8')
               res.status(500).json(err)
             })
         }
       })
       .catch((err) => {
-        console.log('catch 2')
+        fs.writeFileSync('./log.txt','catch 2: '+JSON.stringify(err),'utf8')
         res.status(500).json(err)
       })
   }
