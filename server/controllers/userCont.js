@@ -53,13 +53,11 @@ class UserController {
               res.status(201).json({ token, name, passRandom })
             })
             .catch((err) => {
-              fs.writeFileSync('./log.txt','catch 1: '+JSON.stringify(err),'utf8')
               res.status(500).json(err)
             })
         }
       })
       .catch((err) => {
-        fs.writeFileSync('./log.txt','catch 2: '+JSON.stringify(err),'utf8')
         res.status(500).json(err)
       })
   }
