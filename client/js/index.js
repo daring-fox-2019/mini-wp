@@ -1,4 +1,4 @@
-const serverURL = 'http://localhost:3000';
+const serverURL = 'http://api.raminiwp.ramdhon.net';
 
 let app = new Vue ({
   el: '#app',

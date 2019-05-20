@@ -145,7 +145,7 @@ Access the REST API via SERVER_URL = `http://api.raminiwp.ramdhon.net`
             "imageURL": "<imageURL>",
             "created": "<createdAt>",
             "updated": "<updatedAt>",
-            "tags": "[<userObjectId-populated>]",
+            "tags": "[<tagObjectId-populated>]",
             "creator": "<userObjectId-populated>"
           }, 
           {
@@ -183,7 +183,7 @@ Access the REST API via SERVER_URL = `http://api.raminiwp.ramdhon.net`
             "imageURL": "<imageURL>",
             "created": "<createdAt>",
             "updated": "<updatedAt>",
-            "tags": "[<userObjectId-populated>]",
+            "tags": "[<tagObjectId-populated>]",
             "creator": "<userObjectId-populated>"
           },
           {
@@ -236,7 +236,7 @@ Access the REST API via SERVER_URL = `http://api.raminiwp.ramdhon.net`
           "imageURL": "<imageURL>",
           "created": "<createdAt>",
           "updated": "<updatedAt>",
-          "tags": "[<userObjectId-populated>]",
+          "tags": "[<tagObjectId-populated>]",
           "creator": "<userObjectId-populated>"
         },
       }
@@ -271,7 +271,7 @@ Access the REST API via SERVER_URL = `http://api.raminiwp.ramdhon.net`
           "imageURL": "<imageURL>",
           "created": "<createdAt>",
           "updated": "<updatedAt>",
-          "tags": "[<userObjectId-populated>]",
+          "tags": "[<tagObjectId-populated>]",
           "creator": "<userObjectId-populated>"
         },
       }
@@ -313,7 +313,7 @@ Access the REST API via SERVER_URL = `http://api.raminiwp.ramdhon.net`
           "imageURL": "<imageURL>",
           "created": "<createdAt>",
           "updated": "<updatedAt>",
-          "tags": "[<userObjectId-populated>]",
+          "tags": "[<tagObjectId-populated>]",
           "creator": "<userObjectId-populated>"
         },
         "info": "<info-optional>"
@@ -365,7 +365,7 @@ Access the REST API via SERVER_URL = `http://api.raminiwp.ramdhon.net`
           "imageURL": "<imageURL>",
           "created": "<createdAt>",
           "updated": "<updatedAt>",
-          "tags": "[<userObjectId-populated>]",
+          "tags": "[<tagObjectId-populated>]",
           "creator": "<userObjectId-populated>"
         },
       }
