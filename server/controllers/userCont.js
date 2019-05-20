@@ -15,11 +15,13 @@ class UserController {
       .then((ticket) => {
         payload = ticket.getPayload();
         const userid = payload['sub']
-        // console.log(payload)
+        console.log('verifyIdToken')
         return User.findOne({ email: payload.email })
       })
       .then((user) => {
+        console.log('findOne User')
         if (user) {
+        console.log('if')
           let { name } = user
           let payload = {
             _id: user._id,
@@ -30,6 +32,7 @@ class UserController {
           console.log('token --->', token, '<---token')
           res.status(200).json({ token, name })
         } else {
+        console.log('else')
           let passRandom = randomPass()
           User.create({
             name: payload.name,
@@ -37,6 +40,7 @@ class UserController {
             password: passRandom
           })
             .then((user) => {
+              console.log('create User')
               let { name } = user
               let payload = {
                 _id: user._id,
