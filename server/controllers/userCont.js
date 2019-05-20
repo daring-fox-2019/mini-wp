@@ -52,12 +52,13 @@ class UserController {
               res.status(201).json({ token, name, passRandom })
             })
             .catch((err) => {
+              console.log('catch 1')
               res.status(500).json(err)
             })
         }
       })
       .catch((err) => {
-        console.log(err)
+        console.log('catch 2')
         res.status(500).json(err)
       })
   }
