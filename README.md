@@ -356,7 +356,7 @@ Access the REST API via SERVER_URL = `http://api.raminiwp.ramdhon.net`
     ```json
       {
         "message": "data deleted",
-        "deletedTodo":
+        "deletedArticle":
         {
           "_id": "<id>",
           "title": "<title>",
@@ -382,7 +382,6 @@ Access the REST API via SERVER_URL = `http://api.raminiwp.ramdhon.net`
         - no token assigned
         - not allowed to access
         - not recognized input data
-      - ERROR `400` is also Validation Error caused by entering *empty title*
     - status: `401`:
       ```json
       {
