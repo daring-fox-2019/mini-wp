@@ -53,13 +53,8 @@
                         <button class="btn btn-primary" v-on:click.prevent="registerPage=false;loginPage=true">already have an account</button>
                         <button class="btn btn-primary" v-on:click.prevent="register">register</button>
                     </form>
-                    {{name}}
-                    {{email}}
-                    {{password}}
                 </div>
             </div>
-        </div>
-        <div>
         </div>
         <div v-if='islogin' style="height:100%">
             <div id="banner" class="row bg-dark text-light sticky-top">
@@ -90,7 +85,7 @@
                         <button aria-expanded="true" class="card-header btn btn-link text-body" type="button"
                             id="add_post_button" style="text-align:left; height: 3rem;"
                             v-on:click.prevent="toShowAndHide('allArticles')">
-                            All Articles
+                            Manage my articles
                         </button>
 
                     </div>
@@ -98,7 +93,7 @@
                     <div class="accordion" id="accordionExample">
                         <div class="card" style="border:none; background-color: white; border-radius: 0">
 
-                            <button data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"
+                            <button v-if='articles.length > 0' data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"
                                 class="card-header btn btn-link text-body" type="button" data-toggle="collapse"
                                 id="headingOne" style="text-align:left; height: 3rem;">
                                 Posts
@@ -125,15 +120,15 @@
                     </div>
                 </div>
                 <div id="content" class="pt-3 col-sm row justify-content-center" style="height: 100%;">
-                    <div id="allArticles" class="row justify-content-center"
+                    <div id="allArticles" class="row col-sm-12"
                         style="height: 100%; padding-bottom: 100px;" v-show="showHide.allArticles">
-                        <div class='col-sm-5'>
+                        <div class='col-12'>
                             <form class="mb-3">
                                 <input type='text' v-model='search' style='width:100%; height:3rem'
                                     placeholder="search by title">
                             </form>
                         </div>
-                        <div class="d-flex justify-content-center" style="height: 100%; overflow-y:scroll">
+                        <div class="d-flex justify-content-center col-12" style="height: 100%; overflow-y:scroll">
                             <div id="listArticle" class="col-sm-9" style="height: 100%;">
                                 <div class="row" v-for="article in filtered">
                                     <div class="col-sm-12">
@@ -193,7 +188,7 @@
                                 </div>
                                 <input id='imageInputUpdate' type="file" v-on:change="uploadImage($event)"><br>
                                 <wysiwyg v-model='updateArticle.text'></wysiwyg>
-                                <button type="submit" v-on:click.prevent="update(updateArticle._id)">
+                                <button type="submit" v-on:click.prevent="update(updateArticle.id)">
                                     Submit
                                 </button>
                             </form>

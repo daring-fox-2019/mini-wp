@@ -116,7 +116,7 @@ const app = new Vue({
             this.file = ''
             console.log('vue add new article')
             let formData = new FormData()
-            formData.append('file', this.newArticle.image)
+            formData.append('image', this.newArticle.image)
             formData.append('title', this.newArticle.title)
             formData.append('content', this.newArticle.text)
             axios({
@@ -136,6 +136,10 @@ const app = new Vue({
             })
             .then(({data})=>{
                 this.articles.push(data)
+                this.newArticle.text = ''
+                this.newArticle.title = ''
+                this.newArticle.image = ''
+                this.read(data._id)
                 console.log(data)
             })
             .catch(({error})=>{
@@ -161,6 +165,7 @@ const app = new Vue({
         },
         updatePage:function(id){
             //masih error kalau #updateArticlePage dengan v-if. kalau dengan v-show, updateArticle nya nggk ke render dalam page
+            
             axios({
                 method:'GET',
                 url:`${baseURL}/articles/${id}`,
@@ -171,8 +176,8 @@ const app = new Vue({
             .then(({data})=>{
                 this.updateArticle.title = data.title
                 this.updateArticle.text = data.content
-                console.log(data)
-                console.log(this.updateArticle.title)
+                this.updateArticle.id = data._id
+                console.log(this.updateArticle.id)
                 this.toShowAndHide("updateArticlePage")
             })
             .catch((error)=>{
@@ -183,7 +188,7 @@ const app = new Vue({
         update:function(id){
             let formData = new FormData()
             this.editArticle.image = this.file
-            formData.append('file', this.editArticle.image)
+            formData.append('image', this.editArticle.image)
             formData.append('title', this.editArticle.title)
             formData.append('content', this.editArticle.text)
             axios({
@@ -195,6 +200,10 @@ const app = new Vue({
                 data:formData
             })
             .then(({data})=>{
+                this.editArticle.image = ''
+                this.editArticle.title = ''
+                this.editArticle.text = ''
+                this.read(data._id)
                 console.log(data)
             })
             .catch(({error})=>{

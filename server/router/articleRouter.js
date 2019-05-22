@@ -10,7 +10,7 @@ const {
 
 router.get('/', articleController.findAll)
 router.get('/:id', articleController.findOne)
-router.post('/', upload.single('file'), sendUploadToGCS, articleController.create)
+router.post('/', upload.single('image'), sendUploadToGCS, articleController.create)
 router.patch('/:id', authorization, upload.single('image'), sendUploadToGCS, articleController.update)
 router.delete('/:id', authorization, articleController.delete)
 
