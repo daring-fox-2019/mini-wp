@@ -5,8 +5,8 @@ const index=require('./router/index')
 const cors = require('cors')
 const mongoose = require('mongoose')
 require('dotenv').config()
-
-mongoose.connect('mongodb://localhost:27017/mini-wp', {useNewUrlParser: true})
+let connection = process.env.MONGODB_CONNECTION ||'mongodb://localhost:27017/mini-wp'  
+mongoose.connect(connection, {useNewUrlParser: true})
 console.log(process.env.GCLOUD_PROJECT_ID, 'di app')
 
 app.use(cors())
