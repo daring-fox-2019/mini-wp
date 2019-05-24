@@ -1,0 +1,43 @@
+{
+  "posts": [
+    {
+      "title": "fahmi ganteng",
+      "id": 1
+    },
+    {
+      "id": 2,
+      "title": "Belajar",
+      "author": "Dienul"
+    },
+    {
+      "id": 3,
+      "title": "Javascript",
+      "author": "Dienul"
+    },
+    {
+      "id": 4,
+      "title": "Jquery",
+      "author": "Dienul"
+    },
+    {
+      "id": 5,
+      "title": "vue",
+      "author": "Dienul"
+    },
+    {
+      "id": 6,
+      "title": "sequelize",
+      "author": "Dienul"
+    },
+    {
+      "title": "asd",
+      "author": "Dienul",
+      "id": 7
+    },
+    {
+      "title": "bosen",
+      "author": "Dienul",
+      "id": 8
+    }
+  ]
+}
