@@ -45,11 +45,7 @@ Vue.component("card-article", {
     `
     <div class="card">
                     <img class="card-img-top"
-<<<<<<< HEAD
                     v-bind:src="list.image"
-=======
-                    src="https://s3.amazonaws.com/peoplepng/wp-content/uploads/2018/12/22235003/WordPress-Logo-PNG-Image.png"
->>>>>>> a0a72790edc4b798ece83512efc1683fca8803eb
                     alt="Card image cap">
                     <div class="card-body">
                       <h5 class="card-title">{{list.title}}</h5>
