@@ -1,4 +1,4 @@
-const baseURL = 'http://localhost:3000'
+const baseURL = 'http://35.247.168.18'
 const app = new Vue({
     el: '#app',
     data: {
@@ -256,7 +256,7 @@ const app = new Vue({
         if (this.islogin) {
             axios({
                 method: 'GET',
-                url: 'http://localhost:3000/articles',
+                url: `${baseURL}/articles`,
                 headers:{
                     token : localStorage.getItem('token')
                 }

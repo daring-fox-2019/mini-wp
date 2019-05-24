@@ -142,7 +142,7 @@
                                                 </div>
                                                 <div class="dropdown-divider"></div>
 
-                                                <p class="card-text">{{article.content}}</p>
+                                                <span  v-html='article.content'></span>
                                                 <div class='d-flex flex-row-reverse'>
                                                     <a href="#" style="font-size:medium" class="text-muted"
                                                         v-on:click.prevent="read(article._id)">read</a>
