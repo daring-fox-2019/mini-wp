@@ -42,6 +42,9 @@
         v-if="page === 'article form'"
         :article="article"
         :old-article="oldArticle"
+        @show-home-page="showHomePage"
+        @old-article="oldArticle = $event"
+        @fetch-article="fetchArticles"
         ></article-form>
       </transition>
         
@@ -73,12 +76,16 @@
         v-if="page === 'article'"
         :article="article"
         :user-email="userEmail"
+        @edit-article="editArticle"
+        @delete-article="deleteArticle"
       ></article-detail>
       </transition>
       
       
       <login-form 
         v-if="page === 'login form'"
+        @show-home-page="showHomePage"
+        @is-login="isLogin = $event"
       ></login-form>
         <signup-form
         v-if="page === 'register form'" 

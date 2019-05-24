@@ -22,8 +22,8 @@ Vue.component('loginForm', {
                     localStorage.setItem('accesstoken', data.accesstoken)
                     localStorage.setItem('email', this.emailLogin)
 
-                    this.$parent.showHomePage();
-                    this.$parent.isLogin = true;
+                    this.$emit('show-home-page');
+                    this.$emit('is-login', true)
                     swal({
                         title: 'Login Success',
                         icon: 'success'
@@ -50,8 +50,8 @@ Vue.component('loginForm', {
                     localStorage.setItem('accesstoken', data.accesstoken)
                     localStorage.setItem('email', this.emailLogin)
 
-                    this.$parent.showHomePage();
-                    this.$parent.isLogin = true;
+                    this.$emit('show-home-page');
+                    this.$emit('is-login', true)
                     // console.log(data)
 
                     this.emailLogin = '';

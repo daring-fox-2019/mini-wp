@@ -63,11 +63,9 @@ Vue.component('article-form', {
                 data: newArticle
             })
                 .then(({ data }) => {
-                    if (!edit) {
-                        this.$parent.articles.unshift(data)
-                    }
-                    this.$parent.oldArticle = ''
-                    this.$parent.showHomePage();
+                  this.$emit('show-home-page')
+                  this.$emit('old-article', '')
+                  this.$emit('fetch-articles')
                 })
                 .catch(err => {
                     if (err.response) {

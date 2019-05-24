@@ -4,46 +4,6 @@ Vue.component('article-detail', {
         userEmail: String
     },
     methods: {
-        // EDIT ARTICLE
-        editArticle() {
-            this.$parent.oldArticle = this.article
-            this.$parent.page = 'article form'
-        },
-        // DELETE ARTICLE
-        deleteArticle(id) {
-            swal({
-                title: "Are you sure?",
-                text: "Once deleted, you will not be able to recover this!",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        axios({
-                            url: baseUrl + `/articles/${id}`,
-                            method: 'delete',
-                            headers: {
-                                accesstoken: localStorage.getItem('accesstoken')
-                            }
-                        })
-                            .then(({ data }) => {
-                                this.$parent.showHomePage();
-
-                                swal("Article deleted!", {
-                                    icon: "success",
-                                });
-                            })
-                            .catch(err => {
-                                if (err.response) {
-                                    swal(err.response.data.message)
-                                } else {
-                                    console.log(err)
-                                }
-                            })
-                    }
-                });
-        }
     },
     template: `
     <div class="ui basic segment container">
@@ -79,7 +39,7 @@ Vue.component('article-detail', {
                 data-inverted=""
                 data-tooltip="Edit article"
                 data-position="left center"
-                @click="editArticle"
+                @click="$emit('edit-article')"
               >
                 <i class="edit icon"></i>
               </button>
@@ -88,7 +48,7 @@ Vue.component('article-detail', {
                 data-inverted=""
                 data-tooltip="Delete article"
                 data-position="right center"
-                @click="deleteArticle(article._id)"
+                @click="$emit('delete-article', article._id)"
               >
                 <i class="trash icon"></i>
               </button>

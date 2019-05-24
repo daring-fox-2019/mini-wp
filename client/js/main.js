@@ -86,5 +86,46 @@ let App = new Vue({
             this.article = article
             this.page = 'article'
         },
+        // EDIT ARTICLE
+        editArticle() {
+            this.oldArticle =  this.article
+            this.page = 'article form'
+        },
+        // DELETE ARTICLE
+        deleteArticle(id) {
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        axios({
+                            url: baseUrl + `/articles/${id}`,
+                            method: 'delete',
+                            headers: {
+                                accesstoken: localStorage.getItem('accesstoken')
+                            }
+                        })
+                            .then(({ data }) => {
+                                this.showHomePage();
+                                this.fetchArticles();
+                                
+                                swal("Article deleted!", {
+                                    icon: "success",
+                                });
+                            })
+                            .catch(err => {
+                                if (err.response) {
+                                    swal(err.response.data.message)
+                                } else {
+                                    console.log(err)
+                                }
+                            })
+                    }
+                });
+        }
     },
 })
