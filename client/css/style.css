@@ -1,0 +1,119 @@
+* {
+    margin: 0;
+    padding: 0;
+  }
+
+  @import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+  html {
+    font-family: Arial;
+    font-size: 16px;
+  }
+  
+  .sidebar {
+    position: fixed;
+    width: 20%;
+    height: 100vh;
+    background: #312450;
+    font-size: 0.65em;
+    background: gainsboro ;
+  }
+
+  .sidebar img{
+      border-radius: 50%;
+      filter: grayscale(70%)
+  }
+  
+  #sidebar {
+    position: relative;
+    margin: 0 15%;
+    text-align: right;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: bold;
+  }
+    
+  #sidebar ul {
+    list-style: none;    
+  }
+
+  body {
+    font-family: sans-serif;
+  }
+  
+  .topnav {
+    display: flex;
+    justify-content: space-around;
+    background-color:transparent;
+    padding: 15px;
+    height: 50px;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    width: 100%;
+  }
+  
+  .topnav .links {
+    display: flex;
+    align-items: center;
+  }
+  
+  .topnav .links ul {
+    list-style: none;
+  }
+  
+  .topnav .links li {
+    display: inline;
+  }
+  
+  .topnav .links a {
+    font-size: 18px;
+    text-decoration: none;
+    margin-left: 30px;
+    color: #DFF0F8;
+  }
+  
+  .topnav .links.icons a {
+    font-size: 24px;
+    margin-left: 15px;
+  }
+  
+  .topnav .links li:first-child a {
+    margin-left: 0px;
+  }
+  
+  .topnav #logo img {
+    height: 50px;
+  } 
+
+  #articles{
+    margin-top: 6%;
+    margin-left: 12%;
+  }
+
+  #sub-article{
+    display: flex;
+  }
+
+  #content-post{
+    white-space: nowrap; 
+    font-size: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis; 
+  }
+
+  #navigation{
+    justify-content:flex-end;
+  }
+
+  #navigation a{
+    margin-right: 27%
+  }
+
+  #create-article{
+    text-align: center;
+  }
+
+  #submit-form{
+    width: 55%;
+  }
