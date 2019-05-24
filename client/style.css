@@ -1,0 +1,29 @@
+/* *{
+    border:black solid 1px
+} */
+
+a{
+    text-decoration: none;
+    color:black
+}
+button:hover{
+    background-color: rgb(194, 190, 190);
+    text-decoration:none;
+}
+button:active{
+    text-decoration:none;
+    background-color:white
+}
+.article-navigation:hover{
+    background-color: rgb(194, 190, 190);
+    text-decoration: none
+}  
+.article-navigation:active{
+    background-color:white
+}
+
+input[type=text] {
+    background-color: white;
+    background-repeat: no-repeat;
+    padding-left: 20px
+  }
