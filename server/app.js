@@ -8,20 +8,20 @@ const kue = require('kue')
 
 let app= express()
 
-// mongoose.connect(process.env.MONGODB_ATLAS, {useNewUrlParser: true}, function(err){
-//     if(err){
-//         console.log('Databases connection failed!');
-//     }else{
-//         console.log('Databases connected!');
-//     }
-// })
-mongoose.connect('mongodb://localhost/NewMiniWP', {useNewUrlParser: true}, function(err){
+mongoose.connect(process.env.MONGODB_ATLAS, {useNewUrlParser: true}, function(err){
     if(err){
         console.log('Databases connection failed!');
     }else{
         console.log('Databases connected!');
     }
 })
+// mongoose.connect('mongodb://localhost/NewMiniWP', {useNewUrlParser: true}, function(err){
+//     if(err){
+//         console.log('Databases connection failed!');
+//     }else{
+//         console.log('Databases connected!');
+//     }
+// })
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
 app.use(cors())
