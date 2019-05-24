@@ -203,9 +203,9 @@ const app = new Vue({
                 data:formData
             })
             .then(({data})=>{
-                this.editArticle.image = ''
-                this.editArticle.title = ''
-                this.editArticle.text = ''
+                this.updateArticle.image = ''
+                this.updateArticle.title = ''
+                this.updateArticle.text = ''
                 this.read(data._id)
                 console.log(data)
             })
