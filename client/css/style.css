@@ -1,0 +1,56 @@
+
+nav {
+  display: flex;
+  justify-content: space-between;
+}
+
+nav .nav-write{
+  color: red;
+  padding: 10px 
+}
+
+nav .links {
+  color: white;
+  padding: 10px 
+} 
+
+#logo{
+  /* background-color: blanchedalmond; */
+  align-items: flex-start
+}
+
+img{
+  height: 50px;
+}
+
+.vertical-menu a {
+  background-color: #eee;
+  color: black;
+  display: block;
+  padding: 12px;
+  text-decoration: none;
+}
+
+.vertical-menu a:hover {
+  background-color: #ccc;
+}
+
+.vertical-menu a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+#sidebar-wrapper {
+  min-height: 100vh;
+  -webkit-transition: margin .25s ease-out;
+  -moz-transition: margin .25s ease-out;
+  -o-transition: margin .25s ease-out;
+  transition: margin .25s ease-out;
+}
+
+#sidebar-wrapper .sidebar-heading {
+  padding: 0.875rem 1.25rem;
+  font-size: 1.2rem;
+}
+
+
