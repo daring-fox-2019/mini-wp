@@ -76,6 +76,7 @@ const app = new Vue({
                 swal(`usernam/password salah!`, ' ', 'error');
             })
         },
+        
         successLogin(data){
             console.log(data,'ini dari login');
             window.localStorage.setItem('token', data.token);
@@ -87,6 +88,7 @@ const app = new Vue({
             swal(`Welcome ${localStorage.fullName}!`, ' ', 'success');
             this.checkLog();
         },
+
         getMyArticles(){
             axios({
                 method : "get",

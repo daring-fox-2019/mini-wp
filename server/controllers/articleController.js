@@ -34,30 +34,53 @@ class ArticleController{
 
     static create(req,res){
         console.log(req.loggedUser,'ini logged user XXXX');
-        
         let date = new Date()
         let dateFix = `${date.getFullYear()}-${date.getDate()}-${date.getMonth()}` 
-        Article.create({
-            title: req.body.title,
-            description: req.body.description,
-            author: req.body.author,
-            content: req.body.content,
-            created_at: new Date(),
-            image : req.file.cloudStoragePublicUrl,
-            userId : req.loggedUser.id
-        })
-        .then(newArt =>{
-            res.status(200).json({
-                msg : `successfully created article`,
-                newArt
+        if(req.file != undefined){
+            Article.create({
+                title: req.body.title,
+                description: req.body.description,
+                author: req.body.author,
+                content: req.body.content,
+                created_at: new Date(),
+                image : req.file.cloudStoragePublicUrl,
+                userId : req.loggedUser.id
             })
-        })
-        .catch(err =>{
-            console.log(err);
-            res.status(500).json({
-                msg: `internal server error`
+            .then(newArt =>{
+                res.status(200).json({
+                    msg : `successfully created article`,
+                    newArt
+                })
             })
-        })
+            .catch(err =>{
+                console.log(err);
+                res.status(500).json({
+                    msg: `internal server error`
+                })
+            })
+        }else{
+            Article.create({
+                title: req.body.title,
+                description: req.body.description,
+                author: req.body.author,
+                content: req.body.content,
+                created_at: new Date(),
+                image : '',
+                userId : req.loggedUser.id
+            })
+            .then(newArt =>{
+                res.status(200).json({
+                    msg : `successfully created article`,
+                    newArt
+                })
+            })
+            .catch(err =>{
+                console.log(err);
+                res.status(500).json({
+                    msg: `internal server error`
+                })
+            })
+        }
     }
 
     static replace(req,res){

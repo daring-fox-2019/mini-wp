@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const bcrypt = require('bcryptjs')
 
-mongoose.connect('mongodb://localhost/mini-wp',{ useNewUrlParser: true } );
+mongoose.connect(process.env.DB_URL,{ useNewUrlParser: true } );
 
 let userSchema = new Schema({
     firstName : {
