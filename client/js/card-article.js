@@ -14,7 +14,7 @@ Vue.component('card-article', {
             this.$emit('search-tag', tag)
         }
     },
-    template: ` 
+    template: `
         <v-card>
             <v-card-title primary-title>
             <div>

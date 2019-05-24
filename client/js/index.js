@@ -150,7 +150,7 @@ let app = new Vue({
       data.append("tags", this.form.tags)
 
 
-      axios.put(`http://35.198.215.132/articles/${this.idArticleSelected}`, data, {
+      axios.put(`http://localhost:3000/articles/${this.idArticleSelected}`, data, {
         headers: {
           token: localStorage.token
         }
@@ -178,7 +178,7 @@ let app = new Vue({
     },
 
     loadData() {
-      axios.get('http://35.198.215.132/articles', {
+      axios.get('http://localhost:3000/articles', {
         headers: {
           token: localStorage.token
         }
@@ -200,7 +200,7 @@ let app = new Vue({
     },
 
     signUp() {
-      axios.post('http://35.198.215.132/users/signup', this.signup)
+      axios.post('http://localhost:3000/users/signup', this.signup)
         .then(({ data }) => {
           swal(`Register Success!`, {
             icon: "success",
@@ -217,7 +217,7 @@ let app = new Vue({
     },
 
     signIn() {
-      axios.post('http://35.198.215.132/users/signin', this.signin)
+      axios.post('http://localhost:3000/users/signin', this.signin)
         .then(({ data }) => {
           this.signin.email = ''
           this.signin.password = ''
@@ -256,7 +256,7 @@ let app = new Vue({
       })
         .then((willDelete) => {
           if (willDelete) {
-            axios.delete(`http://35.198.215.132/articles/${id}`, {
+            axios.delete(`http://localhost:3000/articles/${id}`, {
               headers: {
                 token: localStorage.token
               }
@@ -296,7 +296,7 @@ let app = new Vue({
       }
       data.append("tags", this.form.tags)
 
-      axios.post('http://35.198.215.132/articles', data, { headers: { token: localStorage.token } })
+      axios.post('http://localhost:3000/articles', data, { headers: { token: localStorage.token } })
         .then(({ data }) => {
           swal(`Create article Success!`, {
             icon: "success",
@@ -335,7 +335,7 @@ let app = new Vue({
 
           let datas = new FormData()
           datas.append('image', this.form.imageFile, this.form.imageName)
-          axios.post('http://35.198.215.132/vision', datas )
+          axios.post('http://localhost:3000/vision', datas )
           .then(({data})=>{
             console.log(data);
             this.imageTag = data
@@ -418,7 +418,8 @@ let app = new Vue({
 function onSignIn(googleUser) {
   let id_token = googleUser.getAuthResponse().id_token;
 
-  axios.post('http://35.198.215.132/users/signinGoogle', {
+  axios.post('http://loclahost:3000/users/signinGoogle', {
+    // axios.post('http://35.198.215.132/users/signinGoogle', {
     token: id_token
   })
     .then(({ data }) => {
@@ -427,13 +428,10 @@ function onSignIn(googleUser) {
       });
       localStorage.setItem('token', data.token)
       localStorage.setItem('name', data.userName)
-      console.log("OK1");
 
       app.userLogin = data.userName
       app.statusSign = '2'
       app.loadData()
-      console.log("OK2");
-      
     })
     .catch((jqXHR, textStatus) => {
       console.log(`request failed ${textStatus}`)
