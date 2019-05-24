@@ -11,7 +11,10 @@ const app = new Vue({
             text: null,
         },
         updateArticle:{
-            text:'mama'      
+            text:'',
+            title:'',
+            id:'',
+            image:''     
         },
         showHide: {
             eachArticle: false,
@@ -187,10 +190,10 @@ const app = new Vue({
         },
         update:function(id){
             let formData = new FormData()
-            this.editArticle.image = this.file
-            formData.append('image', this.editArticle.image)
-            formData.append('title', this.editArticle.title)
-            formData.append('content', this.editArticle.text)
+            this.updateArticle.image = this.file
+            formData.append('image', this.updateArticle.image)
+            formData.append('title', this.updateArticle.title)
+            formData.append('content', this.updateArticle.text)
             axios({
                 method:'PATCH',
                 url:`${baseURL}/articles/${id}`,
