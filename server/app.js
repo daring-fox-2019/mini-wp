@@ -6,7 +6,7 @@ const mongoose = require('mongoose')
 const port = process.env.PORT || 3000
 const routes = require('./routes')
 
-mongoose.connect(`mongodb+srv://admin:<password>@mini-wp-npaxm.gcp.mongodb.net/mini-wp?retryWrites=true`, { useNewUrlParser: true })
+mongoose.connect(process.env.CONNECT_ATLAS, { useNewUrlParser: true })
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cors())
