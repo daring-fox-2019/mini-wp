@@ -1,4 +1,4 @@
-const Article = require('../models/article')
+const Article = require('../../../../w2/mini-wp/server/models/article')
 
 module.exports = (err, req, res, next) => {
     if(req.headers.hasOwnProperty('token')) {

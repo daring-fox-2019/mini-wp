@@ -5,6 +5,7 @@ const PORT = process.env.PORT
 const routes = require('./routes')
 const mongoose = require('mongoose');
 const cors = require('cors')
+mongoose.set('useCreateIndex', true)
 
 mongoose.set('useFindAndModify', false);
 mongoose.connect(process.env.MONGODB_CONNECTION_URL, {useNewUrlParser: true});

@@ -19,12 +19,7 @@ const articleSchema = new Schema({
     },
     tags : [String],
     author : { type: Schema.Types.ObjectId, ref: 'Member' }
-});
-
-articleSchema.pre('save', function() {
-    this.created_at = new Date
-    next()
-})
+}, {timestamps: true});
 
 const Article = mongoose.model('Article', articleSchema);
 
