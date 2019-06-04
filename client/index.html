@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="google-signin-client_id" content="611894394073-9kmqkvj9eii99jf5tlhldlopomonoger.apps.googleusercontent.com">
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css"
+    />
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css"
+    />
+    <title>Mini Wp</title>
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+    <!-- moment  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+    <!-- ck editor -->
+    <script src="../node_modules/@ckeditor/ckeditor5-build-classic/build/ckeditor.js"></script>
+    <script src="../node_modules/@ckeditor/ckeditor5-vue/dist/ckeditor.js"></script>
+  </head>
+
+  <body>
+    <div class="contrainer" id="app">
+      <nav
+        class="navbar navbar-expand-lg navbar-light"
+        style="background-color: #14213D "
+      >
+        <a class="navbar-brand" href="#" style="color:#FCA311"
+          ><i class="fab fa-wordpress" style="font-size: 30px"></i
+        ></a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#" style="color:white"
+                ><i class="far fa-newspaper" style="font-size: 20px"></i>
+                Mini.</a
+              >
+            </li>
+          </ul>
+
+          <b-button
+            @click.prevent="createArticle"
+            class="btn btn-light mx-2"
+            v-show="isLogin"
+            ><i class="fas fa-feather-alt"></i> Write</b-button
+          >
+          <b-button
+            class="btn btn-secondary mx-2"
+            type="button"
+            v-show="isLogin"
+            @click.prevent="logout"
+            ><i class="fas fa-sign-out-alt"></i> Sign Out</b-button
+          >
+        </div>
+      </nav>
+      <!-- login form -->
+      <div class="container" v-show="!isLogin" style="padding: 100px">
+        <div class="row d-flex justify-content-center">
+          <h1>Welcome</h1>
+        </div>
+        <div class="row d-flex justify-content-center">
+          <small text-muted>Mini Wordpress</small>
+        </div>
+        <div class="row d-flex justify-content-center pt-5">
+          <b-form @submit.prevent="login">
+            <b-form-group
+              id="email-label"
+              label="Email address:"
+              label-for="user-email"
+              description="We'll never share your email with anyone else."
+            >
+              <b-form-input
+                id="user-email"
+                v-model="userLogin.email"
+                type="email"
+                required
+                placeholder="Enter email"
+              ></b-form-input>
+            </b-form-group>
+            <b-form-group
+              id="password-label"
+              label="Password:"
+              label-for="password-input"
+              description="We'll never share your password with anyone else."
+            >
+              <b-form-input
+                id="password-input"
+                v-model="userLogin.password"
+                type="password"
+                required
+                placeholder="Enter password"
+              ></b-form-input>
+            </b-form-group>
+            <div class="d-flex justify-content-between">
+              <b-button class="mt-3" type="submit" variant="success"
+                >Login</b-button>
+              <div id="google-button" class="mt-3 g-signin2">
+              </div>
+              <b-button v-b-modal.register-modal class="mt-3" variant="primary">Register</b-button>
+            </div>
+          </b-form>
+        </div>
+      </div>
+      <!-- register modal -->
+      <b-modal id="register-modal" title="Register" hide-footer>
+          <b-form @submit.prevent="register">
+            <b-form-group
+              id="name-register-label"
+              label="Your Name:"
+              label-for="name-register-input"
+            >
+              <b-form-input
+                id="name-register-input"
+                v-model="userRegister.name"
+                type="text"
+                required
+                placeholder="Enter your name"
+              ></b-form-input>
+            </b-form-group>
+              <b-form-group
+                id="email-register-label"
+                label="Email address:"
+                label-for="user-register-email"
+                description="We'll never share your email with anyone else."
+              >
+                <b-form-input
+                  id="user-register-email"
+                  v-model="userRegister.email"
+                  type="email"
+                  required
+                  placeholder="Enter email"
+                ></b-form-input>
+              </b-form-group>
+              <b-form-group
+                id="password-register-label"
+                label="Password:"
+                label-for="password-register-input"
+                description="We'll never share your password with anyone else."
+              >
+                <b-form-input
+                  id="password-register-input"
+                  v-model="userRegister.password"
+                  type="password"
+                  required
+                  placeholder="Enter password"
+                ></b-form-input>
+              </b-form-group>
+              <div class="d-flex justify-content-center pb-4">
+                <b-button class="mt-3" variant="primary" @click.prevent="register">Sign me up!</b-button>
+              </div>
+            </b-form>
+        </b-modal>
+      <!-- home -->
+      <div class="container-fluid" v-show="isLogin">
+        <div class="row">
+          <div class="col pt-3">
+            <div>
+              <b-tabs content-class="mt-3">
+                <!-- published contents -->
+                <b-tab title="Published" active>
+                  <div class="container" style="overflow:scroll; height: 70vh">
+                    <div v-for="article in publishedArticles">
+                      <card-article :article="article">
+                          <div class="d-flex justify-content-end">
+                              <b-button
+                                :id="`read-button-${article._id}`"
+                                class="mx-2"
+                                variant="light"
+                                v-b-modal.one-article
+                                @click="getOneArticle(article)"
+                                style="background-color: #FCA311"
+                                ><i
+                                  class="fas fa-book-open"
+                                  style="font-size:25px"
+                                ></i
+                              ></b-button>
+                              <b-popover
+                                :target="`read-button-${article._id}`"
+                                placement="bottomleft"
+                                title="Read"
+                                triggers="hover"
+                                :content="`Read ${article.title}`"
+                              ></b-popover>
+                              <b-button
+                                :id="`delete-button-${article._id}`"
+                                @click.prevent="deleteArticle(article)"
+                                class="mx-2"
+                                variant="danger"
+                                ><i
+                                  class="fas fa-trash-alt"
+                                  style="font-size:20px"
+                                ></i
+                              ></b-button>
+                              <b-popover
+                                :target="`delete-button-${article._id}`"
+                                placement="bottomleft"
+                                triggers="hover"
+                                title="Delete"
+                                :content="`Delete ${article.title}`"
+                              ></b-popover>
+                            </div>
+                            <div class="d-flex justify-content-end pt-2">
+                              <small>Created At: {{ article.created }}</small>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                              <small
+                                >Published At: {{ article.datePublished }}</small
+                              >
+                            </div>
+                      </card-article>
+                    </div>
+                  </div>
+                </b-tab>
+                <b-tab title="Drafts">
+                  <!-- draft contents -->
+                  <div class="container" style="overflow:scroll; height: 70vh">
+                    <div v-for="article in draftArticles">
+                      <card-article :article="article" >
+                          <div class="d-flex justify-content-end">
+                              <b-button
+                                :id="`read-button-${article._id}`"
+                                class="mx-2"
+                                variant="light"
+                                v-b-modal.one-article
+                                @click="getOneArticle(article)"
+                                style="background-color: #FCA311"
+                                ><i
+                                  class="fas fa-book-open"
+                                  style="font-size:25px"
+                                ></i
+                              ></b-button>
+                              <b-popover
+                                :target="`read-button-${article._id}`"
+                                placement="bottomleft"
+                                title="Read"
+                                triggers="hover"
+                                :content="`Read ${article.title}`"
+                              ></b-popover>
+                              <b-button
+                                :id="`delete-button-${article._id}`"
+                                class="mx-2"
+                                variant="danger"
+                                @click.prevent="deleteArticle(article)"
+                                ><i
+                                  class="fas fa-trash-alt"
+                                  style="font-size:20px"
+                                ></i
+                              ></b-button>
+                              <b-popover
+                                :target="`delete-button-${article._id}`"
+                                placement="bottomleft"
+                                triggers="hover"
+                                title="Delete"
+                                :content="`Delete ${article.title}`"
+                              ></b-popover>
+                              <b-button
+                                :id="`edit-button-${article._id}`"
+                                class="mx-2"
+                                variant="info"
+                                @click.prevent="editArticle(article)"
+                                ><i
+                                  class="fas fa-pen-fancy"
+                                  style="font-size:20px"
+                                ></i
+                              ></b-button>
+                              <b-popover
+                                :target="`edit-button-${article._id}`"
+                                placement="bottomleft"
+                                title="Edit"
+                                triggers="hover"
+                                :content="`Edit ${article.title}`"
+                              ></b-popover>
+                              <b-button
+                                :id="`publish-button-${article._id}`"
+                                class="mx-2"
+                                variant="success"
+                                @click.prevent="publish(article)"
+                                ><i class="fas fa-upload" style="font-size:20px"></i
+                              ></b-button>
+                              <b-popover
+                                :target="`publish-button-${article._id}`"
+                                placement="bottomleft"
+                                title="Publish"
+                                triggers="hover"
+                                :content="`Publish ${article.title}`"
+                              ></b-popover>
+                            </div>
+                            <div class="d-flex justify-content-end pt-2">
+                              <small>Created At: {{ article.created }}</small>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                              <small>{{ article.daysAgo }}</small>
+                            </div>
+                      </card-article>
+                    </div>
+                  </div>
+                </b-tab>
+                <b-tab title="Search">
+                  <div class="container-fluid">
+                    <div class="row d-flex justify-content-center">
+                        <b-form>
+                            <b-form-group>
+                              <div class='row'>
+                                <div class="col">
+                                  <b-form-input class="mr-sm-2" placeholder="Search title" v-model="searchInput"></b-form-input>
+                                </div>
+                                <div class="col">
+                                  <b-button class="my-2 my-sm-0" type="submit" variant="info" @click.prevent="search">Search!</b-button>
+                                </div>
+                              </div>
+                            </b-form-group>
+                          </b-form>
+                    </div>
+                    <div class="row">
+                      <div class="container-fluid" style="height: 68vh;overflow: scroll;">
+                        <div v-for="article in fetchedSearch">
+                            <card-article :article="article">
+                                <div class="d-flex justify-content-end">
+                                    <b-button
+                                      :id="`read-button-${article._id}`"
+                                      class="mx-2"
+                                      variant="light"
+                                      v-b-modal.one-article
+                                      @click="getOneArticle(article)"
+                                      style="background-color: #FCA311"
+                                      ><i
+                                        class="fas fa-book-open"
+                                        style="font-size:25px"
+                                      ></i
+                                    ></b-button>
+                                    <b-popover
+                                      :target="`read-button-${article._id}`"
+                                      placement="bottomleft"
+                                      title="Read"
+                                      triggers="hover"
+                                      :content="`Read ${article.title}`"
+                                    ></b-popover>
+                                  </div>
+                                  <div class="d-flex justify-content-end pt-2">
+                                    <small>Created At: {{ article.created }}</small>
+                                  </div>
+                            </card-article>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </b-tab>
+              </b-tabs>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- article modal -->
+      <b-modal
+        id="one-article"
+        :title="oneArticle.title"
+        no-close-on-backdrop
+        size="xl"
+        centered
+      >
+        <div style="overflow:scroll; height: 60vh">
+          <div class="card">
+            <div class="row">
+              <img
+                class="card-img-top"
+                :src="oneArticle.image"
+                alt="Card image cap"
+                style="max-width: 100%;object-fit: contain"
+              />
+            </div>
+            <div class="card-body">
+              <p class="card-text" v-html="oneArticle.content"></p>
+            </div>
+          </div>
+        </div>
+        <modal-footer>
+          <div class="d-flex justify-content-end" style="margin-top: 15px">
+            <small>{{ oneArticle.author }}</small>
+          </div>
+        </modal-footer>
+        <div slot="modal-footer">
+          <b-button variant="light" @click="$bvModal.hide('one-article')"
+            >OK</b-button
+          >
+        </div>
+      </b-modal>
+      <!-- new article form modal -->
+      <b-modal id="article-form" title="Form Article" size="xl">
+        <form @submit.prevent="">
+          <div class="form-group">
+            <label for="title">Title</label>
+            <input
+              v-model="formArticle.title"
+              type="text"
+              class="form-control"
+              id="title"
+              placeholder="Enter Title"
+            />
+          </div>
+          <div class="d-flex justify-content-center pb-4" style="max-height: 200px">
+            <img :src="formArticle.image" v-if="editing" style="object-fit:contain">
+          </div>
+          <b-form-file
+            v-model="file"
+            :state="Boolean(file)"
+            placeholder="Choose a file..."
+            drop-placeholder="Drop file here..."
+          ></b-form-file>
+          <div class="mt-3">Selected file: {{ file ? file.name : "" }}</div>
+          <div class="mt-3"></div>
+          <ckeditor
+            :editor="editor"
+            v-model="formArticle.content"
+            :config="editorConfig"
+          ></ckeditor>
+        </form>
+        <div slot="modal-footer">
+          <b-button variant="primary" @click.prevent="upload" v-if="!editing"
+            >Create!</b-button>
+          <b-button variant="primary" v-else @click.prevent="updateArticle"
+            >Save!</b-button>
+        </div>
+      </b-modal>
+      <div class="card text-center fixed-bottom" style="height:75px">
+        <div class="card-body">
+          <div class="d-flex justify-content-around">
+            <a href="https://www.instagram.com/fahminugra/?hl=en" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+            <div>
+              <div class="row d-flex justify-content-center">
+                <small>Fahmi Nugra Sutansyah</small>
+
+              </div>
+              <div class="row d-flex justify-content-center">
+                <small text-muted>2019</small>
+                </div>
+            </div>
+            <a href="https://twitter.com/fahminugra" target="_blank"><i class="fab fa-twitter-square"></i> Twitter</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://apis.google.com/js/platform.js"></script>
+    <script src="https://unpkg.com/vue-swal"></script>
+    <script src="js/components/card-article.js"></script>
+    <script src="js/index.js"></script>
+  </body>
+</html>
