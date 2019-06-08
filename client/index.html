@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <meta name="google-signin-client_id" content="274958665765-khhnbmeuhs41ttp4ftmgnfbvpte095cd.apps.googleusercontent.com">
+
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-bs4.css" rel="stylesheet">
+  <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-bs4.js"></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+    integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <link rel="stylesheet" href="./assets/css/vueWysiwyg.css">
+
+  <title>Momenku</title>
+</head>
+
+<body>
+  <div id="app">
+    <div class="d-flex" id="wrapper" v-bind:class="{ toggled }">
+      <sidebar 
+        v-on:go-to-home-page="goToHomePage" 
+        v-on:go-to-list-page="goToListPage" 
+      ></sidebar>
+
+      <div id="page-content-wrapper" style="min-width: 100vw;">
+
+        <myheader 
+          v-bind:user="user"
+          v-on:go-to-article-page="goToArticlePage"
+          v-on:menu-toggle="menuToggle"
+          v-on:logout="logout"
+        ></myheader>
+
+        <div style="height: 14vh">&nbsp;</div>
+
+        <!-- menus -->
+        <login-form 
+          v-bind:menus="menus" 
+          v-bind:user="user" 
+          v-on:go-to-register-page="goToRegisterPage"
+          v-on:login="login"
+        ></login-form>
+        
+
+        <register-form 
+          v-bind:menus="menus" 
+          v-bind:user="user" 
+          v-on:register="register"
+          v-on:go-to-login-page="goToLoginPage"
+        >
+        </register-form>
+
+        <section id="home" v-if="menus.home && user.loggedIn===true">
+          <div class="container">
+            <div class="row">
+              <h4 class="text-center">Welcome to MiniWp</h5>
+              <div class="input-group mb-3">
+                  <input 
+                    type="search" 
+                    class="form-control" 
+                    placeholder="Search by article or tag"
+                    aria-describedby="button-addon2" 
+                    v-model.trim="searchValue"
+                  >
+              </div>
+            </div>
+          </div>
+
+          <div class="container d-flex flex-column">
+            <div 
+              :key="article.id"
+              v-for="article in filteredHomeArticle" 
+              class="my-card 
+                d-flex 
+                justify-content-between" 
+            >
+              <mycard 
+                v-bind:article="article"
+                v-bind:menus="menus"
+              >
+              </mycard>
+            </div>
+          </div>
+        </section>
+
+        <section id="list" class="article--container container-md" v-if="menus.list && user.loggedIn===true">
+
+          <div class="container" style="max-width: 1000px !important">
+            <div class="row">
+              <h4 class="text-center">Your Article</h5>
+              <div class="input-group mb-3">
+                  <input 
+                    type="search" 
+                    class="form-control" 
+                    placeholder="Search by article or tag"
+                    aria-label="Recipient's username" 
+                    aria-describedby="button-addon2" 
+                    v-model.trim="searchValue"
+                  >
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex flex-column">
+            <div 
+              class="my-card 
+                d-flex 
+                justify-content-between" 
+              v-for="article in filteredArticle" 
+              :key="article.id"
+            >
+              <mycard 
+                v-bind:article="article"
+                v-bind:menus="menus"  
+                v-on:click-edit="fetchEdit"
+                v-on:click-delete="deleteArticle"
+              >
+              </mycard>
+            </div>
+          </div>
+        </section>
+
+        <section id="article" v-else-if="menus.article && user.loggedIn===true">
+          <article-page
+            v-bind:createpage="createPage"
+            v-bind:newarticle="newArticle"
+            v-on:submit-create="createArticle"
+            v-on:submit-edit="editArticle"
+          >
+            <wysiwyg
+              slot="wysiwyg"
+              v-model="newArticle.content"
+            ></wysiwyg>
+          </article-page>
+        </section>
+        <!-- end of menus -->
+
+        <myfooter></myfooter>
+      </div>
+    </div>
+  </div>
+  
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+  <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+  <script src="./assets/js/vueWysiwyg.js"></script>
+  <script src="./assets/js/components/articlePage.js"></script>
+  <script src="./assets/js/components/header.js"></script>
+  <script src="./assets/js/components/loginForm.js"></script>
+  <script src="./assets/js/components/registerForm.js"></script>
+  <script src="./assets/js/components/sidebar.js"></script>
+  <script src="./assets/js/components/searchbar.js"></script>
+  <script src="./assets/js/components/card.js"></script>
+  <script src="./assets/js/components/footer.js"></script>
+
+  <script src="./assets/js/vue.js"></script>
+</body>
+
+</html>

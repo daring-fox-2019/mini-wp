@@ -1,0 +1,25 @@
+.list {
+    &-group {
+        position: fixed;
+        width: 9em;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        padding-left: 0;
+        margin-bottom: 0;
+
+        >.item {
+            position: relative;
+            display: block;
+            padding: .75rem 1.25rem;
+            margin-bottom: -1px;
+            background-color: #fff;
+            border: 1px solid rgba(0,0,0,.125);
+        }
+    }
+}
+
+#sidebar__article-link:hover {text-decoration: underline;}
+
+#sidebar__create-link:hover {text-decoration: underline;}

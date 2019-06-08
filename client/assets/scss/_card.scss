@@ -1,0 +1,45 @@
+.my-card{
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: auto;
+    margin-right: 1.2%;
+    background: #ffffff;
+    border-radius: 4px;
+    margin: 2em auto 0em;
+
+    &--border {
+        border: solid 1px #bdbdbd;
+    }
+
+    z-index: 0;
+    padding: 13px 23px;
+
+    &:not(:first-child) {
+        margin-top: 1.2em;
+    }
+
+    &:last-child {
+        margin-bottom: 3.3em;
+    }
+
+    &:hover {
+        box-shadow: 0 2px 4px 0 rgba(0,0,0,0.12);
+    }
+
+    &-header {
+        color: #616161;
+        font-size: 26px;
+        font-weight: 600;
+    }
+
+    &-content {
+        color: #616161;
+        font-size: 20px;
+        font-weight: 400;
+
+        max-height: 3.3em;
+        max-width: 40em;
+        overflow: hidden;
+    }
+}

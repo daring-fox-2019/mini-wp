@@ -1,0 +1,47 @@
+{
+  "articles": [
+    {
+      "id": 1,
+      "title": "How Js Works",
+      "content": "JS Content",
+      "created_at": "2019-02-01"
+    },
+    {
+      "id": 2,
+      "title": "How PHP Works",
+      "content": "PHP Content",
+      "created_at": "2019-05-02T05:01:28.531Z"
+    },
+    {
+      "id": 3,
+      "title": "How Ruby Works",
+      "content": "Ruby Content",
+      "created_at": "2019-05-03T05:01:28.531Z"
+    },
+    {
+      "title": "Swimming",
+      "content": "seger",
+      "id": 4
+    },
+    {
+      "title": "dancing",
+      "content": "fun",
+      "id": 5
+    },
+    {
+      "title": "x",
+      "content": "",
+      "id": 6
+    },
+    {
+      "title": "fssfsfsffs",
+      "content": "",
+      "id": 7
+    },
+    {
+      "title": "zzzzzzzzzzzzzzzzzzzzzzz",
+      "content": "",
+      "id": 8
+    }
+  ]
+}
