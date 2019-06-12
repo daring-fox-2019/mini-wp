@@ -1,0 +1,28 @@
+{
+  "articles": [
+    {
+      "id": 1,
+      "title": "Fancy-todo",
+      "description": "description",
+      "content": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+      "created_at": "2019-01-11",
+      "image": "http://primer.com.ph/event/wp-content/uploads/sites/10/2019/04/Twice-in-Manila-Fancy-You-e1555386516710.jpg"
+    },
+    {
+      "id": 2,
+      "title": "mini-wp",
+      "description": "lezatos",
+      "content": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum HUAHAHAHA",
+      "created_at": "2019-01-11",
+      "image": "https://www.mini.co.za/content/dam/MINI/common/Range/lci_jcw/MINI_JCW_sharing_item.jpg"
+    },
+    {
+      "id": 3,
+      "title": "mini-wp",
+      "description": "description",
+      "content": "kenapa kah kenapa",
+      "created_at": "2019-01-11",
+      "image": "https://www.mini.co.za/content/dam/MINI/common/Range/lci_jcw/MINI_JCW_sharing_item.jpg"
+    }
+  ]
+}

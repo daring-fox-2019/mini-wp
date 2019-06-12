@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="google-signin-client_id" content="794107542667-chbefj7vhs7e41q4nscncmp7o9s386a6.apps.googleusercontent.com">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/vueWysiwyg.css">    
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Courgette|Lobster|Vidaloka" rel="stylesheet">
+
+
+    <link href="https://fonts.googleapis.com/css?family=Neuton" rel="stylesheet">
+    <!-- <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet"> -->
+    <style>
+    .g-signin2{
+        width: 100%;
+        }   
+
+    .g-signin2 > div{
+        margin: 0 auto;
+        }
+    #brand{
+        font-family: "Vidaloka",serif;
+        text-align: center;
+    }
+    #descript{
+        font-family: "Lobster",serif;
+        text-align: center
+    }
+
+    .form-register{
+        font-family: "Vidaloka",serif
+    }
+    </style>
+    <title>Mini-WP</title>
+</head>
+<body>
+    <div id="app">
+        <nav class="sticky-top">
+            <div v-show="isLogin === true" id="search-form">
+                <form class="form-inline">
+                    <input class="form-control mr-sm-2" v-model="searchQuery" type="text" placeholder="Search">
+                    <!-- <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> -->
+                </form>
+            </div>
+            <div class="logo">
+                <div id="logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Wordpress_Blue_logo.png"
+                    alt="wordpress logo">
+                    my Wordpress
+                </div>
+            </div>
+            <div v-show="isLogin" class="acc-notif" >
+                    <button v-on:click="articlePage = false" id="new-article" style="margin-right:20px; margin-bottom: 2px" type="button" class="btn btn-success btn-sm"><i class="fas fa-feather-alt" style="margin-right: 10px"></i>New Article</button>
+                <button class="btn" ><i  class="icon-right fas fa-user-circle fa-lg" style="margin-right: 10px">{{user.name}}</i></button><button class="btn" @click.prevent="signOut()"><i class="fas fa-sign-out-alt fa-lg" style="margin-right: 10px"></i></button>
+            </div>
+        </nav>
+        <div v-show="homePage && siginPage === false && isLogin === false" class="jumbotron" style="background-image:url(https://images.unsplash.com/photo-1495020689067-958852a7765e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80); height:850px; background-size: cover" >
+            <div class="row">
+                <div class="card-transparent offset-1 ">
+                    <div class="card-block special-card p-2" style="background-color: rgba(182, 165, 165, 0.4); ">
+                        <h1 id="brand">Mini-Wordpress</h1><br><br>
+                        <div id="descript">
+                            <h2>where idea meet</h2>
+                            <h2>and</h2>
+                            <h2>collided to a magnificent inspiration</h2>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div style="font-family:Vidaloka" class="card-transparent col-4 offset-1">
+                    <div class="card-block special-card p-3" style="background-color: rgba(182, 165, 165, 0.7); ">
+                    <h2>Ready to Jump In? Register Here.</h2>
+                    <registerform class="form-register" v-on:register="register"></registerform>
+                    <div class="row justify-content-center mt-3">
+                        <span style="text-align: center">already have an account? click to login!</span>
+                    </div>
+                    <div class="row justify-content-center mt-3">
+                        <button id="back-to-signin" type="button" class="btn btn-primary" v-on:click="siginPage = true; homePage = false">login</button>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="jumbotron" style="background-image:url(https://images.unsplash.com/photo-1495020689067-958852a7765e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80); height:850px; background-size: cover; font-family: Vidaloka" v-show="!isLogin && siginPage === true">
+            <div >
+                <div class="col-12 d-flex justify-content-center">
+                    <div class="card mt-5 d-flex" style="background-color: rgba(182, 165, 165, 0.7);  ;width: 500px; height: 650px">
+                        <h4 class="card header p-3" style="text-align: center">please login to your account</h4>
+                        <div class="card-content" style="text-align:center">
+                            <form-login v-on:login="login"></form-login>
+                            <br><br><h5>or sign In with google Account</h5>
+                            <div class="g-signin2" data-onsuccess="onSignIn">button</div>
+                            <div class="row justify-content-center mt-3">
+                                <span>dont have any account? click to register!</span>
+                            </div>
+                            <div class="row justify-content-center mt-3">
+                                <button id="back-to-signin" type="button" class="btn btn-primary" v-on:click="siginPage = false; homePage = true">register</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div v-show='isLogin=== true' id="container" class="container-fluid">
+            <div class="row">
+                <nav id="sidebar" class="sidebar col-md-2 d-none d-md-block">
+                    <div class="sidebar">
+                        <h4 class="sidebar-heading d-flex justify-content-center ">Navigation Head</h4>
+                        <div>
+                           <h5>Article List</h5> 
+                            <div class="nav flex-column" id="articles" v-for="article in articles" v-bind:key="article._id">
+                                <li class="nav-item "><button class="btn">{{article.title}}</button></li>
+                            </div>   
+                        </div>
+                    </div>
+                </nav>    
+                <div id="content" class="col-10 offset-2" style="overflow:scroll; height: 900px; background-image: url(https://images.unsplash.com/photo-1495020689067-958852a7765e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80); background-size: cover">
+                    <br><br>
+                    <div v-show="detail" id="detailed-article">
+                        <div class="row justify-content-center card col-10 offset-1">
+                            <div>
+                                <img style="width : 600px; height: 400px" v-bind:src=articleDetail.image alt="articleImage">
+                            </div>
+                            <h4 class="card-header">{{articleDetail.title}}</h4>
+                            <p v-html="articleDetail.content"></p>
+                            <button id="back-to-list" type="button" class="btn btn-primary" v-on:click="articlePage = true; detail = false">back</button>
+                        </div>
+                    </div>
+                    <div v-show="!detail && articlePage" id="content-list" class="card text-center col-10 offset-1" style="background-color: rgba(182, 165, 165, 0.5)">
+                        <div class="card-header" style="background-color: rgba(182, 165, 165, 0.1)">
+                            <!-- <ul class="nav nav-pills card-header-pills">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Published</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#">Draft</a>
+                            </li>
+                            </ul> -->
+                            <h2><b>Your Article List</b></h2>
+                        </div>
+                        <div class="card-body row d-flex justify-content-center" style="background-color: rgba(182, 165, 165, 0.1)" v-if="articlePage">
+                            <!-- <li v-for="article in articles" :key="article.id">
+                                {{article}}
+                            </li> -->
+                            <div class="card col-4 mb-2 mr-2 d-flex" v-for="article in filteredResources" :key="article._id">
+                                <!-- <div v-show="article.showStatus = true" class="card">
+                                    <img class="img-thumbnail" :src=article.image alt="">
+                                    <div class="card-body d-flex justify-content-between">
+                                    </div>
+                                    <div class="row justify-content-around">
+                                        <i class="fas fa-user"><p>{{article.author}}</p></i>
+                                        <i class="fas fa-calendar-alt"><p>{{article.created_at.substring(0,10)}}</p></i>                                    
+                                    </div>
+                                    <div class="row justify-content-around p-3">
+                                        <p class="col"><b>{{article.title}}</b></p>
+                                    </div>
+                                </div> -->
+                                <article-card v-bind:article="article" ></article-card>
+                                <div class="d-flex justify-content-around" >
+                                    <button type="button" class="btn btn-primary" v-on:click="showArticle(article)">Detail</button><button type="button" class="btn btn-danger" @click.prevent="article.showStatus=false;deleteArticle(article._id)">Delete</button><button type="button" class="btn btn-warning" @click.prevent="editArticle(article._id)">Edit</button>
+                                    <!-- <a class="col-sm-6" v-on:click="showArticle(article)" href="#">detail</a><a class="col-sm-6" @click.prevent="article.showStatus=false;deleteArticle(article._id)" href="#">delete</a><a class="col-sm-6" @click.prevent="editArticle(article._id)" href="#">edit</a> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+
+                    <!-- CREATE ARTICLE PAGE -->
+                    
+                    <div v-show="!articlePage && !editPage">
+                        <div class="row card col-10 offset-1" style="background-color: rgba(182, 165, 165, 0.6)">
+                        <form id="create-form" class="col-10 offset-1">
+                            <div class="form-group">
+                                <label for="title">Title</label>
+                                <input v-model="newArticle.title" type="text" class="form-control" id="title" placeholder="Title..">    
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <input v-model="newArticle.description" type="text" class="form-control" id="description" placeholder="description..">    
+                            </div>
+                            <div class="form-group">
+                                <label for="author">Author</label>
+                                <input v-model="newArticle.author" type="text" class="form-control" id="author" placeholder="author..">    
+                            </div>
+                            <div class="form-group">
+                                <label for="picture">Image</label>
+                                <input class="btn" type="file" v-on:change="uploadImage($event); isUpload=true" id="image" />    
+                            </div>
+                            <div class="form-group">
+                                <label for="article">Article</label>
+                                <wysiwyg v-model="newArticle.content"></wysiwyg>
+                            </div>
+                            <br><button id="create-article" type="button" class="btn btn-success" v-on:click="articlePage = true; createArticle()">create article</button>
+                        </form>
+                        </div>
+                    </div>
+                    <div v-show="editPage === true">
+                        <!-- <div>
+                        <form id="edit-form" class="col-10 offset-1">
+                            <div class="form-group">
+                                <input v-model="newArticle.title" type="text" class="form-control" id="title" placeholder="Title">
+                                <input v-model="newArticle.description" type="text" class="form-control" id="description" placeholder="Description">
+                            </div>
+                            <div id="editor2" class="col-12" style="background-color: white">
+                                <textarea id="body" cols="60" rows="10" v-model="newArticle.content"></textarea>                                
+                                <textarea id="body" class="ckeditor" cols="80" rows="10" v-model="newArticle.content" name="editor1"></textarea>
+                            </div>
+                            <br><button id="create-article" type="button" class="btn btn-success" v-on:click="articlePage = true; editArticleDb(newArticle.id)">edit article</button>
+                        </form>
+                        </div> -->
+
+                        <!-- EDIT ARTICLE PAGE -->
+                        
+                        <div class="row card col-10 offset-1" style="background-color: rgba(182, 165, 165, 0.6)">
+                            <form id="edit-form" class="col-10 offset-1">
+                                <img style="width : 300px; height: 300px" v-bind:src=newArticle.image alt="articleImage">
+                                <div class="form-group">
+                                    <label for="title">Title</label>
+                                    <input v-model="newArticle.title" type="text" class="form-control" id="title" placeholder="Title..">    
+                                </div>
+                                <div class="form-group">
+                                    <label for="description">Description</label>
+                                    <input v-model="newArticle.description" type="text" class="form-control" id="description" placeholder="description..">    
+                                </div>
+                                <div class="form-group">
+                                    <label for="author">Author</label>
+                                    <input v-model="newArticle.author" type="text" class="form-control" id="author" placeholder="author..">    
+                                </div>
+                                <div class="form-group">
+                                    <label for="picture">Image</label>
+                                    <input class="btn" type="file" v-on:change="uploadImage($event); isUpload=true" id="image" />    
+                                </div>
+                                <div class="form-group">
+                                    <label for="article">Article</label>
+                                    <wysiwyg v-model="newArticle.content"></wysiwyg>
+                                </div>
+                                <br><button id="create-article" type="button" class="btn btn-success" v-on:click="articlePage = true; editPage = false; editArticleDb(newArticle.id)">edit article</button>
+                            </form>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <p>copyright of Rizky Andi Jani @2019</p>
+        </div>
+    </div>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="./javascript/vueWysiwyg.js"></script>
+    <script src="./component.js/article-card.js"></script>    
+    <script src="./component.js/register.js"></script>
+    <script src="./component.js/login.js"></script>
+    <script src="javascript/vue.js"></script>
+    <!-- <script src="https://cdn.ckeditor.com/4.11.4/standard/ckeditor.js"></script>
+    <script>CKEDITOR.replace( 'editor1' ) -->
+    <!-- </script> -->
+    <!-- <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script> -->
+    <!-- <script v-model="newArticle.content">
+        var quill = new Quill('#editor1', {
+          theme: 'snow',
+          color: 'white'
+        });
+        var content1 = quill.container.firstChild.innerHTML
+    </script> -->
+    <!-- <script>
+        var quill = new Quill('#editor2', {
+          theme: 'snow',
+          color: 'white'
+        });
+        var content2 = quill.container.firstChild.innerHTML
+        console.log(content2);
+    </script> -->
+</body>
+</html>
