@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta
+      name="google-signin-client_id"
+      content="28515749953-jge4mqlip5d8qub0khf9uvfuhbmc33j8.apps.googleusercontent.com"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Domine|Montserrat|Abril+Fatface"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.4/dist/semantic.min.css"
+    />
+    <link rel="stylesheet" href="css/vueWysiwyg.css" />
+    <link rel="stylesheet" href="css/animation.css" />
+    <link rel="stylesheet" href="css/style.css" />
+
+    <title>Mini WP</title>
+
+  </head>
+  <body>
+    <div id="app">
+
+        <navbar 
+          :is-login="isLogin"
+          :page="page"
+          @logout="logout"
+          @fetch-articles="fetchArticles"
+          @show-home-page="showHomePage"  
+        ></navbar>
+
+        <transition
+        enter-active-class="animated slideInRight">
+        <article-form
+        v-if="page === 'article form'"
+        :article="article"
+        :old-article="oldArticle"
+        @show-home-page="showHomePage"
+        @old-article="oldArticle = $event"
+        @fetch-article="fetchArticles"
+        ></article-form>
+      </transition>
+        
+
+      <transition 
+      enter-active-class="animated fadeIn">
+      <template v-if="page === 'home' || page === 'search'">
+        <div class="ui divided items container" style="margin-top: 5rem;">
+          <div v-if="page === 'search'">
+            <h1 class="ui header">Search Result:</h1>
+            <br />
+          </div>
+
+          <article-card 
+            v-for="(article, index) in articles" 
+            :key="index"
+            :index="index"
+            :article="article"
+            @view-article="viewArticle"
+            @fetch-articles="fetchArticles"
+          ></article-card>
+        </div>
+      </template>
+      </transition>
+
+      <transition 
+      enter-active-class="animated fadeInLeft">
+      <article-detail
+        v-if="page === 'article'"
+        :article="article"
+        :user-email="userEmail"
+        @edit-article="editArticle"
+        @delete-article="deleteArticle"
+      ></article-detail>
+      </transition>
+      
+      
+      <login-form 
+        v-if="page === 'login form'"
+        @show-home-page="showHomePage"
+        @is-login="isLogin = $event"
+      ></login-form>
+        <signup-form
+        v-if="page === 'register form'" 
+        ></signup-form>
+
+      <footer-c 
+        v-if="page !== 'login form' && page !== 'register form'"
+      ></footer-c>
+
+    </div>
+
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.4/dist/semantic.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <script src="js/vueWysiwyg.js"></script>
+    <script src="js/components/article-card.js"></script>
+    <script src="js/components/article-form.js"></script>
+    <script src="js/components/article-detail.js"></script>
+    <script src="js/components/login-form.js"></script>
+    <script src="js/components/signup-form.js"></script>
+    <script src="js/components/footer.js"></script>
+    <script src="js/components/navbar.js"></script>
+    <script src="js/components/g-signin-button.js"></script>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>
