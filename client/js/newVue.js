@@ -1,5 +1,5 @@
-// axios.defaults.baseURL = "http://localhost:3000"
-axios.defaults.baseURL = "http://35.198.248.18"
+axios.defaults.baseURL = "http://localhost:3000"
+// axios.defaults.baseURL = "http://35.198.248.18"
 // var userName = ""
 Vue.use(CKEditor);
 
@@ -51,7 +51,7 @@ var app = new Vue({
   watch: {
     searchText(newText) {
       let query = `?title=${newText}`
-      axios.get(`/posts/read/search${query}`, {
+      axios.get(`/posts/${query}`, {
         headers: {
           token: localStorage.getItem('token')
         }
@@ -117,7 +117,7 @@ var app = new Vue({
       let query = `?title=${this.searchText}`
       axios({
         method: "GET",
-        url: `/posts/read/search${query}`,
+        url: `/posts/${query}`,
         headers: {
           token: localStorage.getItem('token')
         }
@@ -135,7 +135,7 @@ var app = new Vue({
     getAllPosts() {
       axios({
         method: "GET",
-        url: "/posts/read",
+        url: "/posts/",
         headers: {
         token: localStorage.getItem('token')
       }
@@ -158,7 +158,7 @@ var app = new Vue({
       formData.append("image_url", this.inputNewPost.image)
       axios({
         method: "POST",
-        url: "/posts/create",
+        url: "/posts",
         data: formData,
         // {
         //   title: this.inputNewPost.title,
@@ -191,7 +191,7 @@ var app = new Vue({
       formData.append("image_url", this.inputNewPost.image)
       axios({
         method: "PUT",
-        url: `/posts/update/${id}`,
+        url: `/posts/${id}`,
         data: formData,
         headers: {
           token: localStorage.getItem('token')
@@ -236,7 +236,7 @@ var app = new Vue({
         if (result.value) {
           axios({
             method: "DELETE",
-            url: `/posts/delete/${idPost}`,
+            url: `/posts/${idPost}`,
             headers: {
               token: localStorage.getItem('token')
             }

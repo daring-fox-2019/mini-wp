@@ -1,33 +1,37 @@
-require('dotenv').config()
-const mongoose = require('mongoose')
+if (process.env.NODE_ENV === 'development') {
+  require('dotenv').config();
+}
+
 const express = require('express')
 const app = express()
+const mongoose = require('mongoose')
 const cors = require('cors')
-const url = `mongodb+srv://admin:admin@mini-wp-alvin-cluster-51np1.gcp.mongodb.net/test?retryWrites=true`
-const port = process.env.PORT || 3000
-const routes = require('./routes')
 
-mongoose.set('useNewUrlParser', true);
-mongoose.set('useCreateIndex', true);
-mongoose.set('useFindAndModify', false)
-mongoose.connect(url)
+const port = process.env.PORT || 3000
+const url = process.env.DATABASE_URL || "mongodb://localhost/miniwp"
+const routes = require('./routes')
+const error = require('./middlewares/error')
+
+mongoose.connect(url, {
+  useNewUrlParser: true,
+  // useCreateIndex: true,
+  // useFindAndModify: false
+})
   .then(() => {
-    console.log('======> MongoDB Connected <=======');
+    console.log('MongoDB connected');
   })
   .catch((err) => { 
     console.log(err) 
   })
 
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 app.use(cors())
-// app.use(function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//   next();
-// });
+
 app.use("/", routes)
 
+app.use(error)
+
 app.listen(port, () => {
-  console.log(`Listening on port ${port}`)
+  console.log('Listening on port',port)
 })

@@ -16,6 +16,7 @@ const getPublicUrl = (filename) => {
 
 const sendUploadToGCS = (req, res, next) => {
   if (!req.file) {
+    console.log("masuk return next")
     return next()
   }
 

@@ -1,30 +1,23 @@
 const User = require('../models/user')
-const jwt = require('jsonwebtoken')
+const jwt = require('../helpers/jwt')
 
-module.exports = (req, res, next) => {
-  if(req.headers.hasOwnProperty('token')){
-    req.decoded = jwt.verify(req.headers.token, process.env.KUNCI)
-    // cek user ada di database atau tidak
-    // console.log("Authenticate",req.decoded._id)
-    User.findOne({_id:req.decoded._id})
-    .then(user =>{
-      // console.log(user)
-      if(user) 
-        next()
-      else 
-        res.status(403).json({
-          message: 'User not found'
-        })
-    })
-    .catch(err =>{
-      res.status(403).json({
-        message: 'Authenticate catch'
+module.exports = (req,res,next)=>{
+  if(req.headers['access-token']) {
+    try {
+      req.decoded = jwt.verify(req.headers['access-token'])
+    }
+    catch(err) {
+      next({ code: 400, message: 'Invalid token' })
+    }
+    User.findById(req.decoded._id)
+      .then(row =>{
+        if(row)
+          next()
+        else
+          next({ code: 404, message: 'User not found' })
       })
-    })
+      .catch(next)
   }
-  else {
-    res.status(401).json({
-      message: 'login dulu, baru masuk mas'
-    })
-  }
+  else
+    next({ code: 401, message: 'please login first' })
 }

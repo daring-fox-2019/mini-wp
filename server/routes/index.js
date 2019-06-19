@@ -1,9 +1,9 @@
 const router = require("express").Router()
-const post = require('./postRoutes')
-const user = require("./userRoutes")
+const post = require('./post')
+const user = require("./user")
 
 router.get("/", (req, res) => {
-  res.status(200).json({ msg: 'connected' })
+  res.status(200).json({ message : 'API connected' })
 })
 
 router.use("/posts", post)
