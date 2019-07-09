@@ -7,6 +7,7 @@ API Documentation
 ```Client URL : http://localhost:8080,
 Client URL : http://localhost:8080
 Server URL : http://localhost:3000
+Deploy URL : http://sprache.paulinadavita.com
 ```
 
 #### Usage
