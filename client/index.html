@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- CK -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/12.0.0/classic/ckeditor.js"></script>
+
+    <!-- WYSIWIG -->
+    <link rel="stylesheet" href="./style/editor.css">
+
+    <!-- GOOGLE -->
+    <meta name="google-signin-client_id"
+        content="550504097732-l8pd2uqg6ckll173bmha2b0cq2524v4a.apps.googleusercontent.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+
+    <!-- FONTS -->
+    <link href="https://fonts.googleapis.com/css?family=Gentium+Book+Basic|Lato" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Abril+Fatface|Habibi" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+        integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+
+    <!-- VUE AX -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <!-- SWL -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+
+    <!-- STYLE -->
+    <script src="./style/other.css"></script>
+
+    <!-- MOMENT -->
+    <script src="https://momentjs.com/downloads/moment.js"></script>
+
+    <style>
+        body {
+            font-family: 'Lato', sans-serif;
+        }
+
+        .ck-editor__editable_inline {
+            min-height: 40vh;
+        }
+    </style>
+    <title>Sprache</title>
+</head>
+
+<body>
+    <!-- START OF APP VUE -->
+    <div id="app">
+        <!-- NAVBAR STARTS HERE -->
+        <navbar  v-on:sign-out="signOut" v-on:changestories="changestories" v-bind:is-login="isLogin"
+            v-on:gethome="gethome" v-on:searchtag="searchtag" v-bind:current-page="currentPage"
+            v-bind:user-image="userImage" v-on:search="search" v-on:writestories="writestories">
+        </navbar>
+        <!-- NAVBAR ENDS HERE -->
+        
+        <!-- LANDING PAGE -->
+        <div v-show="currentPage == 'landing'" class="container">
+            <div class = "row">
+                <div class="col-2 pt-1 pl-4">
+                    <span style="font-weight:400; font-size:60px; font-family: 'Abril Fatface', cursive; letter-spacing: 0.02em;" >Sprache</span>
+                    <span style="font-weight:100; font-size:30px; font-family: 'Abril Fatface', cursive; letter-spacing: -0.02em; line-height: 25px !important;"> Your source of impetus to do more</span>
+                    <div class="dropdown-divider"></div>
+                     <span class="pb-2" style="font-size:20px; font-family: 'Abril Fatface', cursive; letter-spacing: 0.01em;">
+                            Thought-provoking; Aspirations;<br>
+                            Stories.<br>
+                            Made by you.<br>  
+                    </span>
+                    <div>
+                        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                    </div>
+
+                   
+                </div>
+                <div class="col-8 pt-5 pl-5" style="position: absoulte" >
+                    <img style="max-width:150vh;  z-index: -9999999; position:relative;" src="./assets/pablohome.png">
+
+                </div>
+            </div>
+        </div>
+
+        <!-- LANDING PAGE -->
+
+        <!-- LOGIN FORM STARTS HERE -->
+        <login v-if="currentPage == 'login'" v-on:sign-in="signIn" v-bind:is-login="isLogin" v-if="!isLogin"></login>
+        <!-- LOGIN FORM ENDS HERE -->
+
+        <!-- REGISTER STARTS HERE -->
+        <register v-if="currentPage == 'register'" v-on:successregister="showLogin" v-if="!isLogin"></register>
+        <!-- REGISTER FORM ENDS HERE -->
+
+        <!-- HOME SEGALA HOME STARTS HERE -->
+        <div v-if="currentPage == 'home' && isLogin == true" class="container">
+
+            <div class ="row">
+                <div v-for="(art, index) in [arrArticles[getRandomInt(0, arrArticles.length)]]"  class ="col-4">
+                        <headlinecard v-bind:art="art" v-on:fullarticle="fullarticle"></headlinecard>
+                </div>
+                <div class ="col-4" >
+                    <smallcard v-for="(art, index) in arrArticles.slice(0,3)" :key="index" v-bind:art="art" v-on:fullarticle="fullarticle" v-on:likearticle="likearticle">
+                    </smallcard>
+                </div>
+                <div  v-for="(art, index) in [arrArticles[getRandomInt(0, arrArticles.length)]]" class ="col-4">
+                        <headlinecard v-bind:art="art" v-on:fullarticle="fullarticle"></headlinecard>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col md-6">
+                    <div v-for="(art, index) in arrArticles" :key="index" class=" col-md-12">
+                        <mediumcard v-on:deletearticle="deletearticle" v-on:likearticle="likearticle"
+                            v-on:fullarticle="fullarticle" v-on:editarticle="editarticle" v-bind:art="art">
+                        </mediumcard>
+                    </div>
+
+                </div>
+                <div style="background: url('./assets/nevermiss.png')"  class="col md-6">
+                    <div class="col-md-4">
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <!-- HOME SEGALA HOME ENDS HERE -->
+
+        <!-- START MODAL REGISTER -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div style="background-color: transparent; min-width:0% !important;"
+                class="modal-dialog modal-dialog-centered" role="document">
+                <div style=" background:url('./assets/smallbg1.jpg') no-repeat center" class="modal-content">
+
+                    <div class="modal-body">
+
+                        <br><br><br><br><br><br><br><br>
+                        <button data-dismiss="modal" v-on:click.prevent="showLogin" class="btn btn-light"
+                            style="margin-left:200px">Login</button>
+                        <br>
+                        <button data-dismiss="modal" v-on:click.prevent="showRegister" class="btn btn-light"
+                            style="margin-left:190px">Register</button>
+                        <br><br><br>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- MODAL REGISTER ENDS -->
+
+        <!-- START MY STORIES -->
+        <div v-show="currentPage == 'mystories'" class="container">
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
+                        aria-controls="nav-home" aria-selected="true">Home</a>
+                    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
+                        aria-controls="nav-profile" v-on:click="getMyLikes()" aria-selected="false">My Likes</a>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                    <div v-for="(art, index) in arrArticles" :key="index" id="myarticles">
+                        <mediumcard v-on:deletearticle="deletearticle" v-on:likearticle="likearticle"
+                            v-on:fullarticle="fullarticle" v-on:editarticle="editarticle" v-bind:art="art">
+
+                        </mediumcard>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                    <!-- INI BAGIAN LIKES -->
+                    <div class="row ">
+                        <div v-for="(art, index) in myLikes" :key="index" class="col-md-4 align-self-baseline">
+                            <smallcard v-bind:art="art" v-on:fullarticle="fullarticle" v-on:likearticle="likearticle">
+                                <button v-if="art.userId" @click="likeThis(art._id)" style="font-size:12px;"
+                                    class="btn button-like float-sm-left">
+                                    <i v-if="art.likes.indexOf(userId) >= 0" class="fa fa-heart"
+                                        style="color:#cc4b37"></i>
+                                    <i v-else class="fa fa-heart"></i>
+                                    <span>Like</span>
+                                </button>
+                            </smallcard>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- END OF MY STORIES -->
+
+
+
+        <!-- START ON WRITE STORIES -->
+        <div class="container">
+            <div v-if="currentPage == 'writePage' ">
+                <br>
+                <h3>Your Story Goes Here</h3>
+                <div class="dropdown-divider"></div>
+
+                <div class="form-group">
+                    <input v-model="articleTitle" type="text" class="form-control" id="formGroupExampleInput"
+                        placeholder="Write an eye-catching hook">
+                </div>
+                <wysiwyg v-model="articleBody"></wysiwyg>
+                <small class="mt-2 mb-2">We automatically generate tags for you based on your featured image. You
+                    may delete tags you don't want or add a custom tag : </small>
+                <div class="custom-file col-md-6">
+                    <input v-on:change="getImage" type="file" class="custom-file-input" id="customFile">
+
+                    <label class="mt-2 mb-2 custom-file-label" for="customFile">Add Featured Image To Reach More
+                        People</label>
+                </div>
+                <br><br>
+                <form v-on:submit.prevent="createTagInputUser" class="form-inline">
+                    <div class="form-group mb-2">
+                        <label for="usertag" class="sr-only">More tags..</label>
+                        <input v-model="inputTag" type="text" value="">
+                    </div>
+                    <button type="submit" class="btn-sm btn btn-light mb-2">Insert Tag One By One</button>
+                </form>
+                <br>
+
+                <div class="row">
+                    <div v-for="(tag, index) in currentTags" :key="index">
+                        <chips v-on:deletetag="deletetag(tag)" v-bind:namanya="tag">
+                            <i v-on:click.prevent="deletetag(tag)" class="ml-2 fas fa-times"></i>
+                        </chips>
+                    </div>
+                </div>
+                <button v-if="!editor" @click.prevent="postArticle" class="btn btn-light mt-2" type="submit"
+                    name="action">Submit</button>
+                <button v-if="editor" @click.prevent="patchArticle()" class="btn btn-light mt-2" type="submit"
+                    name="action">Edit</button>
+                <button id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home"
+                    aria-selected="true" @click.prevent="changestories" class="btn btn-light mt-2" type="submit"
+                    name="action">Cancel</button>
+            </div>
+        </div>
+
+
+
+
+        <!-- END ON WRITE STORIES -->
+
+        <!-- START OF FULL ARTICLE -->
+
+        <div class="container">
+            <fullarticle v-bind:current-article="currentArticle" v-if="currentPage == 'fullarticle'"
+                v-on:translate="translate">
+            </fullarticle>
+        </div>
+        <!-- END OF FULL ARTICLE -->
+
+
+        <!-- START OF SEARCH SECTION -->
+        <div v-show="this.currentPage == 'searchpage'" class="container">
+            <div class="row">
+                <div v-if="searchedInput.length == 0">
+                    <emptyarray></emptyarray>
+                </div>
+                <div v-else v-for="(art, index) in searchedInput" :key="index" class="col-6 col-md-4">
+                    <headlinecard v-bind:art="art" v-on:fullarticle="fullarticle"></headlinecard>
+                </div>
+            </div>
+        </div>
+        <!-- END OF SEARCH -->
+
+
+        <!-- THIS BELOW DIV CLOSING BELONGS TO APP VUE; DO NOT MOVE -->
+    </div>
+    <!-- END OF APP -->
+
+
+
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="./components/vueWysiwyg.js"></script>
+    <script src="./components/FullArticle.js"></script>
+    <script src="./components/Loading.js"></script>
+    <script src="./components/Navbar.js"></script>
+    <script src="./components/Empty.js"></script>
+    <script src="./components/MediumCard.js"></script>
+    <script src="./components/HeadlineCard.js"></script>
+    <script src="./components/SmallCard.js"></script>
+    <script src="./components/PopularCard.js"></script>
+    <script src="./components/ModalLanding.js"></script>
+    <script src="./components/Login.js"></script>
+    <script src="./components/Register.js"></script>
+    <script src="./components/Chips.js"></script>
+    <script src="./components/MyStories.js"></script>
+    <script src="./components/Home.js"></script>
+
+    <script src="./main.js"></script>
+    <script>
+        $('#myModal').modal()
+        $('#myTab a').on('click', function (e) {
+            e.preventDefault()
+            $(this).tab('show')
+        })
+    </script>
+    <script>
+    </script>
+    </script>
+
+</body>
+
+</html>
